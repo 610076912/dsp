@@ -9,10 +9,18 @@
       <div class="header-con">
         <div class="center">
           <ul>
-            <li><router-link to="/">首页</router-link></li>
-            <li><router-link to="plan">推广数据</router-link></li>
-            <li><router-link to="data">数据监测</router-link></li>
-            <li><router-link to="finance">财务管理</router-link></li>
+            <li>
+              <router-link to="/">首页</router-link>
+            </li>
+            <li>
+              <router-link to="plan">推广数据</router-link>
+            </li>
+            <li>
+              <router-link to="data">数据监测</router-link>
+            </li>
+            <li>
+              <router-link to="finance">财务管理</router-link>
+            </li>
           </ul>
         </div>
       </div>
@@ -32,9 +40,12 @@
 </template>
 
 <script>
-export default {
-  name: 'app'
-}
+  import Hello from './components/Hello.vue'
+
+  export default {
+    name: 'app',
+    components: {Hello}
+  }
 
 </script>
 
@@ -54,31 +65,36 @@ export default {
     }
   }
 
-  .header{
+  .header {
     width: 100%;
     height: 160px;
   }
-  .header-top{
+
+  .header-top {
     width: 100%;
     height: 40px;
     background: #454546;
   }
-  .header-con{
+
+  .header-con {
     width: 100%;
     height: 70px;
     background: #ffffff;
   }
-  .header-tab{
+
+  .header-tab {
     width: 100%;
     height: 50px;
     background: #f9f9f9;
   }
-  .header-con ul{
+
+  .header-con ul {
     width: 560px;
     height: 100%;
     float: right;
   }
-  .header-con ul li{
+
+  .header-con ul li {
     width: 140px;
     height: 100%;
     float: left;
@@ -87,14 +103,13 @@ export default {
     cursor: pointer;
   }
 
-  .main{
+  .main {
     width: 1200px;
     min-height: calc(100% - 380px);
     margin: 0 auto;
   }
 
-
-  .footer{
+  .footer {
     width: 100%;
     height: 220px;
     background: #454546;
