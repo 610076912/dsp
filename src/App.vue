@@ -9,10 +9,10 @@
       <div class="header-con">
         <div class="center">
           <ul>
-            <li>首页</li>
-            <li>推广计划</li>
-            <li>数据监测</li>
-            <li>财务管理</li>
+            <li><router-link to="/">首页</router-link></li>
+            <li><router-link to="plan">推广数据</router-link></li>
+            <li><router-link to="data">数据监测</router-link></li>
+            <li><router-link to="finance">财务管理</router-link></li>
           </ul>
         </div>
       </div>
@@ -23,12 +23,11 @@
       </div>
     </div>
     <div class="main">
-      主体
+      <router-view></router-view>
     </div>
     <div class="footer">
       页尾
     </div>
-    <!--<router-view></router-view>-->
   </div>
 </template>
 
@@ -36,6 +35,7 @@
 export default {
   name: 'app'
 }
+
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
