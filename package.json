@@ -16,6 +16,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "element-ui": "^1.4.3",
+    "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "vue": "^2.4.2",
     "vue-router": "^2.7.0"
