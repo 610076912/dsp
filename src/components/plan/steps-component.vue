@@ -1,8 +1,8 @@
 <template>
   <div class="setps">
-    <span class="title">新建推广计划</span>
-    <div class="left"></div>
-    <div class="content">
+    <span class="setps-title">新建推广计划</span>
+    <div class="setps-left"></div>
+    <div class="setps-content">
       <el-steps :space="130" :active="active">
         <el-step title="基本设置" icon="my-yuan"></el-step>
         <el-step title="场景化设置" icon="my-yuan"></el-step>
@@ -12,7 +12,7 @@
         <el-step title="广告素材" icon="my-yuan"></el-step>
       </el-steps>
     </div>
-    <div class="right"></div>
+    <div class="setps-right"></div>
   </div>
 </template>
 
@@ -39,22 +39,22 @@
     div {
       display: inline-block;
     }
-    .title {
+    .setps-title {
       position: absolute;
       left: 20px;
       top: 15px;
       color: #3e3e3e;
     }
-    .left, .right {
+    .setps-left, .setps-right {
       width: 256px;
       height: 50px;
       border-bottom: 2px solid #169bd5;
     }
-    .right {
+    .setps-right {
       float: right;
       border-color: #ccc;
     }
-    .content {
+    .setps-content {
       position: absolute;
       top: 21px;
       left: 260px;
