@@ -59,7 +59,7 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     background: #eeeeee;
 
     .center {
@@ -69,11 +69,12 @@ export default {
     }
   }
 
-  .header{
+  .header {
     width: 100%;
     height: 160px;
   }
-  .header-top{
+
+  .header-top {
     width: 100%;
     height: 40px;
     background: #454546;
@@ -98,12 +99,13 @@ export default {
   .logout{
     cursor: pointer;
   }
-  .header-con{
+  .header-con {
     width: 100%;
     height: 70px;
     background: #ffffff;
   }
-  .header-tab{
+
+  .header-tab {
     width: 100%;
     height: 50px;
     background: #f9f9f9;
@@ -118,12 +120,13 @@ export default {
     font-size 14px;
     border-bottom 2px solid #1D8CE0;
   }
-  .header-con ul{
+  .header-con ul {
     width: 560px;
     height: 100%;
     float: right;
   }
-  .header-con ul li{
+
+  .header-con ul li {
     width: 140px;
     height: 100%;
     float: left;
@@ -143,14 +146,13 @@ export default {
   }
   
 
-  .main{
+  .main {
     width: 1200px;
     min-height: calc(100% - 380px);
     margin: 0 auto;
   }
 
-
-  .footer{
+  .footer {
     width: 100%;
     height: 220px;
     background: #454546;

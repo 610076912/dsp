@@ -1,16 +1,16 @@
 <template>
-    <div>finance</div>
+    <div>{{msg}}</div>
 </template>
 
 <script>
-    export default {
-      name: 'finance',
-      data () {
-        return {
-          msg: 'finance'
-        }
+  export default {
+    name: 'finance',
+    data () {
+      return {
+        msg: 'finance'
       }
     }
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
