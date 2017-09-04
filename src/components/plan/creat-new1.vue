@@ -36,7 +36,9 @@
         </el-form-item>
         <el-form-item class="button-wrap">
           <el-button>返回</el-button>
-          <el-button class="next-button" type="primary" @click="nextStep('new1form')">下一步</el-button>
+          <el-button class="next-button" type="primary" @click="nextStep">
+            下一步
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -68,6 +70,7 @@
               return callback(new Error('请填写正确的数值'))
             }
           }
+          callback()
         }
       }
       return {
@@ -92,11 +95,12 @@
     },
     methods: {
       // 下一步
-      nextStep (new1form) {
-        console.log(new1form)
-        this.$refs[new1form].validate((valid) => {
-          console.log(valid)
-          console.log(this.ruleForm)
+      nextStep () {
+        let that = this
+        this.$refs['new1form'].validate((valid) => {
+          // 如果验证通过则跳转下一个路由。
+          // if (valid) that.$router.push('/creatnew2')
+          that.$router.push({name: 'creatnew2'})
         })
       }
     },
