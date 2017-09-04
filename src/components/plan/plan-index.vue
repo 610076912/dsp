@@ -122,7 +122,8 @@
         </el-table>
       </div>
     </el-tabs>
-    <button class="creat-new">新建活动</button>
+    <button class="creat-new"><router-link to="creatnew1"></router-link>新建活动</button>
+
   </div>
 </template>
 
@@ -290,6 +291,14 @@
       top: 32px;
       right: 35px;
       cursor: pointer;
+      a{
+        display :inline-block;
+        position :absolute;
+        left:0;
+        top:0;
+        width:100%;
+        height:100%;
+      }
     }
   }
 </style>

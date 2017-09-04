@@ -34,7 +34,7 @@
   @import url('../../assets/font/iconfont.css')
   .setps {
     width: 100%;
-    height: 70px;
+    height: 80px;
     position: relative;
     div {
       display: inline-block;
@@ -64,7 +64,7 @@
         left: -8%;
       }
       .el-step__head {
-        font-size: 22px;
+        font-size: 20px;
       }
       .el-step__title {
         font-size: 12px;
