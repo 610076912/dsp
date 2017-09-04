@@ -10,7 +10,7 @@
             <div class="link-button">
               <el-button size="small" type="primary">进入推广计划</el-button>
               <el-button size="small">新建活动</el-button>
-            </div>  
+            </div>
           </div>
         </div>
         <div class="statist">
@@ -19,7 +19,7 @@
           </ul>
           <div class="tag-items">
             <div class="tag-item" v-for="(key,index) in datas" v-if="indexs == index">
-                 
+
             <el-row class="count-data">
               <el-col :span="6"><div class="grid-content r b"><span>0</span><p>今日曝光量</p></div></el-col>
               <el-col :span="6"><div class="grid-content r b"><span>0</span><p>今日点击量</p></div></el-col>
@@ -29,12 +29,12 @@
               <el-col :span="6"><div class="grid-content r"><span>0</span><p>待审核</p></div></el-col>
               <el-col :span="6"><div class="grid-content r"><span>0</span><p>审核拒绝</p></div></el-col>
               <el-col :span="6"><div class="grid-content"><span>0</span><p>今天曝光量</p></div></el-col>
-            </el-row>     
-              
+            </el-row>
+
             </div>
           </div>
         </div>
-      </div> 
+      </div>
       <!-- mobile -->
       <div class="mobile">
         <div class="mobile-title"><span>移动营销概况</span></div>
@@ -74,7 +74,7 @@
             </div>
           </div>
           <div class="mobile-chart-box">
-            
+
           </div>
         </div>
       </div>
@@ -117,7 +117,7 @@
             </div>
           </div>
           <div class="mobile-chart-box">
-            
+
           </div>
         </div>
       </div>
@@ -160,10 +160,10 @@
             </div>
           </div>
           <div class="mobile-chart-box">
-            
+
           </div>
         </div>
-      </div>     
+      </div>
     </div>
 </template>
 
@@ -179,13 +179,61 @@
           sum: 500,
           tags: ['移动', 'PC', 'OTT'],
           indexs: 0,
-          datas: ['我是移动页面', 'pc页面在此', '发生的离开']
+          datas: ['我是移动页面', 'pc页面在此', '发生的离开'],
+
+          chartDate: {
+            tooltip: {trigger: 'axis'},
+            legend: {
+              left: '1vw',
+              data: ['访客数']
+            },
+            toolbox: {
+              feature: { saveAsImage: {} }
+            },
+            grid: {
+              left: '1vw',
+              right: '15px',
+              bottom: '1vw',
+              containLabel: true
+            },
+            xAxis: [
+              {
+                type: 'category',
+                boundaryGap: false,
+                data: [1, 2, 3, 4, 5]
+              }
+            ],
+            yAxis: [
+              {type: 'value'}
+            ],
+            series: [
+              {
+                name: '访客数',
+                type: 'line',
+                smooth: true,
+                data: [3, 4, 56, 23, 78]
+              }
+            ],
+            color: [
+              '#33A4FE'
+            ]
+          }
         }
       },
       methods: {
         toggleTags: function (index) {
           this.indexs = index
         }
+      },
+      mounted: function () {
+        const mobileChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[0])
+        mobileChart.setOption(this.chartDate, true)
+
+        const pcChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[1])
+        pcChart.setOption(this.chartDate, true)
+
+        const ottChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[2])
+        ottChart.setOption(this.chartDate, true)
       }
     }
 </script>
@@ -272,10 +320,10 @@
     }
     .count-data{
       width 100%;
-      height 100%  
+      height 100%
     }
     .grid-content{
-      height 69px; 
+      height 69px;
       text-align center
       padding 12px 0
       span{
@@ -299,12 +347,12 @@
       height 34px
       line-height 34px
       border-bottom 1px solid #e1e1e1
-      background #f4f5f9 
+      background #f4f5f9
     }
     .mobile-title span{
       margin-left 10px
     }
-    
+
     .mobile-n-grid{
       height 130px
       padding 40px 0;
@@ -314,7 +362,7 @@
         margin-top 20px
       }
     }
-    
+
 
     .mobile-chart{
       padding: 30px
@@ -330,7 +378,7 @@
         top 5px
       }
       input{
-        margin-left 10px 
+        margin-left 10px
         height 30px
         width 100px
       }

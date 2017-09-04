@@ -32,9 +32,11 @@
           <li><p>0</p><span>花费(元)</span></li>
         </ul>
       </div>
-      <div class="chart-con"></div>
-    </div>
+      <div class="chart-con">
 
+        <div class="line-chart"></div>
+      </div>
+    </div>
     <div class="form">
       <div class="top">
         <span class="name">推广数据明细</span>
@@ -54,46 +56,91 @@
 </template>
 
 <script>
-    export default {
-      name: 'plandata',
-      data () {
-        return {
-          msg: 'plandata',
-          activeName: 'first',
-          activityOptions: [{
-            value: '选项1',
-            label: '选项1'
-          }, {
-            value: '选项2',
-            label: '选项2'
-          }],
-          activityValue: '--全部活动--',
-          dateOptions: [{
-            value: '选项1',
-            label: '选项1'
-          }, {
-            value: '选项2',
-            label: '选项2'
-          }],
-          dateValue: '近7天',
+  export default {
+    name: 'plandata',
+    data () {
+      return {
+        msg: 'plandata',
+        activeName: 'first',
+        activityOptions: [{
+          value: '选项1',
+          label: '选项1'
+        }, {
+          value: '选项2',
+          label: '选项2'
+        }],
+        activityValue: '--全部活动--',
+        dateOptions: [{
+          value: '选项1',
+          label: '选项1'
+        }, {
+          value: '选项2',
+          label: '选项2'
+        }],
+        dateValue: '近7天',
 
-          tableData: [{
-            actName: '奥迪A8',
-            actDate: '2017-9-1',
-            actShow: '123',
-            actClick: '12',
-            actJump: '1',
-            actClickRate: '2',
-            actPay: '123'
-          }]
-        }
-      },
-      methods: {
-        handleClick (tab, event) {
-          console.log(tab, event)
+        tableData: [{
+          actName: '奥迪A8',
+          actDate: '2017-9-1',
+          actShow: '123',
+          actClick: '12',
+          actJump: '1',
+          actClickRate: '2',
+          actPay: '123'
+        }],
+
+        chartDate: {
+          tooltip: {trigger: 'axis'},
+          legend: {
+            left: '1vw',
+            data: ['访客数']
+          },
+          toolbox: {
+            feature: { saveAsImage: {} }
+          },
+          grid: {
+            left: '1vw',
+            right: '15px',
+            bottom: '1vw',
+            containLabel: true
+          },
+          xAxis: [
+            {
+              type: 'category',
+              boundaryGap: false,
+              data: [1, 2, 3, 4, 5]
+            }
+          ],
+          yAxis: [
+            {type: 'value'}
+          ],
+          series: [
+            {
+              name: '访客数',
+              type: 'line',
+              smooth: true,
+              data: [3, 4, 56, 23, 78]
+            }
+          ],
+          color: [
+            '#33A4FE'
+          ]
         }
       }
+    },
+    methods: {
+      handleClick (tab, event) {
+        console.log(tab, event)
+      },
+      chartShow () {
+        console.log(this)
+      }
+    },
+    mounted: function () {
+      const myChart = this.$echarts.init(document.getElementsByClassName('line-chart')[0])
+      myChart.setOption(this.chartDate, true)
     }
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
@@ -204,6 +251,16 @@
             border: none
           }
         }
+      }
+
+      .chart-con{
+        width: 100%
+        height: 100%
+      }
+      .line-chart{
+        width: 840px
+        height: 220px
+        margin: 100px auto;
       }
     }
 

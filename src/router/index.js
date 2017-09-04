@@ -64,7 +64,7 @@ export default new Router({
       component: data,
       children: [
         {
-          path: '/',
+          path: '',
           name: 'plandata',
           component: plandata
         },
