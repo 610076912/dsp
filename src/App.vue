@@ -8,18 +8,26 @@
       </div>
       <div class="header-con">
         <div class="center">
-          <div class="logo"><router-link to="/"></router-link></div>
+          <div class="logo"><router-link to="/">智视广告投放平台</router-link></div>
           <ul>
-            <li><router-link to="/" >首页</router-link></li>
-            <li><router-link to="plan" >推广数据</router-link></li>
-            <li><router-link to="data" >数据监测</router-link></li>
-            <li><router-link to="finance">财务管理</router-link></li>
+            <li v-bind:class="{ checked: pathCheck[0] }">
+              <router-link @click.native="onActive(0)" to="/">首页</router-link>
+            </li>
+            <li v-bind:class="{ checked: pathCheck[1] }">
+              <router-link @click.native="onActive(1)" to="plan">推广数据</router-link>
+            </li>
+            <li v-bind:class="{ checked: pathCheck[2] }">
+              <router-link @click.native="onActive(2)" to="data">数据监测</router-link>
+            </li>
+            <li v-bind:class="{ checked: pathCheck[3] }">
+              <router-link @click.native="onActive(3)" to="finance">财务管理</router-link>
+            </li>
           </ul>
         </div>
       </div>
       <div class="header-tab">
         <div class="center">
-          <div class="location">{{location}}</div>  
+          <div class="location">{{path}}</div>
         </div>
       </div>
     </div>
@@ -39,14 +47,31 @@ export default {
   name: 'app',
   data () {
     return {
-      name: '电风扇',
-      path: [true, false, false, false],
-      location: '首页'
+      name: '王雨晨',
+      pathCheck: [true, false, false, false],
+      path: '首页'
     }
   },
   methods: {
-    onActive: function () {
-      console.log(this.name)
+    onActive: function (pathNum) {
+      switch (pathNum) {
+        case 0:
+          this.path = '首页'
+          this.pathCheck = [true, false, false, false]
+          break
+        case 1:
+          this.path = '推广数据'
+          this.pathCheck = [false, true, false, false]
+          break
+        case 2:
+          this.path = '数据监测'
+          this.pathCheck = [false, false, true, false]
+          break
+        case 3:
+          this.path = '财务管理'
+          this.pathCheck = [false, false, false, true]
+          break
+      }
     }
   }
 }
@@ -111,7 +136,7 @@ export default {
     background: #f9f9f9;
   }
   .location{
-    line-height: 50px; 
+    line-height: 50px;
     font-weight: bold;
     display block;
     height: 48px;
@@ -135,16 +160,18 @@ export default {
     line-height: 70px;
     cursor: pointer;
   }
-  .header-con ul li .active{
-    color: #1D8CE0;
+  .header-con ul li.checked a{
+    color: #60a7d6
   }
   .logo{
     height: 100%;
     width: 260px;
-    background: gray;
-    float left
+    float: left
+    line-height: 70px
+    font-size: 22px
+    color: #333333
   }
-  
+
 
   .main {
     width: 1200px;

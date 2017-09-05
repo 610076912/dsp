@@ -128,7 +128,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import setps from './setps-component.vue'
+  import setps from './steps-component.vue'
   export default {
     name: 'plan',
     data () {

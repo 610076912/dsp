@@ -5,7 +5,7 @@
     <div class="data-con">
       <el-row class="tac">
         <el-col :span="5" class="data-left">
-          <el-menu :default-active="$route.path" mode="vertical" default-active="1" class="el-menu-vertical-demo" router>
+          <el-menu mode="vertical" default-active="data" class="el-menu-vertical-demo" router>
             <el-submenu index="1">
               <template slot="title"><i class="el-icon-minus"></i>移动广告数据</template>
               <el-menu-item index="data">推广数据</el-menu-item>
