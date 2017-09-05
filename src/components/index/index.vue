@@ -15,7 +15,7 @@
         </div>
         <div class="statist">
           <ul class="tab-tag">
-            <li v-for="(key,index) in tags" v-bind:class="{tagActive:(indexs == index)}" @click="toggleTags(index)">{{key}}</li>
+            <li v-for="(key,index) in tags" v-bind:class="{ tagActive: (indexs == index) }" @click="toggleTags(index)">{{key}}</li>
           </ul>
           <div class="tag-items">
             <div class="tag-item" v-for="(key,index) in datas" v-if="indexs == index">
@@ -218,8 +218,8 @@
       float left;
     }
     .now-location{
-      height 68px;
-      line-height 68px;
+      height 60px;
+      line-height 60px;
     }
     .user-info{
       height 50px;

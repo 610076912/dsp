@@ -11,6 +11,11 @@ import plandata from '@/components/data/plandata'
 import mediadata from '@/components/data/mediadata'
 import finance from '@/components/finance/finance'
 
+// 引入财务管理页面
+// import finance from '@/components/finance/finance'
+import finaCWGK from '@/components/finance/finaCWGK'
+import finaCZJL from '@/components/finance/finaCZJL'
+import finaHistory from '@/components/finance/finaHistory'
 Vue.use(Router)
 
 export default new Router({
@@ -75,7 +80,24 @@ export default new Router({
     {
       path: '/finance',
       name: 'finance',
-      component: finance
+      component: finance,
+      children: [
+        {
+          path: '/',
+          name: 'finaCWGK',
+          component: finaCWGK
+        },
+        {
+          path: '/finaCZJL',
+          name: 'finaCZJL',
+          component: finaCZJL
+        },
+        {
+          path: '/finaHistory',
+          name: 'finaHistory',
+          component: finaHistory
+        }
+      ]
     }
 
   ]
