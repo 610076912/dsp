@@ -1,6 +1,6 @@
 <template>
   <div class="finance">
-    <div class="now-location"><b>当前位置：</b>{{location}}</div>
+    <div class="now-location"><b>当前位置：</b>财务管理 > {{location[isActive]}}</div>
     <div class="finance-content">
       <div class="finance-content-nav">
         <ul class="nav-ul">
@@ -23,7 +23,7 @@ export default {
     return {
       msg: 'finance',
       isActive: 0,
-      location: '财务管理>财务概况'
+      location: ['财务概况', '充值记录', '花费记录']
     }
   },
   methods: {

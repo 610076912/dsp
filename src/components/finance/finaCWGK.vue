@@ -65,8 +65,49 @@
           actJump: '1',
           actClickRate: '2',
           actPay: '123'
-        }]
+        }],
+        chartDate: {
+          tooltip: {trigger: 'axis'},
+          legend: {
+            left: '1vw',
+            data: ['访客数']
+          },
+          toolbox: {
+            feature: { saveAsImage: {} }
+          },
+          grid: {
+            left: '1vw',
+            right: '15px',
+            bottom: '1vw',
+            containLabel: true
+          },
+          xAxis: [
+            {
+              type: 'category',
+              boundaryGap: false,
+              data: [1, 2, 3, 4, 5, 6, 7]
+            }
+          ],
+          yAxis: [
+            {type: 'value'}
+          ],
+          series: [
+            {
+              name: '访客数',
+              type: 'line',
+              smooth: true,
+              data: [3, 4, 56, 23, 46, 52, 78]
+            }
+          ],
+          color: [
+            '#33A4FE'
+          ]
+        }
       }
+    },
+    mounted () {
+      let myEchart = this.$echarts.init(document.getElementsByClassName('money-chart-content')[0])
+      myEchart.setOption(this.chartDate, true)
     }
   }
 </script>
