@@ -172,7 +172,6 @@ export default {
     color: #333333
   }
 
-
   .main {
     width: 1200px;
     min-height: calc(100% - 380px);
