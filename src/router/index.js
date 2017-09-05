@@ -5,7 +5,7 @@ import index from '@/components/index/index'
 import plan from '@/components/plan/plan'
 import planIndex from '@/components/plan/plan-index'
 import creatnew1 from '@/components/plan/creat-new1'
-import creatnew2 from '@/components/plan/creat-new2'
+import creatnew2 from '@/components/plan/creat-new3'
 
 import data from '@/components/data/data'
 import plandata from '@/components/data/plandata'
@@ -41,24 +41,24 @@ export default new Router({
           component: creatnew1
         },
         {
-          path: 'creatnew2',
+          path: '/creatnew2',
           name: 'creatnew2',
           component: creatnew2
         },
         {
-          path: 'creatnew3',
+          path: '/creatnew3',
           component: planIndex
         },
         {
-          path: 'creatnew4',
+          path: '/creatnew4',
           component: planIndex
         },
         {
-          path: 'creatnew5',
+          path: '/creatnew5',
           component: planIndex
         },
         {
-          path: 'creatnew6',
+          path: '/creatnew6',
           component: planIndex
         }
       ]

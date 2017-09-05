@@ -25,7 +25,7 @@
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
   .creat-header-component {
     width: 100%;
-    height: 120px;
+    height: 130px;
     background: #fff;
     & > span {
       display: block;
