@@ -6,6 +6,8 @@ import plan from '@/components/plan/plan'
 import planIndex from '@/components/plan/plan-index'
 import creatnew1 from '@/components/plan/creat-new1'
 import creatnew2 from '@/components/plan/creat-new2'
+import creatpreview from '@/components/plan/creatpreview'
+import creatmaterial from '@/components/plan/creatmaterial'
 
 import data from '@/components/data/data'
 import plandata from '@/components/data/plandata'
@@ -33,7 +35,7 @@ export default new Router({
       children: [
         {
           path: '',
-          component: planIndex
+          component: creatnew1
         },
         {
           path: '/creatnew1',
@@ -54,12 +56,14 @@ export default new Router({
           component: planIndex
         },
         {
-          path: 'creatnew5',
-          component: planIndex
+          path: '/creatpreview',
+          name: 'creatpreview',
+          component: creatpreview
         },
         {
-          path: 'creatnew6',
-          component: planIndex
+          path: '/creatmaterial',
+          name: 'creatmaterial',
+          component: creatmaterial
         }
       ]
     },
