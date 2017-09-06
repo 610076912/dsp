@@ -5,8 +5,11 @@
       <creat-header title="时间周期定向" text="按时间"></creat-header>
       <div class="time">
         <div class="time-left">
-          <module-header-compoent title="时间" :check="true" :checkBox="timeCheckBox"
-                                  @checkall="timeCheckAll"></module-header-compoent>
+          <module-header-compoent
+            title="时间"
+            :check="true"
+            :checkBox="timeCheckBox"
+            @checkall="timeCheckAll"></module-header-compoent>
           <div class="checkbox-wrap">
             <el-checkbox
               v-for="(i, index) in timeArray.hour"
@@ -27,7 +30,11 @@
       <creat-header title="" text="按周期"></creat-header>
       <div class="week">
         <div class="week-left">
-          <module-header-compoent title="周期" :check="true" @checkall="weekCheckAll"></module-header-compoent>
+          <module-header-compoent
+            title="周期"
+            :check="true"
+            :checkBox="weekCheckBox"
+            @checkall="weekCheckAll"></module-header-compoent>
           <div class="checkbox-wrap">
             <el-checkbox
               v-for="(item, index) in timeArray.week"
@@ -47,8 +54,8 @@
       </div>
     </div>
     <div class="button-wrap">
-      <el-button>返回</el-button>
-      <el-button class="next-btn" type="primary">下一步</el-button>
+      <el-button @click="back">返回</el-button>
+      <el-button class="next-btn" type="primary" @click="nextStep">下一步</el-button>
     </div>
   </div>
 </template>
@@ -67,7 +74,8 @@
         timeArray: {},
         checkedTime: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         checkedWeek: [0, 0, 0, 0, 0, 0, 0],
-        timeCheckBox: false
+        timeCheckBox: false,
+        weekCheckBox: false
       }
     },
     created () {
@@ -78,10 +86,25 @@
     },
     watch: {
       'checkedTime' (val) {
-//        let isall = val.every((item) => {
-//          return item !== 0
-//        })
-        this.timeCheckBox = true
+        let isall = val.every((item) => {
+          return item === 1
+        })
+        if (isall === true) {
+          this.timeCheckBox = true
+        } else {
+          this.timeCheckBox = false
+        }
+        console.log(isall)
+      },
+      'checkedWeek' (val) {
+        let isall = val.every((item) => {
+          return item === 1
+        })
+        if (isall === true) {
+          this.weekCheckBox = true
+        } else {
+          this.weekCheckBox = false
+        }
       }
     },
     methods: {
@@ -100,6 +123,13 @@
       },
       weekChange () {
         console.log(this.checkedWeek)
+      },
+      // 下一步
+      nextStep () {
+        this.$router.push('/creatMedia')
+      },
+      back () {
+        this.$router.go(-1)
       }
     },
     components: {
@@ -118,15 +148,15 @@
       width: 100%;
       overflow: hidden;
       padding: 15px 30px;
-      padding-bottom: 30px;
+      padding-bottom: 60px;
       border-bottom: 1px solid #cacaca;
       .time, .week {
         width: 100%;
-        height: 600px;
+        height: 670px;
         .time-left, .week-left {
-          width: 300px;
+          width: 340px;
           background: #f9f9f9;
-          padding: 15px 30px;
+          padding: 15px 35px 30px;
           float left;
           .checkbox-wrap {
             width: 100%;
@@ -137,7 +167,7 @@
             }
             .el-checkbox {
               width: 100%;
-              height: 40px;
+              height: 47px;
               border: 1px solid #cacaca;
               border-bottom: none;
               margin-left: 0;
@@ -148,20 +178,20 @@
               }
               .el-checkbox__input {
                 position: relative;
-                left: 210px;
+                left: 240px;
               }
             }
           }
         }
         .time-right, .week-right {
-          width: calc(100% - 300px)
-          height: 563px;
+          width: calc(100% - 340px)
+          height: 662px;
           float: left;
           border: 1px solid #f9f9f9;
           padding: 14px 30px;
         }
         .week-right {
-          height: 363px;
+          height: 427px;
         }
       }
       .week {
@@ -170,11 +200,15 @@
     }
     .button-wrap {
       width: 100%;
-      height: 80px;
+      height: 150px;
       text-align: center;
-      line-height: 80px;
+      line-height: 150px;
+      button {
+        width: 160px;
+        height: 40px;
+      }
       .next-btn {
-        margin-left: 80px;
+        margin-left: 25px;
       }
     }
   }

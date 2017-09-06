@@ -35,7 +35,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item class="button-wrap">
-          <el-button>返回</el-button>
+          <el-button @click="back">返回</el-button>
           <el-button class="next-button" type="primary" @click="nextStep">
             下一步
           </el-button>
@@ -100,8 +100,11 @@
         this.$refs['new1form'].validate((valid) => {
           // 如果验证通过则跳转下一个路由。
           // if (valid) that.$router.push('/creatnew2')
-          that.$router.push({name: 'creatnew2'})
+          that.$router.push('/creatScene')
         })
+      },
+      back () {
+        this.$router.go(-1)
       }
     },
     components: {

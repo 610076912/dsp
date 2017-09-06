@@ -24,11 +24,15 @@
         <div class="con">
           <el-collapse accordion value="1">
             <el-collapse-item name="1">
-              <template class="fontb" slot="title">Flash1 150px*150px规格<el-button class="fr" size="small">保存</el-button></template>
+              <template class="fontb" slot="title">Flash1 150px*150px规格
+                <button @click.stop class="fr" size="small">保存</button>
+              </template>
               <div class="ads"></div>
             </el-collapse-item>
             <el-collapse-item name="2">
-              <template class="fontb" slot="title">Flash2 150px*150px规格<el-button class="fr" size="small">保存</el-button></template>
+              <template class="fontb" slot="title">Flash2 150px*150px规格
+                <button @click.stop class="fr" size="small">保存</button>
+              </template>
               <div class="ads"></div>
             </el-collapse-item>
           </el-collapse>
@@ -39,11 +43,15 @@
         <div class="con">
           <el-collapse accordion value="1">
             <el-collapse-item name="1">
-              <template class="fontb" slot="title">关联模板1 屏占比3:1 适用于: 商品<el-button class="fr" size="small">保存</el-button></template>
+              <template class="fontb" slot="title">关联模板1 屏占比3:1 适用于: 商品
+                <button @click.stop class="fr" size="small">保存</button>
+              </template>
               <div class="ads"></div>
             </el-collapse-item>
             <el-collapse-item name="2">
-              <template class="fontb" slot="title">关联模板2 屏占比3:2 适用于: 商品<el-button class="fr" size="small">保存</el-button></template>
+              <template class="fontb" slot="title">关联模板2 屏占比3:2 适用于: 商品
+                <button @click.stop class="fr" size="small">保存</button>
+              </template>
               <div class="ads"></div>
             </el-collapse-item>
           </el-collapse>
@@ -59,6 +67,7 @@
 
 <script>
   import setps from './steps-component.vue'
+
   export default {
     name: 'creatmaterial',
     data () {
@@ -93,18 +102,31 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
-  #creatmaterial{
-    .fr{
+  #creatmaterial {
+    .fr {
       float: right
       margin: 7px 20px
+      cursor: pointer;
+      background: #fff;
+      border: 1px solid #c4c4c4;
+      padding: 0 10px;
+      height: 28px;
+      font-size: 12px;
+      border-radius: 4px;
+      outline: none;
+      transition: .3s;
+      &:hover {
+        border-color: #169bd5;
+        color: #169bd5;
+      }
     }
-    .slide{
+    .slide {
       width: 1140px
       height: 60px
       margin: 60px auto
       position: relative
 
-      .btn{
+      .btn {
         width: 42px
         height: 60px
         position: absolute
@@ -114,27 +136,27 @@
         margin-left: -12px;
         cursor: pointer;
       }
-      .slide-prev{
+      .slide-prev {
         left: 0
       }
-      .slide-next{
+      .slide-next {
         right: 0
       }
-      .slide-box{
+      .slide-box {
         width: 980px
         height: 100%
         margin: 0 auto
         overflow hidden
         position: relative
 
-        ul{
+        ul {
           position: absolute
           transition: left 0.5s;
-          -moz-transition: left 0.5s;	/* Firefox 4 */
-          -webkit-transition: left 0.5s;	/* Safari 和 Chrome */
-          -o-transition: left 0.5s;	/* Opera */
+          -moz-transition: left 0.5s; /* Firefox 4 */
+          -webkit-transition: left 0.5s; /* Safari 和 Chrome */
+          -o-transition: left 0.5s; /* Opera */
 
-          li{
+          li {
             width: 180px
             height: 60px
             float: left
@@ -144,40 +166,40 @@
         }
       }
     }
-    .material{
+    .material {
       width: 1140px;
       margin: 0 auto 60px
       overflow: hidden
-
-      .left{
+      min-height: 438px;
+      .left {
         width: 554px
         float: left
       }
-      .right{
+      .right {
         width: 554px
         float: right
       }
 
-      .top{
+      .top {
         line-height: 38px
         color: #31a5d8
         border-bottom: 2px solid #169bd5
       }
-      .con{
+      .con {
 
-        .el-collapse-item__content{
+        .el-collapse-item__content {
           padding: 0
         }
-        .ads{
+        .ads {
           height: 310px
           background: #ccc
         }
       }
-      .el-collapse-item__header{
+      .el-collapse-item__header {
         font-weight: bold
       }
     }
-    .btns{
+    .btns {
       width: 100%
       height: 130px
       text-align: center

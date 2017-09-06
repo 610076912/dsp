@@ -31,6 +31,15 @@
         checkStatus: false
       }
     },
+    watch: {
+      'checkBox' (val) {
+        if (val) {
+          this.checkStatus = true
+        } else {
+          this.checkStatus = false
+        }
+      }
+    },
     methods: {
       change () {
         if (this.check) {

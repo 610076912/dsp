@@ -122,7 +122,7 @@
         </el-table>
       </div>
     </el-tabs>
-    <button class="creat-new"><router-link to="creatnew1"></router-link>新建活动</button>
+    <button class="creat-new"><router-link to="creatBasics"></router-link>新建活动</button>
 
   </div>
 </template>

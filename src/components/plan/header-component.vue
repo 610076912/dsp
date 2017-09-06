@@ -25,7 +25,7 @@
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
   .creat-header-component {
     width: 100%;
-    height: 130px;
+    height: 140px;
     background: #fff;
     & > span {
       display: block;
@@ -38,17 +38,17 @@
     .creat-header-wrap {
       width: 100%;
       margin-top: 20px;
-      height: 40px;
+      height: 50px;
       border-bottom: 1px solid #169bd5;
       background: #f9f9f9;
       span {
         display: block;
         width: 100px;
-        height: 40px;
+        height: 50px;
         background: #169bd5;
-        margin-left: 50px;
+        margin-left: 34px;
         color: #fff;
-        line-height: 40px;
+        line-height: 50px;
         text-align: center;
       }
     }

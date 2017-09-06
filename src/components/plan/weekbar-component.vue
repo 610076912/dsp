@@ -43,16 +43,16 @@
     &>span
       font-size 14px
     .line
-      width: 5%
+      width: 4%
       border-bottom 1px solid #169bd5
       position relative
       top: -5px
     .box
-      width: 7%
+      width: 8.8%
       border: 1px solid #169bd5
-      height: 30px
+      height: 25px
       text-align center
-      line-height 30px
+      line-height 25px
       color: #169bd5
       font-size 14px
     .box-active

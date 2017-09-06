@@ -27,7 +27,7 @@
       </div>
       <div class="header-tab">
         <div class="center">
-          <div class="location">{{location}}</div>
+          <div class="location"></div>
         </div>
       </div>
     </div>

@@ -21,8 +21,8 @@
       </div>
     </div>
     <div class="button-wrap">
-      <el-button>返回</el-button>
-      <el-button class="next-btn" type="primary">下一步</el-button>
+      <el-button @click="back">返回</el-button>
+      <el-button class="next-btn" type="primary" @click="nextStep">下一步</el-button>
     </div>
   </div>
 </template>
@@ -49,6 +49,13 @@
       },
       checkall () {
         console.log(111)
+      },
+      // 下一步
+      nextStep () {
+        this.$router.push('/creatTime')
+      },
+      back () {
+        this.$router.go(-1)
       }
     },
     components: {
@@ -117,11 +124,15 @@
     }
     .button-wrap {
       width: 100%;
-      height: 80px;
+      height: 150px;
       text-align: center;
-      line-height: 80px;
+      line-height: 150px;
+      button {
+        width: 160px;
+        height: 40px;
+      }
       .next-btn {
-        margin-left: 80px;
+        margin-left: 25px;
       }
     }
   }

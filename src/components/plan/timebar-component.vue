@@ -66,7 +66,7 @@
     .left
       width 6%
       position relative
-      top: -8px
+      top: -6px
       .left-line
         width: 60%
         border-bottom 2px dashed #169bd5
@@ -81,19 +81,19 @@
         float left
         margin-left: 3px
       .circel
-        width 25px
-        height: 25px
+        width 20px
+        height: 20px
         -webkit-border-radius: 50%
         -moz-border-radius: 50%
         border-radius: 50%
         border: 1px solid #169bd5
         text-align center
-        line-height 25px
+        line-height 20px
       .line
-        width: 4%
+        width: 4.9%
         border-bottom 2px dashed #169bd5
         position relative
-        top: 11px
+        top: 9px
       .time-bar-line
         border-bottom-style solid
       .time-bar-circel

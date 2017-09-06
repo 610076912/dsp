@@ -4,10 +4,14 @@ import index from '@/components/index/index'
 // 推广计划及子页面
 import plan from '@/components/plan/plan'
 import planIndex from '@/components/plan/plan-index'
-import creatnew1 from '@/components/plan/creat-new1'
-import creatnew2 from '@/components/plan/creat-new3'
-import creatpreview from '@/components/plan/creatpreview'
-import creatmaterial from '@/components/plan/creatmaterial'
+import creatBasics from '@/components/plan/creat-basics'
+import creatScene from '@/components/plan/creat-scene'
+import creatTime from '@/components/plan/creat-time'
+import creatMedia from '@/components/plan/creat-media'
+import creatMediaType from '@/components/plan/creat-mediatype'
+import creatStrategy from '@/components/plan/creat-strategy'
+import creatPreview from '@/components/plan/creat-preview'
+import creatMaterial from '@/components/plan/creat-material'
 
 import data from '@/components/data/data'
 import plandata from '@/components/data/plandata'
@@ -38,30 +42,36 @@ export default new Router({
           component: planIndex
         },
         {
-          path: '/creatnew1',
-          name: 'creatnew1',
-          component: creatnew1
+          path: '/creatBasics',
+          component: creatBasics
         },
         {
-          path: 'creatnew2',
-          name: 'creatnew2',
-          component: creatnew2
+          path: '/creatScene',
+          component: creatScene
         },
         {
-          path: 'creatnew3',
-          component: planIndex
+          path: '/creatTime',
+          component: creatTime
         },
         {
-          path: 'creatnew4',
-          component: planIndex
+          path: '/creatMedia',
+          component: creatMedia
         },
         {
-          path: 'creatnew5',
-          component: planIndex
+          path: '/creatMediaType',
+          component: creatMediaType
         },
         {
-          path: 'creatnew6',
-          component: planIndex
+          path: '/creatStrategy',
+          component: creatStrategy
+        },
+        {
+          path: '/creatPreview',
+          component: creatPreview
+        },
+        {
+          path: '/creatMaterial',
+          component: creatMaterial
         }
       ]
     },

@@ -1,6 +1,6 @@
 <template>
   <div id="creatpreview">
-    <setps :active="4"></setps>
+    <steps :active="4"></steps>
     <div class="basic cons">
       <p class="head"><span>基本信息</span><b>编辑信息</b></p>
       <el-row class="row">
@@ -116,7 +116,7 @@
 </template>
 
 <script>
-  import setps from './steps-component.vue'
+  import steps from './steps-component.vue'
   export default {
     name: 'creatpreview',
     data () {
@@ -126,18 +126,18 @@
     },
     methods: {
       back () {
-        console.log('back')
+        this.$router.go(-1)
       },
       finish () {
         console.log('complete')
       },
       finishto () {
         console.log('finishto')
-        this.$router.push('creatmaterial')
+        this.$router.push('/creatMaterial')
       }
     },
     components: {
-      setps
+      steps
     }
   }
 </script>
