@@ -124,9 +124,9 @@
       weekChange () {
         console.log(this.checkedWeek)
       },
-      // 下一步
+      // 下一步C
       nextStep () {
-        this.$router.push('/creatMedia')
+        this.$router.push('/creatCity')
       },
       back () {
         this.$router.go(-1)

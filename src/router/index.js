@@ -7,6 +7,7 @@ import planIndex from '@/components/plan/plan-index'
 import creatBasics from '@/components/plan/creat-basics'
 import creatScene from '@/components/plan/creat-scene'
 import creatTime from '@/components/plan/creat-time'
+import creatCity from '@/components/plan/creat-city'
 import creatMedia from '@/components/plan/creat-media'
 import creatMediaType from '@/components/plan/creat-mediatype'
 import creatStrategy from '@/components/plan/creat-strategy'
@@ -52,6 +53,11 @@ export default new Router({
         {
           path: '/creatTime',
           component: creatTime
+        },
+        {
+          path: '/creatCity',
+          name: 'creatCity',
+          component: creatCity
         },
         {
           path: '/creatMedia',

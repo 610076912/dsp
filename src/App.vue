@@ -39,7 +39,7 @@
     </div>
     <div class="footer">
       <div class="center">
-        页面底部
+        北京视连通科技有限公司  京ICP备15041948号
       </div>
     </div>
   </div>
@@ -188,6 +188,8 @@
     line-height: 70px
     font-size: 22px
     color: #333333
+    padding-left: 50px
+    background: url('./assets/img/logo.png') no-repeat center left/auto 70%
   }
 
   .main {

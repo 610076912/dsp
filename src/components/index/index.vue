@@ -168,74 +168,74 @@
 </template>
 
 <script>
-    export default {
-      name: 'index',
-      data () {
-        return {
-          value: '',
-          name: '电风扇',
-          msg: 'index',
-          location: '首页',
-          sum: 500,
-          tags: ['移动', 'PC', 'OTT'],
-          indexs: 0,
-          datas: ['我是移动页面', 'pc页面在此', '发生的离开'],
+  export default {
+    name: 'index',
+    data () {
+      return {
+        value: '',
+        name: '电风扇',
+        msg: 'index',
+        location: '首页',
+        sum: 500,
+        tags: ['移动', 'PC', 'OTT'],
+        indexs: 0,
+        datas: ['我是移动页面', 'pc页面在此', '发生的离开'],
 
-          chartDate: {
-            tooltip: {trigger: 'axis'},
-            legend: {
-              left: '1vw',
-              data: ['访客数']
-            },
-            toolbox: {
-              feature: { saveAsImage: {} }
-            },
-            grid: {
-              left: '1vw',
-              right: '15px',
-              bottom: '1vw',
-              containLabel: true
-            },
-            xAxis: [
-              {
-                type: 'category',
-                boundaryGap: false,
-                data: [1, 2, 3, 4, 5]
-              }
-            ],
-            yAxis: [
-              {type: 'value'}
-            ],
-            series: [
-              {
-                name: '访客数',
-                type: 'line',
-                smooth: true,
-                data: [3, 4, 56, 23, 78]
-              }
-            ],
-            color: [
-              '#33A4FE'
-            ]
-          }
+        chartDate: {
+          tooltip: {trigger: 'axis'},
+          legend: {
+            left: '1vw',
+            data: ['访客数']
+          },
+          toolbox: {
+            feature: { saveAsImage: {} }
+          },
+          grid: {
+            left: '1vw',
+            right: '15px',
+            bottom: '1vw',
+            containLabel: true
+          },
+          xAxis: [
+            {
+              type: 'category',
+              boundaryGap: false,
+              data: [1, 2, 3, 4, 5]
+            }
+          ],
+          yAxis: [
+            {type: 'value'}
+          ],
+          series: [
+            {
+              name: '访客数',
+              type: 'line',
+              smooth: true,
+              data: [3, 4, 56, 23, 78]
+            }
+          ],
+          color: [
+            '#33A4FE'
+          ]
         }
-      },
-      methods: {
-        toggleTags: function (index) {
-          this.indexs = index
-        }
-      },
-      mounted: function () {
-        const mobileChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[0])
-        mobileChart.setOption(this.chartDate, true)
-
-        const pcChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[1])
-        pcChart.setOption(this.chartDate, true)
-
-        const ottChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[2])
-        ottChart.setOption(this.chartDate, true)
       }
+    },
+    methods: {
+      toggleTags: function (index) {
+        this.indexs = index
+      }
+    },
+    mounted: function () {
+      const mobileChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[0])
+      mobileChart.setOption(this.chartDate, true)
+
+      const pcChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[1])
+      pcChart.setOption(this.chartDate, true)
+
+      const ottChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[2])
+      ottChart.setOption(this.chartDate, true)
     }
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
