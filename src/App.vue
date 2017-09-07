@@ -3,12 +3,15 @@
     <div class="header">
       <div class="header-top">
         <div class="center">
-          <div class="header-welcome">欢迎您，<span class="header-ggz">广告主</span><span class="header-name">{{name}} <i class="el-icon-caret-bottom"></i></span><span class="logout">安全退出</span></div>
+          <div class="header-welcome">欢迎您，<span class="header-ggz">广告主</span><span class="header-name">{{name}} <i
+            class="el-icon-caret-bottom"></i></span><span class="logout">安全退出</span></div>
         </div>
       </div>
       <div class="header-con">
         <div class="center">
-          <div class="logo"><router-link to="/">智视广告投放平台</router-link></div>
+          <div class="logo">
+            <router-link to="/">智视广告投放平台</router-link>
+          </div>
           <ul>
             <li v-bind:class="{ checked: pathCheck[0] }">
               <router-link @click.native="onActive(0)" to="/">首页</router-link>
@@ -43,38 +46,44 @@
 </template>
 
 <script>
-export default {
-  name: 'app',
-  data () {
-    return {
-      name: '王雨晨',
-      pathCheck: [true, false, false, false],
-      path: '首页'
-    }
-  },
-  methods: {
-    onActive: function (pathNum) {
-      switch (pathNum) {
-        case 0:
-          this.path = '首页'
-          this.pathCheck = [true, false, false, false]
-          break
-        case 1:
-          this.path = '推广数据'
-          this.pathCheck = [false, true, false, false]
-          break
-        case 2:
-          this.path = '数据监测'
-          this.pathCheck = [false, false, true, false]
-          break
-        case 3:
-          this.path = '财务管理'
-          this.pathCheck = [false, false, false, true]
-          break
+  export default {
+    name: 'app',
+    data () {
+      return {
+        name: '王雨晨',
+        pathCheck: [true, false, false, false],
+        path: '首页'
+      }
+    },
+    created () {
+      this.$http.get('/api/api/get_act_group')
+        .then(function (data) {
+          console.log(data)
+        })
+    },
+    methods: {
+      onActive: function (pathNum) {
+        switch (pathNum) {
+          case 0:
+            this.path = '首页'
+            this.pathCheck = [true, false, false, false]
+            break
+          case 1:
+            this.path = '推广数据'
+            this.pathCheck = [false, true, false, false]
+            break
+          case 2:
+            this.path = '数据监测'
+            this.pathCheck = [false, false, true, false]
+            break
+          case 3:
+            this.path = '财务管理'
+            this.pathCheck = [false, false, false, true]
+            break
+        }
       }
     }
   }
-}
 
 </script>
 
@@ -104,26 +113,31 @@ export default {
     height: 40px;
     background: #454546;
   }
-  .header-welcome{
-    float: right ;
+
+  .header-welcome {
+    float: right;
     padding: 10px 0;
     line-height: 20px;
     color: #fff;
   }
-  .header-ggz{
+
+  .header-ggz {
     display: inline-block;
     background: #1D8CE0;
     padding: 0 5px;
     margin: 0 3px;
     border-radius: 3px;
   }
-  .header-name{
+
+  .header-name {
     margin: 0 5px 0 3px;
     cursor: pointer;
   }
-  .logout{
+
+  .logout {
     cursor: pointer;
   }
+
   .header-con {
     width: 100%;
     height: 70px;
@@ -135,7 +149,8 @@ export default {
     height: 50px;
     background: #f9f9f9;
   }
-  .location{
+
+  .location {
     line-height: 50px;
     font-weight: bold;
     display block;
@@ -145,6 +160,7 @@ export default {
     font-size 14px;
     border-bottom 2px solid #1D8CE0;
   }
+
   .header-con ul {
     width: 560px;
     height: 100%;
@@ -160,10 +176,12 @@ export default {
     line-height: 70px;
     cursor: pointer;
   }
-  .header-con ul li.checked a{
+
+  .header-con ul li.checked a {
     color: #60a7d6
   }
-  .logo{
+
+  .logo {
     height: 100%;
     width: 260px;
     float: left
