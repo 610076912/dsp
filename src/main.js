@@ -6,6 +6,8 @@ import 'element-ui/lib/theme-default/index.css'
 import App from './App'
 import router from './router'
 // axios
+import es6Promise from 'es6-promise'
+es6Promise.polyfill()
 import axios from 'axios'
 import './assets/css/reset.styl'
 import echarts from 'echarts/lib/echarts'
@@ -17,6 +19,21 @@ Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts
 Vue.prototype.$http = axios
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.Auth)) {
+    if (!sessionStorage.getItem('token')) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
 
 /* eslint-disable no-new */
 new Vue({

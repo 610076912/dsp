@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import index from '@/components/index/index'
+import login from '@/components/index/login'
 // 推广计划及子页面
 import plan from '@/components/plan/plan'
 import planIndex from '@/components/plan/plan-index'
@@ -31,12 +32,19 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: index
+      component: index,
+      meta: { Auth: true }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: login
     },
     {
       path: '/plan',
       name: 'plan',
       component: plan,
+      meta: { Auth: true },
       children: [
         {
           path: '',
@@ -85,6 +93,7 @@ export default new Router({
       path: '/data',
       name: 'data',
       component: data,
+      meta: { Auth: true },
       children: [
         {
           path: '',
@@ -102,6 +111,7 @@ export default new Router({
       path: '/finance',
       name: 'finance',
       component: finance,
+      meta: { Auth: true },
       children: [
         {
           path: '/',
@@ -120,6 +130,5 @@ export default new Router({
         }
       ]
     }
-
   ]
 })

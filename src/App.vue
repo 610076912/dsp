@@ -3,8 +3,8 @@
     <div class="header">
       <div class="header-top">
         <div class="center">
-          <div class="header-welcome">欢迎您，<span class="header-ggz">广告主</span><span class="header-name">{{name}} <i
-            class="el-icon-caret-bottom"></i></span><span class="logout">安全退出</span></div>
+          <div class="header-welcome">欢迎您，<span class="header-ggz">广告主</span><span class="header-name">{{username}} <i
+            class="el-icon-caret-bottom"></i></span><span class="logout" @click="signOut">安全退出</span></div>
         </div>
       </div>
       <div class="header-con">
@@ -13,24 +13,24 @@
             <router-link to="/">智视广告投放平台</router-link>
           </div>
           <ul>
-            <li v-bind:class="{ checked: pathCheck[0] }">
-              <router-link @click.native="onActive(0)" to="/">首页</router-link>
+            <li>
+              <router-link @click.native="onActive('/')" to="/">首页</router-link>
             </li>
-            <li v-bind:class="{ checked: pathCheck[1] }">
-              <router-link @click.native="onActive(1)" to="plan">推广数据</router-link>
+            <li>
+              <router-link @click.native="onActive('/plan')" to="plan">推广数据</router-link>
             </li>
-            <li v-bind:class="{ checked: pathCheck[2] }">
-              <router-link @click.native="onActive(2)" to="data">数据监测</router-link>
+            <li>
+              <router-link @click.native="onActive('/data')" to="data">数据监测</router-link>
             </li>
-            <li v-bind:class="{ checked: pathCheck[3] }">
-              <router-link @click.native="onActive(3)" to="finance">财务管理</router-link>
+            <li>
+              <router-link @click.native="onActive('/finance')" to="finance">财务管理</router-link>
             </li>
           </ul>
         </div>
       </div>
       <div class="header-tab">
         <div class="center">
-          <div class="location"></div>
+          <div class="location">{{ path }}</div>
         </div>
       </div>
     </div>
@@ -50,35 +50,33 @@
     name: 'app',
     data () {
       return {
-        name: '王雨晨',
+        username: '王雨晨',
         pathCheck: [true, false, false, false],
         path: '首页'
       }
     },
     created () {
-      this.$http.get('/api/api/get_act_group')
-        .then(function (data) {
-          console.log(data)
-        })
+      this.onActive(this.$router.currentRoute.fullPath)
+      this.username = sessionStorage.getItem('user')
     },
     methods: {
+      signOut () {
+        sessionStorage.removeItem('token')
+        this.$router.push('/login')
+      },
       onActive: function (pathNum) {
         switch (pathNum) {
-          case 0:
+          case '/':
             this.path = '首页'
-            this.pathCheck = [true, false, false, false]
             break
-          case 1:
+          case '/plan':
             this.path = '推广数据'
-            this.pathCheck = [false, true, false, false]
             break
-          case 2:
+          case '/data':
             this.path = '数据监测'
-            this.pathCheck = [false, false, true, false]
             break
-          case 3:
+          case '/finance':
             this.path = '财务管理'
-            this.pathCheck = [false, false, false, true]
             break
         }
       }
@@ -95,7 +93,11 @@
     width: 100%;
     min-height: 100%;
     background: #eeeeee;
+    position: relative
 
+    .router-link-exact-active {
+      color: #60a7d6
+    }
     .center {
       width: 1200px;
       height: 100%;
