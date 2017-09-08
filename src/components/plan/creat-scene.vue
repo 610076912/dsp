@@ -76,7 +76,7 @@
       padding-bottom: 30px;
       border-bottom: 1px solid #cacaca;
       .target-wrap {
-        width: 300px;
+        width: 340px;
         height: 700px;
         background: #f9f9f9;
         padding: 20px 30px;
@@ -85,8 +85,6 @@
           width: 100%;
           max-height: 90%;
           overflow-y: auto;
-          border-top: 1px solid #cacaca;
-          border-bottom: 1px solid #cacaca;
           &::-webkit-scrollbar {
             width: 0;
           }
@@ -110,7 +108,7 @@
       }
       .target-con {
         float: left;
-        width: 840px;
+        width: 800px;
         padding: 20px 30px;
         border: 1px solid #f9f9f9;
         border-left: none;
@@ -122,18 +120,6 @@
         }
       }
     }
-    .button-wrap {
-      width: 100%;
-      height: 150px;
-      text-align: center;
-      line-height: 150px;
-      button {
-        width: 160px;
-        height: 40px;
-      }
-      .next-btn {
-        margin-left: 25px;
-      }
-    }
+
   }
 </style>

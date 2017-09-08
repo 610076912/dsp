@@ -32,9 +32,9 @@
         </div>
       </div>
     </div>
-    <div class="btns">
-      <el-button type="info" @click="back">返回</el-button>
-      <el-button type="info" @click="next">下一步</el-button>
+    <div class="button-wrap">
+      <el-button  @click="back">返回</el-button>
+      <el-button type="primary" @click="next">下一步</el-button>
     </div>
   </div>
 </template>
@@ -148,7 +148,6 @@
       width: 100%;
       overflow: hidden;
       padding: 10px 20px;
-      margin-bottom: 50px;
 
       .citys{
         width: 100%
@@ -212,13 +211,6 @@
           background: #f9f9f9
         }
       }
-    }
-    .btns{
-      width: 100%
-      height: 130px
-      text-align: center
-      padding-top: 30px
-      border-top: 1px solid #f2f2f2
     }
   }
 </style>

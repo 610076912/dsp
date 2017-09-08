@@ -50,8 +50,7 @@
     name: 'app',
     data () {
       return {
-        username: '王雨晨',
-        pathCheck: [true, false, false, false],
+        name: '王雨晨',
         path: '首页'
       }
     },
@@ -177,9 +176,14 @@
     text-align: center;
     line-height: 70px;
     cursor: pointer;
+    a {
+      display: inline-block;
+      height: 100%;
+      width: 100%;
+    }
   }
 
-  .header-con ul li.checked a {
+  .router-link-exact-active {
     color: #60a7d6
   }
 

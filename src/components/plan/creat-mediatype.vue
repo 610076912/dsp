@@ -52,7 +52,7 @@
     methods: {
       // 下一步
       nextStep () {
-        this.$router.push('/creatPreview')
+        this.$router.push('/creatStrategy')
       },
       back () {
         this.$router.go(-1)
@@ -100,19 +100,6 @@
         .all-checked {
           width: 100px;
         }
-      }
-    }
-    .button-wrap {
-      width: 100%;
-      height: 150px;
-      text-align: center;
-      line-height: 150px;
-      button {
-        width: 160px;
-        height: 40px;
-      }
-      .next-btn {
-        margin-left: 25px;
       }
     }
   }

@@ -124,10 +124,20 @@
       .form {
         .button-wrap {
           position: absolute;
-          bottom: 20px;
+          bottom: 10px;
+          left: -86px;
+          width: 100%;
+          text-align: center;
+          height: auto;
+          button {
+            width: 160px;
+            height: 40px;
+          }
+          .next-btn {
+            margin-left: 25px;
+          }
         }
       }
-
     }
     .border-bottom {
       width: 100%;
