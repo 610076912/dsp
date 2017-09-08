@@ -100,8 +100,7 @@
             <template scope="scope">
               <el-switch
                 v-model="scope.row.kg"
-                on-text=""
-                off-text=""
+                on-color="#ff9900"
                 @change="switch1(scope)">
               </el-switch>
             </template>
@@ -122,7 +121,7 @@
         </el-table>
       </div>
     </el-tabs>
-    <button class="creat-new"><router-link to="creatBasics"></router-link>新建活动</button>
+    <router-link tag="button" class="creat-new" to="creatBasics">新建活动</router-link>
 
   </div>
 </template>

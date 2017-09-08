@@ -9,14 +9,18 @@
         <el-form-item label="选择分组" prop="group">
           <el-select
             v-model="ruleForm.group"
-            filterable
-            allow-create
+            @change="selectChange"
             placeholder="请选择分组">
+            <el-option value="new">新建分组</el-option>
             <el-option
               v-for="item in groupArray"
-              :key="item"
-              :label="item"
-              :value="item">
+              :key="item.group_id"
+              :label="item.group_name"
+              :value="item.group_name">
+              <span style="float: left">{{item.group_name}}</span>
+              <span @click.stop="delGroup(item.group_id,item.group_name)"
+                    style="float: right; color: #8492a6; font-size: 10px"><i
+                class="el-icon-close"></i></span>
             </el-option>
           </el-select>
         </el-form-item>
@@ -30,7 +34,7 @@
           <el-date-picker
             v-model="ruleForm.date"
             range-separator="~"
-            type="daterange"
+            type="datetimerange"
             placeholder="选择日期范围">
           </el-date-picker>
         </el-form-item>
@@ -93,6 +97,11 @@
         groupArray: ['分组1', '分组2', '分组3']
       }
     },
+    created () {
+      // 获取活动分组
+      this.queryGroupData()
+    },
+    watch: {},
     methods: {
       // 下一步
       nextStep () {
@@ -105,6 +114,81 @@
       },
       back () {
         this.$router.go(-1)
+      },
+      // 下拉框改变
+      selectChange (val) {
+        console.log(val)
+        console.log(this.ruleForm.group)
+        if (val === 'new') {
+          this.$prompt('请输入新分组名称', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            inputValidator (value) {
+              const reg = /^[^\S]/g
+              if (value === null || reg.test(value)) {
+                console.log(value)
+                return false
+              } else {
+                return true
+              }
+            },
+            inputErrorMessage: '请勿使用空格开头'
+          }).then(({value}) => {
+            this.ruleForm.group = value
+            this.addGroup(value)
+          })
+            .catch(() => {
+              this.ruleForm.group = ''
+            })
+        }
+      },
+      // 请求分组数据
+      queryGroupData () {
+        // 获取活动分组
+        this.$http.get('/api/api/get_act_group', {
+          headers: {Authorization: sessionStorage.getItem('token')}
+        }).then(data => {
+          console.log(data)
+          if (data.data.code === 200) {
+            this.groupArray = data.data.data
+          }
+        })
+      },
+      // 添加分组
+      addGroup (groupName) {
+        this.$http.post(
+          '/api/api/add_act_group',
+          {group_name: groupName},
+          {headers: {Authorization: sessionStorage.getItem('token')}}
+        )
+          .then(data => {
+            if (data.data.code === 200) {
+              this.queryGroupData()
+            }
+          })
+      },
+      // 删除分组
+      delGroup (id, name) {
+        this.$confirm(`您确定要删除${name}分组吗？`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(
+            '/api/api/del_act_group',
+            {group_id_list: JSON.stringify([id])},
+            {headers: {Authorization: sessionStorage.getItem('token')}}
+          ).then(data => {
+            if (data.data.code === 200) {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+              // 重新获取分组数据
+              this.queryGroupData()
+            }
+          })
+        })
       }
     },
     components: {
