@@ -13,24 +13,24 @@
             <router-link to="/">智视广告投放平台</router-link>
           </div>
           <ul>
-            <li v-bind:class="{ checked: pathCheck[0] }">
-              <router-link @click.native="onActive(0)" to="/">首页</router-link>
+            <li>
+              <router-link @click.native="onActive('/')" to="/">首页</router-link>
             </li>
-            <li v-bind:class="{ checked: pathCheck[1] }">
-              <router-link @click.native="onActive(1)" to="plan">推广数据</router-link>
+            <li>
+              <router-link @click.native="onActive('/plan')" to="plan">推广数据</router-link>
             </li>
-            <li v-bind:class="{ checked: pathCheck[2] }">
-              <router-link @click.native="onActive(2)" to="data">数据监测</router-link>
+            <li>
+              <router-link @click.native="onActive('/data')" to="data">数据监测</router-link>
             </li>
-            <li v-bind:class="{ checked: pathCheck[3] }">
-              <router-link @click.native="onActive(3)" to="finance">财务管理</router-link>
+            <li>
+              <router-link @click.native="onActive('/finance')" to="finance">财务管理</router-link>
             </li>
           </ul>
         </div>
       </div>
       <div class="header-tab">
         <div class="center">
-          <div class="location"></div>
+          <div class="location">{{path}}</div>
         </div>
       </div>
     </div>
@@ -39,7 +39,7 @@
     </div>
     <div class="footer">
       <div class="center">
-        北京视连通科技有限公司  京ICP备15041948号
+        北京视连通科技有限公司 京ICP备15041948号
       </div>
     </div>
   </div>
@@ -51,7 +51,6 @@
     data () {
       return {
         name: '王雨晨',
-        pathCheck: [true, false, false, false],
         path: '首页'
       }
     },
@@ -60,25 +59,22 @@
         .then(function (data) {
           console.log(data)
         })
+      this.onActive(this.$router.currentRoute.fullPath)
     },
     methods: {
       onActive: function (pathNum) {
         switch (pathNum) {
-          case 0:
+          case '/':
             this.path = '首页'
-            this.pathCheck = [true, false, false, false]
             break
-          case 1:
+          case '/plan':
             this.path = '推广数据'
-            this.pathCheck = [false, true, false, false]
             break
-          case 2:
+          case '/data':
             this.path = '数据监测'
-            this.pathCheck = [false, false, true, false]
             break
-          case 3:
+          case '/finance':
             this.path = '财务管理'
-            this.pathCheck = [false, false, false, true]
             break
         }
       }
@@ -175,9 +171,14 @@
     text-align: center;
     line-height: 70px;
     cursor: pointer;
+    a {
+      display: inline-block;
+      height: 100%;
+      width: 100%;
+    }
   }
 
-  .header-con ul li.checked a {
+  .router-link-exact-active {
     color: #60a7d6
   }
 
@@ -189,7 +190,7 @@
     font-size: 22px
     color: #333333
     padding-left: 50px
-    background: url('./assets/img/logo.png') no-repeat center left/auto 70%
+    background: url('./assets/img/logo.png') no-repeat center left / auto 70%
   }
 
   .main {

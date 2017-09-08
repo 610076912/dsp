@@ -107,16 +107,17 @@
         </div>
       </div>
     </div>
-    <div class="btns">
-      <el-button type="info" @click="back">返回</el-button>
-      <el-button type="info" @click="finish">完成</el-button>
-      <el-button type="info" @click="finishto">完成并上传广告素材</el-button>
+    <div class="button-wrap">
+      <el-button @click="back">返回</el-button>
+      <el-button @click="finish">完成</el-button>
+      <el-button type="primary" @click="finishto">完成并上传广告素材</el-button>
     </div>
   </div>
 </template>
 
 <script>
   import steps from './steps-component.vue'
+
   export default {
     name: 'creatpreview',
     data () {
@@ -143,54 +144,54 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
-  #creatpreview{
-    .cons{
+  #creatpreview {
+    .cons {
       width: 1170px
       margin-left: 30px
       padding-top: 20px
     }
-    .head{
+    .head {
       width: 1140px
       height: 38px
       border-bottom: 1px solid #e4e4e4
       margin-bottom: 20px
 
-      span{
+      span {
         display: inline-block
         border-bottom: 2px solid #169bd5
         font-size: 14px
         line-height: 36px
         float: left
       }
-      b{
+      b {
         float: right
         padding-top: 14px
         font-weight: normal
         color: #169bd5
       }
     }
-    .row{
+    .row {
       width: 100%
       line-height: 30px
     }
-    .box{
+    .box {
       width: 100%
       line-height: 30px
       margin-bottom: 20px
 
-      .minhead{
+      .minhead {
         line-height: 36px
 
-        span{
+        span {
           display: inline-block
           border-bottom: 2px solid #169bd5
         }
       }
-      .label{
+      .label {
         width: 100%
         font-size: 0
 
-        .labels{
+        .labels {
           display: inline-block
           width: 86px
           height: 44px
@@ -201,43 +202,41 @@
           font-size: 12px
         }
       }
-      .bar{
+      .bar {
         width: 100%
         height: 80px
         margin-bottom: 60px
-
-        .title{
+        &:nth-last-of-type(1) {
+          margin-bottom: 0;
+        }
+        .title {
           width: 120px
           height: 100%
           float: left
         }
-        .block{
+        .block {
           width: 340px
           height: 100%
           border: 1px solid #f2f2f2
           float: left
           padding: 10px 0 0 20px
 
-          p{
+          p {
             color: #cccccc
 
-            i{
+            i {
               padding: 0 10px 0 20px
               color: #ff4e00
             }
           }
         }
-        .inp{
+        .inp {
 
         }
       }
     }
-    .btns{
-      width: 100%
-      height: 130px
-      text-align: center
-      padding-top: 30px
-      border-top: 1px solid #f2f2f2
+    .button-wrap {
+      border-top: 1px solid #e4e4e4;
     }
   }
 </style>

@@ -198,18 +198,5 @@
         height: 400px;
       }
     }
-    .button-wrap {
-      width: 100%;
-      height: 150px;
-      text-align: center;
-      line-height: 150px;
-      button {
-        width: 160px;
-        height: 40px;
-      }
-      .next-btn {
-        margin-left: 25px;
-      }
-    }
   }
 </style>

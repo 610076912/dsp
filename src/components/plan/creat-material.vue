@@ -58,9 +58,9 @@
         </div>
       </div>
     </div>
-    <div class="btns">
-      <el-button type="info" @click="back">返回</el-button>
-      <el-button type="info" @click="finish">完成</el-button>
+    <div class="button-wrap">
+      <el-button @click="back">返回</el-button>
+      <el-button type="primary" @click="finish">完成</el-button>
     </div>
   </div>
 </template>
@@ -199,12 +199,8 @@
         font-weight: bold
       }
     }
-    .btns {
-      width: 100%
-      height: 130px
-      text-align: center
-      padding-top: 30px
-      border-top: 1px solid #f2f2f2
+    .button-wrap {
+      border-top: 1px solid #e4e4e4;
     }
   }
 </style>
