@@ -16,7 +16,7 @@
               v-for="item in groupArray"
               :key="item.group_id"
               :label="item.group_name"
-              :value="item.group_name">
+              :value="item.group_id">
               <span style="float: left">{{item.group_name}}</span>
               <span @click.stop="delGroup(item.group_id,item.group_name)"
                     style="float: right; color: #8492a6; font-size: 10px"><i
@@ -30,7 +30,7 @@
         <el-form-item label="计划总预算" prop="all" required>
           <el-input v-model.number="ruleForm.all"></el-input>
         </el-form-item>
-        <el-form-item label="投放日期" prop="date">
+        <el-form-item label="投放日期" prop="date" class="date-time-range">
           <el-date-picker
             v-model="ruleForm.date"
             range-separator="~"
@@ -80,7 +80,9 @@
       return {
         ruleForm: {
           name: '',
-          group: '',
+          group: {
+            type: Number
+          },
           day: '',
           all: '',
           date: []
@@ -91,7 +93,7 @@
           day: [{type: 'number', message: '请输入数字', trigger: 'blur'}],
           all: [{validator: checkAll, trigger: 'blur'}],
           date: [{required: true, type: 'array', message: '请选择投放日期', trigger: 'change'}],
-          group: [{required: true, message: '请选择投放日期', trigger: 'change'}]
+          group: [{required: true, type: 'number', message: '请选择投放日期', trigger: 'change'}]
 
         },
         groupArray: ['分组1', '分组2', '分组3']
@@ -100,6 +102,27 @@
     created () {
       // 获取活动分组
       this.queryGroupData()
+      // 拓展时间格式化
+      Date.prototype.Format = function (fmt) {
+        var o = {
+          'M+': this.getMonth() + 1,
+          'd+': this.getDate(),
+          'h+': this.getHours(),
+          'm+': this.getMinutes(),
+          's+': this.getSeconds(),
+          'q+': Math.floor((this.getMonth() + 3) / 3),
+          'S': this.getMilliseconds()
+        }
+        if (/(y+)/.test(fmt)) {
+          fmt = fmt.replace(RegExp.$1, (this.getFullYear() + '').substr(4 - RegExp.$1.length))
+        }
+        for (var k in o) {
+          if (new RegExp('(' + k + ')').test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+          }
+        }
+        return fmt
+      }
     },
     watch: {},
     methods: {
@@ -107,9 +130,25 @@
       nextStep () {
         let that = this
         this.$refs['new1form'].validate((valid) => {
-          // 如果验证通过则跳转下一个路由。
-          // if (valid) that.$router.push('/creatnew2')
-          that.$router.push('/creatScene')
+          console.log(that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'))
+          // 如果验证通过则跳转下一个路由
+          if (valid) {
+            that.$http.post('/api/api/add_act',
+              {
+                act_name: that.ruleForm.name,
+                act_b_time: that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'),
+                act_e_time: that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'),
+                day_budget: that.ruleForm.day,
+                all_budget: that.ruleForm.all,
+                channel: 1,
+                group_id: that.ruleForm.group
+              },
+              {headers: {Authorization: sessionStorage.getItem('token')}})
+              .then(data => {
+                console.log(data)
+              })
+            that.$router.push('/creatScene')
+          }
         })
       },
       back () {

@@ -29,10 +29,13 @@
         </div>
         <label>
           组名：
-          <el-select v-model="sort" class="group-select">
-            <el-option key="time" label="活动推广时间" value="time"></el-option>
-            <el-option key="group" label="分组" value="group"></el-option>
-            <el-option key="kg" label="开关" value="kg"></el-option>
+          <el-select v-model="seekData.group" class="group-select">
+            <el-option
+              v-for="g in group"
+              :key="g.group_id"
+              :label="g.group_name"
+              :value="g.group_id">
+            </el-option>
           </el-select>
         </label>
         <label>
@@ -128,6 +131,7 @@
 
 <script type="text/ecmascript-6">
   import setps from './steps-component.vue'
+
   export default {
     name: 'plan',
     data () {
@@ -135,6 +139,10 @@
         activeName: 'first',
         sort: '',
         serchText: '',
+        group: [],
+        seekData: {
+          group_id: ''
+        },
         // 选中个数，判断是否可以点击批量删除
         selectedLength: 0,
         tableData: [{
@@ -179,6 +187,17 @@
           kg: true
         }]
       }
+    },
+    created () {
+      const that = this
+      this.$http.get('/api/api/get_act_group', {
+        headers: {Authorization: sessionStorage.getItem('token')}
+      }).then(data => {
+        console.log(data)
+        if (data.data.code === 200) {
+          that.group = data.data.data
+        }
+      })
     },
     watch: {
       // 排序
@@ -290,13 +309,13 @@
       top: 32px;
       right: 35px;
       cursor: pointer;
-      a{
-        display :inline-block;
-        position :absolute;
-        left:0;
-        top:0;
-        width:100%;
-        height:100%;
+      a {
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
       }
     }
   }
