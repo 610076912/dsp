@@ -56,8 +56,11 @@
     }
     .setps-content {
       position: absolute;
-      top: 21px;
       left: 260px;
+      & > .el-steps {
+        position: absolute;
+        top: 34px;
+      }
       .el-step__main {
         position: absolute;
         top: -30px;

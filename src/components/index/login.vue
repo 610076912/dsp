@@ -42,16 +42,16 @@
           sessionStorage.setItem('user', response.data.data.user_name)
           _this.$router.push('/')
         })
-        .catch(function (error) {
-          console.log(error)
-        })
+          .catch(function (error) {
+            console.log(error)
+          })
       }
     }
   }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
-  #login{
+  #login {
     width: 100%
     height: 100%
     position: absolute
@@ -59,11 +59,11 @@
     top: 0
     background: #ffffff
 
-    .head{
+    .head {
       width: 100%
       height: 80px
 
-      h1{
+      h1 {
         width: 1200px
         height: 100%
         line-height: 80px
@@ -71,41 +71,41 @@
         font-size: 30px
         color: #4a89db
         padding-left: 52px
-        background: url('../../assets/img/logo.png') no-repeat center left/auto 70%
+        background: url('../../assets/img/logo.png') no-repeat center left / auto 70%
       }
     }
-    .con{
+    .con {
       width: 100%
       height: calc(100% - 175px)
       background: #0290c6
 
-      .main{
+      .main {
         width: 1200px
         height: 100%
         margin: 0 auto
 
-        .left{
+        .left {
           width: 50%
           height: 100%
           float: left
         }
-        .right{
+        .right {
           width: 50%
           height: 100%
           float: right
         }
-        .loginCon{
+        .loginCon {
           width: 340px
           height: 100%
           color: #ffffff
 
-          .title{
+          .title {
             height: 18px
             line-height: 18px
             margin: 110px 0 50px 0
             font-size: 18px
           }
-          .user,.pw,.btn{
+          .user, .pw, .btn {
             width: 100%
             height: 34px
             margin-bottom: 10px
@@ -115,23 +115,24 @@
             -moz-border-radius: 3px
             border-radius: 3px
           }
-          .user,.pw{
+          .user, .pw {
             padding: 0 14px
             font-size: 14px
             color: #ffffff
-            background: rgba(255,255,255,0.5)
+            background: rgba(255, 255, 255, 0.5)
           }
-          .btn{
-            background: rgba(0,0,0,0.5)
+          .btn {
+            background: rgba(0, 0, 0, 0.5)
             color: #ffffff
             letter-spacing: 6px
             font-size: 14px
           }
-          .btn:hover{
-            background: rgba(10,10,10,0.5)
+          .btn:hover {
+            background: rgba(10, 10, 10, 0.5)
             color: #dddddd
           }
-          input::-webkit-input-placeholder{
+          input:
+          :-webkit-input-placeholder {
             color: #ffffff
             font-size: 14px
           }
@@ -139,7 +140,8 @@
             color: #ffffff
             font-size: 14px
           }
-          input::-moz-placeholder {
+          input:
+          :-moz-placeholder {
             color: #ffffff
             font-size: 14px
           }
@@ -150,7 +152,7 @@
         }
       }
     }
-    .foot{
+    .foot {
       width: 100%
       height: 95px
       border-top: 1px solid #dedede
