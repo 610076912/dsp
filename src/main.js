@@ -14,11 +14,13 @@ import echarts from 'echarts/lib/echarts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
+import ajax from './assets/js/service'
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts
 Vue.prototype.$http = axios
+Vue.prototype.$ajax = ajax
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.Auth)) {
@@ -36,10 +38,11 @@ router.beforeEach((to, from, next) => {
 })
 
 /* eslint-disable no-new */
-new Vue({
+const vue = new Vue({
   el: '#app',
   router,
   template: '<App/>',
   components: { App }
 })
 
+window.vm = vue

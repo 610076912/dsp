@@ -48,18 +48,22 @@ export default new Router({
       children: [
         {
           path: '',
+          name: 'planIndex',
           component: planIndex
         },
         {
           path: '/creatBasics',
+          name: 'creatBasics',
           component: creatBasics
         },
         {
           path: '/creatScene',
+          name: 'creatScene',
           component: creatScene
         },
         {
           path: '/creatTime',
+          name: 'creatTime',
           component: creatTime
         },
         {
@@ -69,22 +73,27 @@ export default new Router({
         },
         {
           path: '/creatMedia',
+          name: 'creatMedia',
           component: creatMedia
         },
         {
           path: '/creatMediaType',
+          name: 'creatMediaType',
           component: creatMediaType
         },
         {
           path: '/creatStrategy',
+          name: 'creatStrategy',
           component: creatStrategy
         },
         {
           path: '/creatPreview',
+          name: 'creatPreview',
           component: creatPreview
         },
         {
           path: '/creatMaterial',
+          name: 'creatMaterial',
           component: creatMaterial
         }
       ]
