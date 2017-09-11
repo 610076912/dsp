@@ -20,16 +20,19 @@ let Ajax = function () {
       }
     })
   }
+  this.msg = message => {
+    window.vm.$alert('请求错误：' + message)
+  }
 }
 
 Ajax.prototype.get = function (url, data, callback) {
-  this.request({method: 'get', url: loccof + url, params: data}).then(res => { callback(res) })
+  this.request({method: 'get', url: loccof + url, params: data}).then(res => { res && res.status === 200 ? callback(res.data) : this.msg(res.status) })
 }
 Ajax.prototype.post = function (url, data, callback) {
-  this.request({method: 'post', url: loccof + url, data: data}).then(res => { callback(res) })
+  this.request({method: 'post', url: loccof + url, data: data}).then(res => { res && res.status === 200 ? callback(res.data) : this.msg(res.status) })
 }
 Ajax.prototype.delete = function (url, data, callback) {
-  this.request({method: 'delete', url: loccof + url, params: data}).then(res => { callback(res) })
+  this.request({method: 'delete', url: loccof + url, params: data}).then(res => { res && res.status === 200 ? callback(res.data) : this.msg(res.status) })
 }
 
 let ajax = new Ajax()

@@ -4,14 +4,16 @@
       <h1>智视DSP广告平台</h1>
     </div>
     <div class="con">
-      <div class="main">
-        <div class="left"></div>
-        <div class="right">
-          <div class="loginCon">
-            <p class="title">用户登录</p>
-            <input class="user" type="text" placeholder="用户名" v-model="username">
-            <input class="pw" type="password" placeholder="密码" v-model="password">
-            <button class="btn" @click="login">{{ info }}</button>
+      <div class="main-box">
+        <div class="main">
+          <div class="left"></div>
+          <div class="right">
+            <div class="loginCon">
+              <p class="title">用户登录</p>
+              <input class="user" type="text" placeholder="用户名" v-model="username">
+              <input class="pw" type="password" placeholder="密码" v-model="password">
+              <button class="btn" @click="login">{{ info }}</button>
+            </div>
           </div>
         </div>
       </div>
@@ -77,8 +79,12 @@
     .con {
       width: 100%
       height: calc(100% - 175px)
-      background: #0290c6
 
+      .main-box{
+        width: 100%
+        height: 50%
+        background: url('../../assets/img/loginbg.jpg') no-repeat top center / cover
+      }
       .main {
         width: 1200px
         height: 100%
@@ -88,6 +94,7 @@
           width: 50%
           height: 100%
           float: left
+          background: url('../../assets/img/loginimg.png') no-repeat center center  / auto 70%
         }
         .right {
           width: 50%
@@ -102,7 +109,7 @@
           .title {
             height: 18px
             line-height: 18px
-            margin: 110px 0 50px 0
+            margin: 9vh 0 5vh 0
             font-size: 18px
           }
           .user, .pw, .btn {
