@@ -54,7 +54,7 @@
   import setps from './steps-component.vue'
 
   export default {
-
+    name: 'creatBasics',
     data () {
       // 自定义判断总预算
       let checkAll = (rule, value, callback) => {
@@ -133,7 +133,7 @@
           console.log(that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'))
           // 如果验证通过则跳转下一个路由
           if (valid) {
-            that.$http.post('/api/api/add_act',
+            that.$http.post('/api/add_act',
               {
                 act_name: that.ruleForm.name,
                 act_b_time: that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'),
@@ -146,8 +146,8 @@
               {headers: {Authorization: sessionStorage.getItem('token')}})
               .then(data => {
                 console.log(data)
+                that.$router.push('/creatScene')
               })
-            that.$router.push('/creatScene')
           }
         })
       },
@@ -184,7 +184,7 @@
       // 请求分组数据
       queryGroupData () {
         // 获取活动分组
-        this.$http.get('/api/api/get_act_group').then(data => {
+        this.$http.get('/api/get_act_group').then(data => {
           console.log(data)
           if (data.code === 200) {
             this.groupArray = data.data
@@ -194,7 +194,7 @@
       // 添加分组
       addGroup (groupName) {
         this.$http.post(
-          '/api/api/add_act_group',
+          '/api/add_act_group',
           {group_name: groupName}
         )
           .then(data => {
@@ -211,7 +211,7 @@
           type: 'warning'
         }).then(() => {
           this.$http.post(
-            '/api/api/del_act_group',
+            '/api/del_act_group',
             {group_id_list: JSON.stringify([id])},
             {headers: {Authorization: sessionStorage.getItem('token')}}
           ).then(data => {

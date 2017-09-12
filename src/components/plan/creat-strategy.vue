@@ -55,6 +55,7 @@
   import steps from './steps-component.vue'
 
   export default {
+    name: 'creatStrategy',
     data () {
       return {
         times: 1,
@@ -63,6 +64,9 @@
         // 自定义频次输入框状态
         inputStatus: true
       }
+    },
+    created () {
+      // 通知父组件，使自己重新缓存
     },
     watch: {
       // 自定义频次输入框禁用

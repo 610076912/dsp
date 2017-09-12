@@ -46,8 +46,12 @@
   import header from './header-component.vue'
 
   export default {
+    name: 'creatMediaType',
     data () {
       return {}
+    },
+    created () {
+      // 通知父组件，使自己重新缓存
     },
     methods: {
       // 下一步

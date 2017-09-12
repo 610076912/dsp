@@ -46,7 +46,7 @@
             <el-option key="kg" label="开关" value="kg"></el-option>
           </el-select>
         </label>
-        <button class="submit">查询</button>
+        <button class="submit" @click="aaa">查询</button>
       </div>
       <div class="card-content">
         <el-table
@@ -124,8 +124,7 @@
         </el-table>
       </div>
     </el-tabs>
-    <router-link tag="button" class="creat-new" to="creatBasics">新建活动</router-link>
-
+    <button class="creat-new" @click="creatNew">新建活动</button>
   </div>
 </template>
 
@@ -190,7 +189,8 @@
     },
     created () {
       const that = this
-      this.$http.get('/api/api/get_act_group').then(data => {
+      // 获取分组
+      this.$http.get('/api/get_act_group').then(data => {
         console.log(data)
         if (data.code === 200) {
           that.group = data.data
@@ -204,6 +204,14 @@
       }
     },
     methods: {
+      // 新建按钮
+      creatNew () {
+        this.$emit('creatNew')
+        this.$router.push('/creatBasics')
+      },
+      aaa () {
+        this.$router.push('/creatBasics')
+      },
       // 选项卡
       handleClick () {
         console.log(this.activeName)

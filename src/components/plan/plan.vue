@@ -1,13 +1,11 @@
 <template>
   <div class="plan">
-    <div class="plan-nav">
+    <div class="plan-nav" @click="conRef">
       <span class="position">当前位置：</span>
       <span>推广计划 > {{navText}}</span>
     </div>
     <div class="plan-content">
-      <keep-alive>
-        <router-view></router-view>
-      </keep-alive>
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -17,10 +15,21 @@
     name: 'plan',
     data () {
       return {
-        navText: '推广活动'
+        navText: '推广活动',
+        exclude: []
       }
     },
-    metched: {}
+    methods: {
+      conRef () {
+        this.$store.commit('ACTID', 12)
+        console.log(this.actId)
+      }
+    },
+    computed: {
+      actId () {
+        return this.$store.state.creatData.actId
+      }
+    }
   }
 </script>
 

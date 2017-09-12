@@ -69,7 +69,7 @@
   import setps from './steps-component.vue'
 
   export default {
-    name: 'creatmaterial',
+    name: 'creatMaterial',
     data () {
       return {
         radio: 'true',
@@ -78,6 +78,9 @@
           left: '0'
         }
       }
+    },
+    created () {
+      // 通知父组件，使自己重新缓
     },
     methods: {
       prev () {

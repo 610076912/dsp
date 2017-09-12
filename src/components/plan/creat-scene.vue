@@ -33,11 +33,15 @@
   import moduleHeaderCompoent from './module-header-component'
 
   export default {
+    name: 'creatScene',
     data () {
       return {
         checkData: ['上海', '北京', '广州', '深圳'],
         checkList: []
       }
+    },
+    created () {
+      // 通知父组件，使自己重新缓存
     },
     methods: {
       checkChange (event) {

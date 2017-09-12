@@ -34,8 +34,12 @@
   import header from './header-component.vue'
 
   export default {
+    name: 'creatMedia',
     data () {
       return {}
+    },
+    created () {
+      // 通知父组件，使自己重新缓存
     },
     methods: {
       // 下一步
@@ -54,7 +58,7 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
-  .creat-media{
+  .creat-media {
     .creat-media-content {
       width: 100%;
       padding: 0 30px;

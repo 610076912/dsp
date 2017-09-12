@@ -69,6 +69,7 @@
   import hourData from '@/../static/timeData.json'
 
   export default {
+    name: 'creatTime',
     data () {
       return {
         timeArray: {},
@@ -79,6 +80,7 @@
       }
     },
     created () {
+      // 通知父组件，使自己重新缓存
       console.log(hourData)
       this.timeArray = hourData.time
       // this.checkedTime = hourData.time.hour

@@ -119,11 +119,14 @@
   import steps from './steps-component.vue'
 
   export default {
-    name: 'creatpreview',
+    name: 'creatPreview',
     data () {
       return {
         radio: 'true'
       }
+    },
+    created () {
+      // 通知父组件，使自己重新缓存
     },
     methods: {
       back () {

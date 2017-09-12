@@ -45,7 +45,7 @@
   import citys from '@/assets/json/city.json'
 
   export default {
-    name: 'creatcity',
+    name: 'creatCity',
     data () {
       return {
         regionList: [],
