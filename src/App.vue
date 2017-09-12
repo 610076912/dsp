@@ -57,9 +57,6 @@
     created () {
       this.onActive(this.$router.currentRoute.fullPath)
       this.username = sessionStorage.getItem('user')
-      this.$ajax.get('/api/get_act_group', {}, function (result) {
-        console.log(result.data)
-      })
     },
     methods: {
       signOut () {

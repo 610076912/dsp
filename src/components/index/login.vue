@@ -1,5 +1,5 @@
 <template>
-  <div id="login">
+  <div id="login" @keyup.enter="login">
     <div class="head">
       <h1>智视DSP广告平台</h1>
     </div>
@@ -38,13 +38,11 @@
           user_name: this.username,
           password: this.password
         }).then(function (response) {
-          sessionStorage.setItem('token', response.data.data.token)
-          sessionStorage.setItem('user', response.data.data.user_name)
+          console.log(response)
+          sessionStorage.setItem('token', response.data.token)
+          sessionStorage.setItem('user', response.data.user_name)
           _this.$router.push('/')
         })
-          .catch(function (error) {
-            console.log(error)
-          })
       }
     }
   }

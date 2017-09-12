@@ -190,12 +190,10 @@
     },
     created () {
       const that = this
-      this.$http.get('/api/api/get_act_group', {
-        headers: {Authorization: sessionStorage.getItem('token')}
-      }).then(data => {
+      this.$http.get('/api/api/get_act_group').then(data => {
         console.log(data)
-        if (data.data.code === 200) {
-          that.group = data.data.data
+        if (data.code === 200) {
+          that.group = data.data
         }
       })
     },

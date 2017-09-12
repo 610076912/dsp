@@ -8,21 +8,19 @@ import router from './router'
 // axios
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
-import axios from 'axios'
+import axios from '@/assets/js/axiosplus'
 import './assets/css/reset.styl'
 import echarts from 'echarts/lib/echarts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/title'
-import ajax from './assets/js/service'
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts
-Vue.prototype.$http = axios
-Vue.prototype.$ajax = ajax
+Vue.use(axios)
 
-router.beforeEach((to, from, next) => {
+/* router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.Auth)) {
     if (!sessionStorage.getItem('token')) {
       next({
@@ -35,7 +33,7 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
-})
+}) */
 
 /* eslint-disable no-new */
 const vue = new Vue({

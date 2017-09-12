@@ -184,12 +184,10 @@
       // 请求分组数据
       queryGroupData () {
         // 获取活动分组
-        this.$http.get('/api/api/get_act_group', {
-          headers: {Authorization: sessionStorage.getItem('token')}
-        }).then(data => {
+        this.$http.get('/api/api/get_act_group').then(data => {
           console.log(data)
-          if (data.data.code === 200) {
-            this.groupArray = data.data.data
+          if (data.code === 200) {
+            this.groupArray = data.data
           }
         })
       },
@@ -197,8 +195,7 @@
       addGroup (groupName) {
         this.$http.post(
           '/api/api/add_act_group',
-          {group_name: groupName},
-          {headers: {Authorization: sessionStorage.getItem('token')}}
+          {group_name: groupName}
         )
           .then(data => {
             if (data.data.code === 200) {
