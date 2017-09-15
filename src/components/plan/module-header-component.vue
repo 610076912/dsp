@@ -3,7 +3,7 @@
     <span class="module-header-component-title">{{title}}</span>
     <el-checkbox v-if="check" v-model="checkStatus" @change="change" class="module-header-component-check">全选
     </el-checkbox>
-    <span v-if="del" class="module-header-component-del"><i class="el-icon-delete"></i>清空选择</span>
+    <span v-if="del" class="module-header-component-del" @click="clearchose"><i class="el-icon-delete"></i>清空选择</span>
   </div>
 </template>
 
@@ -44,6 +44,11 @@
       change () {
         if (this.check) {
           this.$emit('checkall', this.checkStatus)
+        }
+      },
+      clearchose () {
+        if (this.del) {
+          this.$emit('clearchose')
         }
       }
     }

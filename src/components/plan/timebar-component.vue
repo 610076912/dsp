@@ -29,6 +29,35 @@
       <div class="line" :class="{'time-bar-line':timeArr[11]}"></div>
       <div class="circel" :class="{'time-bar-circel':timeArr[11]}">12</div>
     </div>
+    <div class="left">
+      <span>PM</span>
+      <div class="left-line" :class="{'time-bar-line':timeArr[12]}"></div>
+    </div>
+    <div class="time-bar-content">
+      <div class="circel" :class="{'time-bar-circel':timeArr[12] || timeArr[13]}">1</div>
+      <div class="line" :class="{'time-bar-line':timeArr[13]}"></div>
+      <div class="circel" :class="{'time-bar-circel':timeArr[13] || timeArr[14]}">2</div>
+      <div class="line" :class="{'time-bar-line':timeArr[14]}"></div>
+      <div class="circel" :class="{'time-bar-circel':timeArr[14] || timeArr[15]}">3</div>
+      <div class="line" :class="{'time-bar-line':timeArr[15]}"></div>
+      <div class="circel" :class="{'time-bar-circel':timeArr[15] || timeArr[16]}">4</div>
+      <div class="line" :class="{'time-bar-line':timeArr[16]}"></div>
+      <div class="circel" :class="{'time-bar-circel':timeArr[16] || timeArr[17]}">5</div>
+      <div class="line" :class="{'time-bar-line':timeArr[17]}"></div>
+      <div class="circel" :class="{'time-bar-circel':timeArr[17] || timeArr[18]}">6</div>
+      <div class="line" :class="{'time-bar-line':timeArr[18]}"></div>
+      <div class="circel" :class="{'time-bar-circel':timeArr[18] || timeArr[19]}">7</div>
+      <div class="line" :class="{'time-bar-line':timeArr[19]}"></div>
+      <div class="circel" :class="{'time-bar-circel':timeArr[19] || timeArr[20]}">8</div>
+      <div class="line" :class="{'time-bar-line':timeArr[20]}"></div>
+      <div class="circel" :class="{'time-bar-circel':timeArr[20] || timeArr[21]}">9</div>
+      <div class="line" :class="{'time-bar-line':timeArr[21]}"></div>
+      <div class="circel" :class="{'time-bar-circel':timeArr[21] || timeArr[22]}">10</div>
+      <div class="line" :class="{'time-bar-line':timeArr[22]}"></div>
+      <div class="circel" :class="{'time-bar-circel':timeArr[22] || timeArr[23]}">11</div>
+      <div class="line" :class="{'time-bar-line':timeArr[23]}"></div>
+      <div class="circel" :class="{'time-bar-circel':timeArr[23]}">12</div>
+    </div>
 
   </div>
 </template>
@@ -39,7 +68,7 @@
     props: {
       timeArr: {
         type: Array,
-        default: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        default: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       }
     },
     data () {
@@ -57,7 +86,7 @@
   .time-bar-component
     width: 100%
     min-width 720px
-    height: 100px
+    height: 330px
     padding: 35px 0px
     div
       display inline-block
@@ -67,6 +96,7 @@
       width 6%
       position relative
       top: -6px
+      margin-top:80px
       .left-line
         width: 60%
         border-bottom 2px dashed #169bd5

@@ -5,8 +5,14 @@ Vue.use(Vuex)
 
 const state = {
   creatData: {
-    actId: '',
-    creatBasice: {},
+    actId: 10,
+    creatBasice: {
+      name: '',
+      group: '',
+      day: '',
+      all: '',
+      date: []
+    },
     creatCity: {},
     creatTime: {},
     creatMaterial: {},
@@ -23,6 +29,13 @@ const mutations = {
   },
   BASICE (state, basice) {
     // 改变creatBasice的方法
+    state.creatData.creatBasice = basice
+  },
+  TIME (state, time) {
+    state.creatTime = time
+  },
+  SCENE (state, scene) {
+    state.creatScene = scene
   }
 }
 export default new Vuex.Store({

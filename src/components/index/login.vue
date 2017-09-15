@@ -36,7 +36,7 @@
       login () {
         this.info = '正在登录...'
         const _this = this
-        this.$http.post('/api/users/login', {
+        this.$http.post('/users/login', {
           user_name: this.username,
           password: this.password
         }).then(function (response) {

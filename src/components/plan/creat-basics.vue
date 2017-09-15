@@ -80,9 +80,7 @@
       return {
         ruleForm: {
           name: '',
-          group: {
-            type: Number
-          },
+          group: '',
           day: '',
           all: '',
           date: []
@@ -96,33 +94,24 @@
           group: [{required: true, type: 'number', message: '请选择投放日期', trigger: 'change'}]
 
         },
-        groupArray: ['分组1', '分组2', '分组3']
+        groupArray: ['分组1', '分组2', '分组3'],
+        // 判断是否调修改接口
+        isEdit: false
       }
     },
     created () {
+      // 判断store里是否有数据
+      let creatData = this.$store.state.creatData.creatBasice
+      if (creatData) {
+        this.ruleForm.name = creatData.name
+        this.ruleForm.group = creatData.group
+        this.ruleForm.day = creatData.day
+        this.ruleForm.all = creatData.all
+        this.ruleForm.date = creatData.date
+        this.isEdit = true
+      }
       // 获取活动分组
       this.queryGroupData()
-      // 拓展时间格式化
-      Date.prototype.Format = function (fmt) {
-        var o = {
-          'M+': this.getMonth() + 1,
-          'd+': this.getDate(),
-          'h+': this.getHours(),
-          'm+': this.getMinutes(),
-          's+': this.getSeconds(),
-          'q+': Math.floor((this.getMonth() + 3) / 3),
-          'S': this.getMilliseconds()
-        }
-        if (/(y+)/.test(fmt)) {
-          fmt = fmt.replace(RegExp.$1, (this.getFullYear() + '').substr(4 - RegExp.$1.length))
-        }
-        for (var k in o) {
-          if (new RegExp('(' + k + ')').test(fmt)) {
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
-          }
-        }
-        return fmt
-      }
     },
     watch: {},
     methods: {
@@ -130,26 +119,48 @@
       nextStep () {
         let that = this
         this.$refs['new1form'].validate((valid) => {
-          console.log(that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'))
           // 如果验证通过则跳转下一个路由
-          if (valid) {
-            that.$http.post('/api/add_act',
-              {
-                act_name: that.ruleForm.name,
-                act_b_time: that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'),
-                act_e_time: that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'),
-                day_budget: that.ruleForm.day,
-                all_budget: that.ruleForm.all,
-                channel: 1,
-                group_id: that.ruleForm.group
-              },
-              {headers: {Authorization: sessionStorage.getItem('token')}})
-              .then(data => {
-                console.log(data)
-                that.$router.push('/creatScene')
-              })
+          let url, data
+          if (valid && !this.isEdit) {
+            // 添加
+            url = '/api/add_act'
+            data = {
+              act_name: that.ruleForm.name,
+              act_b_time: that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'),
+              act_e_time: that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'),
+              day_budget: that.ruleForm.day,
+              all_budget: that.ruleForm.all,
+              channel: 1,
+              group_id: that.ruleForm.group
+            }
           }
+          if (valid && this.isEdit) {
+            // 修改
+            url = '/api/upd_act'
+            data = {
+              act_id: this.$store.state.creatData.actId,
+              act_name: that.ruleForm.name,
+              act_b_time: that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'),
+              act_e_time: that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'),
+              day_budget: that.ruleForm.day,
+              all_budget: that.ruleForm.all,
+              channel: 1,
+              group_id: that.ruleForm.group
+            }
+          }
+          that.$http.post(url, data)
+            .then(data => {
+              console.log(data)
+              if (data.code === 200) {
+                // 保存活动Id
+                this.$store.commit('ACTID', data)
+                // 保存活动数据
+                this.$store.commit('BASICE', that.ruleForm)
+                this.$router.push('/creatScene')
+              }
+            })
         })
+        this.$router.push('/creatScene')
       },
       back () {
         this.$router.go(-1)
@@ -198,7 +209,7 @@
           {group_name: groupName}
         )
           .then(data => {
-            if (data.data.code === 200) {
+            if (data.code === 200) {
               this.queryGroupData()
             }
           })
@@ -213,7 +224,6 @@
           this.$http.post(
             '/api/del_act_group',
             {group_id_list: JSON.stringify([id])},
-            {headers: {Authorization: sessionStorage.getItem('token')}}
           ).then(data => {
             if (data.data.code === 200) {
               this.$message({
