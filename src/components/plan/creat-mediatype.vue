@@ -4,33 +4,13 @@
     <div class="creat-media-content">
       <creat-header title="媒体定向" text="直投媒体"></creat-header>
       <div class="media-wrap">
-        <div class="item-wrap">
-          电影
-          <el-checkbox></el-checkbox>
-        </div>
-        <div class="item-wrap">
-          电影
-          <el-checkbox></el-checkbox>
-        </div>
-        <div class="item-wrap">
-          电视剧
-          <el-checkbox></el-checkbox>
-        </div>
-        <div class="item-wrap">
-          电影
-          <el-checkbox></el-checkbox>
-        </div>
-        <div class="item-wrap">
-          电影
-          <el-checkbox></el-checkbox>
-        </div>
-        <div class="item-wrap">
-          电影
-          <el-checkbox></el-checkbox>
+        <div class="item-wrap" v-for="item in typeData">
+          {{item.type}}
+          <el-checkbox v-model="chosedType" :label="item.type_id">{{''}}</el-checkbox>
         </div>
         <div class="item-wrap all-checked">
           全选
-          <el-checkbox></el-checkbox>
+          <el-checkbox v-model="isCheckedAll" @change="checkedAll"></el-checkbox>
         </div>
       </div>
     </div>
@@ -45,18 +25,57 @@
   import steps from './steps-component.vue'
   import header from './header-component.vue'
 
+  const mediaType = [{type: '电影', type_id: 'a'}, {type: '电视剧', type_id: 'b'}, {type: '动漫', type_id: 'c'}, {type: '少儿', type_id: 'd'}, {type: '综艺', type_id: 'e'}, {type: '体育', type_id: 'f'}, {type: '音乐', type_id: 'g'}, {type: '电影', type_id: 'h'}, {type: '育儿', type_id: 'i'}, {type: '汽车', type_id: 'j'}, {type: '时尚', type_id: 'k'}]
   export default {
     name: 'creatMediaType',
     data () {
-      return {}
+      return {
+        chosedType: [],
+        isCheckedAll: false,
+        typeData: null
+      }
     },
     created () {
-      // 通知父组件，使自己重新缓存
+      // 判断Vuex中是否有数据
+      let initData = this.$store.state.creatData.creatMediaType
+      if (initData) {
+        this.chosedType = initData
+      }
+      // 获取类型
+      this.typeData = mediaType
     },
     methods: {
+      // 全选
+      checkedAll () {
+        if (this.isCheckedAll) {
+          let res = []
+          this.typeData.forEach(function (item) {
+            res.push(item.type_id)
+          })
+          this.chosedType = res
+        } else {
+          this.chosedType = []
+        }
+        console.log(this.chosedType)
+      },
       // 下一步
       nextStep () {
-        this.$router.push('/creatStrategy')
+        if (this.chosedType.length === 0) {
+          this.$alert('请选择媒体类型', '提示', {
+            confirmButtonText: '确定'
+          })
+          return
+        }
+        this.$http.post('/api/add_class_plan', {
+          class_plan: this.chosedType.join(''),
+          act_id: this.$store.state.creatData.actId
+        }).then(res => {
+          console.log(res)
+          if (res.code === 200) {
+            this.$store.commit('MEDIATYPE', this.chosedType)
+            this.$router.push('/creatStrategy')
+          }
+        })
       },
       back () {
         this.$router.go(-1)

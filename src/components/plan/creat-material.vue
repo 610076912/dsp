@@ -1,6 +1,6 @@
 <template>
   <div id="creatmaterial">
-    <setps :active="5"></setps>
+    <setps :active="4"></setps>
     <div class="slide">
       <span class="slide-prev btn" @click="prev"><i class="el-icon-arrow-left"></i></span>
       <span class="slide-next btn" @click="next"><i class="el-icon-arrow-right"></i></span>
@@ -113,7 +113,7 @@
         this.$router.go(-1)
       },
       finish () {
-        console.log('complete')
+        this.$router.push('/creatPreview')
       },
       chooseMedia (mediaId) {
         this.currentMedia = mediaId

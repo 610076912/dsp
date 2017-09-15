@@ -1,6 +1,6 @@
 <template>
   <div id="creatpreview">
-    <steps :active="4"></steps>
+    <steps :active="5"></steps>
     <div class="basic cons">
       <p class="head"><span>基本信息</span><b><router-link to="creatBasics">编辑信息</router-link></b></p>
       <el-row class="row">
@@ -234,9 +234,9 @@
         this.updataGroup(res => {
           this.finishtoLoading = false
           if (res === false) {
-            this.$router.push('/creatMaterial')
+            // this.$router.push('/creatPreview')
           } else if (res.code === 200) {
-            this.$router.push('/creatMaterial')
+            // this.$router.push('/creatPreview')
           }
         })
       },

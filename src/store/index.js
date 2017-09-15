@@ -13,12 +13,13 @@ const state = {
       all: '',
       date: []
     },
-    creatCity: {},
-    creatTime: {},
-    creatMaterial: {},
-    creatMedia: {},
-    creatMediaType: {},
-    creatScene: {}
+    creatCity: null,
+    creatTime: null,
+    creatMaterial: null,
+    creatStrategy: null,
+    creatMedia: null,
+    creatMediaType: null,
+    creatScene: null
   }
 }
 
@@ -32,10 +33,16 @@ const mutations = {
     state.creatData.creatBasice = basice
   },
   TIME (state, time) {
-    state.creatTime = time
+    state.creatData.creatTime = time
   },
   SCENE (state, scene) {
-    state.creatScene = scene
+    state.creatData.creatScene = scene
+  },
+  MEDIATYPE (state, mediatype) {
+    state.creatData.creatMediaType = mediatype
+  },
+  STRATEGY (state, strategy) {
+    state.creatData.creatStrategy = strategy
   }
 }
 export default new Vuex.Store({

@@ -5,11 +5,11 @@
       <div class="bar">
         <div class="title">投放频次:</div>
         <div class="block">
-          <el-radio v-model="times" :label="1"> 不控制频次</el-radio>
+          <el-radio v-model="times" :label="0"> 不控制频次</el-radio>
           <p><i class="el-icon-information"></i> 针对移动设备部控制投放频次</p>
         </div>
         <div class="block">
-          <el-radio v-model="times" :label="2"> 自定义频次</el-radio>
+          <el-radio v-model="times" :label="1"> 自定义频次</el-radio>
           <p><i class="el-icon-information"></i> 每天每个设备曝光
             <el-input :maxlength="3" :disabled="inputStatus"></el-input>
             次
@@ -19,22 +19,22 @@
       <div class="bar">
         <div class="title">投放速度:</div>
         <div class="block">
-          <el-radio v-model="speed" :label="1"> 快速投放</el-radio>
+          <el-radio v-model="speed" :label="0"> 快速投放</el-radio>
           <p><i class="el-icon-information"></i> 在较短的时间段内换取最大的曝光量</p>
         </div>
         <div class="block">
-          <el-radio v-model="speed" :label="2"> 均匀投放</el-radio>
+          <el-radio v-model="speed" :label="1"> 均匀投放</el-radio>
           <p><i class="el-icon-information"></i> 将预算划分到当天的每个小时，均匀投放</p>
         </div>
       </div>
       <div class="bar">
         <div class="title">计费类型:</div>
         <div class="block">
-          <el-radio v-model="priceType" :label="1"> 按照曝光计费（CPM）</el-radio>
+          <el-radio v-model="priceType" :label="0"> 按照曝光计费（CPM）</el-radio>
           <p><i class="el-icon-information"></i> 每千次有效展示的成本</p>
         </div>
         <div class="block">
-          <el-radio v-model="priceType" :label="2"> 按点击计费</el-radio>
+          <el-radio v-model="priceType" :label="1"> 按点击计费</el-radio>
           <p><i class="el-icon-information"></i> 每次点击的有效成本</p>
         </div>
       </div>
@@ -58,26 +58,47 @@
     name: 'creatStrategy',
     data () {
       return {
-        times: 1,
-        speed: 2,
-        priceType: 1,
+        times: 0,
+        speed: 1,
+        priceType: 0,
         // 自定义频次输入框状态
         inputStatus: true
       }
     },
     created () {
-      // 通知父组件，使自己重新缓存
+      // 判断vuex数据
+      let initData = this.$store.state.creatData.creatStrategy
+      if (initData) {
+        this.times = initData.times
+        this.speed = initData.speed
+        this.priceType = initData.priceType
+      }
     },
     watch: {
       // 自定义频次输入框禁用
       'times' (val) {
-        val === 1 ? this.inputStatus = true : this.inputStatus = false
+        this.inputStatus = (val === 1)
       }
     },
     methods: {
       // 下一步
       nextStep () {
-        this.$router.push('/creatPreview')
+        this.$http.post('/api/add_strategy_plan', {
+          act_id: this.$store.state.creatData.actId,
+          frequency: this.times,
+          casttype: this.speed,
+          billing: this.priceType
+        }).then(res => {
+          console.log(res)
+          if (res.code === 200) {
+            this.$store.commit('STRATEGY', {
+              times: this.times,
+              speed: this.speed,
+              priceType: this.priceType
+            })
+            this.$router.push('/creatMaterial')
+          }
+        })
       },
       back () {
         this.$router.go(-1)

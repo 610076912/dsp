@@ -106,7 +106,7 @@
     created () {
       this.timeArray = hourData.time
       // 判断vuex中是否有数据
-      let creatData = this.$store.state.creatTime
+      let creatData = this.$store.state.creatData.creatTime
       // console.log(creatData)
       if (creatData) {
         console.log(creatData.time, creatData.week)
