@@ -21,7 +21,7 @@ Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts
 Vue.use(axios)
 
-/* router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.Auth)) {
     if (!sessionStorage.getItem('token')) {
       next({
@@ -34,15 +34,13 @@ Vue.use(axios)
   } else {
     next()
   }
-}) */
+})
 
 /* eslint-disable no-new */
-const vue = new Vue({
+new Vue({
   el: '#app',
   router,
   store,
   template: '<App/>',
   components: { App }
 })
-
-window.vm = vue

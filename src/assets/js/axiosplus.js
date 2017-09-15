@@ -5,7 +5,7 @@ import Router from '../../router/index'
 
 const Axios = axios.create({
   baseURL: '/api',
-  timeout: 3000,
+  timeout: 10000,
   headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
 })
 
