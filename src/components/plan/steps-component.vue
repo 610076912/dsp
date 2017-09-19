@@ -4,12 +4,12 @@
     <div class="setps-left"></div>
     <div class="setps-content">
       <el-steps :space="130" :active="active">
-        <el-step class="el-step" title="基本设置" icon="my-yuan" @stepClick="clickTo('/creatBasics')"></el-step>
-        <el-step class="el-step" title="场景化设置" icon="my-yuan" @click="clickTo('/creatScene')"></el-step>
-        <el-step class="el-step" title="定向设置" icon="my-yuan" @click="clickTo('/creatMedia')"></el-step>
-        <el-step class="el-step" title="投放设置" icon="my-yuan" @click="clickTo('/creatStrategy')"></el-step>
-        <el-step class="el-step" title="广告素材" icon="my-yuan" @click="clickTo('/creatMaterial')"></el-step>
-        <el-step class="el-step" title="活动预览" icon="my-yuan" @click="clickTo('/creatPreview')"></el-step>
+        <el-step class="el-step" title="基本设置" icon="my-yuan" @click.native="clickTo('/creatBasics')"></el-step>
+        <el-step class="el-step" title="场景化设置" icon="my-yuan" @click.native="clickTo('/creatScene')"></el-step>
+        <el-step class="el-step" title="定向设置" icon="my-yuan" @click.native="clickTo('/creatMedia')"></el-step>
+        <el-step class="el-step" title="投放设置" icon="my-yuan" @click.native="clickTo('/creatStrategy')"></el-step>
+        <el-step class="el-step" title="广告素材" icon="my-yuan" @click.native="clickTo('/creatMaterial')"></el-step>
+        <el-step class="el-step" title="活动预览" icon="my-yuan" @click.native="clickTo('/creatPreview')"></el-step>
       </el-steps>
     </div>
     <div class="setps-right"></div>

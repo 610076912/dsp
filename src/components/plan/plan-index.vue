@@ -59,56 +59,67 @@
           style="width: 100%">
           <el-table-column
             type="selection"
+            align="center"
             width="40">
           </el-table-column>
           <el-table-column
             label="活动ID"
             prop="act_id"
+            align="center"
             width="60">
           </el-table-column>
           <el-table-column
             label="活动名称"
             prop="act_name"
-            width="130">
+            align="center"
+            width="140">
           </el-table-column>
           <el-table-column
             label="组名"
             prop="group_name"
-            width="70">
+            align="center"
+            width="60">
           </el-table-column>
           <el-table-column
             label="推广时间"
             prop="time"
             :formatter="formatter"
-            width="135">
+            align="center"
+            width="140">
           </el-table-column>
           <el-table-column
             label="日预算"
             prop="day_budget"
-            width="100">
+            align="center"
+            width="75">
           </el-table-column>
           <el-table-column
             label="总预算"
             prop="all_budget"
-            width="100">
+            align="center"
+            width="75">
           </el-table-column>
           <el-table-column
             label="媒体状态"
             prop="meidanum"
-            width="90">
+            align="center"
+            width="75">
           </el-table-column>
           <el-table-column
             label="广告素材"
+            align="center"
             prop="adnum"
-            width="90">
+            width="75">
           </el-table-column>
           <el-table-column
             label="投放策略"
+            align="center"
             prop="billing"
-            width="70">
+            width="75">
           </el-table-column>
           <el-table-column
             label="开关"
+            align="center"
             width="100">
             <template scope="scope">
               <el-switch
@@ -120,22 +131,46 @@
           </el-table-column>
           <el-table-column
             label="活动状态"
+            align="center"
             prop="status"
-            width="70">
+            width="90">
           </el-table-column>
-          <el-table-column label="功能操作">
+          <el-table-column label="功能操作" align="left">
             <template scope="scope">
               <span class="operation">查看&nbsp;</span>
-              <span class="operation">复制</span>
+              <span class="operation">复制&nbsp;</span>
+              <span class="operation" @click="excentionStatus">状态</span>
               <br>
               <span class="operation">报表&nbsp;</span>
-              <span class="operation" @click="itemDel(scope.row.act_id)">删除</span>
+              <span class="operation" @click="itemDel(scope.row.act_id)">删除&nbsp;</span>
             </template>
           </el-table-column>
         </el-table>
       </div>
     </el-tabs>
     <button class="creat-new" @click="creatNew">新建活动</button>
+    <el-dialog title="提示" :visible.sync="dialogVisible" size="tiny">
+      <el-table :data="exStatus" border="true">
+        <el-table-column property="id" label="活动ID" width="60" align="center"></el-table-column>
+        <el-table-column property="name" label="活动名称" width="110" align="center"></el-table-column>
+        <el-table-column
+          label="开关"
+          align="center">
+          <template scope="scope">
+            <el-switch
+              v-model="scope.row.kg"
+              on-color="#ff9900">
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column property="status" label="素材状态" align="center" width="120"></el-table-column>
+        <el-table-column label="功能操作" align="center">
+          <template scope="scope">
+            <span>编辑素材</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -159,12 +194,41 @@
         },
         // 选中个数，判断是否可以点击批量删除
         selectedLength: 0,
-        tableData: []
+        // 表格数据
+        tableData: [],
+        dialogVisible: false,
+        // 状态数据
+        exStatus: [
+          {
+            id: 123,
+            name: '土豆',
+            kg: false,
+            status: 2
+          },
+          {
+            id: 124,
+            name: '土豆',
+            kg: false,
+            status: 2
+          },
+          {
+            id: 121,
+            name: '土豆',
+            kg: false,
+            status: 2
+          },
+          {
+            id: 122,
+            name: '土豆',
+            kg: false,
+            status: 2
+          }
+        ]
       }
     },
     created () {
       // 获取分组
-      this.$http.get('/api/get_act_group').then(data => {
+      this.$http.get('/api2/get_plan_group').then(data => {
         console.log(data)
         if (data.code === 200) {
           this.group = data.data
@@ -197,7 +261,7 @@
           target: '.card-content',
           text: '努力加载中'
         })
-        this.$http.post('/api/get_act_list', {
+        this.$http.post('/api2/get_act', {
           sort_type: option.sort_type,
           act_name: option.name,
           group_id: option.groupId,
@@ -280,6 +344,10 @@
         console.log(option)
         this.getActiveList(option)
       },
+      // 状态按钮弹出推广状态
+      excentionStatus () {
+        this.dialogVisible = !this.dialogVisible
+      },
       // 格式化时间
       formatter (item, b, c) {
         return new Date(item.act_b_time).Format('yyyy-MM-dd hh:mm:ss') + ' ' + new Date(item.act_e_time).Format('yyyy-MM-dd hh:mm:ss')
@@ -337,13 +405,12 @@
       width: 100%;
       .el-table .cell, .el-table th > div {
         padding: 0 10px;
-        text-align: center;
       }
       .operation {
         color: #169bd5;
         border-right: 1px solid #000;
         cursor: pointer;
-        &:nth-of-type(2n) {
+        &:nth-of-type(3n) {
           border: none;
         }
       }

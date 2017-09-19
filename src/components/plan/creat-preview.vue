@@ -161,27 +161,27 @@
     },
     created () {
       // 分组信息
-      this.$http.get('/api/get_act_group').then(res => {
+      this.$http.get('/api2/get_plan_group').then(res => {
         if (res.code === 200) {
           this.options = res.data
           this.loading = false
         }
       })
       // 预览信息
-      this.$http.post('/api/act_conf_preview', {
-        act_id: 10
+      this.$http.post('/api2/plan_conf_preview', {
+        plan_id: 34
       }).then(res => {
         if (res.code === 200) {
           const result = res.data
           const _this = this
           if (result.baseInfo_1) {
             // 基本信息
-            _this.baseInfo.act_name = result.baseInfo_1.act_name
-            _this.baseInfo.act_b_time = result.baseInfo_1.act_b_time
+            _this.baseInfo.act_name = result.baseInfo_1.plan_name
+            _this.baseInfo.act_b_time = result.baseInfo_1.plan_b_time
             _this.baseInfo.group_name = result.baseInfo_1.group_name
             _this.oldValue = result.baseInfo_1.group_name
-            _this.baseInfo.day_budget = result.baseInfo_1.day_budget
-            _this.baseInfo.all_budget = result.baseInfo_1.all_budget
+            _this.baseInfo.day_budget = result.baseInfo_1.plan_day_budget
+            _this.baseInfo.all_budget = result.baseInfo_1.plan_all_budget
           }
           if (result.sceneInfo_2) {
             // 场景化投放设置

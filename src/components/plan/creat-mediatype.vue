@@ -66,9 +66,9 @@
           })
           return
         }
-        this.$http.post('/api/add_class_plan', {
+        this.$http.post('/api2/add_class_plan', {
           class_plan: this.chosedType.join(''),
-          act_id: this.$store.state.creatData.actId
+          plan_id: this.$store.state.creatData.actId
         }).then(res => {
           console.log(res)
           if (res.code === 200) {

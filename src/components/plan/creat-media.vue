@@ -36,9 +36,9 @@
     },
     created () {
       // 获取媒体定向信息
-      this.$http.get('/api/get_media_plan', {
+      this.$http.get('/api2/get_media_plan', {
         params: {
-          act_id: 10
+          plan_id: 10
         }
       }).then(res => {
         if (res.code === 200) {
@@ -53,13 +53,14 @@
     methods: {
       // 下一步
       nextStep () {
-        const checkedMedia = []
+        let checkedMedia = []
         this.medias.forEach(item => { if (item.checked) checkedMedia.push(item.media_id) })
         // 提交媒体定向
-        this.$http.post('/api/add_media_plan', {
-          act_id: 10,
-          media_plan: checkedMedia.join('')
+        this.$http.post('/api2/add_media_plan', {
+          plan_id: this.$store.state.creatData.actId,
+          channel_id_list: JSON.stringify(checkedMedia)
         }).then(res => {
+          console.log(res)
           this.$router.push('/creatMediaType')
         })
       },

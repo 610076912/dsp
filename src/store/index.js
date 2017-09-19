@@ -5,9 +5,9 @@ Vue.use(Vuex)
 
 const state = {
   creatData: {
-    actId: 10,
+    actId: 34,
     creatBasice: {
-      name: '',
+      name: '1',
       group: '',
       day: '',
       all: '',

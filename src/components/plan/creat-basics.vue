@@ -102,7 +102,7 @@
     created () {
       // 判断store里是否有数据
       let creatData = this.$store.state.creatData.creatBasice
-      if (creatData) {
+      if (creatData.name) {
         this.ruleForm.name = creatData.name
         this.ruleForm.group = creatData.group
         this.ruleForm.day = creatData.day
@@ -121,30 +121,32 @@
         this.$refs['new1form'].validate((valid) => {
           // 如果验证通过则跳转下一个路由
           let url, data
-          if (valid && !this.isEdit) {
+          console.log(that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'), that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'))
+          debugger
+          if (valid && !that.isEdit) {
             // 添加
-            url = '/api/add_act'
+            url = '/api2/add_plan'
             data = {
-              act_name: that.ruleForm.name,
-              act_b_time: that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'),
-              act_e_time: that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'),
-              day_budget: that.ruleForm.day,
-              all_budget: that.ruleForm.all,
-              channel: 1,
+              plan_name: that.ruleForm.name,
+              plan_b_time: that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'),
+              plan_e_time: that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'),
+              plan_day_budget: that.ruleForm.day,
+              plan_all_budget: that.ruleForm.all,
+              plan_channel: 1,
               group_id: that.ruleForm.group
             }
           }
-          if (valid && this.isEdit) {
+          if (valid && that.isEdit) {
             // 修改
-            url = '/api/upd_act'
+            url = '/api2/upd_plan'
             data = {
-              act_id: this.$store.state.creatData.actId,
-              act_name: that.ruleForm.name,
-              act_b_time: that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'),
-              act_e_time: that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'),
-              day_budget: that.ruleForm.day,
-              all_budget: that.ruleForm.all,
-              channel: 1,
+              plan_id: this.$store.state.creatData.actId,
+              plan_name: that.ruleForm.name,
+              plan_b_time: that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'),
+              plan_e_time: that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'),
+              plan_day_budget: that.ruleForm.day,
+              plan_all_budget: that.ruleForm.all,
+              plan_channel: 1,
               group_id: that.ruleForm.group
             }
           }
@@ -195,7 +197,7 @@
       // 请求分组数据
       queryGroupData () {
         // 获取活动分组
-        this.$http.get('/api/get_act_group').then(data => {
+        this.$http.get('/api2/get_plan_group').then(data => {
           console.log(data)
           if (data.code === 200) {
             this.groupArray = data.data
@@ -205,7 +207,7 @@
       // 添加分组
       addGroup (groupName) {
         this.$http.post(
-          '/api/add_act_group',
+          '/api2/add_plan_group',
           {group_name: groupName}
         )
           .then(data => {
@@ -222,10 +224,10 @@
           type: 'warning'
         }).then(() => {
           this.$http.post(
-            '/api/del_act_group',
+            '/api2/del_plan_group',
             {group_id_list: JSON.stringify([id])},
           ).then(data => {
-            if (data.data.code === 200) {
+            if (data.code === 200) {
               this.$message({
                 type: 'success',
                 message: '删除成功!'

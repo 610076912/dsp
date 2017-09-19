@@ -83,8 +83,8 @@
     methods: {
       // 下一步
       nextStep () {
-        this.$http.post('/api/add_strategy_plan', {
-          act_id: this.$store.state.creatData.actId,
+        this.$http.post('/api2/add_strategy_plan', {
+          plan_id: this.$store.state.creatData.actId,
           frequency: this.times,
           casttype: this.speed,
           billing: this.priceType

@@ -94,8 +94,8 @@
         return res
       }
       // 请求广告目标信息
-      this.$http.post('/api/add_target_list', {
-        act_id: this.$store.state.creatData.actId
+      this.$http.post('/api2/get_target_list', {
+        plan_id: this.$store.state.creatData.actId
       }).then(res => {
         if (res.code === 200) {
           this.checkData = res.data
@@ -141,9 +141,9 @@
       // 请求所有包
       getAllPkg () {
         const that = this
-        this.$http.get('/api/get_all_pkg_info', {
+        this.$http.get('/api2/get_all_pkg_info', {
           params: {
-            act_id: that.$store.state.creatData.actId
+            plan_id: that.$store.state.creatData.actId
           }
         }).then(res => {
           if (res.code === 200) {
@@ -181,16 +181,16 @@
           this.$alert('请选择一个类', '提示', {
             confirmButtonText: '确定'
           })
-          return
+          // return
         }
         let result = []
+        debugger
         this.checkedId.forEach(function (item) {
-          result.push(item.pkg_id)
+          result.push(item.class_id)
         })
-        this.$http.get('/api/add_pkg_info', {
-          params: {
-            pkg_id_list: JSON.stringify(result)
-          }
+        this.$http.post('/api2/add_pkg_info', {
+          plan_id: this.$store.state.creatData.actId,
+          cls_id_list: JSON.stringify(result)
         }).then(res => {
           if (res.code === 200) {
             this.$store.commit('SCENE', this.checkedId)

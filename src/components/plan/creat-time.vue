@@ -169,8 +169,8 @@
       // http添加时间周期设置
       addTime () {
         const that = this
-        this.$http.post('/api/add_time_plan', {
-          act_id: this.$store.state.creatData.actId,
+        this.$http.post('/api2/add_time_plan', {
+          plan_id: this.$store.state.creatData.actId,
           time_plan: this.transformTime(this.checkedTime),
           week_plan: this.transformWeek(this.checkedWeek)
         }).then(res => {
