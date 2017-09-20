@@ -32,6 +32,13 @@ const mutations = {
     // 改变creatBasice的方法
     state.creatData.creatBasice = basice
   },
+  CITY (state, cityMsg) {
+    if (state.creatData.creatCity === null) state.creatData.creatCity = {}
+    state.creatData.creatCity[cityMsg.type] = cityMsg.msg
+  },
+  MEDIA (state, Media) {
+    state.creatData.creatMedia = Media
+  },
   TIME (state, time) {
     state.creatData.creatTime = time
   },

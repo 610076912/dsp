@@ -3,7 +3,7 @@
     <setps :active="2"></setps>
     <div class="content">
       <creat-header title="地理位置定向" text="按地区"></creat-header>
-      <div class="citys">
+      <div class="citys" v-loading="loading">
         <div class="area">
           <div class="top">
             <span class="title">大区划分（快捷选择）</span>
@@ -34,7 +34,7 @@
     </div>
     <div class="button-wrap">
       <el-button  @click="back">返回</el-button>
-      <el-button type="primary" @click="next">下一步</el-button>
+      <el-button type="primary" @click="next" :loading="btnLoading">下一步</el-button>
     </div>
   </div>
 </template>
@@ -48,31 +48,90 @@
     name: 'creatCity',
     data () {
       return {
+        // 城市数据状态仓库
+        cityStore: this.$store.state.creatData.creatCity,
+        // 活动id
+        actId: this.$store.state.creatData.actId,
+        // 大区列表
         regionList: [],
         regionProps: {
           label: 'lable'
         },
+        // 城市列表
         cityList: [],
         cityProps: {
           children: 'region_val',
           label: 'lable'
         },
+        // 已选中城市数
         checkedCitysNum: 0,
+        // 已选城市列表
         checkedCitys: [],
         checkedCityProps: {
           children: 'region_val',
           label: 'lable'
         },
-        checkedCityId: []
+        // 已选城市id
+        checkedCityId: [],
+        btnLoading: false,
+        loading: true,
+        timer: null
       }
+    },
+    created () {
+      if (this.actId) {
+        if (!this.cityStore) {
+          // 获取已选城市
+          this.$http.get('/api2/get_region_plan', {
+            params: {
+              plan_id: this.actId
+            }
+          }).then(res => {
+            if (res.code === 200) {
+              this.checkedCityId = res.data
+              this.$store.commit('CITY', {
+                type: 'cityId',
+                msg: res.data
+              })
+              this.loading = false
+            }
+          })
+          this.loading = false
+        } else {
+          this.checkedCityId = this.cityStore.cityId
+          this.loading = false
+        }
+      }
+    },
+    mounted () {
+      const regionArr = this.arrSort(citys.RECORDS, 'area')
+      this.regionList = this.filterArr(regionArr, 'area', 'area')
+      const cityArr = this.arrSort(citys.RECORDS, 'city_id')
+      this.cityList = this.filterArr(cityArr, 'region', 'region')
     },
     methods: {
       back () {
         this.$router.go(-1)
       },
       next () {
-        this.$router.push('/creatMedia')
-        console.log(this.checkedCityId)
+        this.btnLoading = true
+        this.$http.post('/api2/add_region_plan', {
+          plan_id: this.actId,
+          city_id_list: JSON.stringify(this.checkedCityId)
+        }).then(res => {
+          if (res.code === 200) {
+            this.$store.commit('CITY', {
+              type: 'cityId',
+              msg: this.checkedCityId
+            })
+            this.$store.commit('CITY', {
+              type: 'citys',
+              msg: this.checkedCitys
+            })
+            this.$router.push('/creatMedia')
+          }
+          this.btnLoading = false
+        })
       },
       // 排序
       arrSort (arr, key) {
@@ -112,25 +171,30 @@
       },
       // 获取省级已选city_id
       getCityChecked () {
-        const checkCitys = this.$refs.cityTree.getCheckedKeys(true)
-        this.checkedCityId = checkCitys
-        this.checkedCitysNum = checkCitys.length
+        // 阻止change事件频繁触发
+        let _this = this
+        clearTimeout(this.timer)
+        this.timer = setTimeout(function () {
+          _this.checkedCityId = _this.$refs.cityTree.getCheckedKeys(true)
+        }, 0)
+      }
+    },
+    watch: {
+      checkedCityId (val) {
+        // 监听cityId改变
+        this.$refs.cityTree.setCheckedKeys(val, true)
+        this.checkedCitysNum = val.length
+        // 过滤出已选城市列表
         let checkedCity = []
         for (let i in citys.RECORDS) {
-          for (let j in checkCitys) {
-            if (checkCitys[j] === citys.RECORDS[i].city_id) {
+          for (let j in val) {
+            if (val[j] === citys.RECORDS[i].city_id) {
               checkedCity.push(citys.RECORDS[i])
             }
           }
         }
-        this.checkedCitys = this.filterArr(checkedCity, 'region', 'region')
+        this.checkedCitys = checkedCity.length > 0 ? this.filterArr(checkedCity, 'region', 'region') : []
       }
-    },
-    created: function () {
-      const regionArr = this.arrSort(citys.RECORDS, 'area')
-      this.regionList = this.filterArr(regionArr, 'area', 'area')
-      const cityArr = this.arrSort(citys.RECORDS, 'city_id')
-      this.cityList = this.filterArr(cityArr, 'region', 'region')
     },
     components: {
       setps,
