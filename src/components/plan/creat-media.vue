@@ -29,7 +29,6 @@
   import medias from '@/assets/json/media.json'
 
   export default {
-    name: 'creatMedia',
     data () {
       return {
         // 活动id

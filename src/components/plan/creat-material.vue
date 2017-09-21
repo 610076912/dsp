@@ -6,7 +6,9 @@
       <span class="slide-next btn" @click="next"><i class="el-icon-arrow-right"></i></span>
       <div class="slide-box">
         <ul v-bind:style="{ width: slide.width+'%', left: slide.left+'%' }">
-          <li v-for="item in medias" @click="chooseMedia(item.media_id)">{{ item.media_name }}</li>
+          <li v-for="(item, index) in medias" :class="{checked: currentIndex===index}" @click="chooseMedia(item.act_id, item.media_id, index)">
+            <img :src="item.media_url" :title="item.media_name">
+          </li>
         </ul>
       </div>
     </div>
@@ -14,33 +16,39 @@
       <div class="left">
         <p class="top">一级广告</p>
         <div class="con">
-          <el-collapse accordion value="flash1">
-            <el-collapse-item name="flash1">
+          <el-collapse accordion :value="currentTpl" @change="tplChange">
+            <!--flash模板1-->
+            <el-collapse-item name="flash1" v-if="mateTpl.flash1">
               <template class="fontb" slot="title">Flash1 150px*150px规格
-                <button @click.stop="save('flash1')" class="fr" v-show="isShow.flash1" size="small">保存</button>
-                <button @click.stop="edit('flash1')" class="fr" v-show="!isShow.flash1" size="small">编辑</button>
-                <button @click.stop class="fr" size="small">预览</button>
-              </template>
-              <div class="ads">
-                <div class="ad-style"></div>
-                <div class="ad-edit" v-show="isShow.flash1">
-                  <div class="flash"></div>
-                  <div class="ad-con">
-                    <div class="ad-title">*Flash规范：格式fla、目标Flash Player17、脚本ActionScript3.0、大小200K</div>
-                    <div class="ad-position">
-                      <span>广告位置</span>
-                      <span :class="{ checked: flash1Checked[0] }" @click="choosePosition('left')">屏幕居左</span>
-                      <span :class="{ checked: flash1Checked[1] }" @click="choosePosition('center')">屏幕居中</span>
-                      <span :class="{ checked: flash1Checked[2] }" @click="choosePosition('right')">屏幕居右</span>
-                    </div>
-                    <div class="ad-url">
-                      <el-input placeholder="请输入内容" v-model="adContent.flash1.url" size="small">
-                        <template slot="prepend">跳转链接</template>
-                      </el-input>
-                    </div>
-                  </div>
+                <div class="btns" v-show="chenkedTpl==='flash1'">
+                  <button @click.stop="save('flash1')" class="fr" v-show="isShow.flash1" size="small">保存</button>
+                  <button @click.stop="edit('flash1')" class="fr" v-show="!isShow.flash1" size="small">编辑</button>
+                  <button @click.stop class="fr" v-show="currentTpl==='flash1'" size="small">预览</button>
                 </div>
+              </template>
+              <flash1 :isShow="isShow" :adContent="adContent"></flash1>
+            </el-collapse-item>
+            <!--flash模板2-->
+            <el-collapse-item name="flash2" v-if="mateTpl.flash2">
+              <template class="fontb" slot="title">Flash2 210px*60px规格
+                <div class="btns" v-show="chenkedTpl==='flash2'">
+                  <button @click.stop="save('flash2')" class="fr" v-show="isShow.flash2" size="small">保存</button>
+                  <button @click.stop="edit('flash2')" class="fr" v-show="!isShow.flash2" size="small">编辑</button>
+                  <button @click.stop class="fr" v-show="currentTpl==='flash2'" size="small">预览</button>
+                </div>
+              </template>
+              <flash2 :isShow="isShow" :adContent="adContent"></flash2>
+            </el-collapse-item>
+            <!--flash模板3-->
+            <el-collapse-item name="flash3" v-if="mateTpl.flash3">
+              <template class="fontb" slot="title">Flash3 210px*90px规格
+                <div class="btns" v-show="chenkedTpl==='flash3'">
+                <button @click.stop="save('flash3')" class="fr" v-show="isShow.flash3" size="small">保存</button>
+                <button @click.stop="edit('flash3')" class="fr" v-show="!isShow.flash3" size="small">编辑</button>
+                <button @click.stop class="fr" v-show="currentTpl==='flash3'" size="small">预览</button>
               </div>
+              </template>
+              <flash3 :isShow="isShow" :adContent="adContent"></flash3>
             </el-collapse-item>
           </el-collapse>
         </div>
@@ -48,20 +56,14 @@
       <div class="right">
         <p class="top">二级广告</p>
         <div class="con">
-          <!--<el-collapse accordion value="1">
-            <el-collapse-item name="1">
+          <el-collapse accordion value="1">
+            <!--<el-collapse-item name="1">
               <template class="fontb" slot="title">关联模板1 屏占比3:1 适用于: 商品
-                <button @click.stop class="fr" size="small">保存</button>
+              <button @click.stop class="fr" size="small">保存</button>
               </template>
-              <div class="ads"></div>
-            </el-collapse-item>
-            <el-collapse-item name="2">
-              <template class="fontb" slot="title">关联模板2 屏占比3:2 适用于: 商品
-                <button @click.stop class="fr" size="small">保存</button>
-              </template>
-              <div class="ads"></div>
-            </el-collapse-item>
-          </el-collapse>-->
+              <tpl2></tpl2>
+            </el-collapse-item>-->
+          </el-collapse>
         </div>
       </div>
     </div>
@@ -74,32 +76,94 @@
 
 <script>
   import setps from './steps-component.vue'
-  import medias from '@/assets/json/media.json'
+  import allMedias from '@/assets/json/media.json'
+
+  // 素材模板
+  import flash1 from '../template/flash1.vue'
+  import flash2 from '../template/flash2.vue'
+  import flash3 from '../template/flash3.vue'
 
   export default {
     data () {
       return {
-        radio: 'true',
+        // 计划id
+        planId: this.$store.state.creatData.actId,
+        // 滑块
         slide: {
-          width: Math.ceil(medias.length / 5) * 100,
+          width: 0,
           left: '0'
         },
-        medias: medias,
-        currentMedia: '',
-        isShow: {
-          flash1: false
+        // 媒体平台模板配对
+        mateTpl: {
+          flash1: false,
+          flash2: false,
+          flash3: false
         },
+        // 媒体平台列表
+        medias: [],
+        // 当前已选索引
+        currentIndex: '',
+        // 当前已选媒体活动id
+        currentMediaActId: '',
+        // 当前已选媒体id
+        currentMediaId: '',
+        // 素材模板状态
+        isShow: {
+          flash1: false,
+          flash2: false
+        },
+        // 当前选中素材模板 用以显示当前激活栏按钮
+        chenkedTpl: '',
+        // 当前已保存素材模板 用以确定默认激活栏和预览按钮
+        currentTpl: '',
+        // 广告模板数据结构
         adContent: {
           flash1: {
             flash: '',
             position: '',
-            url: ''
+            url: '',
+            size: '150,150'
+          },
+          flash2: {
+            flash: '',
+            position: '',
+            url: '',
+            size: '210,60'
+          },
+          flash3: {
+            flash: '',
+            position: '',
+            url: '',
+            size: '210,90'
           }
-        },
-        flash1Checked: [false, false, false]
+        }
       }
     },
-    created () {},
+    created () {
+      if (this.planId) {
+        // 获取媒体信息
+        this.$http.get('/api2/get_media_plan', {
+          params: {
+            plan_id: this.planId
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            let _this = this
+            // 媒体平台数据
+            res.data.forEach(function (media) {
+              allMedias.forEach(function (item) {
+                if (media.act_channel_id === item.media_id) {
+                  item.act_id = media.act_id
+                  _this.medias.push(item)
+                }
+              })
+            })
+            // 计算媒体列表滑动体宽度
+            _this.slide.width = Math.ceil(_this.medias.length / 5) * 100
+          }
+        })
+      }
+    },
     methods: {
       prev () {
         const L = this.slide.left
@@ -115,54 +179,96 @@
       finish () {
         this.$router.push('/creatPreview')
       },
-      chooseMedia (mediaId) {
-        this.currentMedia = mediaId
-        // 获取模板信息
-        this.$http.post('/api/get_ad_for_channel', {
-          act_id: 10,
-          media_channel: mediaId
+      // 选择媒体平台 获取广告信息
+      chooseMedia (actId, mediaId, index) {
+        // 当前已选索引
+        this.currentIndex = index
+        // 检索当前选中媒体可用模板
+        this.currentMediaId = mediaId
+        for (let key in this.mateTpl) {
+          if (this.medias[index].tpl.some(item => { return item === key })) {
+            this.mateTpl[key] = true
+          } else {
+            this.mateTpl[key] = false
+          }
+        }
+        // 当前选中媒体活动id
+        this.currentMediaActId = actId
+        // 获取广告信息
+        this.$http.post('/api2/get_ad_for_channel', {
+          act_id: actId
         }).then(res => {
-          console.log(res)
+          if (res.code === 200) {
+            this.chenkedTpl = res.data[0].tpl_cat
+            this.currentTpl = res.data[0].tpl_cat
+            this.adContent[res.data[0].tpl_cat] = JSON.parse(res.data[0].conf_info)
+          }
         })
       },
-      addMaterial (appType, tplCat, adType) {
-        // 添加模板
-        this.$http.post('/api/add_ad_material', {
-          act_id: 10,
-          media_channel: this.currentMedia,
-          app_type: appType,
-          tpl_cat: tplCat,
-          conf_info: JSON.stringify(this.adContent[adType])
-        }).then(res => {
-          console.log(res)
-        })
+      // 激活模板改变
+      tplChange (val) {
+        this.chenkedTpl = val
       },
       edit (adName) {
         // 编辑模板
         this.isShow[adName] = true
       },
       save (adName) {
-        // 保存模板
-        this.isShow[adName] = false
-        this.addMaterial('flash', 1, adName)
-      },
-      choosePosition (position) {
-        this.adContent.flash1.position = position
-        switch (position) {
-          case 'left':
-            this.flash1Checked = [true, false, false]
-            break
-          case 'center':
-            this.flash1Checked = [false, true, false]
-            break
-          case 'right':
-            this.flash1Checked = [false, false, true]
-            break
+        // 模板保存
+        // 判断是否为修改广告
+        if (this.currentTpl && this.chenkedTpl !== this.currentTpl) {
+          this.$confirm('保存新广告会替换之前设置的广告, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            // 保存/编辑按钮状态
+            this.isShow[adName] = false
+            // 当前模板
+            this.currentTpl = adName
+            // 添加广告
+            this.addMaterial('flash', adName)
+          })
+        } else if (this.chenkedTpl === this.currentTpl) {
+          // 保存/编辑按钮状态
+          this.isShow[adName] = false
+          // 当前模板
+          this.currentTpl = adName
+          // 添加广告
+          this.addMaterial('flash', adName)
         }
+      },
+      // 添加广告信息
+      addMaterial (appType, adName) {
+        // 添加模板
+        this.$http.post('/api2/add_ad_material', {
+          // 计划id
+          plan_id: this.planId,
+          // 活动id 计划id和媒体id组成
+          act_id: this.currentMediaActId,
+          // 媒体id
+          act_channel_id: this.currentMediaId,
+          // 模板类型
+          app_type: appType,
+          // 模板id
+          tpl_cat: adName,
+          // 模板广告内容
+          conf_info: JSON.stringify(this.adContent[adName])
+        }).then(res => {
+          if (res.code === 200) {
+            this.$message({
+              type: 'success',
+              message: '保存成功!'
+            })
+          }
+        })
       }
     },
     components: {
-      setps
+      setps: setps,
+      flash1: flash1,
+      flash2: flash2,
+      flash3: flash3
     }
   }
 </script>
@@ -228,6 +334,35 @@
             float: left
             margin-right: 20px
             border: 1px solid #c9c9c9
+            text-align: center
+            overflow: hidden
+
+            img{
+              height: 100%
+              width: auto
+              margin: 0 auto
+              transition: all 0.3s
+              -moz-transition: all 0.3s
+              -webkit-transition: all 0.3s
+              -o-transition: all 0.3s
+            }
+          }
+          li:hover img{
+            transform: scale(1.1)
+            -ms-transform: scale(1.1)
+            -moz-transform: scale(1.1)
+            -webkit-transform: scale(1.1)
+            -o-transform: scale(1.1)
+          }
+          li.checked{
+            border: 1px solid #31a5d8
+            img{
+              transform: scale(1.1)
+              -ms-transform: scale(1.1)
+              -moz-transform: scale(1.1)
+              -webkit-transform: scale(1.1)
+              -o-transform: scale(1.1)
+            }
           }
         }
       }
@@ -256,6 +391,9 @@
         .el-collapse-item__content {
           padding: 0
         }
+        .btns{
+          display: inline
+        }
         .ads {
           height: 310px
           position: relative
@@ -276,51 +414,6 @@
             top: 0
             padding: 73px 25px 0
             background: #f0f3f8
-          }
-
-          .flash{
-            width: 148px
-            height: 148px
-            border: 1px solid #e4e4e4
-            float: left
-            background: #ffffff
-          }
-          .ad-con{
-            width: 327px
-            height: 150px
-            float: left
-            margin-left: 25px
-
-            .ad-title{
-              width: 100%
-              height: 70px
-            }
-            .ad-position,.ad-url{
-              width: 100%
-              height: 30px
-              margin-top: 10px
-            }
-            .ad-position{
-              border: 1px solid #e4e4e4
-              span{
-                display: inline-block
-                width: 81px
-                height: 100%
-                border-left: 1px solid #e4e4e4
-                text-align: center
-                line-height: 28px
-                background: #f9fafc
-                float: left
-              }
-              span:first-of-type{
-                cursor: inherit
-                border: none
-                background: #ffffff
-              }
-              span.checked{
-                border: 1px solid #169bd5
-              }
-            }
           }
         }
       }

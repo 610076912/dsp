@@ -25,6 +25,7 @@ import finance from '@/components/finance/finance'
 import finaCWGK from '@/components/finance/finaCWGK'
 import finaCZJL from '@/components/finance/finaCZJL'
 import finaHistory from '@/components/finance/finaHistory'
+
 Vue.use(Router)
 
 export default new Router({

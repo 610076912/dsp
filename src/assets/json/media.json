@@ -3,37 +3,12 @@
     "media_id": 1001,
     "media_name": "暴风",
     "media_url": "/static/img/baofeng.png",
-    "checked": false
-  },
-  {
-    "media_id": 1004,
-    "media_name": "爱奇艺",
-    "media_url": "/static/img/baofeng.png",
-    "checked": false
-
-  },
-  {
-    "media_id": 1003,
-    "media_name": "优酷",
-    "media_url": "/static/img/baofeng.png",
-    "checked": false
+    "tpl": ["flash1", "flash2", "flash3"]
   },
   {
     "media_id": 1002,
-    "media_name": "腾讯",
+    "media_name": "爱奇艺",
     "media_url": "/static/img/baofeng.png",
-    "checked": false
-  },
-  {
-    "media_id": 1005,
-    "media_name": "乐视",
-    "media_url": "/static/img/baofeng.png",
-    "checked": false
-  },
-  {
-    "media_id": 1006,
-    "media_name": "网易",
-    "media_url": "",
-    "checked": false
+    "tpl": ["flash2"]
   }
 ]
