@@ -132,6 +132,7 @@
           }
           this.btnLoading = false
         })
+        this.$router.push('/creatMedia')
       },
       // 排序
       arrSort (arr, key) {

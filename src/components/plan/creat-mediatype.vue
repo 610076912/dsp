@@ -25,7 +25,13 @@
   import steps from './steps-component.vue'
   import header from './header-component.vue'
 
-  const mediaType = [{type: '电影', type_id: 'a'}, {type: '电视剧', type_id: 'b'}, {type: '动漫', type_id: 'c'}, {type: '少儿', type_id: 'd'}, {type: '综艺', type_id: 'e'}, {type: '体育', type_id: 'f'}, {type: '音乐', type_id: 'g'}, {type: '电影', type_id: 'h'}, {type: '育儿', type_id: 'i'}, {type: '汽车', type_id: 'j'}, {type: '时尚', type_id: 'k'}]
+  const mediaType = [{type: '电影', type_id: 'a'}, {type: '电视剧', type_id: 'b'}, {type: '动漫', type_id: 'c'}, {
+    type: '少儿',
+    type_id: 'd'
+  }, {type: '综艺', type_id: 'e'}, {type: '体育', type_id: 'f'}, {type: '音乐', type_id: 'g'}, {
+    type: '电影',
+    type_id: 'h'
+  }, {type: '育儿', type_id: 'i'}, {type: '汽车', type_id: 'j'}, {type: '时尚', type_id: 'k'}]
   export default {
     name: 'creatMediaType',
     data () {
@@ -40,6 +46,18 @@
       let initData = this.$store.state.creatData.creatMediaType
       if (initData) {
         this.chosedType = initData
+      } else if (this.$store.state.creatData.actId) {
+        this.$http.get('/api2/get_class_plan', {
+          params: {
+            plan_id: this.$store.state.creatData.actId
+          }
+        }).then(res => {
+          console.log(res)
+          if (res.code === 200) {
+            this.chosedType = res.data.class_plan.split('')
+            this.$store.commit('MEDIATYPE', this.chosedType)
+          }
+        })
       }
       // 获取类型
       this.typeData = mediaType

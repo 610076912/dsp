@@ -31,7 +31,7 @@
                 <el-checkbox
                   v-model="checkedId"
                   v-for="items in item.pkg_id_val"
-                  :label="items"
+                  :label="items.class_id"
                   :key="items.class_id">
                   {{items.class_name}}
                 </el-checkbox>
@@ -79,15 +79,31 @@
     created () {
       // 判断vuex中是否有数据
       let vuexData = this.$store.state.creatData.creatScene
-      console.log(vuexData)
+      if (vuexData) {
+        this.checkedId = vuexData
+      } else if (this.$store.state.creatData.actId) {
+        this.$http.post('/api2/get_pkg_info', {
+          plan_id: this.$store.state.creatData.actId
+        }).then(res => {
+          console.log(res)
+          if (res.code === 200 && res.data.length > 0) {
+            let resData = []
+            res.data.forEach(function (item) {
+              resData.push(item.class_id)
+            })
+            this.checkedId = resData
+            this.$store.commit('SCENE', resData)
+          }
+        })
+      }
       // 特定的数组去重
       Array.prototype._unique = function () {
         this.sort(function (a, b) {
-          return a['class_id'].toString().localeCompare(b['class_id'].toString())
+          return a - b
         })
         var res = [this[0]]
-        for (var i = 1; i < this.length; i++) {
-          if (this[i].class_id !== res[res.length - 1].class_id) {
+        for (let i = 1; i < this.length; i++) {
+          if (this[i] !== res[res.length - 1]) {
             res.push(this[i])
           }
         }
@@ -111,8 +127,13 @@
         const that = this
         if (this.checkedClass1Id.indexOf(val) !== -1) {
           for (let i = 0; i < this.allPack.length; i++) {
-            if (this.allPack[i].pkg_id === val) {
-              this.checkedId = this.checkedId.concat(this.allPack[i].pkg_id_val)._unique()
+            if (this.allPack[i].pkg_id * 1 === val * 1) {
+              this.allPack[i].pkg_id_val.forEach(item => {
+                that.checkedId.push(item.class_id)
+              })
+              this.checkedId = this.checkedId._unique()
+              console.log(this.checkedId)
+              // this.checkedId = this.checkedId.concat(this.allPack[i].pkg_id_val)._unique()
               break
             }
           }
@@ -120,8 +141,11 @@
           for (let j = 0; j < this.allPack.length; j++) {
             if (this.allPack[j].pkg_id === val) {
               this.allPack[j].pkg_id_val.forEach(function (item) {
-                if (that.checkedId.indexOf(item) !== -1) {
-                  that.checkedId.splice(that.checkedId.indexOf(item), 1)
+                if (that.checkedId.indexOf(item.class_id) !== -1) {
+                  console.log(that.checkedId.indexOf(item.class_id))
+                  console.log(that.checkedId)
+                  // that.checkedId.splice(that.checkedId.indexOf(item.class_id), 1)
+                  that.$delete(that.checkedId, that.checkedId.indexOf(item.class_id))
                 }
               })
               break
@@ -164,7 +188,7 @@
                 resultArr.push(obj)
               }
             }
-            // console.log(resultArr)
+            console.log(resultArr)
             this.allPack = resultArr
           }
         })
@@ -183,16 +207,12 @@
           })
           // return
         }
-        let result = []
-        debugger
-        this.checkedId.forEach(function (item) {
-          result.push(item.class_id)
-        })
         this.$http.post('/api2/add_pkg_info', {
           plan_id: this.$store.state.creatData.actId,
-          cls_id_list: JSON.stringify(result)
+          cls_id_list: JSON.stringify(this.checkedId)
         }).then(res => {
           if (res.code === 200) {
+            debugger
             this.$store.commit('SCENE', this.checkedId)
           }
         })
@@ -213,7 +233,6 @@
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
   .creat-new2 {
-
     .content {
       width: 100%;
       overflow: hidden;
@@ -259,21 +278,19 @@
         border-left: none;
         .target-con-top {
           height: 657px;
+          overflow: hidden;
           ul.top-content {
-            width: 100%;
+            width: 105%;
             max-height: calc(100% - 43px);
             overflow-y: auto;
             display: flex;
             flex-wrap: wrap;
-            &::-webkit-scrollbar {
-              width: 0;
-            }
             li {
               width: 22%;
               height: 50px;
               border: 1px solid #c9c9c9;
               line-height: 50px;
-              margin-right: 4%;
+              margin-right: 3%;
               margin-bottom: 15px;
               padding: 0 10px;
               cursor: pointer;
@@ -281,19 +298,18 @@
                 float: right;
               }
               &:nth-of-type(4n) {
-                margin-right: 0;
                 .child-wrap {
-                  left: -586px;
+                  left: -580px;
                 }
               }
               &:nth-of-type(4n-2){
                 .child-wrap {
-                  left: -202px;
+                  left: -200px;
                 }
               }
               &:nth-of-type(4n-1){
                 .child-wrap {
-                  left: -394px;
+                  left: -390px;
                 }
               }
               .child-wrap {

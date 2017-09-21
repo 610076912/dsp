@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import es6Promise from 'es6-promise'
+es6Promise.polyfill()
 
 Vue.use(Vuex)
 
@@ -24,6 +26,26 @@ const state = {
 }
 
 const mutations = {
+  CLEARCREATDATA (state, actId) {
+    // 清除数据
+    state.creatData = {
+      actId: actId,
+      creatBasice: {
+        name: '',
+        group: '',
+        day: '',
+        all: '',
+        date: []
+      },
+      creatCity: null,
+      creatTime: null,
+      creatMaterial: null,
+      creatStrategy: null,
+      creatMedia: null,
+      creatMediaType: null,
+      creatScene: null
+    }
+  },
   ACTID (state, actId) {
     // 改变id的方法
     state.creatData.actId = actId

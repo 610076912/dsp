@@ -83,7 +83,8 @@
           group: '',
           day: '',
           all: '',
-          date: []
+          date: [],
+          channel: ''
         },
         // 验证规则
         rules: {
@@ -103,12 +104,32 @@
       // 判断store里是否有数据
       let creatData = this.$store.state.creatData.creatBasice
       if (creatData.name) {
+        // 读取vux里的数据
         this.ruleForm.name = creatData.name
         this.ruleForm.group = creatData.group
         this.ruleForm.day = creatData.day
         this.ruleForm.all = creatData.all
         this.ruleForm.date = creatData.date
         this.isEdit = true
+      } else if (this.$store.state.creatData.actId) {
+        // 请求服务器数据
+        this.$http.get('/api2/get_plan', {
+          params: {
+            plan_id: this.$store.state.creatData.actId
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            const data = res.data
+            this.ruleForm.name = data.plan_name
+            this.ruleForm.group = data.group_id
+            this.ruleForm.day = data.plan_day_budget
+            this.ruleForm.all = data.plan_all_budget
+            this.$set(this.ruleForm.date, 0, new Date(data.plan_b_time))
+            this.$set(this.ruleForm.date, 1, new Date(data.plan_e_time))
+            this.isEdit = true
+            this.$store.commit('BASICE', this.ruleForm)
+          }
+        })
       }
       // 获取活动分组
       this.queryGroupData()
@@ -121,8 +142,6 @@
         this.$refs['new1form'].validate((valid) => {
           // 如果验证通过则跳转下一个路由
           let url, data
-          console.log(that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'), that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'))
-          debugger
           if (valid && !that.isEdit) {
             // 添加
             url = '/api2/add_plan'
@@ -140,7 +159,7 @@
             // 修改
             url = '/api2/upd_plan'
             data = {
-              plan_id: this.$store.state.creatData.actId,
+              plan_id: that.$store.state.creatData.actId,
               plan_name: that.ruleForm.name,
               plan_b_time: that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'),
               plan_e_time: that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'),

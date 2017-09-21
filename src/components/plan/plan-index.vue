@@ -64,13 +64,13 @@
           </el-table-column>
           <el-table-column
             label="活动ID"
-            prop="act_id"
+            prop="plan_id"
             align="center"
             width="60">
           </el-table-column>
           <el-table-column
             label="活动名称"
-            prop="act_name"
+            prop="plan_name"
             align="center"
             width="140">
           </el-table-column>
@@ -89,13 +89,13 @@
           </el-table-column>
           <el-table-column
             label="日预算"
-            prop="day_budget"
+            prop="plan_day_budget"
             align="center"
             width="75">
           </el-table-column>
           <el-table-column
             label="总预算"
-            prop="all_budget"
+            prop="plan_all_budget"
             align="center"
             width="75">
           </el-table-column>
@@ -261,9 +261,9 @@
           target: '.card-content',
           text: '努力加载中'
         })
-        this.$http.post('/api2/get_act', {
+        this.$http.post('/api2/get_plan_list', {
           sort_type: option.sort_type,
-          act_name: option.name,
+          plan_name: option.name,
           group_id: option.groupId,
           status: option.status,
           time_start: option.timeStart,
@@ -290,7 +290,7 @@
       },
       // 新建按钮
       creatNew () {
-        this.$store.state.creatData.creatBasice = null
+        this.$store.commit('CLEARCREATDATA', 34)
         this.$router.push('/creatBasics')
       },
       // 选项卡
@@ -349,8 +349,8 @@
         this.dialogVisible = !this.dialogVisible
       },
       // 格式化时间
-      formatter (item, b, c) {
-        return new Date(item.act_b_time).Format('yyyy-MM-dd hh:mm:ss') + ' ' + new Date(item.act_e_time).Format('yyyy-MM-dd hh:mm:ss')
+      formatter (item) {
+        return new Date(item.plan_b_time).Format('yyyy-MM-dd hh:mm:ss') + ' ' + new Date(item.plan_e_time).Format('yyyy-MM-dd hh:mm:ss')
       }
     },
     components: {

@@ -72,6 +72,25 @@
         this.times = initData.times
         this.speed = initData.speed
         this.priceType = initData.priceType
+      } else if (this.$store.state.creatData.actId) {
+        this.$http.get('/api2/get_strategy_plan', {
+          params: {
+            plan_id: this.$store.state.creatData.actId
+          }
+        }).then(res => {
+          // console.log(res)
+          if (res.code === 200) {
+            this.times = res.data.frequency
+            this.speed = res.data.casttype
+            this.priceType = res.data.billing
+            // 存vuex
+            this.$store.commit('STRATEGY', {
+              times: this.times,
+              speed: this.speed,
+              priceType: this.priceType
+            })
+          }
+        })
       }
     },
     watch: {
@@ -120,7 +139,6 @@
         width: 100%
         height: 80px
         margin-bottom: 60px
-
         .title {
           width: 120px
           height: 100%

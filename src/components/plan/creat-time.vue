@@ -112,6 +112,23 @@
         console.log(creatData.time, creatData.week)
         this.checkedTime = creatData.time
         this.checkedWeek = creatData.week
+      } else if (this.$store.state.creatData.actId) {
+        this.$http.get('/api2/get_time_plan', {
+          params: {
+            plan_id: this.$store.state.creatData.actId
+          }
+        }).then(res => {
+          console.log(res)
+          if (res.code === 200) {
+            this.checkedTime = this.transformTime(res.data.plan_time)
+            this.checkedWeek = this.transformWeek(res.data.plan_week)
+            // 保存Vuex
+            this.$store.commit('TIME', {
+              time: this.checkedTime,
+              week: this.checkedWeek
+            })
+          }
+        })
       }
     },
     watch: {
@@ -119,22 +136,13 @@
         let isall = val.every((item) => {
           return item === 1
         })
-        if (isall === true) {
-          this.timeCheckBox = true
-        } else {
-          this.timeCheckBox = false
-        }
-        console.log(isall)
+        this.timeCheckBox = isall
       },
       'checkedWeek' (val) {
         let isall = val.every((item) => {
           return item === 1
         })
-        if (isall === true) {
-          this.weekCheckBox = true
-        } else {
-          this.weekCheckBox = false
-        }
+        this.weekCheckBox = isall
       }
     },
     methods: {
@@ -194,6 +202,8 @@
             for (let i in strTOarr) {
               if (i === item) {
                 res[strTOarr[i]] = 1
+              } else {
+                res[strTOarr[i]] = 0
               }
             }
           })
@@ -215,7 +225,7 @@
       transformWeek (arg) {
         let res = ''
         if (typeof arg === 'string') {
-          res = new Array(7)
+          res = [0, 0, 0, 0, 0, 0, 0]
           for (let i = 0; i < arg.split('').length; i++) {
             if (arg.split('')[i] === 0) {
               res.splice(6, 1, 1)
