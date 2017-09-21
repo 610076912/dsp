@@ -111,11 +111,11 @@
         this.ruleForm.all = creatData.all
         this.ruleForm.date = creatData.date
         this.isEdit = true
-      } else if (this.$store.state.creatData.actId) {
+      } else if (this.$store.state.creatData.planId) {
         // 请求服务器数据
         this.$http.get('/api2/get_plan', {
           params: {
-            plan_id: this.$store.state.creatData.actId
+            plan_id: this.$store.state.creatData.planId
           }
         }).then(res => {
           if (res.code === 200) {
@@ -159,7 +159,7 @@
             // 修改
             url = '/api2/upd_plan'
             data = {
-              plan_id: that.$store.state.creatData.actId,
+              plan_id: that.$store.state.creatData.planId,
               plan_name: that.ruleForm.name,
               plan_b_time: that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'),
               plan_e_time: that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'),
@@ -170,13 +170,13 @@
             }
           }
           that.$http.post(url, data)
-            .then(data => {
-              console.log(data)
-              if (data.code === 200) {
+            .then(res => {
+              // console.log(res)
+              if (res.code === 200) {
                 // 保存活动Id
-                this.$store.commit('ACTID', data)
+                this.$store.commit('planId', res.data)
                 // 保存活动数据
-                this.$store.commit('BASICE', that.ruleForm)
+                this.$store.commit('BASICE', res.ruleForm)
                 this.$router.push('/creatScene')
               }
             })

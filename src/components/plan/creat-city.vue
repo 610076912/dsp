@@ -51,7 +51,7 @@
         // 城市数据状态仓库
         cityStore: this.$store.state.creatData.creatCity,
         // 活动id
-        actId: this.$store.state.creatData.actId,
+        planId: this.$store.state.creatData.planId,
         // 大区列表
         regionList: [],
         regionProps: {
@@ -79,12 +79,12 @@
       }
     },
     created () {
-      if (this.actId) {
+      if (this.planId) {
         if (!this.cityStore) {
           // 获取已选城市
           this.$http.get('/api2/get_region_plan', {
             params: {
-              plan_id: this.actId
+              plan_id: this.planId
             }
           }).then(res => {
             if (res.code === 200) {
@@ -116,7 +116,7 @@
       next () {
         this.btnLoading = true
         this.$http.post('/api2/add_region_plan', {
-          plan_id: this.actId,
+          plan_id: this.planId,
           city_id_list: JSON.stringify(this.checkedCityId)
         }).then(res => {
           if (res.code === 200) {

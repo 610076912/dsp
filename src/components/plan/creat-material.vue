@@ -87,7 +87,7 @@
     data () {
       return {
         // 计划id
-        planId: this.$store.state.creatData.actId,
+        planId: this.$store.state.creatData.planId,
         // 滑块
         slide: {
           width: 0,
@@ -104,7 +104,7 @@
         // 当前已选索引
         currentIndex: '',
         // 当前已选媒体活动id
-        currentMediaActId: '',
+        currentMediaplanId: '',
         // 当前已选媒体id
         currentMediaId: '',
         // 素材模板状态
@@ -180,7 +180,7 @@
         this.$router.push('/creatPreview')
       },
       // 选择媒体平台 获取广告信息
-      chooseMedia (actId, mediaId, index) {
+      chooseMedia (planId, mediaId, index) {
         // 当前已选索引
         this.currentIndex = index
         // 检索当前选中媒体可用模板
@@ -193,10 +193,10 @@
           }
         }
         // 当前选中媒体活动id
-        this.currentMediaActId = actId
+        this.currentMediaplanId = planId
         // 获取广告信息
         this.$http.post('/api2/get_ad_for_channel', {
-          act_id: actId
+          act_id: planId
         }).then(res => {
           if (res.code === 200) {
             this.chenkedTpl = res.data[0].tpl_cat
@@ -245,7 +245,7 @@
           // 计划id
           plan_id: this.planId,
           // 活动id 计划id和媒体id组成
-          act_id: this.currentMediaActId,
+          act_id: this.currentMediaplanId,
           // 媒体id
           act_channel_id: this.currentMediaId,
           // 模板类型

@@ -72,10 +72,10 @@
         this.times = initData.times
         this.speed = initData.speed
         this.priceType = initData.priceType
-      } else if (this.$store.state.creatData.actId) {
+      } else if (this.$store.state.creatData.planId) {
         this.$http.get('/api2/get_strategy_plan', {
           params: {
-            plan_id: this.$store.state.creatData.actId
+            plan_id: this.$store.state.creatData.planId
           }
         }).then(res => {
           // console.log(res)
@@ -103,7 +103,7 @@
       // 下一步
       nextStep () {
         this.$http.post('/api2/add_strategy_plan', {
-          plan_id: this.$store.state.creatData.actId,
+          plan_id: this.$store.state.creatData.planId,
           frequency: this.times,
           casttype: this.speed,
           billing: this.priceType

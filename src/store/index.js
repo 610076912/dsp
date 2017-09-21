@@ -7,7 +7,7 @@ Vue.use(Vuex)
 
 const state = {
   creatData: {
-    actId: 34,
+    planId: 34,
     creatBasice: {
       name: '1',
       group: '',
@@ -26,10 +26,10 @@ const state = {
 }
 
 const mutations = {
-  CLEARCREATDATA (state, actId) {
+  CLEARCREATDATA (state, planId) {
     // 清除数据
     state.creatData = {
-      actId: actId,
+      planId: planId,
       creatBasice: {
         name: '',
         group: '',
@@ -46,9 +46,9 @@ const mutations = {
       creatScene: null
     }
   },
-  ACTID (state, actId) {
+  planId (state, planId) {
     // 改变id的方法
-    state.creatData.actId = actId
+    state.creatData.planId = planId
   },
   BASICE (state, basice) {
     // 改变creatBasice的方法

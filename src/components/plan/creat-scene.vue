@@ -81,9 +81,9 @@
       let vuexData = this.$store.state.creatData.creatScene
       if (vuexData) {
         this.checkedId = vuexData
-      } else if (this.$store.state.creatData.actId) {
+      } else if (this.$store.state.creatData.planId) {
         this.$http.post('/api2/get_pkg_info', {
-          plan_id: this.$store.state.creatData.actId
+          plan_id: this.$store.state.creatData.planId
         }).then(res => {
           console.log(res)
           if (res.code === 200 && res.data.length > 0) {
@@ -111,7 +111,7 @@
       }
       // 请求广告目标信息
       this.$http.post('/api2/get_target_list', {
-        plan_id: this.$store.state.creatData.actId
+        plan_id: this.$store.state.creatData.planId
       }).then(res => {
         if (res.code === 200) {
           this.checkData = res.data
@@ -167,7 +167,7 @@
         const that = this
         this.$http.get('/api2/get_all_pkg_info', {
           params: {
-            plan_id: that.$store.state.creatData.actId
+            plan_id: that.$store.state.creatData.planId
           }
         }).then(res => {
           if (res.code === 200) {
@@ -208,7 +208,7 @@
           // return
         }
         this.$http.post('/api2/add_pkg_info', {
-          plan_id: this.$store.state.creatData.actId,
+          plan_id: this.$store.state.creatData.planId,
           cls_id_list: JSON.stringify(this.checkedId)
         }).then(res => {
           if (res.code === 200) {

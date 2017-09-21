@@ -48,8 +48,8 @@
       }
     },
     computed: {
-      actId () {
-        return this.$store.state.creatData.actId
+      planId () {
+        return this.$store.state.creatData.planId
       }
     }
   }

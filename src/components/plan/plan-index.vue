@@ -278,10 +278,10 @@
         })
       },
       // 删除
-      delActive (actId) {
+      delActive (planId) {
         const that = this
         this.$http.post('/api/del_act', {
-          act_id_list: JSON.stringify(actId)
+          act_id_list: JSON.stringify(planId)
         }).then(function (res) {
           if (res.code === 200) {
             that.seek()
@@ -328,8 +328,8 @@
         this.delActive(this.selectedLength)
       },
       // 单项删除
-      itemDel (actId) {
-        this.delActive([actId])
+      itemDel (planId) {
+        this.delActive([planId])
       },
       // 查询按钮
       seek () {

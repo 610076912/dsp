@@ -46,10 +46,10 @@
       let initData = this.$store.state.creatData.creatMediaType
       if (initData) {
         this.chosedType = initData
-      } else if (this.$store.state.creatData.actId) {
+      } else if (this.$store.state.creatData.planId) {
         this.$http.get('/api2/get_class_plan', {
           params: {
-            plan_id: this.$store.state.creatData.actId
+            plan_id: this.$store.state.creatData.planId
           }
         }).then(res => {
           console.log(res)
@@ -86,7 +86,7 @@
         }
         this.$http.post('/api2/add_class_plan', {
           class_plan: this.chosedType.join(''),
-          plan_id: this.$store.state.creatData.actId
+          plan_id: this.$store.state.creatData.planId
         }).then(res => {
           console.log(res)
           if (res.code === 200) {

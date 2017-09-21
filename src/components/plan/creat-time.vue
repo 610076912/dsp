@@ -112,10 +112,10 @@
         console.log(creatData.time, creatData.week)
         this.checkedTime = creatData.time
         this.checkedWeek = creatData.week
-      } else if (this.$store.state.creatData.actId) {
+      } else if (this.$store.state.creatData.planId) {
         this.$http.get('/api2/get_time_plan', {
           params: {
-            plan_id: this.$store.state.creatData.actId
+            plan_id: this.$store.state.creatData.planId
           }
         }).then(res => {
           console.log(res)
@@ -178,7 +178,7 @@
       addTime () {
         const that = this
         this.$http.post('/api2/add_time_plan', {
-          plan_id: this.$store.state.creatData.actId,
+          plan_id: this.$store.state.creatData.planId,
           time_plan: this.transformTime(this.checkedTime),
           week_plan: this.transformWeek(this.checkedWeek)
         }).then(res => {

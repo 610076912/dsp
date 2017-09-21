@@ -32,7 +32,7 @@
     data () {
       return {
         // 活动id
-        actId: this.$store.state.creatData.actId,
+        planId: this.$store.state.creatData.planId,
         // 媒体列表
         medias: medias,
         // 全部媒体id
@@ -45,12 +45,12 @@
     },
     created () {
       this.medias.forEach(item => { this.allMediaId.push(item.media_id) })
-      if (this.actId) {
+      if (this.planId) {
         if (!this.$store.state.creatData.creatMedia) {
           // 获取媒体定向信息
           this.$http.get('/api2/get_media_plan', {
             params: {
-              plan_id: this.actId
+              plan_id: this.planId
             }
           }).then(res => {
             if (res.code === 200) {
@@ -71,7 +71,7 @@
         this.btnLoading = true
         // 提交媒体定向
         this.$http.post('/api2/add_media_plan', {
-          plan_id: this.actId,
+          plan_id: this.planId,
           channel_id_list: JSON.stringify(this.checkedMedia)
         }).then(res => {
           if (res.code === 200) {
