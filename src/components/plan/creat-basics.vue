@@ -174,7 +174,7 @@
               console.log(data)
               if (data.code === 200) {
                 // 保存活动Id
-                this.$store.commit('ACTID', data)
+                this.$store.commit('ACTID', data.data)
                 // 保存活动数据
                 this.$store.commit('BASICE', that.ruleForm)
                 this.$router.push('/creatScene')

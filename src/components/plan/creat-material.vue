@@ -23,7 +23,7 @@
                 <div class="btns" v-show="chenkedTpl==='flash1'">
                   <button @click.stop="save('flash1')" class="fr" v-show="isShow.flash1" size="small">保存</button>
                   <button @click.stop="edit('flash1')" class="fr" v-show="!isShow.flash1" size="small">编辑</button>
-                  <button @click.stop class="fr" v-show="currentTpl==='flash1'" size="small">预览</button>
+                  <button @click.stop="cancel('flash1')" class="fr" size="small">取消</button>
                 </div>
               </template>
               <flash1 :isShow="isShow" :adContent="adContent"></flash1>
@@ -34,7 +34,7 @@
                 <div class="btns" v-show="chenkedTpl==='flash2'">
                   <button @click.stop="save('flash2')" class="fr" v-show="isShow.flash2" size="small">保存</button>
                   <button @click.stop="edit('flash2')" class="fr" v-show="!isShow.flash2" size="small">编辑</button>
-                  <button @click.stop class="fr" v-show="currentTpl==='flash2'" size="small">预览</button>
+                  <button @click.stop="cancel('flash2')" class="fr" size="small">取消</button>
                 </div>
               </template>
               <flash2 :isShow="isShow" :adContent="adContent"></flash2>
@@ -45,7 +45,7 @@
                 <div class="btns" v-show="chenkedTpl==='flash3'">
                 <button @click.stop="save('flash3')" class="fr" v-show="isShow.flash3" size="small">保存</button>
                 <button @click.stop="edit('flash3')" class="fr" v-show="!isShow.flash3" size="small">编辑</button>
-                <button @click.stop class="fr" v-show="currentTpl==='flash3'" size="small">预览</button>
+                <button @click.stop="cancel('flash3')" class="fr" size="small">取消</button>
               </div>
               </template>
               <flash3 :isShow="isShow" :adContent="adContent"></flash3>
@@ -209,6 +209,10 @@
       tplChange (val) {
         this.chenkedTpl = val
       },
+      cancel (adName) {
+        // 返回显示模板图片
+        this.isShow[adName] = false
+      },
       edit (adName) {
         // 编辑模板
         this.isShow[adName] = true
@@ -229,7 +233,7 @@
             // 添加广告
             this.addMaterial('flash', adName)
           })
-        } else if (this.chenkedTpl === this.currentTpl) {
+        } else {
           // 保存/编辑按钮状态
           this.isShow[adName] = false
           // 当前模板

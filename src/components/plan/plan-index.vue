@@ -290,7 +290,7 @@
       },
       // 新建按钮
       creatNew () {
-        this.$store.commit('CLEARCREATDATA', 34)
+        this.$store.commit('CLEARCREATDATA', '')
         this.$router.push('/creatBasics')
       },
       // 选项卡
