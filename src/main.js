@@ -8,6 +8,7 @@ import router from './router'
 import store from './store'
 // axios
 import es6Promise from 'es6-promise'
+
 es6Promise.polyfill()
 import axios from '@/assets/js/axiosplus'
 import './assets/css/reset.styl'
@@ -21,12 +22,13 @@ Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts
 Vue.use(axios)
 
+// 登录页面router钩子函数
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.Auth)) {
     if (!sessionStorage.getItem('token')) {
       next({
         path: '/login',
-        query: { redirect: to.fullPath }
+        query: {redirect: to.fullPath}
       })
     } else {
       next()
@@ -42,5 +44,5 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App }
+  components: {App}
 })

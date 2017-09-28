@@ -96,7 +96,7 @@
     watch: {
       // 自定义频次输入框禁用
       'times' (val) {
-        this.inputStatus = (val === 1)
+        this.inputStatus = (val !== 1)
       }
     },
     methods: {

@@ -137,12 +137,12 @@
           </el-table-column>
           <el-table-column label="功能操作" align="left">
             <template scope="scope">
-              <span class="operation">查看&nbsp;</span>
+              <span class="operation" @click="details(scope.row.plan_id)">查看&nbsp;</span>
               <span class="operation">复制&nbsp;</span>
               <span class="operation" @click="excentionStatus">状态</span>
               <br>
               <span class="operation">报表&nbsp;</span>
-              <span class="operation" @click="itemDel(scope.row.act_id)">删除&nbsp;</span>
+              <span class="operation" @click="itemDel(scope.row.plan_id)">删除&nbsp;</span>
             </template>
           </el-table-column>
         </el-table>
@@ -274,7 +274,7 @@
           if (res.code === 200) {
             that.tableData = res.data
           }
-          console.log(res)
+          // console.log(res)
         })
       },
       // 删除
@@ -290,7 +290,7 @@
       },
       // 新建按钮
       creatNew () {
-        this.$store.commit('CLEARCREATDATA', 34)
+        this.$store.commit('CLEARCREATDATA', null)
         this.$router.push('/creatBasics')
       },
       // 选项卡
@@ -347,6 +347,12 @@
       // 状态按钮弹出推广状态
       excentionStatus () {
         this.dialogVisible = !this.dialogVisible
+      },
+      // 查看按钮
+      details (planId) {
+        console.log(planId)
+        this.$store.commit('PLANID', planId)
+        this.$router.push('/creatPreview')
       },
       // 格式化时间
       formatter (item) {

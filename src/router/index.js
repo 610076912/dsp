@@ -34,7 +34,7 @@ export default new Router({
       path: '/',
       name: 'index',
       component: index,
-      meta: { Auth: true }
+      meta: {Auth: true}
     },
     {
       path: '/login',
@@ -45,7 +45,7 @@ export default new Router({
       path: '/plan',
       name: 'plan',
       component: plan,
-      meta: { Auth: true },
+      meta: {Auth: true},
       children: [
         {
           path: '',
@@ -103,7 +103,7 @@ export default new Router({
       path: '/data',
       name: 'data',
       component: data,
-      meta: { Auth: true },
+      meta: {Auth: true},
       children: [
         {
           path: '',
@@ -121,7 +121,7 @@ export default new Router({
       path: '/finance',
       name: 'finance',
       component: finance,
-      meta: { Auth: true },
+      meta: {Auth: true},
       children: [
         {
           path: '/',

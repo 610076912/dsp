@@ -92,8 +92,7 @@
           day: [{type: 'number', message: '请输入数字', trigger: 'blur'}],
           all: [{validator: checkAll, trigger: 'blur'}],
           date: [{required: true, type: 'array', message: '请选择投放日期', trigger: 'change'}],
-          group: [{required: true, type: 'number', message: '请选择投放日期', trigger: 'change'}]
-
+          group: [{required: true, type: 'number', message: '请选择一个分组', trigger: 'change'}]
         },
         groupArray: ['分组1', '分组2', '分组3'],
         // 判断是否调修改接口
@@ -157,6 +156,7 @@
           }
           if (valid && that.isEdit) {
             // 修改
+            debugger
             url = '/api2/upd_plan'
             data = {
               plan_id: that.$store.state.creatData.planId,
@@ -174,7 +174,7 @@
               // console.log(res)
               if (res.code === 200) {
                 // 保存活动Id
-                this.$store.commit('planId', res.data)
+                this.$store.commit('PLANID', res.data)
                 // 保存活动数据
                 this.$store.commit('BASICE', res.ruleForm)
                 this.$router.push('/creatScene')

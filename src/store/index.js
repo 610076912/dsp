@@ -7,9 +7,9 @@ Vue.use(Vuex)
 
 const state = {
   creatData: {
-    planId: 34,
+    planId: 37,
     creatBasice: {
-      name: '1',
+      name: null,
       group: '',
       day: '',
       all: '',
@@ -46,7 +46,7 @@ const mutations = {
       creatScene: null
     }
   },
-  planId (state, planId) {
+  PLANID (state, planId) {
     // 改变id的方法
     state.creatData.planId = planId
   },
