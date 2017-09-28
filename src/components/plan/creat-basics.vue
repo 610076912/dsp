@@ -156,7 +156,6 @@
           }
           if (valid && that.isEdit) {
             // 修改
-            debugger
             url = '/api2/upd_plan'
             data = {
               plan_id: that.$store.state.creatData.planId,

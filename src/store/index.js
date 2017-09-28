@@ -9,7 +9,7 @@ const state = {
   creatData: {
     planId: 37,
     creatBasice: {
-      name: null,
+      name: '1',
       group: '',
       day: '',
       all: '',
