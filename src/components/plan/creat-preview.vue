@@ -2,10 +2,12 @@
   <div id="creatpreview">
     <steps :active="5"></steps>
     <div class="basic cons">
-      <p class="head"><span>基本信息</span><b><router-link to="creatBasics">编辑信息</router-link></b></p>
+      <p class="head"><span>基本信息</span><b>
+        <router-link to="creatBasics">编辑信息</router-link>
+      </b></p>
       <el-row class="row">
         <el-col :span="8"><span>推广计划名称: </span><span>{{ baseInfo.act_name }}</span></el-col>
-        <el-col :span="8"><span>投放日期: </span><span>{{ baseInfo.act_b_time }}</span></el-col>
+        <el-col :span="8"><span>投放日期: </span><span>{{ new Date(baseInfo.act_b_time).Format('yyyy-MM-dd hh:mm:ss') }}</span></el-col>
         <el-col :span="8"><span>移动到组: </span><span>{{ baseInfo.group_name }}</span></el-col>
       </el-row>
       <el-row class="row">
@@ -14,11 +16,13 @@
       </el-row>
     </div>
     <div class="scene cons">
-      <p class="head"><span>场景化投放设置</span><b><router-link to="creatScene">编辑信息</router-link></b></p>
+      <p class="head"><span>场景化投放设置</span><b>
+        <router-link to="creatScene">编辑信息</router-link>
+      </b></p>
       <div class="pro-box">
         <p class="minhead"><span>广告目标</span></p>
         <div class="label">
-          <span class="labels">汽车</span>
+
         </div>
       </div>
       <div class="pro-box">
@@ -29,7 +33,9 @@
       </div>
     </div>
     <div class="date cons">
-      <p class="head"><span>投放时间</span><b><router-link to="creatTime">编辑信息</router-link></b></p>
+      <p class="head"><span>投放时间</span><b>
+        <router-link to="creatTime">编辑信息</router-link>
+      </b></p>
       <div class="pro-box">
         <p class="minhead"><span>小时</span></p>
         <div class="label">
@@ -44,7 +50,9 @@
       </div>
     </div>
     <div class="position cons">
-      <p class="head"><span>地理位置定向</span><b><router-link to="creatCity">编辑信息</router-link></b></p>
+      <p class="head"><span>地理位置定向</span><b>
+        <router-link to="creatCity">编辑信息</router-link>
+      </b></p>
       <div class="pro-box">
         <p class="minhead"><span>按地区</span></p>
         <div class="label">
@@ -54,7 +62,9 @@
       </div>
     </div>
     <div class="media cons">
-      <p class="head"><span>媒体定向</span><b><router-link to="creatMedia">编辑信息</router-link></b></p>
+      <p class="head"><span>媒体定向</span><b>
+        <router-link to="creatMedia">编辑信息</router-link>
+      </b></p>
       <div class="pro-box">
         <div class="label">
           <span class="labels" v-for="item in meidaInfo">{{ item.media_name }}</span>
@@ -62,7 +72,9 @@
       </div>
     </div>
     <div class="episode cons">
-      <p class="head"><span>剧集定向</span><b><router-link to="creatMediatype">编辑信息</router-link></b></p>
+      <p class="head"><span>剧集定向</span><b>
+        <router-link to="creatMediatype">编辑信息</router-link>
+      </b></p>
       <div class="pro-box">
         <div class="label">
           <span class="labels" v-for="item in episodeInfo">{{ item.type }}</span>
@@ -70,7 +82,9 @@
       </div>
     </div>
     <div class="strategy cons">
-      <p class="head"><span>投放策略</span><b><router-link to="creatStrategy">编辑信息</router-link></b></p>
+      <p class="head"><span>投放策略</span><b>
+        <router-link to="creatStrategy">编辑信息</router-link>
+      </b></p>
       <div class="pro-box">
         <div class="bar">
           <div class="title">投放频次:</div>
@@ -112,6 +126,21 @@
             <span>元</span>
           </div>
         </div>-->
+      </div>
+    </div>
+    <div class="material cons">
+      <p class="head"><span>广告素材类型</span><b>
+        <router-link to="creatMaterial">编辑信息</router-link>
+      </b></p>
+      <div class="pro-box">
+        <div class="material-item" v-for="(item, index) in platformName">
+          <img :src="materialBg[index]" alt="">
+          <div class="mask">
+            <span>平&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;台：{{item}}</br></span>
+            <span>广告类型：</br></span>
+            <span>模板类型：</span>
+          </div>
+        </div>
       </div>
     </div>
     <div class="button-wrap">
@@ -175,7 +204,7 @@
     data () {
       return {
         // 计划id
-        planId: this.$store.state.creatData.actId,
+        planId: this.$store.state.creatData.planId,
         loading: true,
         options: [],
         oldValue: '',
@@ -199,13 +228,14 @@
         strategy: {},
         radio: 'true',
         finishLoading: false,
-        finishtoLoading: false
+        finishtoLoading: false,
+        materialInfo: []
       }
     },
     created () {
       // 预览信息
       this.$http.post('/api2/plan_conf_preview', {
-        plan_id: this.planId
+        plan_id: this.$store.state.creatData.planId
       }).then(res => {
         if (res.code === 200) {
           const result = res.data
@@ -265,6 +295,10 @@
             // 投放策略
             _this.strategyInfo = result.strategyInfo_7
           }
+          if (result.adConfInfo_8) {
+            // 广告信息
+            _this.materialInfo = result.adConfInfo_8
+          }
         }
       })
     },
@@ -290,6 +324,10 @@
           } else if (res.code === 200) {
             // this.$router.push('/creatPreview')
           }
+        })
+        // 审核
+        this.$http.post('/api2/send_audit', {
+          plan_id: this.$store.state.creatData.planId
         })
       },
       updataGroup (callback) {
@@ -353,6 +391,36 @@
           })
         }
         return res
+      }
+    },
+    computed: {
+      'platformName': {
+        get: function () {
+          let res = []
+          this.materialInfo.forEach(function (item) {
+            if (item.act_channel_id === 1001) {
+              res.push('暴风影音')
+            } else {
+              res.push('爱奇艺')
+            }
+          })
+          return res
+        }
+      },
+      'materialBg': {
+        get: function () {
+          let res = []
+          this.materialInfo.forEach(function (item) {
+            if (item.tpl_cat === 'flash1') {
+              res.push('/static/img/flash150x150.png')
+            } else if (item.tpl_cat === 'flash2') {
+              res.push('/static/img/flash210x60.png')
+            } else {
+              res.push('/static/img/flash210x90.png')
+            }
+          })
+          return res
+        }
       }
     },
     components: {
@@ -455,6 +523,44 @@
         }
         .inp {
 
+        }
+      }
+    }
+    .material {
+      .pro-box {
+        overflow: hidden;
+        .material-item {
+          width: 550px;
+          height: 315px;
+          float: left;
+          margin-bottom: 40px;
+          position: relative;
+          overflow: hidden;
+          &:nth-of-type(2n-1) {
+            margin-right: 35px;
+          }
+          .mask {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .7);
+            transform :scale(0);
+            transition :all .5s;
+            padding: 100px 130px;
+            span {
+              color: #fff;
+              font-size: 14px;
+            }
+          }
+          img {
+            width: 100%;
+            height: 100%;
+          }
+          &:hover .mask {
+            transform :scale(1, 1)
+          }
         }
       }
     }

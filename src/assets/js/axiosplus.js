@@ -42,7 +42,7 @@ Axios.interceptors.request.use(function (config) {
 // 响应拦截
 Axios.interceptors.response.use(function (res) {
   // 状态码不等于200则弹窗提示
-  if (res.data.code !== 200) {
+  if (res.data.code !== 200 && res.data.code !== 300) {
     Message({
       showClose: true,
       message: res.data.msg,

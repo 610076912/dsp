@@ -62,7 +62,9 @@
         speed: 1,
         priceType: 0,
         // 自定义频次输入框状态
-        inputStatus: true
+        inputStatus: true,
+        // 是否为修改状态
+        isEdit: false
       }
     },
     created () {
@@ -72,6 +74,7 @@
         this.times = initData.times
         this.speed = initData.speed
         this.priceType = initData.priceType
+        this.isEdit = true
       } else if (this.$store.state.creatData.planId) {
         this.$http.get('/api2/get_strategy_plan', {
           params: {
@@ -83,6 +86,7 @@
             this.times = res.data.frequency
             this.speed = res.data.casttype
             this.priceType = res.data.billing
+            this.isEdit = true
             // 存vuex
             this.$store.commit('STRATEGY', {
               times: this.times,
@@ -102,13 +106,16 @@
     methods: {
       // 下一步
       nextStep () {
-        this.$http.post('/api2/add_strategy_plan', {
+        let url = '/api2/add_strategy_plan'
+        if (this.isEdit) {
+          url = '/api2/upd_strategy_plan'
+        }
+        this.$http.post(url, {
           plan_id: this.$store.state.creatData.planId,
           frequency: this.times,
           casttype: this.speed,
           billing: this.priceType
         }).then(res => {
-          console.log(res)
           if (res.code === 200) {
             this.$store.commit('STRATEGY', {
               times: this.times,

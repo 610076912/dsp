@@ -173,14 +173,15 @@
               // console.log(res)
               if (res.code === 200) {
                 // 保存活动Id
+                debugger
                 this.$store.commit('PLANID', res.data)
+                console.log(that.$store.state.creatData)
                 // 保存活动数据
-                this.$store.commit('BASICE', res.ruleForm)
+                this.$store.commit('BASICE', that.ruleForm)
                 this.$router.push('/creatScene')
               }
             })
         })
-        this.$router.push('/creatScene')
       },
       back () {
         this.$router.go(-1)

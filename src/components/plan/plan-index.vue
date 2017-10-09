@@ -273,6 +273,7 @@
           loading.close()
           if (res.code === 200) {
             that.tableData = res.data
+            console.log(res.data)
           }
           // console.log(res)
         })
@@ -315,8 +316,30 @@
       },
       // 开关状态改变时调用
       switch1 (result) {
+        // const that = this
         console.log(result)
-        alert('第' + (result.$index + 1) + '行的开关状态为' + result.row.kg)
+        if (result.publish) {
+          this.$http.post('/api2/canclepublish', {
+            plan_id: result.row.plan_id
+          }).then(res => {
+            if (res.code !== 200) {
+              result.row.publish = true
+            }
+          })
+        } else {
+          this.$http.post('/api2/publish', {
+            plan_id: result.row.plan_id
+          }).then(res => {
+            if (res.code !== 200) {
+              this.$alert(res.msg, '提示', {
+                confirmButtonText: '确定',
+                callback: action => {
+                  result.row.publish = false
+                }
+              })
+            }
+          })
+        }
       },
       // 批量删除按钮方法
       beachDel () {

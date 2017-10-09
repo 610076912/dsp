@@ -40,7 +40,8 @@
         // 已选媒体id
         checkedMedia: [],
         allChecked: false,
-        btnLoading: false
+        btnLoading: false,
+        isEdit: false
       }
     },
     created () {
@@ -58,10 +59,12 @@
               res.data.forEach(item => { result.push(item.act_channel_id) })
               this.checkedMedia = result
               this.$store.commit('MEDIA', result)
+              this.isEdit = true
             }
           })
         } else {
           this.checkedMedia = this.$store.state.creatData.creatMedia
+          this.isEdit = true
         }
       }
     },
@@ -69,8 +72,10 @@
       // 下一步
       nextStep () {
         this.btnLoading = true
+        let url = this.isEdit ? '/api2/upd_media_plan' : '/api2/add_media_plan'
+        console.log(url)
         // 提交媒体定向
-        this.$http.post('/api2/add_media_plan', {
+        this.$http.post(url, {
           plan_id: this.planId,
           channel_id_list: JSON.stringify(this.checkedMedia)
         }).then(res => {

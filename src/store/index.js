@@ -5,11 +5,11 @@ es6Promise.polyfill()
 
 Vue.use(Vuex)
 
-const state = {
+let state = {
   creatData: {
-    planId: 37,
+    planId: null,
     creatBasice: {
-      name: '1',
+      name: '',
       group: '',
       day: '',
       all: '',

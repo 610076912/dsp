@@ -19,6 +19,7 @@ import 'echarts/lib/component/title'
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false
+Vue.config.performance = true
 Vue.prototype.$echarts = echarts
 Vue.use(axios)
 
