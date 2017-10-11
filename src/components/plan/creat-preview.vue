@@ -7,7 +7,8 @@
       </b></p>
       <el-row class="row">
         <el-col :span="8"><span>推广计划名称: </span><span>{{ baseInfo.act_name }}</span></el-col>
-        <el-col :span="8"><span>投放日期: </span><span>{{ new Date(baseInfo.act_b_time).Format('yyyy-MM-dd hh:mm:ss') }}</span></el-col>
+        <el-col :span="8">
+          <span>投放日期: </span><span>{{ new Date(baseInfo.act_b_time).Format('yyyy-MM-dd hh:mm:ss') }}</span></el-col>
         <el-col :span="8"><span>移动到组: </span><span>{{ baseInfo.group_name }}</span></el-col>
       </el-row>
       <el-row class="row">
@@ -88,33 +89,33 @@
       <div class="pro-box">
         <div class="bar">
           <div class="title">投放频次:</div>
-          <div class="block" v-if="strategy.frequency">
+          <div class="block" v-if="!strategy.frequency">
             <el-radio v-model="radio" label="true"> 不控制频次</el-radio>
             <p><i class="el-icon-information"></i> 针对移动设备部控制投放频次</p>
           </div>
-          <div class="block" v-if="!strategy.frequency">
+          <div class="block" v-if="strategy.frequency">
             <el-radio v-model="radio" label="true"> 自定义频次</el-radio>
             <p><i class="el-icon-information"></i> 每天每个设备曝光？？次</p>
           </div>
         </div>
         <div class="bar">
           <div class="title">投放速度:</div>
-          <div class="block" v-if="strategy.casttype">
+          <div class="block" v-if="!strategy.casttype">
             <el-radio v-model="radio" label="true"> 快速投放</el-radio>
             <p><i class="el-icon-information"></i> 在较短的时间内获取最大的曝光量</p>
           </div>
-          <div class="block" v-if="!strategy.casttype">
+          <div class="block" v-if="strategy.casttype">
             <el-radio v-model="radio" label="true"> 均匀投放</el-radio>
             <p><i class="el-icon-information"></i> 将预算划分到当天的每个小时，均匀投放</p>
           </div>
         </div>
         <div class="bar">
           <div class="title">计费类型:</div>
-          <div class="block" v-if="strategy.billing">
+          <div class="block" v-if="!strategy.billing">
             <el-radio v-model="radio" label="true"> 按照曝光计费（CPM）</el-radio>
             <p><i class="el-icon-information"></i> 每千次有效展示的成本</p>
           </div>
-          <div class="block" v-if="!strategy.billing">
+          <div class="block" v-if="strategy.billing">
             <el-radio v-model="radio" label="true"> 按照点击计费</el-radio>
             <p><i class="el-icon-information"></i> 每次点击的有效成本</p>
           </div>
@@ -158,6 +159,7 @@
 
   import medias from '@/assets/json/media.json'
   import region from '@/assets/json/region.json'
+  import tplJson from '@/assets/json/tpl.json'
 
   // 剧集数据
   const episode = [
@@ -279,6 +281,7 @@
                 }
               }
             }
+            console.log(_this.meidaInfo)
           }
           if (result.classInfo_6) {
             // 剧集定向
@@ -292,12 +295,15 @@
             }
           }
           if (result.strategyInfo_7) {
+            console.log(result.strategyInfo_7)
             // 投放策略
-            _this.strategyInfo = result.strategyInfo_7
+            _this.strategy = result.strategyInfo_7
+            console.log(_this.strategy)
           }
           if (result.adConfInfo_8) {
             // 广告信息
             _this.materialInfo = result.adConfInfo_8
+            console.log(_this.materialInfo)
           }
         }
       })
@@ -396,14 +402,18 @@
     computed: {
       'platformName': {
         get: function () {
+          let that = this
           let res = []
+          console.log(this.meidaInfo)
           this.materialInfo.forEach(function (item) {
-            if (item.act_channel_id === 1001) {
-              res.push('暴风影音')
-            } else {
-              res.push('爱奇艺')
+            debugger
+            for (let i = 0; i < that.meidaInfo.length; i++) {
+              if (item.act_channel_id === that.meidaInfo[i].media_id) {
+                res.push(that.meidaInfo[i].media_name)
+              }
             }
           })
+          console.log(res)
           return res
         }
       },
@@ -411,13 +421,7 @@
         get: function () {
           let res = []
           this.materialInfo.forEach(function (item) {
-            if (item.tpl_cat === 'flash1') {
-              res.push('/static/img/flash150x150.png')
-            } else if (item.tpl_cat === 'flash2') {
-              res.push('/static/img/flash210x60.png')
-            } else {
-              res.push('/static/img/flash210x90.png')
-            }
+            res.push(tplJson[item.tpl_cat])
           })
           return res
         }
@@ -546,8 +550,8 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, .7);
-            transform :scale(0);
-            transition :all .5s;
+            transform: scale(0);
+            transition: all .5s;
             padding: 100px 130px;
             span {
               color: #fff;
@@ -559,7 +563,7 @@
             height: 100%;
           }
           &:hover .mask {
-            transform :scale(1, 1)
+            transform: scale(1, 1)
           }
         }
       }

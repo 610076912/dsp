@@ -292,7 +292,7 @@
       // 新建按钮
       creatNew () {
         this.$store.commit('CLEARCREATDATA', null)
-        this.$router.push('/creatBasics')
+        this.$router.push({name: 'creatBasics', params: {activeName: this.activeName}})
       },
       // 选项卡
       handleClick () {

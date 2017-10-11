@@ -35,7 +35,8 @@ const mutations = {
         group: '',
         day: '',
         all: '',
-        date: []
+        date: [],
+        channel: null
       },
       creatCity: null,
       creatTime: null,

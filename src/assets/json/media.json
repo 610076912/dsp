@@ -7,8 +7,50 @@
   },
   {
     "media_id": 1002,
+    "media_name": "华数传媒",
+    "media_url": "/static/img/huashu.png",
+    "tpl": ["flash2"]
+  },
+  {
+    "media_id": 1003,
+    "media_name": "CIBN",
+    "media_url": "/static/img/CIBN.png",
+    "tpl": ["flash2"]
+  },
+  {
+    "media_id": 1004,
+    "media_name": "1905电影网",
+    "media_url": "/static/img/1905.png",
+    "tpl": ["flash2"]
+  },
+  {
+    "media_id": 1005,
+    "media_name": "秒拍",
+    "media_url": "/static/img/miaopai.png",
+    "tpl": ["flash2"]
+  },
+  {
+    "media_id": 1006,
     "media_name": "爱奇艺",
-    "media_url": "/static/img/baofeng.png",
+    "media_url": "/static/img/aiqiyi.png",
+    "tpl": ["flash2"]
+  },
+  {
+    "media_id": 1007,
+    "media_name": "腾讯视频",
+    "media_url": "/static/img/tengxun.png",
+    "tpl": ["flash2"]
+  },
+  {
+    "media_id": 1008,
+    "media_name": "土豆",
+    "media_url": "/static/img/tudou.png",
+    "tpl": ["flash2"]
+  },
+  {
+    "media_id": 1009,
+    "media_name": "优酷视频",
+    "media_url": "/static/img/youku.png",
     "tpl": ["flash2"]
   }
 ]

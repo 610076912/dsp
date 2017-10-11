@@ -55,6 +55,11 @@
 
   export default {
     name: 'creatBasics',
+    props: {
+      activeName: {
+        default: 1
+      }
+    },
     data () {
       // 自定义判断总预算
       let checkAll = (rule, value, callback) => {
@@ -109,6 +114,7 @@
         this.ruleForm.day = creatData.day
         this.ruleForm.all = creatData.all
         this.ruleForm.date = creatData.date
+        this.activeName = creatData.channel
         this.isEdit = true
       } else if (this.$store.state.creatData.planId) {
         // 请求服务器数据
@@ -117,12 +123,15 @@
             plan_id: this.$store.state.creatData.planId
           }
         }).then(res => {
+          debugger
+          console.log(res)
           if (res.code === 200) {
             const data = res.data
             this.ruleForm.name = data.plan_name
             this.ruleForm.group = data.group_id
             this.ruleForm.day = data.plan_day_budget
             this.ruleForm.all = data.plan_all_budget
+            this.activeName = data.plan_channel
             this.$set(this.ruleForm.date, 0, new Date(data.plan_b_time))
             this.$set(this.ruleForm.date, 1, new Date(data.plan_e_time))
             this.isEdit = true
@@ -150,7 +159,7 @@
               plan_e_time: that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'),
               plan_day_budget: that.ruleForm.day,
               plan_all_budget: that.ruleForm.all,
-              plan_channel: 1,
+              plan_channel: that.activeName,
               group_id: that.ruleForm.group
             }
           }
@@ -164,7 +173,7 @@
               plan_e_time: that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'),
               plan_day_budget: that.ruleForm.day,
               plan_all_budget: that.ruleForm.all,
-              plan_channel: 1,
+              plan_channel: that.activeName,
               group_id: that.ruleForm.group
             }
           }
@@ -177,6 +186,7 @@
                 this.$store.commit('PLANID', res.data)
                 console.log(that.$store.state.creatData)
                 // 保存活动数据
+                that.ruleForm.channel = that.activeName
                 this.$store.commit('BASICE', that.ruleForm)
                 this.$router.push('/creatScene')
               }

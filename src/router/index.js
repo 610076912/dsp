@@ -55,7 +55,8 @@ export default new Router({
         {
           path: '/creatBasics',
           name: 'creatBasics',
-          component: creatBasics
+          component: creatBasics,
+          props: true
         },
         {
           path: '/creatScene',

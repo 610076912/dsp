@@ -55,13 +55,15 @@
         // 大区列表
         regionList: [],
         regionProps: {
-          label: 'lable'
+          label: 'lable',
+          disabled: 'disabled'
         },
         // 城市列表
         cityList: [],
         cityProps: {
           children: 'region_val',
-          label: 'lable'
+          label: 'lable',
+          disabled: 'disabled'
         },
         // 已选中城市数
         checkedCitysNum: 0,
@@ -102,12 +104,18 @@
           this.loading = false
         }
       }
+      // 默认全选
+      this.$nextTick(res => {
+        this.$refs.regionTree.setCheckedKeys(['东北', '华东', '华中', '华北', '华南', '西北', '西南'])
+      })
     },
     mounted () {
       const regionArr = this.arrSort(citys.RECORDS, 'area')
       this.regionList = this.filterArr(regionArr, 'area', 'area')
+      console.log(this.regionList)
       const cityArr = this.arrSort(citys.RECORDS, 'city_id')
       this.cityList = this.filterArr(cityArr, 'region', 'region')
+      console.log(this.cityList)
     },
     methods: {
       back () {
@@ -145,6 +153,8 @@
         let resultArr = []
         for (let i = 0, len = arr.length; i < len; i++) {
           arr[i]['lable'] = arr[i]['city']
+          // 给元数据增加属性 disabled = true 使树状结构的最小项为不可选
+          arr[i]['disabled'] = true
           if (i > 0 && arr[i][key] === arr[i - 1][key]) {
             resultArr[resultArr.length - 1][key + '_val'].push(arr[i])
           } else {
@@ -152,6 +162,8 @@
             obj[key] = arr[i][key]
             obj['lable'] = arr[i][lable]
             obj[key + '_val'] = [arr[i]]
+            // 给元数据增加属性 disabled = true 使树状结构的最小项为不可选
+            obj['disabled'] = true
             resultArr.push(obj)
           }
         }

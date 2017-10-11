@@ -21,12 +21,12 @@
             <div class="tag-item" v-for="(key,index) in datas" v-if="indexs == index">
 
             <el-row class="count-data">
-              <el-col :span="6"><div class="grid-content r b"><span>0</span><p>今日曝光量</p></div></el-col>
-              <el-col :span="6"><div class="grid-content r b"><span>0</span><p>今日点击量</p></div></el-col>
-              <el-col :span="6"><div class="grid-content r b"><span>0</span><p>今日平均点击率</p></div></el-col>
+              <el-col :span="6"><div class="grid-content r b"><span>9.1万</span><p>今日曝光量</p></div></el-col>
+              <el-col :span="6"><div class="grid-content r b"><span>522</span><p>今日点击量</p></div></el-col>
+              <el-col :span="6"><div class="grid-content r b"><span>0.54</span><p>今日平均点击率</p></div></el-col>
               <el-col :span="6"><div class="grid-content b"><span>0</span><p>今日消费</p></div></el-col>
-              <el-col :span="6"><div class="grid-content r"><span>0</span><p>正在投放</p></div></el-col>
-              <el-col :span="6"><div class="grid-content r"><span>0</span><p>待审核</p></div></el-col>
+              <el-col :span="6"><div class="grid-content r"><span>2</span><p>正在投放</p></div></el-col>
+              <el-col :span="6"><div class="grid-content r"><span>1</span><p>待审核</p></div></el-col>
               <el-col :span="6"><div class="grid-content r"><span>0</span><p>审核拒绝</p></div></el-col>
               <el-col :span="6"><div class="grid-content"><span>0</span><p>今天曝光量</p></div></el-col>
             </el-row>
@@ -39,9 +39,9 @@
       <div class="mobile">
         <div class="mobile-title"><span>移动营销概况</span></div>
         <div class="mobile-number">
-          <el-col :span="6"><div class="mobile-n-grid r"><span>0</span><p>曝光量（次）</p></div></el-col>
-          <el-col :span="6"><div class="mobile-n-grid r"><span>0</span><p>点击量（次）</p></div></el-col>
-          <el-col :span="6"><div class="mobile-n-grid r"><span>0</span><p>平均点击率（%）</p></div></el-col>
+          <el-col :span="6"><div class="mobile-n-grid r"><span>82.7万</span><p>曝光量（次）</p></div></el-col>
+          <el-col :span="6"><div class="mobile-n-grid r"><span>4400次</span><p>点击量（次）</p></div></el-col>
+          <el-col :span="6"><div class="mobile-n-grid r"><span>0.53</span><p>平均点击率（%）</p></div></el-col>
           <el-col :span="6"><div class="mobile-n-grid"><span>0</span><p>花费（元）</p></div></el-col>
         </div>
         <div class="mobile-chart">
@@ -200,18 +200,24 @@
             {
               type: 'category',
               boundaryGap: false,
-              data: [1, 2, 3, 4, 5]
+              data: [1, 2, 3, 4, 5, 6, 7]
             }
           ],
           yAxis: [
-            {type: 'value'}
+            {
+              type: 'value',
+              scale: true,
+              splitNumber: 5,
+              minInterval: 1,
+              name: '曝光量（万）'
+            }
           ],
           series: [
             {
               name: '访客数',
               type: 'line',
               smooth: true,
-              data: [3, 4, 56, 23, 78]
+              data: [10.2, 11, 9.3, 8.8, 11.9, 11.7, 9.1, 10.7]
             }
           ],
           color: [
