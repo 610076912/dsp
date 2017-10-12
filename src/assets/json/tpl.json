@@ -1,5 +1,5 @@
 {
-  "flash1": "/static/img/flash150x150.png",
-  "flash2": "/static/img/flash210x60.png",
-  "flash3": "/static/img/flash210x90.png"
+  "flash1": "./static/img/flash150x150.png",
+  "flash2": "./static/img/flash210x60.png",
+  "flash3": "./static/img/flash210x90.png"
 }

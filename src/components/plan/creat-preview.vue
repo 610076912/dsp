@@ -406,7 +406,6 @@
           let res = []
           console.log(this.meidaInfo)
           this.materialInfo.forEach(function (item) {
-            debugger
             for (let i = 0; i < that.meidaInfo.length; i++) {
               if (item.act_channel_id === that.meidaInfo[i].media_id) {
                 res.push(that.meidaInfo[i].media_name)

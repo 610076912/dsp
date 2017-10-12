@@ -1,6 +1,6 @@
 <template>
   <div class="ads flash1">
-    <div class="ad-style"><img src="/static/img/flash150x150.png" alt=""></div>
+    <div class="ad-style"><img src="../../../static/img/flash150x150.png" alt=""></div>
     <div class="ad-edit" v-show="isShow.flash1">
       <div class="flash"></div>
       <div class="ad-con">

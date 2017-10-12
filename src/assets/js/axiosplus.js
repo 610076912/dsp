@@ -4,7 +4,7 @@ import qs from 'qs'
 import Router from '../../router/index'
 
 const Axios = axios.create({
-  baseURL: '/api',
+  baseURL: 'api/',
   timeout: 10000,
   headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
 })
@@ -21,7 +21,7 @@ Axios.interceptors.request.use(function (config) {
   // 判断是否登录，排除登录接口
   if (sessionStorage.getItem('token')) {
     config.headers.Authorization = sessionStorage.getItem('token')
-  } else if (config.url !== '/api/users/login') {
+  } else if (config.url !== 'api/users/login') {
     MessageBox.alert('您的登录已过期，请重新登录。', '登录提示', {
       confirmButtonText: '确定',
       callback: action => {

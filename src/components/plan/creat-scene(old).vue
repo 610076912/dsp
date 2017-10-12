@@ -213,7 +213,6 @@
           cls_id_list: JSON.stringify(this.checkedId)
         }).then(res => {
           if (res.code === 200) {
-            debugger
             this.$store.commit('SCENE', this.checkedId)
           }
         })

@@ -123,7 +123,6 @@
             plan_id: this.$store.state.creatData.planId
           }
         }).then(res => {
-          debugger
           console.log(res)
           if (res.code === 200) {
             const data = res.data
@@ -182,7 +181,6 @@
               // console.log(res)
               if (res.code === 200) {
                 // 保存活动Id
-                debugger
                 this.$store.commit('PLANID', res.data)
                 console.log(that.$store.state.creatData)
                 // 保存活动数据

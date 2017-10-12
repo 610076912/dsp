@@ -195,7 +195,7 @@
     font-size: 22px
     color: #333333
     padding-left: 50px
-    background: url('./assets/img/logo.png') no-repeat center left/auto 70%
+    background: url('assets/img/logo.png') no-repeat center left/auto 70%
   }
 
   .main {
