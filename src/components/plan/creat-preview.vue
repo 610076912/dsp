@@ -8,7 +8,7 @@
       <el-row class="row">
         <el-col :span="8"><span>推广计划名称: </span><span>{{ baseInfo.act_name }}</span></el-col>
         <el-col :span="8">
-          <span>投放日期: </span><span>{{ new Date(baseInfo.act_b_time).Format('yyyy-MM-dd hh:mm:ss') }}</span></el-col>
+          <span>投放日期: </span><span>{{ new Date(baseInfo.act_b_time).Format('yyyy-MM-dd hh:mm:ss') }}~{{ new Date(baseInfo.act_e_time).Format('yyyy-MM-dd hh:mm:ss') }}</span></el-col>
         <el-col :span="8"><span>移动到组: </span><span>{{ baseInfo.group_name }}</span></el-col>
       </el-row>
       <el-row class="row">
@@ -245,6 +245,7 @@
           if (result.baseInfo_1) {
             // 基本信息
             _this.baseInfo.act_name = result.baseInfo_1.plan_name
+            _this.baseInfo.act_e_time = result.baseInfo_1.plan_e_time
             _this.baseInfo.act_b_time = result.baseInfo_1.plan_b_time
             _this.baseInfo.group_name = result.baseInfo_1.group_name
             _this.oldValue = result.baseInfo_1.group_name
@@ -334,6 +335,12 @@
         // 审核
         this.$http.post('/api2/send_audit', {
           plan_id: this.$store.state.creatData.planId
+        }).then(res => {
+          if (res.code === 200) {
+            this.$alert('提审成功', '成功', {
+              confirmButtonText: '确定'
+            })
+          }
         })
       },
       updataGroup (callback) {

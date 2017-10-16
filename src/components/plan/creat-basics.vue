@@ -25,10 +25,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="计划每日预算" prop="day" required>
-          <el-input v-model.number="ruleForm.day"></el-input>
+          <el-input v-model="ruleForm.day"></el-input>
         </el-form-item>
         <el-form-item label="计划总预算" prop="all" required>
-          <el-input v-model.number="ruleForm.all"></el-input>
+          <el-input v-model="ruleForm.all"></el-input>
         </el-form-item>
         <el-form-item label="投放日期" prop="date" class="date-time-range">
           <el-date-picker
@@ -62,13 +62,24 @@
     },
     data () {
       // 自定义判断总预算
+      let checkDay = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('请填写每日预算'))
+        }
+        if (!/^\d+$/.test(value)) {
+          return callback(new Error('请输入数值'))
+        } else {
+          return callback()
+        }
+      }
+      // 自定义判断总预算
       let checkAll = (rule, value, callback) => {
         // 判断是否为空
         if (!value) {
           return callback(new Error('请填写总预算'))
         }
         // 判断是否为数字
-        if (!Number.isInteger(value)) {
+        if (!/^\d+$/.test(value)) {
           return callback(new Error('请输入数值'))
         } else {
           // 判断总预算要大于每日预算
@@ -86,17 +97,26 @@
         ruleForm: {
           name: '',
           group: '',
-          day: '',
+          day: null,
           all: '',
           date: [],
-          channel: ''
+          channel: null
         },
         // 验证规则
         rules: {
-          name: [{required: true, message: '请输入计划名称', trigger: 'blur'}],
-          day: [{type: 'number', message: '请输入数字', trigger: 'blur'}],
+          name: [{required: true, message: '请输入计划名称(20字符内)', trigger: 'blur', max: 10}],
+          day: [{validator: checkDay, trigger: 'blur'}],
           all: [{validator: checkAll, trigger: 'blur'}],
-          date: [{required: true, type: 'array', message: '请选择投放日期', trigger: 'change'}],
+          date: [
+            {
+              required: true,
+              type: 'array',
+              // 深度验证
+              fields: {0: {type: 'date', message: '请选择投放日期', required: true}, 1: {type: 'date', message: '请选择投放日期', required: true}},
+              message: '请选择投放日期',
+              trigger: 'blur'
+            }
+          ],
           group: [{required: true, type: 'number', message: '请选择一个分组', trigger: 'change'}]
         },
         groupArray: ['分组1', '分组2', '分组3'],
@@ -104,6 +124,7 @@
         isEdit: false
       }
     },
+    watch: {},
     created () {
       // 判断store里是否有数据
       let creatData = this.$store.state.creatData.creatBasice
@@ -141,7 +162,6 @@
       // 获取活动分组
       this.queryGroupData()
     },
-    watch: {},
     methods: {
       // 下一步
       nextStep () {
@@ -203,15 +223,15 @@
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             inputValidator (value) {
+              console.log(value)
               const reg = /^[^\S]/g
-              if (value === null || reg.test(value)) {
-                console.log(value)
+              if (value === null || reg.test(value) || value.length > 5) {
                 return false
               } else {
                 return true
               }
             },
-            inputErrorMessage: '请勿使用空格开头'
+            inputErrorMessage: '请勿使用空格开头并不能大于5个字符'
           }).then(({value}) => {
             this.ruleForm.group = value
             this.addGroup(value)

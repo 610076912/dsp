@@ -43,10 +43,10 @@
             <el-collapse-item name="flash3" v-if="mateTpl.flash3">
               <template class="fontb" slot="title">Flash3 210px*90px规格
                 <div class="btns" v-show="chenkedTpl==='flash3'">
-                <button @click.stop="save('flash3')" class="fr" v-show="isShow.flash3" size="small">保存</button>
-                <button @click.stop="edit('flash3')" class="fr" v-show="!isShow.flash3" size="small">编辑</button>
-                <button @click.stop="cancel('flash3')" class="fr" size="small">取消</button>
-              </div>
+                  <button @click.stop="save('flash3')" class="fr" v-show="isShow.flash3">保存</button>
+                  <button @click.stop="edit('flash3')" class="fr" v-show="!isShow.flash3">编辑</button>
+                  <button @click.stop="cancel('flash3')" class="fr">取消</button>
+                </div>
               </template>
               <flash3 :isShow="isShow" :adContent="adContent"></flash3>
             </el-collapse-item>
@@ -56,13 +56,22 @@
       <div class="right">
         <p class="top">二级广告</p>
         <div class="con">
-          <el-collapse accordion value="1">
-            <!--<el-collapse-item name="1">
+          <el-collapse accordion value="1"  @change="tplChange">
+            <el-collapse-item name="1">
               <template class="fontb" slot="title">关联模板1 屏占比3:1 适用于: 商品
-              <button @click.stop class="fr" size="small">保存</button>
+                <div class="btns" v-show="chenkedTpl==='1'">
+                  <button @click.stop="save('tpl1')" class="fr" v-show="isShow.tpl1" size="small">保存</button>
+                  <button @click.stop="edit('tpl1')" class="fr" v-show="!isShow.tpl1" size="small">编辑</button>
+                  <button @click.stop="cancel('tpl1')" class="fr" size="small">取消</button>
+                </div>
               </template>
-              <tpl2></tpl2>
-            </el-collapse-item>-->
+              <tpl1 :isEdit="isEdit" ref="tpl1"></tpl1>
+            </el-collapse-item>
+            <el-collapse-item name="2">
+              <template class="fontb" slot="title">关联模板1 屏占比3:1 适用于: 商品
+                <button @click.stop class="fr" size="small">保存</button>
+              </template>
+            </el-collapse-item>
           </el-collapse>
         </div>
       </div>
@@ -82,6 +91,7 @@
   import flash1 from '../template/flash1.vue'
   import flash2 from '../template/flash2.vue'
   import flash3 from '../template/flash3.vue'
+  import tpl1 from '../template/tpl1.vue'
 
   export default {
     data () {
@@ -116,6 +126,8 @@
         chenkedTpl: '',
         // 当前已保存素材模板 用以确定默认激活栏和预览按钮
         currentTpl: '',
+        // 传给广告模板，模板中判断是否为编辑状态
+        isEdit: '',
         // 广告模板数据结构
         adContent: {
           flash1: {
@@ -212,10 +224,12 @@
       cancel (adName) {
         // 返回显示模板图片
         this.isShow[adName] = false
+        this.isEdit = false
       },
       edit (adName) {
         // 编辑模板
         this.isShow[adName] = true
+        this.isEdit = adName
       },
       save (adName) {
         // 模板保存
@@ -272,7 +286,8 @@
       setps: setps,
       flash1: flash1,
       flash2: flash2,
-      flash3: flash3
+      flash3: flash3,
+      tpl1
     }
   }
 </script>
@@ -375,7 +390,7 @@
       width: 1140px;
       margin: 0 auto 60px
       overflow: hidden
-      min-height: 438px;
+      min-height: 485px;
       .left {
         width: 554px
         float: left

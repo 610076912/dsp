@@ -11,7 +11,7 @@
         <div class="block">
           <el-radio v-model="times" :label="1"> 自定义频次</el-radio>
           <p><i class="el-icon-information"></i> 每天每个设备曝光
-            <el-input :maxlength="3" :disabled="inputStatus"></el-input>
+            <el-input :maxlength="3" :disabled="inputStatus" type="number"></el-input>
             次
           </p>
         </div>

@@ -72,6 +72,13 @@
       // 下一步
       nextStep () {
         this.btnLoading = true
+        if (this.checkedMedia.length === 0) {
+          this.$alert('请至少选择一个媒体', '提示', {
+            confirmButtonText: '确定'
+          })
+          this.btnLoading = false
+          return
+        }
         let url = this.isEdit ? '/api2/upd_media_plan' : '/api2/add_media_plan'
         console.log(url)
         // 提交媒体定向

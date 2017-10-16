@@ -318,7 +318,7 @@
       switch1 (result) {
         // const that = this
         console.log(result)
-        if (result.publish) {
+        if (!result.row.publish) {
           this.$http.post('/api2/canclepublish', {
             plan_id: result.row.plan_id
           }).then(res => {

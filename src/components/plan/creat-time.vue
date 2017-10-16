@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="time-right">
-          <module-header-compoent title="已选（4）个" :del="true" @clearchose="timeCheckAll(false)"></module-header-compoent>
+          <module-header-compoent :title="`已选 ${timeNum} 个`" :del="true" @clearchose="timeCheckAll(false)"></module-header-compoent>
           <time-bar :timeArr="checkedTime"></time-bar>
         </div>
       </div>
@@ -46,7 +46,7 @@
           </div>
         </div>
         <div class="week-right">
-          <module-header-compoent title="已选（4）个" :del="true" @clearchose="weekCheckAll(false)"></module-header-compoent>
+          <module-header-compoent :title="`已选 ${weekNum} 个`" :del="true" @clearchose="weekCheckAll(false)"></module-header-compoent>
           <week-bar :weekArr="checkedWeek"></week-bar>
         </div>
       </div>
@@ -99,8 +99,12 @@
         timeArray: {},
         checkedTime: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         checkedWeek: [0, 0, 0, 0, 0, 0, 0],
+        // 是否全选
         timeCheckBox: false,
-        weekCheckBox: false
+        weekCheckBox: false,
+        // 当前选中了几个
+        timeNum: 0,
+        weekNum: 0
       }
     },
     created () {
@@ -133,16 +137,20 @@
     },
     watch: {
       'checkedTime' (val) {
-        let isall = val.every((item) => {
+        // 选中了几个
+        let chosedNum = val.filter(function (item) {
           return item === 1
         })
-        this.timeCheckBox = isall
+        this.timeNum = chosedNum.length
+        this.timeCheckBox = chosedNum.length === val.length
       },
       'checkedWeek' (val) {
-        let isall = val.every((item) => {
+        // 选中了几个
+        let chosedNum = val.filter(function (item) {
           return item === 1
         })
-        this.weekCheckBox = isall
+        this.weekNum = chosedNum.length
+        this.weekCheckBox = chosedNum.length === val.length
       }
     },
     methods: {
