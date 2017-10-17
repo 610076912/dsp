@@ -18,6 +18,7 @@
       <div class="con">
         <flash @collapseChange="collapseChange" :collapseVal="collVal"></flash>
         <tpl-image @collapseChange="collapseChange" :collapseVal="collVal"></tpl-image>
+        <tpl-relation2 @collapseChange="collapseChange" :collapseVal="collVal"></tpl-relation2>  
       </div>
     </div>
     <div class="button-wrap">
@@ -32,11 +33,9 @@
   import allMedias from '@/assets/json/media.json'
 
   // 素材模板
-  import flash1 from '../template/flash1.vue'
-  import flash2 from '../template/flash2.vue'
-  import flash3 from '../template/flash3.vue'
   import flash from '../template/tpl-flash1.vue'
   import image from '../template/tpl-image.vue'
+  import relation2 from '../template/tpl-relation2.vue'
 
   export default {
     data () {
@@ -216,9 +215,7 @@
     },
     components: {
       setps: setps,
-      flash1: flash1,
-      flash2: flash2,
-      flash3: flash3,
+      'tpl-relation2': relation2,
       flash,
       'tpl-image': image
     }
