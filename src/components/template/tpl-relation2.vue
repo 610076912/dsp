@@ -93,14 +93,14 @@
               info_con: '',
               info_exp: ''
             }]
+          },
+          relation_info: {
+            type: 'relation2',   // relation1
+            content: [{
+              info_con: '',
+              info_exp: ''
+            }]
           }
-        },
-        relation_info: {
-          type: 'relation2',   // relation1
-          content: [{
-            info_con: '',
-            info_exp: ''
-          }]
         }
       }
     },
