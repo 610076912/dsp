@@ -6,18 +6,74 @@
       <span class="slide-next btn" @click="next"><i class="el-icon-arrow-right"></i></span>
       <div class="slide-box">
         <ul v-bind:style="{ width: slide.width+'%', left: slide.left+'%' }">
-          <li v-for="(item, index) in medias" :class="{checked: currentIndex===index}"
-              @click="chooseMedia(item.act_id, item.media_id, index)">
+          <li v-for="(item, index) in medias" :class="{checked: currentIndex===index}" @click="chooseMedia(item.act_id, item.media_id, index)">
             <img :src="item.media_url" :title="item.media_name">
           </li>
         </ul>
       </div>
     </div>
     <div class="material">
-      <p class="top">广告模板</p>
-      <div class="con">
-        <flash @collapseChange="collapseChange" :collapseVal="collVal"></flash>
-        <tpl-image @collapseChange="collapseChange" :collapseVal="collVal"></tpl-image>
+      <div class="left">
+        <p class="top">一级广告</p>
+        <div class="con">
+          <el-collapse accordion :value="currentTpl" @change="tplChange">
+            <!--flash模板1-->
+            <el-collapse-item name="flash1" v-if="mateTpl.flash1">
+              <template class="fontb" slot="title">Flash1 150px*150px规格
+                <div class="btns" v-show="chenkedTpl==='flash1'">
+                  <button @click.stop="save('flash1')" class="fr" v-show="isShow.flash1" size="small">保存</button>
+                  <button @click.stop="edit('flash1')" class="fr" v-show="!isShow.flash1" size="small">编辑</button>
+                  <button @click.stop="cancel('flash1')" class="fr" size="small">取消</button>
+                </div>
+              </template>
+              <flash1 :isShow="isShow" :adContent="adContent"></flash1>
+            </el-collapse-item>
+            <!--flash模板2-->
+            <el-collapse-item name="flash2" v-if="mateTpl.flash2">
+              <template class="fontb" slot="title">Flash2 210px*60px规格
+                <div class="btns" v-show="chenkedTpl==='flash2'">
+                  <button @click.stop="save('flash2')" class="fr" v-show="isShow.flash2" size="small">保存</button>
+                  <button @click.stop="edit('flash2')" class="fr" v-show="!isShow.flash2" size="small">编辑</button>
+                  <button @click.stop="cancel('flash2')" class="fr" size="small">取消</button>
+                </div>
+              </template>
+              <flash2 :isShow="isShow" :adContent="adContent"></flash2>
+            </el-collapse-item>
+            <!--flash模板3-->
+            <el-collapse-item name="flash3" v-if="mateTpl.flash3">
+              <template class="fontb" slot="title">Flash3 210px*90px规格
+                <div class="btns" v-show="chenkedTpl==='flash3'">
+                  <button @click.stop="save('flash3')" class="fr" v-show="isShow.flash3">保存</button>
+                  <button @click.stop="edit('flash3')" class="fr" v-show="!isShow.flash3">编辑</button>
+                  <button @click.stop="cancel('flash3')" class="fr">取消</button>
+                </div>
+              </template>
+              <flash3 :isShow="isShow" :adContent="adContent"></flash3>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
+      </div>
+      <div class="right">
+        <p class="top">二级广告</p>
+        <div class="con">
+          <el-collapse accordion value="1"  @change="tplChange">
+            <el-collapse-item name="1">
+              <template class="fontb" slot="title">关联模板1 屏占比3:1 适用于: 商品
+                <div class="btns" v-show="chenkedTpl==='1'">
+                  <button @click.stop="save('tpl1')" class="fr" v-show="isShow.tpl1" size="small">保存</button>
+                  <button @click.stop="edit('tpl1')" class="fr" v-show="!isShow.tpl1" size="small">编辑</button>
+                  <button @click.stop="cancel('tpl1')" class="fr" size="small">取消</button>
+                </div>
+              </template>
+              <tpl1 :isEdit="isEdit" ref="tpl1"></tpl1>
+            </el-collapse-item>
+            <el-collapse-item name="2">
+              <template class="fontb" slot="title">关联模板1 屏占比3:1 适用于: 商品
+                <button @click.stop class="fr" size="small">保存</button>
+              </template>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
       </div>
     </div>
     <div class="button-wrap">
@@ -35,13 +91,11 @@
   import flash1 from '../template/flash1.vue'
   import flash2 from '../template/flash2.vue'
   import flash3 from '../template/flash3.vue'
-  import flash from '../template/tpl-flash1.vue'
-  import image from '../template/tpl-image.vue'
+  import tpl1 from '../template/tpl1.vue'
 
   export default {
     data () {
       return {
-        collVal: '',
         // 计划id
         planId: this.$store.state.creatData.planId,
         // 滑块
@@ -123,11 +177,6 @@
       }
     },
     methods: {
-      // 保持手风琴效果
-      collapseChange (val) {
-        console.log(val)
-        this.collVal = val
-      },
       prev () {
         const L = this.slide.left
         if (L < 0) this.slide.left = L + 100
@@ -161,8 +210,7 @@
         this.$http.post('/api2/get_ad_for_channel', {
           act_id: planId
         }).then(res => {
-          console.log(res)
-          if (res.code === 200 && res.data.length !== 0) {
+          if (res.code === 200) {
             this.chenkedTpl = res.data[0].tpl_cat
             this.currentTpl = res.data[0].tpl_cat
             this.adContent[res.data[0].tpl_cat] = JSON.parse(res.data[0].conf_info)
@@ -173,7 +221,17 @@
       tplChange (val) {
         this.chenkedTpl = val
       },
-      save (appType, confInfo) {
+      cancel (adName) {
+        // 返回显示模板图片
+        this.isShow[adName] = false
+        this.isEdit = false
+      },
+      edit (adName) {
+        // 编辑模板
+        this.isShow[adName] = true
+        this.isEdit = adName
+      },
+      save (adName) {
         // 模板保存
         // 判断是否为修改广告
         if (this.currentTpl && this.chenkedTpl !== this.currentTpl) {
@@ -182,14 +240,24 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.addMaterial(appType, confInfo)
+            // 保存/编辑按钮状态
+            this.isShow[adName] = false
+            // 当前模板
+            this.currentTpl = adName
+            // 添加广告
+            this.addMaterial('flash', adName)
           })
         } else {
-          this.addMaterial(appType, confInfo)
+          // 保存/编辑按钮状态
+          this.isShow[adName] = false
+          // 当前模板
+          this.currentTpl = adName
+          // 添加广告
+          this.addMaterial('flash', adName)
         }
       },
       // 添加广告信息
-      addMaterial (appType, confInfo) {
+      addMaterial (appType, adName) {
         // 添加模板
         this.$http.post('/api2/add_ad_material', {
           // 计划id
@@ -201,9 +269,9 @@
           // 模板类型
           app_type: appType,
           // 模板id
-          tpl_cat: appType,
+          tpl_cat: adName,
           // 模板广告内容
-          conf_info: JSON.stringify(confInfo)
+          conf_info: JSON.stringify(this.adContent[adName])
         }).then(res => {
           if (res.code === 200) {
             this.$message({
@@ -219,8 +287,7 @@
       flash1: flash1,
       flash2: flash2,
       flash3: flash3,
-      flash,
-      'tpl-image': image
+      tpl1
     }
   }
 </script>
@@ -272,12 +339,14 @@
         margin: 0 auto
         overflow hidden
         position: relative
+
         ul {
           position: absolute
           transition: left 0.5s;
           -moz-transition: left 0.5s; /* Firefox 4 */
           -webkit-transition: left 0.5s; /* Safari 和 Chrome */
           -o-transition: left 0.5s; /* Opera */
+
           li {
             width: 180px
             height: 60px
@@ -287,7 +356,7 @@
             text-align: center
             overflow: hidden
 
-            img {
+            img{
               height: 100%
               width: auto
               margin: 0 auto
@@ -297,16 +366,16 @@
               -o-transition: all 0.3s
             }
           }
-          li:hover img {
+          li:hover img{
             transform: scale(1.1)
             -ms-transform: scale(1.1)
             -moz-transform: scale(1.1)
             -webkit-transform: scale(1.1)
             -o-transform: scale(1.1)
           }
-          li.checked {
+          li.checked{
             border: 1px solid #31a5d8
-            img {
+            img{
               transform: scale(1.1)
               -ms-transform: scale(1.1)
               -moz-transform: scale(1.1)
@@ -318,10 +387,19 @@
       }
     }
     .material {
-      width: 980px;
+      width: 1140px;
       margin: 0 auto 60px
       overflow: hidden
       min-height: 485px;
+      .left {
+        width: 554px
+        float: left
+      }
+      .right {
+        width: 554px
+        float: right
+      }
+
       .top {
         line-height: 38px
         color: #31a5d8
@@ -332,12 +410,30 @@
         .el-collapse-item__content {
           padding: 0
         }
-        .btns {
+        .btns{
           display: inline
         }
         .ads {
           height: 310px
           position: relative
+
+          .ad-style {
+            width: 100%
+            height: 100%
+            position: absolute
+            left: 0
+            top: 0
+            background: #ccc
+          }
+          .ad-edit {
+            width: 100%
+            height: 100%
+            position: absolute
+            left: 0
+            top: 0
+            padding: 73px 25px 0
+            background: #f0f3f8
+          }
         }
       }
       .el-collapse-item__header {
