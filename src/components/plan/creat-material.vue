@@ -18,6 +18,7 @@
       <div class="con">
         <flash @collapseChange="collapseChange" :collapseVal="collVal" :adCon="adCon.flash"></flash>
         <tpl-image @collapseChange="collapseChange" :collapseVal="collVal" :adCon="adCon.image"></tpl-image>
+        <tpl-relation1 @collapseChange="collapseChange" :collapseVal="collVal" :adCon="adCon.image"></tpl-relation1>
         <tpl-relation2 @collapseChange="collapseChange" :collapseVal="collVal" :adCon="adCon.image"></tpl-relation2>
       </div>
     </div>
@@ -36,6 +37,7 @@
   import flash from '../template/tpl-flash1.vue'
   import image from '../template/tpl-image.vue'
   import relation2 from '../template/tpl-relation2.vue'
+  import relation1 from '../template/tpl-relation1.vue'
 
   export default {
     data () {
@@ -195,6 +197,7 @@
     components: {
       setps: setps,
       'tpl-relation2': relation2,
+      'tpl-relation1': relation1,
       flash,
       'tpl-image': image
     }
