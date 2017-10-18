@@ -5,12 +5,25 @@
         <template slot="title">动态图片模板
           <el-button class="button" size="small" @click.stop="edit" v-show="!isEdit && collapseVal==='image'">编辑
           </el-button>
-          <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='image'">保存</el-button>
+          <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='image'">保存
+          </el-button>
         </template>
         <div class="img">
           <div class="ad-style" v-show="!isEdit"><img src="../../../static/img/flash150x150.png" alt=""></div>
           <div class="ad-edit">
-            <div class="upload-flash">上传图片</div>
+            <div class="upload-flash">
+              <img v-if="conf_info.image_src" :src="conf_info.image_src" class="avatar">
+              <el-upload
+                class="avatar-uploader"
+                action="/api/upload/image"
+                :data="upLoadData"
+                :headers="token"
+                :show-file-list="false"
+                :on-success="upLoadSuccess"
+                :before-upload="beforeUpload">
+                <i class="el-icon-plus avatar-uploader-icon">上传图片</i>
+              </el-upload>
+            </div>
             <div class="ad-con">
               <div class="ad-title"><span>* </span> 图片规范：格式PNG、大小200K、主体内容明显</div>
               <div class="ad-option ad-size">
@@ -54,6 +67,15 @@
     },
     data () {
       return {
+        // 图片服务器基础地址
+        imgUrl: 'http://image.bjvca.com:5000',
+        // token
+        token: {Authorization: sessionStorage.getItem('token')},
+        // 上传图片用的数据
+        upLoadData: {
+          mediachannel: this.$store.state.materialData.mediachannel,
+          act_id: this.$store.state.materialData.act_id
+        },
         isEdit: false,
         // 位置和大小选项样式
         isSize: 1,
@@ -69,43 +91,40 @@
       }
     },
     watch: {
-      'collapseVal' (val) {
-        console.log(this.adCon)
-        if (val === 'image') {
-          // this.isEdit = true
-          // 位置
-          if (this.adCon.position === 'left') this.isPosition = 1
-          if (this.adCon.position === 'center') {
-            this.isPosition = 2
-            this.conf_info.position = 'center'
-          }
-          if (this.adCon.position === 'right') {
-            this.isPosition = 3
-            this.conf_info.size = 'right'
-          }
-          // 大小
-          if (this.adCon.size === '380,200') this.isPosition = 1
-          if (this.adCon.size === '300,300') {
-            this.isPosition = 2
-            this.conf_info.size = '300,300'
-          }
-          if (this.adCon.size === '500,100') {
-            this.isPosition = 3
-            this.conf_info.size = '500,100'
-          }
-          // 效果
-          if (this.adCon.size === 'effect1') this.isPosition = 1
-          if (this.adCon.size === 'effect2') {
-            this.isPosition = 2
-            this.conf_info.size = 'effect2'
-          }
-          if (this.adCon.size === 'effect3') {
-            this.isPosition = 3
-            this.conf_info.size = 'effect3'
-          }
-          this.conf_info.image_src = this.adCon.image_src
-          this.conf_info.out_url = this.adCon.out_url
+      'adCon' (val) {
+        // this.isEdit = true
+        // 位置
+        if (this.adCon.position === 'left') this.isPosition = 1
+        if (this.adCon.position === 'center') {
+          this.isPosition = 2
+          this.conf_info.position = 'center'
         }
+        if (this.adCon.position === 'right') {
+          this.isPosition = 3
+          this.conf_info.size = 'right'
+        }
+        // 大小
+        if (this.adCon.size === '380,200') this.isSize = 1
+        if (this.adCon.size === '300,300') {
+          this.isSize = 2
+          this.conf_info.size = '300,300'
+        }
+        if (this.adCon.size === '500,100') {
+          this.isSize = 3
+          this.conf_info.size = '500,100'
+        }
+        // 效果
+        if (this.adCon.effect === 'effect1') this.isEffect = 1
+        if (this.adCon.effect === 'effect2') {
+          this.isEffect = 2
+          this.conf_info.effect = 'effect2'
+        }
+        if (this.adCon.effect === 'effect3') {
+          this.isEffect = 3
+          this.conf_info.effect = 'effect3'
+        }
+        this.conf_info.image_src = this.adCon.image_src
+        this.conf_info.out_url = this.adCon.out_url
       }
     },
     methods: {
@@ -137,6 +156,16 @@
       changeEffect (effect, index) {
         this.conf_info.effect = effect
         this.isEffect = index
+      },
+      // 上传成功
+      upLoadSuccess (res) {
+        if (res.code === 200) {
+          this.conf_info.image_src = this.imgUrl + res.data
+        }
+      },
+      // 上传前的钩子函数
+      beforeUpload (file) {
+        console.log(file)
       }
     }
   }
@@ -185,6 +214,30 @@
           line-height: 350px;
           text-align: center;
           cursor: pointer;
+          position: relative;
+          overflow: hidden;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+          &:hover .avatar-uploader {
+            top: 0;
+          }
+          .avatar-uploader {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            left: 0;
+            top: -350px;
+            transition: all .5s;
+            .el-upload {
+              width: 100%;
+              height: 100%;
+              i {
+                font-size: 16px;
+              }
+            }
+          }
         }
         .ad-con {
           width: 468px;

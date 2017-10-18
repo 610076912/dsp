@@ -22,6 +22,10 @@ let state = {
     creatMedia: null,
     creatMediaType: null,
     creatScene: null
+  },
+  materialData: {
+    mediachannel: null,
+    act_id: null
   }
 }
 
@@ -73,6 +77,12 @@ const mutations = {
   },
   STRATEGY (state, strategy) {
     state.creatData.creatStrategy = strategy
+  },
+  MEDIACHANNEL (state, mediaChannel) {
+    state.materialData.mediachannel = mediaChannel
+  },
+  ACTID (state, actId) {
+    state.materialData.act_id = actId
   }
 }
 export default new Vuex.Store({

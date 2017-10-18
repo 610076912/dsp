@@ -2,7 +2,7 @@
   <div class="tpl-relation1">
     <el-collapse accordion @change="collapseChange" :value="collapseVal">
       <el-collapse-item name="relation1">
-        <template slot="title">动态图片模板
+        <template slot="title">关联信息模板1
           <el-button class="button" size="small" @click.stop="edit" v-show="!isEdit && collapseVal==='relation1'">编辑
           </el-button>
           <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='relation1'">
@@ -27,42 +27,92 @@
                 </template>
               </div>
               <div class="selectOption" v-if="value === 'prompt2'">
-                <div class="circular">点击上传</br>图片</div>
+                <div class="circular" :style="{backgroundImage: 'url('+promptImgUrl+')', backgroundSize: '100% 100%'}">
+                  <el-upload
+                    class="avatar-uploader"
+                    action="/api/upload/image"
+                    :data="upLoadData"
+                    :headers="token"
+                    :show-file-list="false"
+                    :on-success="tipsImgupLoadSuccess">
+                    <i class="uploader-icon">点击上传</br>图片</i>
+                  </el-upload>
+                </div>
                 <div class="info">
                   <el-input size="small" v-model="promptText" placeholder="请输入内容"></el-input>
                 </div>
               </div>
               <div v-else-if="value === 'prompt1'">
-                <div class="images"></div>
+                <div
+                  class="images"
+                  :style="{backgroundImage: 'url('+promptImgUrl+')', backgroundSize: '100% 100%'}">
+                  <el-upload
+                    class="avatar-uploader"
+                    action="/api/upload/image"
+                    :data="upLoadData"
+                    :headers="token"
+                    :show-file-list="false"
+                    :on-success="tipsImgupLoadSuccess">
+                    <i class="uploader-icon">上传图片</i>
+                  </el-upload>
+                </div>
               </div>
             </div>
             <!--<div class="upload-flash">上传图片</div>-->
             <div class="ad-con">
               <div class="ad-top">
-                <div class="top-img">上传图片</div>
-                <el-input v-model="conf_info.relation_info.content[1].info_con" placeholder="主题（10个字）" size="mini"></el-input>
-                <el-input v-model="conf_info.relation_info.content[2].info_con" placeholder="备注（10个字）" size="mini"></el-input>
+                <div class="top-img"
+                     :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[0].info_con+')', backgroundSize: '100% 100%'}">
+                  <el-upload
+                    class="avatar-uploader"
+                    action="/api/upload/image"
+                    :data="upLoadData"
+                    :headers="token"
+                    :show-file-list="false"
+                    :on-success="topImgupLoadSuccess">
+                    <i class="uploader-icon">上传图片</i>
+                  </el-upload>
+                </div>
+                <el-input v-model="conf_info.relation_info.content[1].info_con" placeholder="主题（10个字）"
+                          size="mini"></el-input>
+                <el-input v-model="conf_info.relation_info.content[2].info_con" placeholder="备注（10个字）"
+                          size="mini"></el-input>
               </div>
               <div class="ad-text">
-                <el-input v-model="conf_info.relation_info.content[3].info_con" type="textarea" :rows="2" placeholder="请输入内容"></el-input>
+                <el-input v-model="conf_info.relation_info.content[3].info_con" type="textarea" :rows="2"
+                          placeholder="请输入内容"></el-input>
               </div>
               <div class="ad-list">
-                <div class="ad-item">
+                <div class="ad-item"
+                     :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[4].info_con+')', backgroundSize: '100% 100%'}">
                   <i class="el-icon-setting" @click="editItem(1)"></i>
                 </div>
-                <div class="ad-item">
+                <div class="ad-item"
+                     :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[7].info_con+')', backgroundSize: '100% 100%'}">
                   <i class="el-icon-setting" @click="editItem(2)"></i>
                 </div>
-                <div class="ad-item">
+                <div class="ad-item"
+                     :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[10].info_con+')', backgroundSize: '100% 100%'}">
                   <i class="el-icon-setting" @click="editItem(3)"></i>
                 </div>
-                <div class="ad-item">
+                <div class="ad-item"
+                     :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[13].info_con+')', backgroundSize: '100% 100%'}">
                   <i class="el-icon-setting" @click="editItem(4)"></i>
                 </div>
               </div>
             </div>
             <div class="ad-confirm" v-show="isItem">
-              <div class="confirm-img"></div>
+              <div class="confirm-img" :style="{backgroundImage: 'url('+confirmImgUrl+')', backgroundSize: '100% 100%'}">
+                <el-upload
+                  class="avatar-uploader"
+                  action="/api/upload/image"
+                  :data="upLoadData"
+                  :headers="token"
+                  :show-file-list="false"
+                  :on-success="itemImgupLoadSuccess">
+                  <i class="uploader-icon">上传图片</i>
+                </el-upload>
+              </div>
               <div class="confirm-con">
                 <el-input v-model="confirmText1" size="small" placeholder="请输入关联主题（15个字）"></el-input>
                 <el-input v-model="confirmText2" size="small" placeholder="请输入跳转地址"></el-input>
@@ -80,10 +130,22 @@
 <script type="text/ecmascript-6">
   export default {
     props: {
-      collapseVal: ''
+      collapseVal: '',
+      adCon: {
+        type: Object
+      }
     },
     data () {
       return {
+        // 图片服务器基础地址
+        imgUrl: 'http://image.bjvca.com:5000',
+        // token
+        token: {Authorization: sessionStorage.getItem('token')},
+        // 上传图片用的数据
+        upLoadData: {
+          mediachannel: this.$store.state.materialData.mediachannel,
+          act_id: this.$store.state.materialData.act_id
+        },
         options: [{
           value: 'prompt1',
           label: '图片提示信息150px*150px'
@@ -185,9 +247,13 @@
         }
       }
     },
+    watch: {
+      'adCon' (val) {
+        this.conf_info = val
+      }
+    },
     methods: {
       collapseChange (val) {
-        console.log(val)
         this.isEdit = false
         this.$emit('collapseChange', val)
       },
@@ -200,26 +266,30 @@
         // 先判断提示信息类型，创建数据格式
         if (this.value === 'prompt1') {
           this.conf_info.prompt_info.effect = 'effect1'
+          this.conf_info.prompt_info.type = 'prompt1'
           this.conf_info.prompt_info.content = [{info_con: this.promptImgUrl, info_exp: '提示信息图片'}]
         } else {
           this.conf_info.prompt_info.effect = 'effect2'
-          this.conf_info.prompt_info.content = [{info_con: this.promptImgUrl, info_exp: '提示信息图片'}, {info_con: this.promptText, info_exp: '提示信息文字'}]
+          this.conf_info.prompt_info.type = 'prompt2'
+          this.conf_info.prompt_info.content = [{
+            info_con: this.promptImgUrl,
+            info_exp: '提示信息图片'
+          }, {info_con: this.promptText, info_exp: '提示信息文字'}]
         }
         console.log(this.conf_info)
         // 调父组件的save方法，并把数据传过去。
-        this.$parent.save('image', this.conf_info)
+        this.$parent.save('relation', this.conf_info)
       },
       // 点击图片上的设置图标
       editItem (index) {
+        this.itemIndex = index
         this.confirmImgUrl = this.conf_info.relation_info.content[1 + 3 * this.itemIndex].info_con
         this.confirmText1 = this.conf_info.relation_info.content[2 + 3 * this.itemIndex].info_con
         this.confirmText2 = this.conf_info.relation_info.content[3 + 3 * this.itemIndex].info_con
         this.isItem = true
-        this.itemIndex = index
       },
       // 弹框中的确定按钮
       itemConfirm () {
-        debugger
         this.conf_info.relation_info.content[1 + 3 * this.itemIndex].info_con = this.confirmImgUrl
         this.conf_info.relation_info.content[2 + 3 * this.itemIndex].info_con = this.confirmText1
         this.conf_info.relation_info.content[3 + 3 * this.itemIndex].info_con = this.confirmText2
@@ -231,6 +301,28 @@
       // 弹框中的取消按钮
       itemCancel () {
         this.isItem = false
+      },
+      // topImg 上传成功回调
+      topImgupLoadSuccess (res) {
+        if (res.code === 200) {
+          this.$set(this.conf_info.relation_info.content[0], 'info_con', this.imgUrl + res.data)
+          // this.conf_info.relation_info.content[0].info_con = this.imgUrl + res.data
+          console.log(this.conf_info.relation_info.content[0])
+        }
+      },
+      itemImgupLoadSuccess (res) {
+        if (res.code === 200) {
+          // this.$set(this.conf_info.relation_info.content[1 + 3 * this.itemIndex], 'info_con', this.imgUrl + res.data)
+          this.confirmImgUrl = this.imgUrl + res.data
+          // this.conf_info.relation_info.content[0].info_con = this.imgUrl + res.data
+        }
+      },
+      tipsImgupLoadSuccess (res) {
+        if (res.code === 200) {
+          // this.$set(this.conf_info.relation_info.content[1 + 3 * this.itemIndex], 'info_con', this.imgUrl + res.data)
+          this.promptImgUrl = this.imgUrl + res.data
+          // this.conf_info.relation_info.content[0].info_con = this.imgUrl + res.data
+        }
       }
     }
   }
@@ -252,6 +344,10 @@
       width: 100%;
       height: 550px;
       position: relative;
+    // 上传图片中的 i 标签
+      .uploader-icon {
+        font-style: normal;
+      }
       .ad-style {
         width: 100%;
         height: 100%;
@@ -297,6 +393,8 @@
             width 210px
             background #ccc
             border 2px solid #f2f2f2
+            text-align: center;
+            line-height: 90px;
           }
           .circular {
             width: 80px;
@@ -388,6 +486,11 @@
             height: 130px;
             float: left;
             background: #fff;
+            text-align: center;
+            line-height: 130px;
+            i {
+              font-style: normal;
+            }
           }
           .confirm-con {
             width: 240px;

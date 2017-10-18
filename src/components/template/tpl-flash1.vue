@@ -12,16 +12,32 @@
         <div class="flash1">
           <div class="ad-style" v-show="!isEdit"><img src="../../../static/img/flash150x150.png" alt=""></div>
           <div class="ad-edit">
-            <div class="upload-flash">上传flash
-              <!--<el-upload
+            <div class="upload-flash">
+              <div class="flash-player1" v-if="conf_info.flash_src">
+                <object id="swf" classid="clsid27CDB6E-AE6D-11cf-96B8-444553540000"
+                        codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0"
+                        align="center">
+                  <param name="movie" value="<%= item.flash_path %>">
+                  <param name="quality" value="high">
+                  <param name="wmode" value="transparent">
+                  <param name="Scale" value="showall">
+                  <embed :src="conf_info.flash_src" name="swf" align="center"
+                         quality="high"
+                         pluginspage="http://www.macromedia.com/go/getflashplayer"
+                         type="application/x-shockwave-flash" swliveconnect="true" play="true"></embed>
+                </object>
+              </div>
+              <el-upload
                 class="avatar-uploader"
-                action="https://jsonplaceholder.typicode.com/posts/"
+                action="/api/upload/flash"
+                :data="upLoadData"
+                :headers="token"
                 :show-file-list="false"
-                :on-success="handleAvatarSuccess"
-                :before-upload="beforeAvatarUpload">
-                <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                <i v-else class="el-icon-plus avatar-uploader-icon">上传flash</i>
-              </el-upload>-->
+                :on-success="upLoadSuccess"
+                :before-upload="beforeUpload">
+                <!--<img v-if="flashUrl" :src="flashUrl" class="avatar">-->
+                <i class="el-icon-plus avatar-uploader-icon">上传flash</i>
+              </el-upload>
             </div>
             <div class="ad-con">
               <div class="ad-title"><span>* </span> Flash规范：格式fla、目标Flash Player17、脚本ActionScript3.0、大小200K</div>
@@ -55,10 +71,22 @@
       collapseVal: '',
       adCon: {
         type: Object
+      },
+      canSave: {
+        default: false
       }
     },
     data () {
       return {
+        // token
+        token: {Authorization: sessionStorage.getItem('token')},
+        // 图片服务器基础地址
+        imgUrl: 'http://image.bjvca.com:5000',
+        // 上传图片用的数据
+        upLoadData: {
+          mediachannel: this.$store.state.materialData.mediachannel,
+          act_id: this.$store.state.materialData.act_id
+        },
         // 是否为编辑状态
         isEdit: false,
         // 位置和大小选项样式
@@ -72,29 +100,25 @@
         }
       }
     },
-    conputed: {},
     watch: {
-      'collapseVal' (val) {
-        console.log(this.adCon)
-        if (val === 'flash') {
-          this.isEdit = true
-          if (this.adCon.position === 'left') this.isPosition = 1
-          if (this.adCon.position === 'center') {
-            this.isPosition = 2
-            this.conf_info.position = 'center'
-          }
-          if (this.adCon.position === 'right') {
-            this.isPosition = 3
-            this.conf_info.position = 'right'
-          }
-          if (this.adCon.size === '150,150') this.isPosition = 1
-          if (this.adCon.size === '210,90') {
-            this.isPosition = 2
-            this.conf_info.size = '210,90'
-          }
-          this.conf_info.flash_src = this.adCon.flash_src
-          this.conf_info.out_url = this.adCon.out_url
+      'adCon' (val) {
+        // this.isEdit = true
+        if (this.adCon.position === 'left') this.isPosition = 1
+        if (this.adCon.position === 'center') {
+          this.isPosition = 2
+          this.conf_info.position = 'center'
         }
+        if (this.adCon.position === 'right') {
+          this.isPosition = 3
+          this.conf_info.position = 'right'
+        }
+        if (this.adCon.size === '150,150') this.isSize = 1
+        if (this.adCon.size === '210,90') {
+          this.isSize = 2
+          this.conf_info.size = '210,90'
+        }
+        this.conf_info.flash_src = this.adCon.flash_src
+        this.conf_info.out_url = this.adCon.out_url
       }
     },
     methods: {
@@ -109,6 +133,10 @@
       },
       // 保存
       flashSave () {
+        if (!this.canSave) {
+          alert('请先选择一个媒体平台')
+          return
+        }
         // 调父组件的save方法，并把数据传过去。
         this.$parent.save('flash', this.conf_info)
       },
@@ -121,6 +149,16 @@
       changePosition (po, index) {
         this.conf_info.position = po
         this.isPosition = index
+      },
+      // 上传成功
+      upLoadSuccess (res, file) {
+        if (res.code === 200) {
+          this.conf_info.flash_src = this.imgUrl + res.data
+        }
+      },
+      // 上传前的钩子函数
+      beforeUpload (file) {
+        console.log(file)
       }
     }
   }
@@ -165,10 +203,33 @@
           float: left;
           background: rgba(0, 0, 0, .8)
           color: #fff;
-          font-size: 20px;
           line-height: 350px;
           text-align: center;
           cursor: pointer;
+          overflow: hidden;
+          position: relative
+          &:hover .avatar-uploader {
+            top: 0;
+          }
+          embed {
+            height: 350px;
+            width: 100%;
+          }
+          .avatar-uploader {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            left: 0;
+            top: -350px;
+            transition: all .5s;
+            .el-upload {
+              width: 100%;
+              height: 100%;
+              i {
+                font-size: 16px;
+              }
+            }
+          }
         }
         .ad-con {
           width: 468px;
