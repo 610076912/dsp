@@ -3,8 +3,11 @@
     <el-collapse accordion @change="collapseChange" :value="collapseVal">
       <el-collapse-item name="flash">
         <template slot="title">Flash模板
-          <el-button class="button" size="small" @click.native.stop="edit" v-show="!isEdit && collapseVal==='flash'">编辑</el-button>
-          <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit">保存</el-button>
+          <el-button class="button" size="small" @click.native.stop="edit" v-show="!isEdit && collapseVal==='flash'">
+            编辑
+          </el-button>
+          <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='flash'">保存
+          </el-button>
         </template>
         <div class="flash1">
           <div class="ad-style" v-show="!isEdit"><img src="../../../static/img/flash150x150.png" alt=""></div>
@@ -26,7 +29,6 @@
                 <span>展示大小</span>
                 <span @click="changeSize('150,150', 1)" :class="{'option-border':isSize===1}">150px * 150px</span>
                 <span @click="changeSize('210,90', 2)" :class="{'option-border':isSize===2}">210px * 90px</span>
-                <span @click="changeSize('210,60', 3)" :class="{'option-border':isSize===3}">210px * 60px</span>
               </div>
               <div class="ad-option ad-position">
                 <span>广告位置</span>
@@ -50,7 +52,10 @@
 <script type="text/ecmascript-6">
   export default {
     props: {
-      collapseVal: ''
+      collapseVal: '',
+      adCon: {
+        type: Object
+      }
     },
     data () {
       return {
@@ -64,6 +69,31 @@
           size: '150,150',
           position: 'left',
           out_url: ''
+        }
+      }
+    },
+    conputed: {},
+    watch: {
+      'collapseVal' (val) {
+        console.log(this.adCon)
+        if (val === 'flash') {
+          this.isEdit = true
+          if (this.adCon.position === 'left') this.isPosition = 1
+          if (this.adCon.position === 'center') {
+            this.isPosition = 2
+            this.conf_info.position = 'center'
+          }
+          if (this.adCon.position === 'right') {
+            this.isPosition = 3
+            this.conf_info.position = 'right'
+          }
+          if (this.adCon.size === '150,150') this.isPosition = 1
+          if (this.adCon.size === '210,90') {
+            this.isPosition = 2
+            this.conf_info.size = '210,90'
+          }
+          this.conf_info.flash_src = this.adCon.flash_src
+          this.conf_info.out_url = this.adCon.out_url
         }
       }
     },
@@ -180,6 +210,9 @@
             span:first-of-type {
               cursor: default;
             }
+          }
+          .ad-size {
+            width: 301px;
           }
           .ad-url {
             margin-top: 15px;
