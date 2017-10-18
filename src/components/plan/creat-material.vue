@@ -16,8 +16,9 @@
     <div class="material">
       <p class="top">广告模板</p>
       <div class="con">
-        <flash @collapseChange="collapseChange" :collapseVal="collVal"></flash>
-        <tpl-image @collapseChange="collapseChange" :collapseVal="collVal"></tpl-image>
+        <flash @collapseChange="collapseChange" :collapseVal="collVal" :adCon="adCon.flash"></flash>
+        <tpl-image @collapseChange="collapseChange" :collapseVal="collVal" :adCon="adCon.image"></tpl-image>
+        <tpl-relation2 @collapseChange="collapseChange" :collapseVal="collVal" :adCon="adCon.image"></tpl-relation2>
       </div>
     </div>
     <div class="button-wrap">
@@ -37,6 +38,7 @@
   import flash3 from '../template/flash3.vue'
   import flash from '../template/tpl-flash1.vue'
   import image from '../template/tpl-image.vue'
+  import relation2 from '../template/tpl-relation1.vue'
 
   export default {
     data () {
@@ -72,28 +74,10 @@
         chenkedTpl: '',
         // 当前已保存素材模板 用以确定默认激活栏和预览按钮
         currentTpl: '',
-        // 传给广告模板，模板中判断是否为编辑状态
-        isEdit: '',
-        // 广告模板数据结构
-        adContent: {
-          flash1: {
-            flash: '',
-            position: '',
-            url: '',
-            size: '150,150'
-          },
-          flash2: {
-            flash: '',
-            position: '',
-            url: '',
-            size: '210,60'
-          },
-          flash3: {
-            flash: '',
-            position: '',
-            url: '',
-            size: '210,90'
-          }
+        adCon: {
+          flash: null,
+          image: null,
+          relation: null
         }
       }
     },
@@ -125,7 +109,7 @@
     methods: {
       // 保持手风琴效果
       collapseChange (val) {
-        console.log(val)
+        this.chenkedTpl = val
         this.collVal = val
       },
       prev () {
@@ -165,13 +149,10 @@
           if (res.code === 200 && res.data.length !== 0) {
             this.chenkedTpl = res.data[0].tpl_cat
             this.currentTpl = res.data[0].tpl_cat
-            this.adContent[res.data[0].tpl_cat] = JSON.parse(res.data[0].conf_info)
+            this.collVal = res.data[0].tpl_cat
+            this.adCon[res.data[0].tpl_cat] = JSON.parse(res.data[0].conf_info)
           }
         })
-      },
-      // 激活模板改变
-      tplChange (val) {
-        this.chenkedTpl = val
       },
       save (appType, confInfo) {
         // 模板保存
@@ -220,7 +201,8 @@
       flash2: flash2,
       flash3: flash3,
       flash,
-      'tpl-image': image
+      'tpl-image': image,
+      'tpl-relation2': relation2
     }
   }
 </script>

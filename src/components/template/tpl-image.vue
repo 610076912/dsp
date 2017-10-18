@@ -5,7 +5,7 @@
         <template slot="title">动态图片模板
           <el-button class="button" size="small" @click.stop="edit" v-show="!isEdit && collapseVal==='image'">编辑
           </el-button>
-          <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit">保存</el-button>
+          <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='image'">保存</el-button>
         </template>
         <div class="img">
           <div class="ad-style" v-show="!isEdit"><img src="../../../static/img/flash150x150.png" alt=""></div>
@@ -15,21 +15,21 @@
               <div class="ad-title"><span>* </span> 图片规范：格式PNG、大小200K、主体内容明显</div>
               <div class="ad-option ad-size">
                 <span>图片大小</span>
-                <span>150px * 150px</span>
-                <span>210px * 90px</span>
-                <span>210px * 60px</span>
+                <span @click="changeSize('380,200', 1)" :class="{'option-border':isSize===1}">380px * 200px</span>
+                <span @click="changeSize('300,300', 2)" :class="{'option-border':isSize===2}">300px * 300px</span>
+                <span @click="changeSize('500,100', 3)" :class="{'option-border':isSize===3}">500px * 100px</span>
               </div>
               <div class="ad-option ad-effect">
                 <span>展示效果</span>
-                <span>从小到大</span>
-                <span>移动飘过</span>
-                <span>物体折线</span>
+                <span @click="changeEffect('effect1', 1)" :class="{'option-border':isEffect===1}">从小到大</span>
+                <span @click="changeEffect('effect2', 2)" :class="{'option-border':isEffect===2}">移动飘过</span>
+                <span @click="changeEffect('effect3', 3)" :class="{'option-border':isEffect===3}">物体折线</span>
               </div>
               <div class="ad-option ad-position">
                 <span>广告位置</span>
-                <span>屏幕居左</span>
-                <span>屏幕居中</span>
-                <span>屏幕居右</span>
+                <span @click="changePosition('left', 1)" :class="{'option-border':isPosition===1}">屏幕居左</span>
+                <span @click="changePosition('center', 2)" :class="{'option-border':isPosition===2}">屏幕居中</span>
+                <span @click="changePosition('right', 3)" :class="{'option-border':isPosition===3}">屏幕居右</span>
               </div>
               <div class="ad-url">
                 <el-input placeholder="请输入内容">
@@ -47,11 +47,65 @@
 <script type="text/ecmascript-6">
   export default {
     props: {
-      collapseVal: ''
+      collapseVal: '',
+      adCon: {
+        type: Object
+      }
     },
     data () {
       return {
-        isEdit: false
+        isEdit: false,
+        // 位置和大小选项样式
+        isSize: 1,
+        isEffect: 1,
+        isPosition: 1,
+        conf_info: {
+          image_src: '',
+          size: '380,200',
+          position: 'left',
+          effect: 'effect1',
+          out_url: ''
+        }
+      }
+    },
+    watch: {
+      'collapseVal' (val) {
+        console.log(this.adCon)
+        if (val === 'image') {
+          // this.isEdit = true
+          // 位置
+          if (this.adCon.position === 'left') this.isPosition = 1
+          if (this.adCon.position === 'center') {
+            this.isPosition = 2
+            this.conf_info.position = 'center'
+          }
+          if (this.adCon.position === 'right') {
+            this.isPosition = 3
+            this.conf_info.size = 'right'
+          }
+          // 大小
+          if (this.adCon.size === '380,200') this.isPosition = 1
+          if (this.adCon.size === '300,300') {
+            this.isPosition = 2
+            this.conf_info.size = '300,300'
+          }
+          if (this.adCon.size === '500,100') {
+            this.isPosition = 3
+            this.conf_info.size = '500,100'
+          }
+          // 效果
+          if (this.adCon.size === 'effect1') this.isPosition = 1
+          if (this.adCon.size === 'effect2') {
+            this.isPosition = 2
+            this.conf_info.size = 'effect2'
+          }
+          if (this.adCon.size === 'effect3') {
+            this.isPosition = 3
+            this.conf_info.size = 'effect3'
+          }
+          this.conf_info.image_src = this.adCon.image_src
+          this.conf_info.out_url = this.adCon.out_url
+        }
       }
     },
     methods: {
@@ -68,6 +122,21 @@
       flashSave () {
         // 调父组件的save方法，并把数据传过去。
         this.$parent.save('image', this.conf_info)
+      },
+      // 选择大小
+      changeSize (size, index) {
+        this.conf_info.size = size
+        this.isSize = index
+      },
+      // 选择位置
+      changePosition (po, index) {
+        this.conf_info.position = po
+        this.isPosition = index
+      },
+      // 选择效果
+      changeEffect (effect, index) {
+        this.conf_info.effect = effect
+        this.isEffect = index
       }
     }
   }
@@ -138,6 +207,10 @@
             font-size: 0;
             border-right: 1px solid #e4e4e4;
             margin-bottom: 10px;
+            .option-border {
+              border-right: 1px solid;
+              border-color: #169bd5
+            }
             span {
               display: inline-block;
               width: 100px;
