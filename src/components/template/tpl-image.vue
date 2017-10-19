@@ -20,6 +20,7 @@
                 :headers="token"
                 :show-file-list="false"
                 :on-success="upLoadSuccess"
+                :on-progress="upLoadProgress"
                 :before-upload="beforeUpload">
                 <i class="el-icon-plus avatar-uploader-icon">上传图片</i>
               </el-upload>
@@ -45,7 +46,7 @@
                 <span @click="changePosition('right', 3)" :class="{'option-border':isPosition===3}">屏幕居右</span>
               </div>
               <div class="ad-url">
-                <el-input placeholder="请输入内容">
+                <el-input v-model="conf_info.out_url" placeholder="请输入内容">
                   <template slot="prepend">跳转链接</template>
                 </el-input>
               </div>
@@ -72,6 +73,7 @@
         // token
         token: {Authorization: sessionStorage.getItem('token')},
         // 上传图片用的数据
+        upLoadLoding: '',
         upLoadData: {
           mediachannel: this.$store.state.materialData.mediachannel,
           act_id: this.$store.state.materialData.act_id
@@ -160,12 +162,29 @@
       // 上传成功
       upLoadSuccess (res) {
         if (res.code === 200) {
+          this.upLoadLoding.close()
           this.conf_info.image_src = this.imgUrl + res.data
         }
       },
       // 上传前的钩子函数
       beforeUpload (file) {
-        console.log(file)
+        const isJPG = file.type === 'image/png'
+        const isLt2M = file.size / 1024 / 1024 < 2
+
+        if (!isJPG) {
+          this.$message.error('请确认文件格式。')
+        }
+        if (!isLt2M) {
+          this.$message.error('上传的文件大小不能超过 2MB!')
+        }
+        return isJPG && isLt2M
+      },
+      // 上传中钩子函数
+      upLoadProgress () {
+        this.upLoadLoding = this.$loading({
+          target: '.upload-flash',
+          text: '上传中。。。。'
+        })
       }
     }
   }

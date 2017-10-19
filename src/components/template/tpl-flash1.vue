@@ -34,6 +34,7 @@
                 :headers="token"
                 :show-file-list="false"
                 :on-success="upLoadSuccess"
+                :on-progress="upLoadProgress"
                 :before-upload="beforeUpload">
                 <!--<img v-if="flashUrl" :src="flashUrl" class="avatar">-->
                 <i class="el-icon-plus avatar-uploader-icon">上传flash</i>
@@ -82,6 +83,7 @@
         token: {Authorization: sessionStorage.getItem('token')},
         // 图片服务器基础地址
         imgUrl: 'http://image.bjvca.com:5000',
+        upLoadLoding: '',
         // 上传图片用的数据
         upLoadData: {
           mediachannel: this.$store.state.materialData.mediachannel,
@@ -153,12 +155,29 @@
       // 上传成功
       upLoadSuccess (res, file) {
         if (res.code === 200) {
+          this.upLoadLoding.close()
           this.conf_info.flash_src = this.imgUrl + res.data
         }
       },
       // 上传前的钩子函数
       beforeUpload (file) {
-        console.log(file)
+        const isJPG = file.type === 'application/x-shockwave-flash'
+        const isLt2M = file.size / 1024 / 1024 < 2
+
+        if (!isJPG) {
+          this.$message.error('请确认文件格式。')
+        }
+        if (!isLt2M) {
+          this.$message.error('上传的文件大小不能超过 2MB!')
+        }
+        return isJPG && isLt2M
+      },
+      // 上传中钩子函数
+      upLoadProgress () {
+        this.upLoadLoding = this.$loading({
+          target: '.upload-flash',
+          text: '上传中。。。。'
+        })
       }
     }
   }

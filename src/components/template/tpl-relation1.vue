@@ -34,6 +34,7 @@
                     :data="upLoadData"
                     :headers="token"
                     :show-file-list="false"
+                    :before-upload="beforeUpload"
                     :on-success="tipsImgupLoadSuccess">
                     <i class="uploader-icon">点击上传</br>图片</i>
                   </el-upload>
@@ -52,6 +53,7 @@
                     :data="upLoadData"
                     :headers="token"
                     :show-file-list="false"
+                    :before-upload="beforeUpload"
                     :on-success="tipsImgupLoadSuccess">
                     <i class="uploader-icon">上传图片</i>
                   </el-upload>
@@ -69,6 +71,7 @@
                     :data="upLoadData"
                     :headers="token"
                     :show-file-list="false"
+                    :before-upload="beforeUpload"
                     :on-success="topImgupLoadSuccess">
                     <i class="uploader-icon">上传图片</i>
                   </el-upload>
@@ -109,6 +112,7 @@
                   :data="upLoadData"
                   :headers="token"
                   :show-file-list="false"
+                  :before-upload="beforeUpload"
                   :on-success="itemImgupLoadSuccess">
                   <i class="uploader-icon">上传图片</i>
                 </el-upload>
@@ -142,6 +146,7 @@
         // token
         token: {Authorization: sessionStorage.getItem('token')},
         // 上传图片用的数据
+        upLoadLoding: '',
         upLoadData: {
           mediachannel: this.$store.state.materialData.mediachannel,
           act_id: this.$store.state.materialData.act_id
@@ -323,6 +328,19 @@
           this.promptImgUrl = this.imgUrl + res.data
           // this.conf_info.relation_info.content[0].info_con = this.imgUrl + res.data
         }
+      },
+      // 上传前的钩子函数
+      beforeUpload (file) {
+        const isJPG = file.type === 'image/png'
+        const isLt2M = file.size / 1024 < 200
+
+        if (!isJPG) {
+          this.$message.error('请确认文件格式。')
+        }
+        if (!isLt2M) {
+          this.$message.error('上传的文件大小不能超过 200KB!')
+        }
+        return isJPG && isLt2M
       }
     }
   }
