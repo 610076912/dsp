@@ -10,7 +10,7 @@
           </el-button>
         </template>
         <div class="relation1">
-          <div class="ad-style" v-show="!isEdit"><img src="../../../static/img/flash150x150.png" alt=""></div>
+          <div class="ad-style" v-show="!isEdit"><video id="rel1video" loop src="../../../static/media/relation1.mp4" alt=""></video></div>
           <div class="ad-edit">
             <!--提示-->
             <div class="tpl-tips">
@@ -141,6 +141,8 @@
     },
     data () {
       return {
+        // video 对象
+        video: '',
         // 图片服务器基础地址
         imgUrl: 'http://image.bjvca.com:5000',
         // token
@@ -253,6 +255,18 @@
       }
     },
     watch: {
+      'collapseVal' (val) {
+        if (val === 'relation1') {
+          this.video = document.getElementById('rel1video')
+          this.video.play()
+        } else {
+          this.video = document.getElementById('rel1video')
+          let that = this
+          setTimeout(function () {
+            that.video.load()
+          }, 500)
+        }
+      },
       'adCon' (val) {
         this.conf_info = val
       }

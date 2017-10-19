@@ -8,7 +8,7 @@
           <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit">保存</el-button>
         </template>
         <div class="relation">
-          <div class="ad-style" v-show="!isEdit"><img src="../../../static/img/tplbg.jpg" alt=""></div>
+          <div class="ad-style" v-show="!isEdit"><video id="rel2video" loop src="../../../static/media/relation2.mp4" alt=""></video></div>
           <div class="ad-edit">
             <!-- 提示模版 -->
             <div class="tpl-tips">
@@ -24,20 +24,20 @@
                   </el-select>
                 </template>
               </div>
-              <div v-if="value === 'prompt1'">    
+              <div v-if="value === 'prompt1'">
                 <div class="images">
                   <el-upload
                     class="avatar-uploader"
                     :action="postImgUrl"
                     :data="upLoadData"
-                    :headers="token"   
+                    :headers="token"
                     :on-success="tipsImgSuccess"
                     :before-upload="beforeAvatarUpload">
                     <div class="imagesbj":style="{backgroundImage: 'url('+conf_info.prompt_info.content[0].info_con+')', backgroundSize: '100% 100%'}">
                       <p v-if="!conf_info.prompt_info.content[0].info_con">上传图片</p>
                     </div>
                   </el-upload>
-                </div>        
+                </div>
               </div>
               <div class="selectOption" v-else-if="value === 'prompt2'">
                 <el-upload
@@ -121,6 +121,8 @@
     },
     data () {
       return {
+        // video 对象
+        video: '',
         imgUrl: 'http://image.bjvca.com:5000',                    // 图片服务器路径
         token: {Authorization: sessionStorage.getItem('token')},  // 上传图片用的数据
         postImgUrl: '/api/upload/image',                          // 上传图片的路径
@@ -184,6 +186,18 @@
       }
     },
     watch: {
+      'collapseVal' (val) {
+        if (val === 'relation2') {
+          this.video = document.getElementById('rel2video')
+          this.video.play()
+        } else {
+          this.video = document.getElementById('rel2video')
+          let that = this
+          setTimeout(function () {
+            that.video.load()
+          }, 500)
+        }
+      },
       'adCon' (val) {
         this.conf_info = val
       }
@@ -333,7 +347,6 @@
 
           .images {
             margin: 30px auto 0;
-            line-height 86px
             height: 90px;
             width: 210px;
             background: #ccc;
@@ -344,19 +357,17 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
+            background-color: #fff;
             position: absolute;
             z-index: 1;
             text-align: center;
-            line-height: 80px;
+            line-height: 20px;
             cursor: pointer;
             overflow: hidden;
 
-            div{
+            div, img {
               height: 100%;
               width: 100%;
-            }
-            .avatar{
-              background #fff
             }
           }
 
@@ -364,7 +375,7 @@
             width: 160px;
             position: absolute;
             left: 70px;
-            top: 25px;
+            top: 23px;
             height: 30px;
           }
         }

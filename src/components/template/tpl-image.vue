@@ -9,7 +9,7 @@
           </el-button>
         </template>
         <div class="img">
-          <div class="ad-style" v-show="!isEdit"><img src="../../../static/img/flash150x150.png" alt=""></div>
+          <div class="ad-style" v-show="!isEdit"><video id="imgvideo" loop src="../../../static/media/image.mp4" alt=""></video></div>
           <div class="ad-edit">
             <div class="upload-flash">
               <img v-if="conf_info.image_src" :src="conf_info.image_src" class="avatar">
@@ -68,6 +68,8 @@
     },
     data () {
       return {
+        // video 对象
+        video: '',
         // 图片服务器基础地址
         imgUrl: 'http://image.bjvca.com:5000',
         // token
@@ -85,7 +87,7 @@
         isPosition: 1,
         conf_info: {
           image_src: '',
-          size: '380,200',
+          size: '380,200,i_size1',
           position: 'left',
           effect: 'effect1',
           out_url: ''
@@ -93,6 +95,18 @@
       }
     },
     watch: {
+      'collapseVal' (val) {
+        if (val === 'image') {
+          this.video = document.getElementById('imgvideo')
+          this.video.play()
+        } else {
+          this.video = document.getElementById('imgvideo')
+          let that = this
+          setTimeout(function () {
+            that.video.load()
+          }, 500)
+        }
+      },
       'adCon' (val) {
         // this.isEdit = true
         // 位置
@@ -106,14 +120,14 @@
           this.conf_info.size = 'right'
         }
         // 大小
-        if (this.adCon.size === '380,200') this.isSize = 1
-        if (this.adCon.size === '300,300') {
+        if (this.adCon.size === '380,200,i_size1') this.isSize = 1
+        if (this.adCon.size === '300,300,i_size2') {
           this.isSize = 2
-          this.conf_info.size = '300,300'
+          this.conf_info.size = '300,300,i_size2'
         }
-        if (this.adCon.size === '500,100') {
+        if (this.adCon.size === '500,100,i_size3') {
           this.isSize = 3
-          this.conf_info.size = '500,100'
+          this.conf_info.size = '500,100,i_size3'
         }
         // 效果
         if (this.adCon.effect === 'effect1') this.isEffect = 1

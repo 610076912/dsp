@@ -42,13 +42,14 @@
   export default {
     data () {
       return {
+        // 模板类型
         collVal: '',
         // 计划id
         planId: this.$store.state.creatData.planId,
         // 滑块
         slide: {
           width: 0,
-          left: '0'
+          left: 0
         },
         // 媒体平台模板配对
         mateTpl: {

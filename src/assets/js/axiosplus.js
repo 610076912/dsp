@@ -21,7 +21,7 @@ Axios.interceptors.request.use(function (config) {
   // 判断是否登录，排除登录接口
   if (sessionStorage.getItem('token')) {
     config.headers.Authorization = sessionStorage.getItem('token')
-  } else if (config.url !== 'api/users/login') {
+  } else if (/.+login/.test(config.url)) {
     MessageBox.alert('您的登录已过期，请重新登录。', '登录提示', {
       confirmButtonText: '确定',
       callback: action => {
