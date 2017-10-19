@@ -201,23 +201,27 @@
       flashSave () {
         debugger
         if (this.value === 'prompt1') {
-          this.conf_info.prompt_info.efect = 'effect1'
-          this.conf_info.prompt_info.type = 'prompt1'
-          this.conf_info.prompt_info.content = [{
-            info_con: this.conf_info.prompt_info.content[0].info_con,
-            info_exp: '提示图片'
-          }]
+          this.conf_info.prompt_info = {  // 提示信息
+            type: 'prompt1',
+            efect: 'effect1',
+            content: [{
+              info_con: this.conf_info.prompt_info.content[0].info_con,
+              info_exp: '提示图片'
+            }]
+          }
         } else if (this.value === 'prompt2') {
-          this.conf_info.prompt_info.efect = 'effect2'
-          this.conf_info.prompt_info.type = 'prompt2'
-          this.conf_info.prompt_info.content = [{
-            info_con: this.conf_info.prompt_info.content[0].info_con,
-            info_exp: '提示图片'
-          },
-          {
-            info_con: this.conf_info.prompt_info.content[1].info_con,
-            info_exp: '提示文字'
-          }]
+          this.conf_info.prompt_info = {  // 提示信息
+            type: 'prompt2',
+            efect: 'effect2',
+            content: [{
+              info_con: this.conf_info.prompt_info.content[0].info_con,
+              info_exp: '提示图片'
+            },
+            {
+              info_con: this.promptText,
+              info_exp: '提示文字'
+            }]
+          }
         }
         // 调父组件的save方法，并把数据传过去。
         this.$parent.save('image', this.conf_info)
@@ -243,16 +247,16 @@
         // console.log(this.conf_info.relation_info)
       },
       beforeAvatarUpload (file) {
-        const isJPG = file.type === 'image/jpeg'
+        const isPNG = file.type === 'image/png'
         const isLt2M = file.size / 1024 / 1024 < 2
 
-        if (!isJPG) {
+        if (!isPNG) {
           this.$message.error('上传头像图片只能是 JPG 格式!')
         }
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!')
         }
-        return isJPG && isLt2M
+        return isPNG && isLt2M
       }
     }
   }
