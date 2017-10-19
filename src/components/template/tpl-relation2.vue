@@ -14,8 +14,7 @@
             <div class="tpl-tips">
               <div class="tips-select">
                 <template>
-                  <el-select class="select-self" v-model="value" size="small" @change="selectSure(value)"
-                             placeholder="请选择">
+                  <el-select class="select-self" v-model="value" size="small" placeholder="请选择">
                     <el-option
                       v-for="item in options"
                       :key="item.value"
@@ -25,31 +24,53 @@
                   </el-select>
                 </template>
               </div>
-              <div class="selectOption" v-if="value === 'prompt2'">
-                <!-- <div class="circular">点击上传</br>图片</div> -->
-                <el-upload
-                  :headers='headers'
-                  class="avatar-uploader circular"
-                  action="http://192.168.1.180:5000/upload/image"
-                  :show-file-list="false"
-                  :on-success="handleAvatarSuccess"
-                  :before-upload="beforeAvatarUpload">
-                  <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
-                <div class="info">
-                  <el-input size="small" v-model="conf_info.prompt_info.content[0].info_con"
-                            placeholder="请输入内容"></el-input>
+              <div v-if="value === 'prompt1'">
+                <div class="images">
+                  <el-upload
+                    class="avatar-uploader"
+                    :action="postImgUrl"
+                    :data="upLoadData"
+                    :headers="token"
+                    :on-success="tipsImgSuccess"
+                    :before-upload="beforeAvatarUpload">
+                    <div class="imagesbj":style="{backgroundImage: 'url('+conf_info.prompt_info.content[0].info_con+')', backgroundSize: '100% 100%'}">
+                      <p v-if="!conf_info.prompt_info.content[0].info_con">上传图片</p>
+                    </div>
+                  </el-upload>
                 </div>
               </div>
-              <div v-else-if="value === 'prompt1'">
-                <div class="images"></div>
+              <div class="selectOption" v-else-if="value === 'prompt2'">
+                <el-upload
+                  class="avatar-uploader circular"
+                  :action="postImgUrl"
+                  :data="upLoadData"
+                  :headers="token"
+                  :on-success="tipsImgTextSuccess"
+                  :before-upload="beforeAvatarUpload">
+                  <div class="avatar" :style="{backgroundImage: 'url('+conf_info.prompt_info.content[0].info_con+')', backgroundSize: '100% 100%'}">
+                    <p v-if="!conf_info.prompt_info.content[0].info_con" >上传图片</p>
+                  </div>
+                </el-upload>
+                <div class="info">
+                  <el-input size="small" v-model="promptText" placeholder="请输入内容"></el-input>
+                </div>
               </div>
             </div>
 
             <!-- 右边展示模版 -->
             <div class="tpl-con">
-              <div class="pic">点击上传图片</div>
+              <div class="pic" :style="{backgroundImage: 'url('+conf_info.relation_info.content[0].info_con+')', backgroundSize: '100% 100%'}">
+                <el-upload
+                  class="avatar-uploader circular"
+                  :action="postImgUrl"
+                  :data="upLoadData"
+                  :headers="token"
+                  :show-file-list="false"
+                  :on-success="tplImgSuccess"
+                  :before-upload="beforeAvatarUpload">
+                  <p v-if="!conf_info.relation_info.content[0].info_con" >上传图片</p>
+                </el-upload>
+              </div>
               <el-input
                 class="title"
                 resize="none"
@@ -60,17 +81,26 @@
               </el-input>
               <div class="priceRow">
                 <span>价格：￥</span>
-                <el-input class="price" size="small" v-model="conf_info.relation_info.content[2].info_con"
-                          placeholder="请输入内容"></el-input>
+                <el-input class="price" type="number" size="small" v-model="conf_info.relation_info.content[2].info_con" placeholder="请输入内容"></el-input>
               </div>
               <div class="stockRow">
                 <span>库存：</span>
-                <el-input class="num" size="small" v-model="conf_info.relation_info.content[3].info_con"
-                          placeholder="请输入内容"></el-input>
+                <el-input class="num" type="number" size="small" v-model="conf_info.relation_info.content[3].info_con" placeholder="请输入内容"></el-input>
               </div>
               <div class="tpl-bottom">
                 <span>扫码加入购物车</span>
-                <div>二维码</div>
+                <div class="QRcode" :style="{backgroundImage: 'url('+conf_info.relation_info.content[4].info_con+')', backgroundSize: '100% 100%'}">
+                  <el-upload
+                    class="avatar-uploader"
+                    :action="postImgUrl"
+                    :data="upLoadData"
+                    :headers="token"
+                    :show-file-list="false"
+                    :on-success="QRcodeImgSuccess"
+                    :before-upload="beforeAvatarUpload">
+                    <p v-if="!conf_info.relation_info.content[4].info_con">二维码</p>
+                  </el-upload>
+                </div>
               </div>
             </div>
 
@@ -93,9 +123,17 @@
       return {
         // video 对象
         video: '',
-        headers: {
-          Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiU2tEdnV0UkZiSDFsUHckWUFZQCIsInVzZXJfbmFtZSI6ImRzcDAwMiIsInVzZXJfdHlwZSI6IjEwMDAwMDAwIiwiaWF0IjoxNTA4MjkzMTY2LCJleHAiOjE1MjEyNTMxNjZ9.6reM7aakaBkhuZXikmyiQwy-3tDK4o8o9d3TYNDVZUw'
+        imgUrl: 'http://image.bjvca.com:5000',                    // 图片服务器路径
+        token: {Authorization: sessionStorage.getItem('token')},  // 上传图片用的数据
+        postImgUrl: '/api/upload/image',                          // 上传图片的路径
+        upLoadData: {
+          mediachannel: this.$store.state.materialData.mediachannel,
+          act_id: this.$store.state.materialData.act_id
         },
+        promptImgUrl: '',      // 提示图片
+        promptImgTextUrl: '',  // 提示图文
+        tplImgUrl: '',         // 模板图片
+        QRcodeImgUrl: '',      // 二维码图片
         imageUrl: '',
         isEdit: false,
         btnIsShow: true,
@@ -113,17 +151,12 @@
         textarea: '',   // 文本域
         conf_info: {
           prompt_info: {  // 提示信息
-            type: '',   // prompt1
-            efect: '',  // 展示效果 图片：effect1，图文：effect2
-            content: [
-              {
-                info_con: '',
-                info_exp: '提示图片'
-              },
-              {
-                info_con: '',
-                info_exp: '提示文字'
-              }]
+            type: 'prompt1',   // prompt1
+            efect: 'effect1',  // 展示效果 图片：effect1，图文：effect2
+            content: [{
+              info_con: '',
+              info_exp: '提示图片'
+            }]
           },
           relation_info: {
             type: 'relation2',   // relation1
@@ -164,6 +197,9 @@
             that.video.load()
           }, 500)
         }
+      },
+      'adCon' (val) {
+        this.conf_info = val
       }
     },
     methods: {
@@ -175,26 +211,50 @@
       edit () {
         this.isEdit = true
       },
-      // 选定选项
-      selectSure (value) {
-        if (value === 'prompt1') {
-          this.conf_info.prompt_info.efect = 'effect1'
-          this.conf_info.prompt_info.type = 'prompt1'
-        } else if (value === 'prompt2') {
-          this.conf_info.prompt_info.efect = 'effect2'
-          this.conf_info.prompt_info.type = 'prompt2'
-        }
-        // console.log(this.conf_info)
-      },
       // 保存
       flashSave () {
+        debugger
+        if (this.value === 'prompt1') {
+          this.conf_info.prompt_info.efect = 'effect1'
+          this.conf_info.prompt_info.type = 'prompt1'
+          this.conf_info.prompt_info.content = [{
+            info_con: this.conf_info.prompt_info.content[0].info_con,
+            info_exp: '提示图片'
+          }]
+        } else if (this.value === 'prompt2') {
+          this.conf_info.prompt_info.efect = 'effect2'
+          this.conf_info.prompt_info.type = 'prompt2'
+          this.conf_info.prompt_info.content = [{
+            info_con: this.conf_info.prompt_info.content[0].info_con,
+            info_exp: '提示图片'
+          },
+          {
+            info_con: this.conf_info.prompt_info.content[1].info_con,
+            info_exp: '提示文字'
+          }]
+        }
         // 调父组件的save方法，并把数据传过去。
         this.$parent.save('image', this.conf_info)
       },
-      handleAvatarSuccess (res, file) {
-        console.log(res)
-        console.log(file)
-        this.imageUrl = URL.createObjectURL(file.raw)
+      tipsImgSuccess (res, file) {      // 提示图片
+        // this.promptImgUrl = this.imgUrl + res.data
+        this.conf_info.prompt_info.content[0].info_con = this.imgUrl + res.data
+        // console.log(this.conf_info.prompt_info)
+      },
+      tipsImgTextSuccess (res, file) {  // 提示图文图片
+        // this.promptImgTextUrl = this.imgUrl + res.data
+        this.conf_info.prompt_info.content[0].info_con = this.imgUrl + res.data
+        // console.log(this.conf_info.prompt_info)
+      },
+      tplImgSuccess (res, file) {
+        // this.tplImgUrl = this.imgUrl + res.data
+        this.conf_info.relation_info.content[0].info_con = this.imgUrl + res.data
+        // console.log(this.conf_info.relation_info)
+      },
+      QRcodeImgSuccess (res, file) {
+        // this.QRcodeImgUrl = this.imgUrl + res.data
+        this.conf_info.relation_info.content[4].info_con = this.imgUrl + res.data
+        // console.log(this.conf_info.relation_info)
       },
       beforeAvatarUpload (file) {
         const isJPG = file.type === 'image/jpeg'
@@ -225,7 +285,15 @@
         width: 60px;
       }
     }
-
+    .avatar-uploader{
+      height 100%
+      width: 100%
+      overflow hidden
+      div{
+        height 100%
+        width: 100%
+      }
+    }
     .relation {
       width: 100%;
       height: 555px;
@@ -344,7 +412,7 @@
             }
 
             .price {
-              width: 90px;
+              width: 110px;
             }
           }
 
@@ -356,7 +424,7 @@
             }
 
             .num {
-              width: 90px;
+              width: 110px;
             }
           }
 
@@ -370,17 +438,16 @@
               background: #f7ba2a;
               text-align: center;
             }
-
-            div {
-              width: 100px;
-              height: 100px;
-              background: #fff;
-              color: #000;
-              text-align: center;
-              line-height: 100px;
-              float: right;
-              cursor: pointer;
-            }
+          }
+          .QRcode {
+            width: 100px;
+            height: 100px;
+            color: #000;
+            background: #fff
+            text-align: center;
+            line-height: 100px;
+            float: right;
+            cursor: pointer;
           }
         }
 
