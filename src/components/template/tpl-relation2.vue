@@ -8,7 +8,7 @@
           <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit">保存</el-button>
         </template>
         <div class="relation">
-          <div class="ad-style" v-show="!isEdit"><img src="../../../static/img/tplbg.jpg" alt=""></div>
+          <div class="ad-style" v-show="!isEdit"><video id="rel2video" loop src="../../../static/media/relation2.mp4" alt=""></video></div>
           <div class="ad-edit">
             <!-- 提示模版 -->
             <div class="tpl-tips">
@@ -91,6 +91,8 @@
     },
     data () {
       return {
+        // video 对象
+        video: '',
         headers: {
           Authorization: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiU2tEdnV0UkZiSDFsUHckWUFZQCIsInVzZXJfbmFtZSI6ImRzcDAwMiIsInVzZXJfdHlwZSI6IjEwMDAwMDAwIiwiaWF0IjoxNTA4MjkzMTY2LCJleHAiOjE1MjEyNTMxNjZ9.6reM7aakaBkhuZXikmyiQwy-3tDK4o8o9d3TYNDVZUw'
         },
@@ -147,6 +149,20 @@
                 info_exp: '二维码'
               }]
           }
+        }
+      }
+    },
+    watch: {
+      'collapseVal' (val) {
+        if (val === 'relation2') {
+          this.video = document.getElementById('rel2video')
+          this.video.play()
+        } else {
+          this.video = document.getElementById('rel2video')
+          let that = this
+          setTimeout(function () {
+            that.video.load()
+          }, 500)
         }
       }
     },

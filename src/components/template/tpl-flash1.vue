@@ -96,7 +96,7 @@
         isPosition: 1,
         conf_info: {
           flash_src: '',
-          size: '150,150',
+          size: '150,150,f_size1',
           position: 'left',
           out_url: ''
         }
@@ -114,10 +114,10 @@
           this.isPosition = 3
           this.conf_info.position = 'right'
         }
-        if (this.adCon.size === '150,150') this.isSize = 1
-        if (this.adCon.size === '210,90') {
+        if (this.adCon.size === '150,150,f_size1') this.isSize = 1
+        if (this.adCon.size === '210,90,f_size2') {
           this.isSize = 2
-          this.conf_info.size = '210,90'
+          this.conf_info.size = '210,90,f_size2'
         }
         this.conf_info.flash_src = this.adCon.flash_src
         this.conf_info.out_url = this.adCon.out_url

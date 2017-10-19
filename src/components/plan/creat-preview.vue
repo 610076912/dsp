@@ -8,7 +8,8 @@
       <el-row class="row">
         <el-col :span="8"><span>推广计划名称: </span><span>{{ baseInfo.act_name }}</span></el-col>
         <el-col :span="8">
-          <span>投放日期: </span><span>{{ new Date(baseInfo.act_b_time).Format('yyyy-MM-dd hh:mm:ss') }}~{{ new Date(baseInfo.act_e_time).Format('yyyy-MM-dd hh:mm:ss') }}</span></el-col>
+          <span>投放日期: </span><span>{{ new Date(baseInfo.act_b_time).Format('yyyy-MM-dd hh:mm:ss') }}~{{ new Date(baseInfo.act_e_time).Format('yyyy-MM-dd hh:mm:ss') }}</span>
+        </el-col>
         <el-col :span="8"><span>移动到组: </span><span>{{ baseInfo.group_name }}</span></el-col>
       </el-row>
       <el-row class="row">
@@ -135,7 +136,7 @@
       </b></p>
       <div class="pro-box">
         <div class="material-item" v-for="(item, index) in platformName">
-          <img :src="materialBg[index]" alt="">
+          <video loop autoplay :src="materialBg[index]" alt=""></video>
           <div class="mask">
             <span>平&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;台：{{item}}</br></span>
             <span>广告类型：</br></span>
@@ -411,7 +412,6 @@
         get: function () {
           let that = this
           let res = []
-          console.log(this.meidaInfo)
           this.materialInfo.forEach(function (item) {
             for (let i = 0; i < that.meidaInfo.length; i++) {
               if (item.act_channel_id === that.meidaInfo[i].media_id) {
@@ -419,7 +419,6 @@
               }
             }
           })
-          console.log(res)
           return res
         }
       },
@@ -427,7 +426,13 @@
         get: function () {
           let res = []
           this.materialInfo.forEach(function (item) {
-            res.push(tplJson[item.tpl_cat])
+            // 从外层数据只能拿到 relation 但不知道relation1还是relation2
+            if (item.tpl_cat !== 'relation') {
+              res.push(tplJson[item.tpl_cat])
+            } else {
+              let relType = JSON.parse(item.conf_info).relation_info.type
+              res.push(tplJson[relType])
+            }
           })
           return res
         }
@@ -546,6 +551,9 @@
           margin-bottom: 40px;
           position: relative;
           overflow: hidden;
+          video {
+            width: 100%;
+          }
           &:nth-of-type(2n-1) {
             margin-right: 35px;
           }
