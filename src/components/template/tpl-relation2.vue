@@ -103,7 +103,6 @@
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </el-collapse-item>
@@ -153,7 +152,7 @@
         conf_info: {
           prompt_info: {  // 提示信息
             type: 'prompt1',   // prompt1
-            efect: 'effect1',  // 展示效果 图片：effect1，图文：effect2
+            effect: 'effect1',  // 展示效果 图片：effect1，图文：effect2
             content: [{
               info_con: '',
               info_exp: '提示图片'
@@ -217,7 +216,7 @@
         if (this.value === 'prompt1') {
           this.conf_info.prompt_info = {  // 提示信息
             type: 'prompt1',
-            efect: 'effect1',
+            effect: 'effect1',
             content: [{
               info_con: this.conf_info.prompt_info.content[0].info_con,
               info_exp: '提示图片'
@@ -226,7 +225,7 @@
         } else if (this.value === 'prompt2') {
           this.conf_info.prompt_info = {  // 提示信息
             type: 'prompt2',
-            efect: 'effect2',
+            effect: 'effect2',
             content: [{
               info_con: this.conf_info.prompt_info.content[0].info_con,
               info_exp: '提示图片'
