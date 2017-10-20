@@ -1,6 +1,6 @@
 {
-  "flash": "./static/media/image.mp4",
-  "image": "./static/media/flash.mp4",
+  "flash": "./static/media/flash.mp4",
+  "image": "./static/media/image.mp4",
   "relation1": "./static/media/relation1.mp4",
   "relation2": "./static/media/relation2.mp4"
 }

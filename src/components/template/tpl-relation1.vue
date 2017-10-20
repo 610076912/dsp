@@ -30,7 +30,7 @@
                 <div class="circular" :style="{backgroundImage: 'url('+promptImgUrl+')', backgroundSize: '100% 100%'}">
                   <el-upload
                     class="avatar-uploader"
-                    action="/api/upload/image"
+                    :action="upLoadImg"
                     :data="upLoadData"
                     :headers="token"
                     :show-file-list="false"
@@ -49,7 +49,7 @@
                   :style="{backgroundImage: 'url('+promptImgUrl+')', backgroundSize: '100% 100%'}">
                   <el-upload
                     class="avatar-uploader"
-                    action="/api/upload/image"
+                    :action="upLoadImg"
                     :data="upLoadData"
                     :headers="token"
                     :show-file-list="false"
@@ -67,7 +67,7 @@
                      :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[0].info_con+')', backgroundSize: '100% 100%'}">
                   <el-upload
                     class="avatar-uploader"
-                    action="/api/upload/image"
+                    :action="upLoadImg"
                     :data="upLoadData"
                     :headers="token"
                     :show-file-list="false"
@@ -108,7 +108,7 @@
               <div class="confirm-img" :style="{backgroundImage: 'url('+confirmImgUrl+')', backgroundSize: '100% 100%'}">
                 <el-upload
                   class="avatar-uploader"
-                  action="/api/upload/image"
+                  :action="upLoadImg"
                   :data="upLoadData"
                   :headers="token"
                   :show-file-list="false"
@@ -143,6 +143,8 @@
       return {
         // video 对象
         video: '',
+        // 上传接口地址
+        upLoadImg: this.$parent.upLoadUrl + '/upload/image',
         // 图片服务器基础地址
         imgUrl: 'http://image.bjvca.com:5000',
         // token
@@ -274,7 +276,7 @@
     methods: {
       collapseChange (val) {
         this.isEdit = false
-        this.$emit('collapseChange', val)
+        this.$emit('update:collapseVal', val)
       },
       // 编辑
       edit () {
@@ -295,7 +297,6 @@
             info_exp: '提示信息图片'
           }, {info_con: this.promptText, info_exp: '提示信息文字'}]
         }
-        console.log(this.conf_info)
         // 调父组件的save方法，并把数据传过去。
         this.$parent.save('relation', this.conf_info)
       },
@@ -325,8 +326,6 @@
       topImgupLoadSuccess (res) {
         if (res.code === 200) {
           this.$set(this.conf_info.relation_info.content[0], 'info_con', this.imgUrl + res.data)
-          // this.conf_info.relation_info.content[0].info_con = this.imgUrl + res.data
-          console.log(this.conf_info.relation_info.content[0])
         }
       },
       itemImgupLoadSuccess (res) {

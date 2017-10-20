@@ -28,7 +28,7 @@
                 <div class="images">
                   <el-upload
                     class="avatar-uploader"
-                    :action="postImgUrl"
+                    :action="upLoadImg"
                     :data="upLoadData"
                     :headers="token"
                     :on-success="tipsImgSuccess"
@@ -42,7 +42,7 @@
               <div class="selectOption" v-else-if="value === 'prompt2'">
                 <el-upload
                   class="avatar-uploader circular"
-                  :action="postImgUrl"
+                  :action="upLoadImg"
                   :data="upLoadData"
                   :headers="token"
                   :on-success="tipsImgTextSuccess"
@@ -62,7 +62,7 @@
               <div class="pic" :style="{backgroundImage: 'url('+conf_info.relation_info.content[0].info_con+')', backgroundSize: '100% 100%'}">
                 <el-upload
                   class="avatar-uploader circular"
-                  :action="postImgUrl"
+                  :action="upLoadImg"
                   :data="upLoadData"
                   :headers="token"
                   :show-file-list="false"
@@ -92,7 +92,7 @@
                 <div class="QRcode" :style="{backgroundImage: 'url('+conf_info.relation_info.content[4].info_con+')', backgroundSize: '100% 100%'}">
                   <el-upload
                     class="avatar-uploader"
-                    :action="postImgUrl"
+                    :action="upLoadImg"
                     :data="upLoadData"
                     :headers="token"
                     :show-file-list="false"
@@ -123,9 +123,10 @@
       return {
         // video 对象
         video: '',
+        // 上传接口地址
+        upLoadImg: this.$parent.upLoadUrl + '/upload/image',
         imgUrl: 'http://image.bjvca.com:5000',                    // 图片服务器路径
         token: {Authorization: sessionStorage.getItem('token')},  // 上传图片用的数据
-        postImgUrl: '/api/upload/image',                          // 上传图片的路径
         upLoadData: {
           mediachannel: this.$store.state.materialData.mediachannel,
           act_id: this.$store.state.materialData.act_id
@@ -205,7 +206,7 @@
     methods: {
       collapseChange (val) {
         this.isEdit = false
-        this.$emit('collapseChange', val)
+        this.$emit('update:collapseVal', val)
       },
       // 编辑
       edit () {
@@ -213,7 +214,6 @@
       },
       // 保存
       flashSave () {
-        debugger
         if (this.value === 'prompt1') {
           this.conf_info.prompt_info.efect = 'effect1'
           this.conf_info.prompt_info.type = 'prompt1'
@@ -234,7 +234,7 @@
           }]
         }
         // 调父组件的save方法，并把数据传过去。
-        this.$parent.save('image', this.conf_info)
+        this.$parent.save('relation', this.conf_info)
       },
       tipsImgSuccess (res, file) {      // 提示图片
         // this.promptImgUrl = this.imgUrl + res.data
@@ -257,7 +257,7 @@
         // console.log(this.conf_info.relation_info)
       },
       beforeAvatarUpload (file) {
-        const isJPG = file.type === 'image/jpeg'
+        const isJPG = file.type === 'image/png'
         const isLt2M = file.size / 1024 / 1024 < 2
 
         if (!isJPG) {

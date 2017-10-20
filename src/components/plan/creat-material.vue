@@ -16,10 +16,10 @@
     <div class="material">
       <p class="top">广告模板</p>
       <div class="con">
-        <flash @collapseChange="collapseChange" :collapseVal="collVal" :adCon="adCon.flash" :canSave="canSave"></flash>
-        <tpl-image @collapseChange="collapseChange" :collapseVal="collVal" :adCon="adCon.image"></tpl-image>
-        <tpl-relation1 @collapseChange="collapseChange" :collapseVal="collVal" :adCon="adCon.relation1"></tpl-relation1>
-        <tpl-relation2 @collapseChange="collapseChange" :collapseVal="collVal" :adCon="adCon.relation2"></tpl-relation2>
+        <flash :collapseVal.sync="collVal" :adCon="adCon.flash" :canSave="canSave"></flash>
+        <tpl-image :collapseVal.sync="collVal" :adCon="adCon.image"></tpl-image>
+        <tpl-relation1 :collapseVal.sync="collVal" :adCon="adCon.relation1"></tpl-relation1>
+        <tpl-relation2 :collapseVal.sync="collVal" :adCon="adCon.relation2"></tpl-relation2>
       </div>
     </div>
     <div class="button-wrap">
@@ -42,6 +42,8 @@
   export default {
     data () {
       return {
+        // 用于打包编译时去掉'api'
+        upLoadUrl: '/api',
         // 模板类型
         collVal: '',
         // 计划id
@@ -113,12 +115,14 @@
         return this.currentMediaId && this.currentMediaplanId
       }
     },
-    methods: {
-      // 保持手风琴效果
-      collapseChange (val) {
+    watch: {
+      // 使用了.sync 修饰符双向绑定了props，允许子组件改变collVal，来达到手风琴的效果。
+      'collVal' (val) {
         this.chenkedTpl = val
         this.collVal = val
-      },
+      }
+    },
+    methods: {
       prev () {
         const L = this.slide.left
         if (L < 0) this.slide.left = L + 100
@@ -135,7 +139,7 @@
       },
       // 选择媒体平台 获取广告信息
       chooseMedia (actId, mediaId, index) {
-        console.log(this.medias)
+        // console.log(this.medias)
         // 当前已选索引
         this.currentIndex = index
         // 检索当前选中媒体可用模板
@@ -155,7 +159,7 @@
         this.$http.post('/api2/get_ad_for_channel', {
           act_id: actId
         }).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.code === 200 && res.data.length !== 0) {
             this.chenkedTpl = res.data[0].tpl_cat
             this.currentTpl = res.data[0].tpl_cat
@@ -167,6 +171,9 @@
               this.collVal = JSON.parse(res.data[0].conf_info).relation_info.type
               this.adCon[this.collVal] = JSON.parse(res.data[0].conf_info)
             }
+          } else {
+            // 如果没有请求到广告信息，则使子组件都合上
+            this.collVal = ''
           }
         })
       },

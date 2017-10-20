@@ -15,7 +15,7 @@
               <img v-if="conf_info.image_src" :src="conf_info.image_src" class="avatar">
               <el-upload
                 class="avatar-uploader"
-                action="/api/upload/image"
+                :action="upLoadImg"
                 :data="upLoadData"
                 :headers="token"
                 :show-file-list="false"
@@ -70,6 +70,8 @@
       return {
         // video 对象
         video: '',
+        // 上传接口地址
+        upLoadImg: this.$parent.upLoadUrl + '/upload/image',
         // 图片服务器基础地址
         imgUrl: 'http://image.bjvca.com:5000',
         // token
@@ -145,9 +147,8 @@
     },
     methods: {
       collapseChange (val) {
-        console.log(val)
         this.isEdit = false
-        this.$emit('collapseChange', val)
+        this.$emit('update:collapseVal', val)
       },
       // 编辑
       edit () {

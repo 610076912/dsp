@@ -29,7 +29,7 @@
               </div>
               <el-upload
                 class="avatar-uploader"
-                action="/api/upload/flash"
+                :action="upLoadFlash"
                 :data="upLoadData"
                 :headers="token"
                 :show-file-list="false"
@@ -81,6 +81,8 @@
       return {
         // token
         token: {Authorization: sessionStorage.getItem('token')},
+        // 上传接口地址
+        upLoadFlash: this.$parent.upLoadUrl + '/upload/flash',
         // 图片服务器基础地址
         imgUrl: 'http://image.bjvca.com:5000',
         upLoadLoding: '',
@@ -127,7 +129,7 @@
       // 使总体保持手风琴效果
       collapseChange (val) {
         this.isEdit = false
-        this.$emit('collapseChange', val)
+        this.$emit('update:collapseVal', val)
       },
       // 编辑
       edit () {
