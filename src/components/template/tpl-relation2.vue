@@ -2,7 +2,7 @@
   <div class="tpl-relation">
     <el-collapse accordion @change="collapseChange" :value="collapseVal">
       <el-collapse-item name="relation2">
-        <template slot="title">动态图片模板
+        <template slot="title">关联信息模板2
           <el-button class="button" size="small" @click.stop="edit" v-show="!isEdit && collapseVal==='relation2'">编辑
           </el-button>
           <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit">保存</el-button>
@@ -130,10 +130,6 @@
           mediachannel: this.$store.state.materialData.mediachannel,
           act_id: this.$store.state.materialData.act_id
         },
-        promptImgUrl: '',      // 提示图片
-        promptImgTextUrl: '',  // 提示图文
-        tplImgUrl: '',         // 模板图片
-        QRcodeImgUrl: '',      // 二维码图片
         imageUrl: '',
         isEdit: false,
         btnIsShow: true,
@@ -189,12 +185,13 @@
       'collapseVal' (val) {
         if (val === 'relation2') {
           this.video = document.getElementById('rel2video')
+          this.video.currentTime = 0
           this.video.play()
         } else {
           this.video = document.getElementById('rel2video')
           let that = this
           setTimeout(function () {
-            that.video.load()
+            that.video.pause()
           }, 500)
         }
       },
@@ -264,7 +261,7 @@
         const isLt2M = file.size / 1024 / 1024 < 2
 
         if (!isPNG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!')
+          this.$message.error('上传头像图片只能是 png 格式!')
         }
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!')

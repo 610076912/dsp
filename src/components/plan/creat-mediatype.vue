@@ -22,16 +22,11 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import MEDIATYPE from '../../../static/media-type.json'
   import steps from './steps-component.vue'
   import header from './header-component.vue'
 
-  const mediaType = [{type: '电影', type_id: 'a'}, {type: '电视剧', type_id: 'b'}, {type: '动漫', type_id: 'c'}, {
-    type: '少儿',
-    type_id: 'd'
-  }, {type: '综艺', type_id: 'e'}, {type: '体育', type_id: 'f'}, {type: '音乐', type_id: 'g'}, {
-    type: '电影',
-    type_id: 'h'
-  }, {type: '育儿', type_id: 'i'}, {type: '汽车', type_id: 'j'}, {type: '时尚', type_id: 'k'}]
+  const mediaType = MEDIATYPE.mediaType
   export default {
     name: 'creatMediaType',
     data () {

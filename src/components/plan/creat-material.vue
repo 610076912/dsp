@@ -42,8 +42,8 @@
   export default {
     data () {
       return {
-        // 用于打包编译时去掉'api'
-        upLoadUrl: '/api',
+        // 用于打包编译时去掉'/api'
+        upLoadUrl: '',
         // 模板类型
         collVal: '',
         // 计划id

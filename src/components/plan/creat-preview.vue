@@ -362,14 +362,10 @@
       transformTime (arr) {
         let res = ''
         if (typeof arr === 'string') {
-          res = new Array(24)
+          res = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
           arr.split('').forEach(function (item) {
             for (let i in strTOarr) {
-              if (i === item) {
-                res[strTOarr[i]] = 1
-              } else {
-                res[strTOarr[i]] = 0
-              }
+              res[strTOarr[i]] = 1
             }
           })
         } else if (typeof arr === 'object') {

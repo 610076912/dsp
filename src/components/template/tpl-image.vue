@@ -29,9 +29,9 @@
               <div class="ad-title"><span>* </span> 图片规范：格式PNG、大小200K、主体内容明显</div>
               <div class="ad-option ad-size">
                 <span>图片大小</span>
-                <span @click="changeSize('380,200', 1)" :class="{'option-border':isSize===1}">380px * 200px</span>
-                <span @click="changeSize('300,300', 2)" :class="{'option-border':isSize===2}">300px * 300px</span>
-                <span @click="changeSize('500,100', 3)" :class="{'option-border':isSize===3}">500px * 100px</span>
+                <span @click="changeSize('380,200,i_size1', 1)" :class="{'option-border':isSize===1}">380px * 200px</span>
+                <span @click="changeSize('300,300,i_size2', 2)" :class="{'option-border':isSize===2}">300px * 300px</span>
+                <span @click="changeSize('500,100,i_size3', 3)" :class="{'option-border':isSize===3}">500px * 100px</span>
               </div>
               <div class="ad-option ad-effect">
                 <span>展示效果</span>
@@ -100,12 +100,13 @@
       'collapseVal' (val) {
         if (val === 'image') {
           this.video = document.getElementById('imgvideo')
+          this.video.currentTime = 0
           this.video.play()
         } else {
           this.video = document.getElementById('imgvideo')
           let that = this
           setTimeout(function () {
-            that.video.load()
+            that.video.pause()
           }, 500)
         }
       },

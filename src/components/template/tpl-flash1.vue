@@ -44,8 +44,8 @@
               <div class="ad-title"><span>* </span> Flash规范：格式fla、目标Flash Player17、脚本ActionScript3.0、大小200K</div>
               <div class="ad-option ad-size">
                 <span>展示大小</span>
-                <span @click="changeSize('150,150', 1)" :class="{'option-border':isSize===1}">150px * 150px</span>
-                <span @click="changeSize('210,90', 2)" :class="{'option-border':isSize===2}">210px * 90px</span>
+                <span @click="changeSize('150,150,f_size1', 1)" :class="{'option-border':isSize===1}">150px * 150px</span>
+                <span @click="changeSize('210,90,f_size2', 2)" :class="{'option-border':isSize===2}">210px * 90px</span>
               </div>
               <div class="ad-option ad-position">
                 <span>广告位置</span>

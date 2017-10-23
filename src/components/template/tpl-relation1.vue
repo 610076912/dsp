@@ -10,7 +10,9 @@
           </el-button>
         </template>
         <div class="relation1">
-          <div class="ad-style" v-show="!isEdit"><video id="rel1video" loop src="../../../static/media/relation1.mp4" alt=""></video></div>
+          <div class="ad-style" v-show="!isEdit">
+            <video id="rel1video" loop src="../../../static/media/relation1.mp4" alt=""></video>
+          </div>
           <div class="ad-edit">
             <!--提示-->
             <div class="tpl-tips">
@@ -105,7 +107,8 @@
               </div>
             </div>
             <div class="ad-confirm" v-show="isItem">
-              <div class="confirm-img" :style="{backgroundImage: 'url('+confirmImgUrl+')', backgroundSize: '100% 100%'}">
+              <div class="confirm-img"
+                   :style="{backgroundImage: 'url('+confirmImgUrl+')', backgroundSize: '100% 100%'}">
                 <el-upload
                   class="avatar-uploader"
                   :action="upLoadImg"
@@ -260,17 +263,21 @@
       'collapseVal' (val) {
         if (val === 'relation1') {
           this.video = document.getElementById('rel1video')
+          this.video.currentTime = 0
           this.video.play()
         } else {
           this.video = document.getElementById('rel1video')
           let that = this
           setTimeout(function () {
-            that.video.load()
+            that.video.pause()
           }, 500)
         }
       },
       'adCon' (val) {
         this.conf_info = val
+        // 对提示信息部分的数据做单独处理
+        this.promptImgUrl = val.prompt_info.content[0].info_con
+        this.promptText = val.prompt_info.content[1] ? val.prompt_info.content[1].info_con : ''
       }
     },
     methods: {
