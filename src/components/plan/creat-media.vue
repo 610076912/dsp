@@ -26,7 +26,7 @@
 <script type="text/ecmascript-6">
   import steps from './steps-component.vue'
   import header from './header-component.vue'
-  import medias from '@/assets/json/media.json'
+  import medias from '../../../static/json/media.json'
 
   export default {
     data () {

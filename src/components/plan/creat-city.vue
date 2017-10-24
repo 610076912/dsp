@@ -42,7 +42,7 @@
 <script>
   import setps from './steps-component.vue'
   import header from './header-component.vue'
-  import citys from '@/assets/json/city.json'
+  import citys from '../../../static/json/city.json'
 
   export default {
     name: 'creatCity',

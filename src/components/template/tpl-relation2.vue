@@ -8,7 +8,7 @@
           <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit">保存</el-button>
         </template>
         <div class="relation">
-          <div class="ad-style" v-show="!isEdit"><video id="rel2video" loop src="../../../static/media/relation2.mp4" alt=""></video></div>
+          <div class="ad-style" v-show="!isEdit"><video id="rel2video" loop src="http://www.bjvca.com/video/relation2.mp4" alt=""></video></div>
           <div class="ad-edit">
             <!-- 提示模版 -->
             <div class="tpl-tips">

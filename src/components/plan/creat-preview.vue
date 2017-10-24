@@ -158,9 +158,9 @@
   import timeBar from './timebar-component.vue'
   import weekBar from './weekbar-component.vue'
 
-  import medias from '@/assets/json/media.json'
-  import region from '@/assets/json/region.json'
-  import tplJson from '@/assets/json/tpl.json'
+  import medias from '../../../static/json/media.json'
+  import region from '../../../static/json/region.json'
+  import tplJson from '../../../static/json/tpl.json'
 
   // 剧集数据
   const episode = [

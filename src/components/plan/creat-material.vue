@@ -31,7 +31,7 @@
 
 <script>
   import setps from './steps-component.vue'
-  import allMedias from '@/assets/json/media.json'
+  import allMedias from '../../../static/json/media.json'
 
   // 素材模板
   import flash from '../template/tpl-flash1.vue'
@@ -43,7 +43,7 @@
     data () {
       return {
         // 用于打包编译时去掉'/api'
-        upLoadUrl: '',
+        upLoadUrl: '/api',
         // 模板类型
         collVal: '',
         // 计划id

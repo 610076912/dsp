@@ -11,7 +11,7 @@
         </template>
         <div class="relation1">
           <div class="ad-style" v-show="!isEdit">
-            <video id="rel1video" loop src="../../../static/media/relation1.mp4" alt=""></video>
+            <video id="rel1video" loop src="http://www.bjvca.com/video/relation1.mp4" alt=""></video>
           </div>
           <div class="ad-edit">
             <!--提示-->

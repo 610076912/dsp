@@ -64,7 +64,7 @@
   import moduleHeaderCompoent from './module-header-component'
   import timeBar from './timebar-component.vue'
   import weekBar from './weekbar-component.vue'
-  import hourData from '@/../static/timeData.json'
+  import hourData from '../../../static/json/timeData.json'
 
   const strTOarr = {
     a: 0,

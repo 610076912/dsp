@@ -120,10 +120,11 @@
           <el-table-column
             label="开关"
             align="center"
+            prop="publish"
             width="100">
             <template scope="scope">
               <el-switch
-                v-model="scope.row.publish"
+                v-model="switchData[scope.$index]"
                 on-color="#ff9900"
                 @change="switch1(scope)">
               </el-switch>
@@ -195,7 +196,9 @@
         // 选中个数，判断是否可以点击批量删除
         selectedLength: 0,
         // 表格数据
-        tableData: [],
+        tableData: null,
+        // 开关数据（单独处理）
+        switchData: [],
         dialogVisible: false,
         // 状态数据
         exStatus: [
@@ -248,7 +251,6 @@
     methods: {
       // 获取活动列表
       getActiveList (option) {
-        const that = this
         if (!arguments[0].name) arguments[0].name = null
         if (!arguments[0].groupId) arguments[0].groupId = null
         if (!arguments[0].status) arguments[0].status = null
@@ -269,11 +271,13 @@
           time_start: option.timeStart,
           time_end: option.timeEnd,
           channel: option.channel
-        }).then(function (res) {
+        }).then((res) => {
           loading.close()
           if (res.code === 200) {
-            that.tableData = res.data
-            console.log(res.data)
+            res.data.forEach((item) => {
+              this.switchData.push(item.publish === 1)
+            })
+            this.tableData = res.data
           }
           // console.log(res)
         })
@@ -316,9 +320,7 @@
       },
       // 开关状态改变时调用
       switch1 (result) {
-        // const that = this
-        console.log(result)
-        if (!result.row.publish) {
+        if (!this.switchData[result.$index]) {
           this.$http.post('/api2/canclepublish', {
             plan_id: result.row.plan_id
           }).then(res => {
@@ -334,7 +336,7 @@
               this.$alert(res.msg, '提示', {
                 confirmButtonText: '确定',
                 callback: action => {
-                  result.row.publish = false
+                  this.$set(this.switchData, result.$index, false)
                 }
               })
             }

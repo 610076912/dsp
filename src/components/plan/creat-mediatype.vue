@@ -22,7 +22,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import MEDIATYPE from '../../../static/media-type.json'
+  import MEDIATYPE from '../../../static/json/media-type.json'
   import steps from './steps-component.vue'
   import header from './header-component.vue'
 
