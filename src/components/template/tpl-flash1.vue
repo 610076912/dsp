@@ -67,6 +67,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  // ceshi
   export default {
     props: {
       collapseVal: '',
