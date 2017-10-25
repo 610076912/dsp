@@ -66,32 +66,7 @@
   import weekBar from './weekbar-component.vue'
   import hourData from '../../../static/json/timeData.json'
 
-  const strTOarr = {
-    a: 0,
-    b: 1,
-    c: 2,
-    d: 3,
-    e: 4,
-    f: 5,
-    g: 6,
-    h: 7,
-    i: 8,
-    j: 9,
-    k: 10,
-    l: 11,
-    m: 12,
-    n: 13,
-    o: 14,
-    p: 15,
-    q: 16,
-    r: 17,
-    s: 18,
-    t: 19,
-    u: 20,
-    v: 21,
-    w: 22,
-    x: 23
-  }
+  const strTOarr = hourData.timeForStr
   export default {
     name: 'creatTime',
     data () {
@@ -207,9 +182,7 @@
         if (typeof arr === 'string') {
           res = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
           arr.split('').forEach(function (item) {
-            for (let i in strTOarr) {
-              res[strTOarr[i]] = 1
-            }
+            res[strTOarr[item]] = 1
           })
         } else if (typeof arr === 'object') {
           arr.forEach(function (item, index) {

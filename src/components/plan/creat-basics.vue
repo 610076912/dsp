@@ -4,7 +4,7 @@
     <div class="content">
       <el-form :model="ruleForm" :rules="rules" label-position="left" label-width="150px" class="form" ref="new1form">
         <el-form-item label="计划名称" prop="name" required>
-          <el-input v-model.trim="ruleForm.name"></el-input>
+          <el-input v-model.trim="ruleForm.name" maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="选择分组" prop="group">
           <el-select

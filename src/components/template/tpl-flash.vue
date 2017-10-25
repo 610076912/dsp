@@ -107,23 +107,34 @@
     },
     watch: {
       'adCon' (val) {
-        // this.isEdit = true
-        if (this.adCon.position === 'left') this.isPosition = 1
-        if (this.adCon.position === 'center') {
-          this.isPosition = 2
-          this.conf_info.position = 'center'
+        if (val && this.collapseVal === 'flash') {
+          // this.isEdit = true
+          if (this.adCon.position === 'left') this.isPosition = 1
+          if (this.adCon.position === 'center') {
+            this.isPosition = 2
+            this.conf_info.position = 'center'
+          }
+          if (this.adCon.position === 'right') {
+            this.isPosition = 3
+            this.conf_info.position = 'right'
+          }
+          if (this.adCon.size === '150,150,f_size1') this.isSize = 1
+          if (this.adCon.size === '210,90,f_size2') {
+            this.isSize = 2
+            this.conf_info.size = '210,90,f_size2'
+          }
+          this.conf_info.flash_src = this.adCon.flash_src
+          this.conf_info.out_url = this.adCon.out_url
+        } else {
+          this.conf_info = {
+            flash_src: '',
+            size: '150,150,f_size1',
+            position: 'left',
+            out_url: ''
+          }
+          this.isSize = 1
+          this.isPosition = 1
         }
-        if (this.adCon.position === 'right') {
-          this.isPosition = 3
-          this.conf_info.position = 'right'
-        }
-        if (this.adCon.size === '150,150,f_size1') this.isSize = 1
-        if (this.adCon.size === '210,90,f_size2') {
-          this.isSize = 2
-          this.conf_info.size = '210,90,f_size2'
-        }
-        this.conf_info.flash_src = this.adCon.flash_src
-        this.conf_info.out_url = this.adCon.out_url
       }
     },
     methods: {

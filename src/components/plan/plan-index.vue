@@ -58,66 +58,79 @@
           @selection-change="selectionChange"
           style="width: 100%">
           <el-table-column
+            :resizable="false"
             type="selection"
             align="center"
             width="40">
           </el-table-column>
           <el-table-column
+            :resizable="false"
             label="活动ID"
             prop="plan_id"
             align="center"
             width="60">
           </el-table-column>
           <el-table-column
+            :resizable="false"
             label="活动名称"
+            :show-overflow-tooltip="true"
             prop="plan_name"
             align="center"
             width="140">
           </el-table-column>
           <el-table-column
+            :resizable="false"
+            :show-overflow-tooltip="true"
             label="组名"
             prop="group_name"
             align="center"
-            width="60">
+            width="70">
           </el-table-column>
           <el-table-column
             label="推广时间"
+            :resizable="false"
             prop="time"
             :formatter="formatter"
             align="center"
-            width="140">
+            width="138">
           </el-table-column>
           <el-table-column
+            :resizable="false"
             label="日预算"
             prop="plan_day_budget"
             align="center"
             width="75">
           </el-table-column>
           <el-table-column
+            :resizable="false"
             label="总预算"
             prop="plan_all_budget"
             align="center"
             width="75">
           </el-table-column>
           <el-table-column
+            :resizable="false"
             label="媒体状态"
             prop="meidanum"
             align="center"
             width="75">
           </el-table-column>
           <el-table-column
+            :resizable="false"
             label="广告素材"
             align="center"
             prop="adnum"
             width="75">
           </el-table-column>
           <el-table-column
+            :resizable="false"
             label="投放策略"
             align="center"
             prop="billing"
             width="75">
           </el-table-column>
           <el-table-column
+            :resizable="false"
             label="开关"
             align="center"
             prop="publish"
@@ -131,12 +144,13 @@
             </template>
           </el-table-column>
           <el-table-column
+            :resizable="false"
             label="活动状态"
             align="center"
             prop="status"
             width="90">
           </el-table-column>
-          <el-table-column label="功能操作" align="left">
+          <el-table-column label="功能操作" align="left" :resizable="false">
             <template scope="scope">
               <span class="operation" @click="details(scope.row.plan_id)">查看&nbsp;</span>
               <span class="operation">复制&nbsp;</span>
@@ -201,32 +215,7 @@
         switchData: [],
         dialogVisible: false,
         // 状态数据
-        exStatus: [
-          {
-            id: 123,
-            name: '土豆',
-            kg: false,
-            status: 2
-          },
-          {
-            id: 124,
-            name: '土豆',
-            kg: false,
-            status: 2
-          },
-          {
-            id: 121,
-            name: '土豆',
-            kg: false,
-            status: 2
-          },
-          {
-            id: 122,
-            name: '土豆',
-            kg: false,
-            status: 2
-          }
-        ]
+        exStatus: []
       }
     },
     created () {
@@ -323,10 +312,6 @@
         if (!this.switchData[result.$index]) {
           this.$http.post('/api2/canclepublish', {
             plan_id: result.row.plan_id
-          }).then(res => {
-            if (res.code !== 200) {
-              result.row.publish = true
-            }
           })
         } else {
           this.$http.post('/api2/publish', {
@@ -363,6 +348,7 @@
           name: this.seekData.name,
           groupId: this.seekData.group,
           status: this.seekData.status,
+          channel: this.activeName,
           timeStart: this.seekData.date[0] ? new Date(this.seekData.date[0]).Format('yyyy-MM-dd hh:mm:ss') : null,
           timeEnd: this.seekData.date[1] ? new Date(this.seekData.date[1]).Format('yyyy-MM-dd hh:mm:ss') : null
         }

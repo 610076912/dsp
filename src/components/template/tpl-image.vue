@@ -111,39 +111,51 @@
         }
       },
       'adCon' (val) {
-        // this.isEdit = true
-        // 位置
-        if (this.adCon.position === 'left') this.isPosition = 1
-        if (this.adCon.position === 'center') {
-          this.isPosition = 2
-          this.conf_info.position = 'center'
+        if (this.collapseVal === 'image' && val) {
+          // 位置
+          if (this.adCon.position === 'left') this.isPosition = 1
+          if (this.adCon.position === 'center') {
+            this.isPosition = 2
+            this.conf_info.position = 'center'
+          }
+          if (this.adCon.position === 'right') {
+            this.isPosition = 3
+            this.conf_info.size = 'right'
+          }
+          // 大小
+          if (this.adCon.size === '380,200,i_size1') this.isSize = 1
+          if (this.adCon.size === '300,300,i_size2') {
+            this.isSize = 2
+            this.conf_info.size = '300,300,i_size2'
+          }
+          if (this.adCon.size === '500,100,i_size3') {
+            this.isSize = 3
+            this.conf_info.size = '500,100,i_size3'
+          }
+          // 效果
+          if (this.adCon.effect === 'effect1') this.isEffect = 1
+          if (this.adCon.effect === 'effect2') {
+            this.isEffect = 2
+            this.conf_info.effect = 'effect2'
+          }
+          if (this.adCon.effect === 'effect3') {
+            this.isEffect = 3
+            this.conf_info.effect = 'effect3'
+          }
+          this.conf_info.image_src = this.adCon.image_src
+          this.conf_info.out_url = this.adCon.out_url
+        } else {
+          this.conf_info = {
+            image_src: '',
+            size: '380,200,i_size1',
+            position: 'left',
+            effect: 'effect1',
+            out_url: ''
+          }
+          this.isSize = 1
+          this.isPosition = 1
+          this.isEffect = 1
         }
-        if (this.adCon.position === 'right') {
-          this.isPosition = 3
-          this.conf_info.size = 'right'
-        }
-        // 大小
-        if (this.adCon.size === '380,200,i_size1') this.isSize = 1
-        if (this.adCon.size === '300,300,i_size2') {
-          this.isSize = 2
-          this.conf_info.size = '300,300,i_size2'
-        }
-        if (this.adCon.size === '500,100,i_size3') {
-          this.isSize = 3
-          this.conf_info.size = '500,100,i_size3'
-        }
-        // 效果
-        if (this.adCon.effect === 'effect1') this.isEffect = 1
-        if (this.adCon.effect === 'effect2') {
-          this.isEffect = 2
-          this.conf_info.effect = 'effect2'
-        }
-        if (this.adCon.effect === 'effect3') {
-          this.isEffect = 3
-          this.conf_info.effect = 'effect3'
-        }
-        this.conf_info.image_src = this.adCon.image_src
-        this.conf_info.out_url = this.adCon.out_url
       }
     },
     methods: {

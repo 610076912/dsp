@@ -34,7 +34,7 @@
   import allMedias from '../../../static/json/media.json'
 
   // 素材模板
-  import flash from '../template/tpl-flash1.vue'
+  import flash from '../template/tpl-flash.vue'
   import image from '../template/tpl-image.vue'
   import relation2 from '../template/tpl-relation2.vue'
   import relation1 from '../template/tpl-relation1.vue'
@@ -169,11 +169,18 @@
               this.adCon[res.data[0].tpl_cat] = JSON.parse(res.data[0].conf_info)
             } else {
               this.collVal = JSON.parse(res.data[0].conf_info).relation_info.type
+              console.log(this.collVal)
               this.adCon[this.collVal] = JSON.parse(res.data[0].conf_info)
             }
           } else {
             // 如果没有请求到广告信息，则使子组件都合上
             this.collVal = ''
+            this.adCon = {
+              flash: null,
+              image: null,
+              relation1: null,
+              relation2: null
+            }
           }
         })
       },

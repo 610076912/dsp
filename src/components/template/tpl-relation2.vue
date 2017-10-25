@@ -5,10 +5,12 @@
         <template slot="title">关联信息模板2
           <el-button class="button" size="small" @click.stop="edit" v-show="!isEdit && collapseVal==='relation2'">编辑
           </el-button>
-          <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit">保存</el-button>
+          <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='relation2'">保存</el-button>
         </template>
         <div class="relation">
-          <div class="ad-style" v-show="!isEdit"><video id="rel2video" loop src="http://www.bjvca.com/video/relation2.mp4" alt=""></video></div>
+          <div class="ad-style" v-show="!isEdit">
+            <video id="rel2video" loop src="http://www.bjvca.com/video/relation2.mp4" alt=""></video>
+          </div>
           <div class="ad-edit">
             <!-- 提示模版 -->
             <div class="tpl-tips">
@@ -31,9 +33,11 @@
                     :action="upLoadImg"
                     :data="upLoadData"
                     :headers="token"
+                    :show-file-list="false"
                     :on-success="tipsImgSuccess"
                     :before-upload="beforeAvatarUpload">
-                    <div class="imagesbj":style="{backgroundImage: 'url('+conf_info.prompt_info.content[0].info_con+')', backgroundSize: '100% 100%'}">
+                    <div class="imagesbj"
+                         :style="{backgroundImage: 'url('+conf_info.prompt_info.content[0].info_con+')', backgroundSize: 'contain'}">
                       <p v-if="!conf_info.prompt_info.content[0].info_con">上传图片</p>
                     </div>
                   </el-upload>
@@ -41,25 +45,28 @@
               </div>
               <div class="selectOption" v-else-if="value === 'prompt2'">
                 <el-upload
-                  class="avatar-uploader circular"
+                  class="circular"
                   :action="upLoadImg"
                   :data="upLoadData"
                   :headers="token"
+                  :show-file-list="false"
                   :on-success="tipsImgTextSuccess"
                   :before-upload="beforeAvatarUpload">
-                  <div class="avatar" :style="{backgroundImage: 'url('+conf_info.prompt_info.content[0].info_con+')', backgroundSize: '100% 100%'}">
-                    <p v-if="!conf_info.prompt_info.content[0].info_con" >上传图片</p>
+                  <div class="avatar"
+                       :style="{backgroundImage: 'url('+conf_info.prompt_info.content[0].info_con+')', backgroundSize: 'cover'}">
+                    <p v-if="!conf_info.prompt_info.content[0].info_con">上传图片</p>
                   </div>
                 </el-upload>
                 <div class="info">
-                  <el-input size="small" v-model="promptText" placeholder="请输入内容"></el-input>
+                  <el-input size="small" v-model="promptText" placeholder="请输入内容（8个字）" :maxlength="8"></el-input>
                 </div>
               </div>
             </div>
 
             <!-- 右边展示模版 -->
             <div class="tpl-con">
-              <div class="pic" :style="{backgroundImage: 'url('+conf_info.relation_info.content[0].info_con+')', backgroundSize: '100% 100%'}">
+              <div class="pic"
+                   :style="{backgroundImage: 'url('+conf_info.relation_info.content[0].info_con+')', backgroundSize: 'cover'}">
                 <el-upload
                   class="avatar-uploader circular"
                   :action="upLoadImg"
@@ -68,7 +75,7 @@
                   :show-file-list="false"
                   :on-success="tplImgSuccess"
                   :before-upload="beforeAvatarUpload">
-                  <p v-if="!conf_info.relation_info.content[0].info_con" >上传图片</p>
+                  <p v-if="!conf_info.relation_info.content[0].info_con">上传图片</p>
                 </el-upload>
               </div>
               <el-input
@@ -76,20 +83,24 @@
                 resize="none"
                 type="textarea"
                 :max="2"
+                :maxlength="10"
                 placeholder="请输入内容"
                 v-model="conf_info.relation_info.content[1].info_con">
               </el-input>
               <div class="priceRow">
                 <span>价格：￥</span>
-                <el-input class="price" type="number" size="small" v-model="conf_info.relation_info.content[2].info_con" placeholder="请输入内容"></el-input>
+                <el-input class="price" type="number" size="small" v-model="conf_info.relation_info.content[2].info_con"
+                          placeholder="请输入内容" :maxlength="10"></el-input>
               </div>
               <div class="stockRow">
                 <span>库存：</span>
-                <el-input class="num" type="number" size="small" v-model="conf_info.relation_info.content[3].info_con" placeholder="请输入内容"></el-input>
+                <el-input class="num" type="number" size="small" v-model="conf_info.relation_info.content[3].info_con"
+                          placeholder="请输入内容" :maxlength="10"></el-input>
               </div>
               <div class="tpl-bottom">
                 <span>扫码加入购物车</span>
-                <div class="QRcode" :style="{backgroundImage: 'url('+conf_info.relation_info.content[4].info_con+')', backgroundSize: '100% 100%'}">
+                <div class="QRcode"
+                     :style="{backgroundImage: 'url('+conf_info.relation_info.content[4].info_con+')', backgroundSize: 'cover'}">
                   <el-upload
                     class="avatar-uploader"
                     :action="upLoadImg"
@@ -196,7 +207,44 @@
         }
       },
       'adCon' (val) {
-        this.conf_info = val
+        if (val && val.relation_info.type === 'relation2') {
+          this.conf_info = val
+        } else {
+          this.conf_info = {
+            prompt_info: {  // 提示信息
+              type: 'prompt1',   // prompt1
+              effect: 'effect1',  // 展示效果 图片：effect1，图文：effect2
+              content: [{
+                info_con: '',
+                info_exp: '提示图片'
+              }]
+            },
+            relation_info: {
+              type: 'relation2',   // relation1
+              content: [
+                {
+                  info_con: '',
+                  info_exp: '主图片'
+                },
+                {
+                  info_con: '',
+                  info_exp: '文本域'
+                },
+                {
+                  info_con: '',
+                  info_exp: '价格'
+                },
+                {
+                  info_con: '',
+                  info_exp: '库存'
+                },
+                {
+                  info_con: '',
+                  info_exp: '二维码'
+                }]
+            }
+          }
+        }
       }
     },
     methods: {
@@ -223,14 +271,16 @@
           this.conf_info.prompt_info = {  // 提示信息
             type: 'prompt2',
             effect: 'effect2',
-            content: [{
-              info_con: this.conf_info.prompt_info.content[0].info_con,
-              info_exp: '提示图片'
-            },
-            {
-              info_con: this.promptText,
-              info_exp: '提示文字'
-            }]
+            content: [
+              {
+                info_con: this.conf_info.prompt_info.content[0].info_con,
+                info_exp: '提示图片'
+              },
+              {
+                info_con: this.promptText,
+                info_exp: '提示文字'
+              }
+            ]
           }
         }
         // 调父组件的save方法，并把数据传过去。
@@ -285,11 +335,11 @@
         width: 60px;
       }
     }
-    .avatar-uploader{
+    .avatar-uploader {
       height 100%
       width: 100%
       overflow hidden
-      div{
+      div {
         height 100%
         width: 100%
       }
@@ -341,12 +391,15 @@
             position: relative;
           }
 
-          .images {
+          .imagesbj {
             margin: 30px auto 0;
             height: 90px;
             width: 210px;
-            background: #ccc;
+            background-color #ccc
+            background-repeat no-repeat
+            background-position center
             border: 2px solid #f2f2f2;
+            line-height: 90px;
           }
 
           .circular {
@@ -364,6 +417,8 @@
             div, img {
               height: 100%;
               width: 100%;
+              background-position: center;
+              background-repeat: no-repeat;
             }
           }
 

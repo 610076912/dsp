@@ -5,11 +5,11 @@
       <div class="bar">
         <div class="title">投放频次:</div>
         <div class="block">
-          <el-radio v-model="times" :label="0"> 不控制频次</el-radio>
+          <el-radio v-model="times" :label="0" disabled> 不控制频次</el-radio>
           <p><i class="el-icon-information"></i> 针对移动设备部控制投放频次</p>
         </div>
         <div class="block">
-          <el-radio v-model="times" :label="1"> 自定义频次</el-radio>
+          <el-radio v-model="times" :label="1" disabled> 自定义频次</el-radio>
           <p><i class="el-icon-information"></i> 每天每个设备曝光
             <el-input :maxlength="3" :disabled="inputStatus" type="number"></el-input>
             次
@@ -19,28 +19,28 @@
       <div class="bar">
         <div class="title">投放速度:</div>
         <div class="block">
-          <el-radio v-model="speed" :label="0"> 快速投放</el-radio>
+          <el-radio v-model="speed" :label="0" disabled> 快速投放</el-radio>
           <p><i class="el-icon-information"></i> 在较短的时间段内换取最大的曝光量</p>
         </div>
         <div class="block">
-          <el-radio v-model="speed" :label="1"> 均匀投放</el-radio>
+          <el-radio v-model="speed" :label="1" disabled> 均匀投放</el-radio>
           <p><i class="el-icon-information"></i> 将预算划分到当天的每个小时，均匀投放</p>
         </div>
       </div>
       <div class="bar">
         <div class="title">计费类型:</div>
         <div class="block">
-          <el-radio v-model="priceType" :label="0"> 按照曝光计费（CPM）</el-radio>
+          <el-radio v-model="priceType" :label="0" disabled> 按照曝光计费（CPM）</el-radio>
           <p><i class="el-icon-information"></i> 每千次有效展示的成本</p>
         </div>
         <div class="block">
-          <el-radio v-model="priceType" :label="1"> 按点击计费</el-radio>
+          <el-radio v-model="priceType" :label="1" disabled> 按点击计费</el-radio>
           <p><i class="el-icon-information"></i> 每次点击的有效成本</p>
         </div>
       </div>
       <div class="price-wrap">
         <div class="title">推广出价:</div>
-        <el-input></el-input>
+        <el-input disabled></el-input>
         元
       </div>
     </div>

@@ -159,49 +159,14 @@
   import weekBar from './weekbar-component.vue'
 
   import medias from '../../../static/json/media.json'
+  import mediaType from '../../../static/json/media-type.json'
   import region from '../../../static/json/region.json'
   import tplJson from '../../../static/json/tpl.json'
+  import timeData from '../../../static/json/timeData.json'
 
   // 剧集数据
-  const episode = [
-    {type: '电影', type_id: 'a'},
-    {type: '电视剧', type_id: 'b'},
-    {type: '动漫', type_id: 'c'},
-    {type: '少儿', type_id: 'd'},
-    {type: '综艺', type_id: 'e'},
-    {type: '体育', type_id: 'f'},
-    {type: '音乐', type_id: 'g'},
-    {type: '电影', type_id: 'h'},
-    {type: '育儿', type_id: 'i'},
-    {type: '汽车', type_id: 'j'},
-    {type: '时尚', type_id: 'k'}
-  ]
-  const strTOarr = {
-    a: 0,
-    b: 1,
-    c: 2,
-    d: 3,
-    e: 4,
-    f: 5,
-    g: 6,
-    h: 7,
-    i: 8,
-    j: 9,
-    k: 10,
-    l: 11,
-    m: 12,
-    n: 13,
-    o: 14,
-    p: 15,
-    q: 16,
-    r: 17,
-    s: 18,
-    t: 19,
-    u: 20,
-    v: 21,
-    w: 22,
-    x: 23
-  }
+  const episode = mediaType.mediaType
+  const strTOarr = timeData.timeForStr
   export default {
     name: 'creatPreview',
     data () {
@@ -243,6 +208,7 @@
         if (res.code === 200) {
           const result = res.data
           const _this = this
+          console.log(result)
           if (result.baseInfo_1) {
             // 基本信息
             _this.baseInfo.act_name = result.baseInfo_1.plan_name
@@ -363,10 +329,9 @@
         let res = ''
         if (typeof arr === 'string') {
           res = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+          console.log(arr.split(''))
           arr.split('').forEach(function (item) {
-            for (let i in strTOarr) {
-              res[strTOarr[i]] = 1
-            }
+            res[strTOarr[item]] = 1
           })
         } else if (typeof arr === 'object') {
           arr.forEach(function (item, index) {

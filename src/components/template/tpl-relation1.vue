@@ -29,7 +29,7 @@
                 </template>
               </div>
               <div class="selectOption" v-if="value === 'prompt2'">
-                <div class="circular" :style="{backgroundImage: 'url('+promptImgUrl+')', backgroundSize: '100% 100%'}">
+                <div class="circular" :style="{backgroundImage: 'url('+promptImgUrl+')', backgroundSize: 'cover'}">
                   <el-upload
                     class="avatar-uploader"
                     :action="upLoadImg"
@@ -42,13 +42,13 @@
                   </el-upload>
                 </div>
                 <div class="info">
-                  <el-input size="small" v-model="promptText" placeholder="请输入内容"></el-input>
+                  <el-input size="small" v-model="promptText" placeholder="请输入内容(8个字)" :maxlength="8"></el-input>
                 </div>
               </div>
               <div v-else-if="value === 'prompt1'">
                 <div
                   class="images"
-                  :style="{backgroundImage: 'url('+promptImgUrl+')', backgroundSize: '100% 100%'}">
+                  :style="{backgroundImage: 'url('+promptImgUrl+')', backgroundSize: 'contain'}">
                   <el-upload
                     class="avatar-uploader"
                     :action="upLoadImg"
@@ -66,7 +66,7 @@
             <div class="ad-con">
               <div class="ad-top">
                 <div class="top-img"
-                     :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[0].info_con+')', backgroundSize: '100% 100%'}">
+                     :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[0].info_con+')', backgroundSize: 'cover'}">
                   <el-upload
                     class="avatar-uploader"
                     :action="upLoadImg"
@@ -79,36 +79,36 @@
                   </el-upload>
                 </div>
                 <el-input v-model="conf_info.relation_info.content[1].info_con" placeholder="主题（10个字）"
-                          size="mini"></el-input>
-                <el-input v-model="conf_info.relation_info.content[2].info_con" placeholder="备注（10个字）"
-                          size="mini"></el-input>
+                          size="mini" :maxlength="10"></el-input>
+                <el-input v-model="conf_info.relation_info.content[2].info_con" placeholder="备注（20个字）"
+                          size="mini" :maxlength="20"></el-input>
               </div>
               <div class="ad-text">
                 <el-input v-model="conf_info.relation_info.content[3].info_con" type="textarea" :rows="2"
-                          placeholder="请输入内容"></el-input>
+                          placeholder="请输入内容" :maxlength="50"></el-input>
               </div>
               <div class="ad-list">
                 <div class="ad-item"
-                     :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[4].info_con+')', backgroundSize: '100% 100%'}">
+                     :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[4].info_con+')', backgroundSize: 'cover'}">
                   <i class="el-icon-setting" @click="editItem(1)"></i>
                 </div>
                 <div class="ad-item"
-                     :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[7].info_con+')', backgroundSize: '100% 100%'}">
+                     :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[7].info_con+')', backgroundSize: 'cover'}">
                   <i class="el-icon-setting" @click="editItem(2)"></i>
                 </div>
                 <div class="ad-item"
-                     :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[10].info_con+')', backgroundSize: '100% 100%'}">
+                     :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[10].info_con+')', backgroundSize: 'cover'}">
                   <i class="el-icon-setting" @click="editItem(3)"></i>
                 </div>
                 <div class="ad-item"
-                     :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[13].info_con+')', backgroundSize: '100% 100%'}">
+                     :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[13].info_con+')', backgroundSize: 'cover'}">
                   <i class="el-icon-setting" @click="editItem(4)"></i>
                 </div>
               </div>
             </div>
             <div class="ad-confirm" v-show="isItem">
               <div class="confirm-img"
-                   :style="{backgroundImage: 'url('+confirmImgUrl+')', backgroundSize: '100% 100%'}">
+                   :style="{backgroundImage: 'url('+confirmImgUrl+')', backgroundSize: 'contain'}">
                 <el-upload
                   class="avatar-uploader"
                   :action="upLoadImg"
@@ -274,10 +274,95 @@
         }
       },
       'adCon' (val) {
-        this.conf_info = val
-        // 对提示信息部分的数据做单独处理
-        this.promptImgUrl = val.prompt_info.content[0].info_con
-        this.promptText = val.prompt_info.content[1] ? val.prompt_info.content[1].info_con : ''
+        if (val && val.relation_info.type === 'relation1') {
+          this.conf_info = val
+          // 对提示信息部分的数据做单独处理
+          this.promptImgUrl = val.prompt_info.content[0].info_con
+          this.promptText = val.prompt_info.content[1] ? val.prompt_info.content[1].info_con : ''
+        } else {
+          // 清空数据，必须是完整的数据结构！
+          this.conf_info = {
+            prompt_info: {
+              type: this.value,
+              effect: '',
+              content: [
+                {
+                  info_con: '',
+                  info_exp: ''
+                }
+              ]
+            },
+            relation_info: {
+              type: 'relation1',
+              content: [
+                {
+                  info_con: '',
+                  info_exp: '主图片（圆形）'
+                },
+                {
+                  info_con: '',
+                  info_exp: '主题'
+                },
+                {
+                  info_con: '',
+                  info_exp: '备注'
+                },
+                {
+                  info_con: '',
+                  info_exp: '内容'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第一个块的图片'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第一个块的关联主题'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第一个块的外跳链接'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第二个块的图片'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第二个块的关联主题'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第二个块的外跳链接'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第三个块的图片'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第三个块的关联主题'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第三个块的外跳链接'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第四个块的图片'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第四个块的关联主题'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第四个块的外跳链接'
+                }
+              ]
+            }
+          }
+        }
       }
     },
     methods: {
@@ -429,7 +514,9 @@
             margin 30px auto 0
             height 90px
             width 210px
-            background #ccc
+            background-color #ccc
+            background-repeat no-repeat
+            background-position center
             border 2px solid #f2f2f2
             text-align: center;
             line-height: 90px;
@@ -439,6 +526,8 @@
             height: 80px;
             border-radius: 50%;
             background-color: #fff;
+            background-position: center;
+            background-repeat: no-repeat;
             position: absolute;
             z-index: 1;
             text-align: center;
@@ -472,7 +561,8 @@
               width: 60px;
               height: 60px;
               border-radius: 50%;
-              background: #fff;
+              background-color: #fff;
+              background-position: center;
               color: #868686;
               text-align: center;
               line-height: 60px;
@@ -494,7 +584,8 @@
             .ad-item {
               width: 47%;
               height: 150px;
-              background: #fff;
+              background-color: #fff;
+              background-position: center;
               margin: 0 12px 10px 0;
               position: relative;
               &:nth-of-type(2n) {
@@ -523,7 +614,9 @@
             width: 130px;
             height: 130px;
             float: left;
-            background: #fff;
+            background-color: #fff;
+            background-position: center;
+            background-repeat: no-repeat;
             text-align: center;
             line-height: 130px;
             i {
