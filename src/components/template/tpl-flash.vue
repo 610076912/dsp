@@ -44,7 +44,8 @@
               <div class="ad-title"><span>* </span> Flash规范：格式fla、目标Flash Player17、脚本ActionScript3.0、大小200K</div>
               <div class="ad-option ad-size">
                 <span>展示大小</span>
-                <span @click="changeSize('150,150,f_size1', 1)" :class="{'option-border':isSize===1}">150px * 150px</span>
+                <span @click="changeSize('150,150,f_size1', 1)"
+                      :class="{'option-border':isSize===1}">150px * 150px</span>
                 <span @click="changeSize('210,90,f_size2', 2)" :class="{'option-border':isSize===2}">210px * 90px</span>
               </div>
               <div class="ad-option ad-position">
@@ -54,7 +55,7 @@
                 <span @click="changePosition('right', 3)" :class="{'option-border':isPosition===3}">屏幕居右</span>
               </div>
               <div class="ad-url">
-                <el-input placeholder="请输入内容" v-model="conf_info.out_url">
+                <el-input placeholder="请输入跳转链接（40字符）" v-model="conf_info.out_url" :maxlength="40">
                   <template slot="prepend">跳转链接</template>
                 </el-input>
               </div>
@@ -169,7 +170,6 @@
       // 上传成功
       upLoadSuccess (res, file) {
         if (res.code === 200) {
-          this.upLoadLoding.close()
           this.conf_info.flash_src = this.imgUrl + res.data
         }
       },
@@ -188,10 +188,6 @@
       },
       // 上传中钩子函数
       upLoadProgress () {
-        this.upLoadLoding = this.$loading({
-          target: '.upload-flash',
-          text: '上传中。。。。'
-        })
       }
     }
   }
@@ -214,6 +210,9 @@
       height: 550px;
       padding: 80px;
       position: relative;
+      background-image: url("../../../static/img/tplbg.png");
+      background-position: center;
+      background-size: cover;
       .ad-style {
         width: 100%;
         height: 100%;

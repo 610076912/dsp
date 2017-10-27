@@ -171,7 +171,7 @@
               time: that.checkedTime,
               week: that.checkedWeek
             })
-            console.log(this.$store.state.creatTime)
+            // console.log(this.$store.state.creatTime)
             this.$router.push('/creatCity')
           }
         })

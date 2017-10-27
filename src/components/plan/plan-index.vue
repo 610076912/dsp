@@ -263,6 +263,7 @@
         }).then((res) => {
           loading.close()
           if (res.code === 200) {
+            this.switchData = []
             res.data.forEach((item) => {
               this.switchData.push(item.publish === 1)
             })
@@ -362,7 +363,8 @@
       // 查看按钮
       details (planId) {
         console.log(planId)
-        this.$store.commit('PLANID', planId)
+        // 清空store里的老数据并将新id记录下来
+        this.$store.commit('CLEARCREATDATA', planId)
         this.$router.push('/creatPreview')
       },
       // 格式化时间

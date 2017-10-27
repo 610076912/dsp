@@ -85,7 +85,7 @@
               </div>
               <div class="ad-text">
                 <el-input v-model="conf_info.relation_info.content[3].info_con" type="textarea" :rows="2"
-                          placeholder="请输入内容" :maxlength="50"></el-input>
+                          placeholder="请输入内容(50个字)" :maxlength="50"></el-input>
               </div>
               <div class="ad-list">
                 <div class="ad-item"
@@ -488,9 +488,9 @@
         width: 100%;
         height: 550px;
         position: relative;
-        background-image: url("../../../static/img/tplbg.jpg");
+        background-image: url("../../../static/img/tplbg.png");
+        background-size: cover;
         background-repeat: no-repeat;
-        background-size: 100%;
         background-position center;
         .tpl-tips {
           position: absolute;

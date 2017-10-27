@@ -46,7 +46,7 @@
                 <span @click="changePosition('right', 3)" :class="{'option-border':isPosition===3}">屏幕居右</span>
               </div>
               <div class="ad-url">
-                <el-input v-model="conf_info.out_url" placeholder="请输入内容">
+                <el-input v-model="conf_info.out_url" placeholder="请输跳转链接（40字符）" :maxlength="40">
                   <template slot="prepend">跳转链接</template>
                 </el-input>
               </div>
@@ -235,6 +235,9 @@
       height: 550px;
       padding: 80px;
       position: relative;
+      background-image: url("../../../static/img/tplbg.png");
+      background-position: center;
+      background-size: cover;
       .ad-style {
         width: 100%;
         height: 100%;

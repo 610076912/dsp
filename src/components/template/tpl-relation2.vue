@@ -83,19 +83,19 @@
                 resize="none"
                 type="textarea"
                 :max="2"
-                :maxlength="10"
-                placeholder="请输入内容"
+                :maxlength="30"
+                placeholder="请输入内容（30个字）"
                 v-model="conf_info.relation_info.content[1].info_con">
               </el-input>
               <div class="priceRow">
                 <span>价格：￥</span>
                 <el-input class="price" type="number" size="small" v-model="conf_info.relation_info.content[2].info_con"
-                          placeholder="请输入内容" :maxlength="10"></el-input>
+                          placeholder="请输入内容（10个字符）" :maxlength="10"></el-input>
               </div>
               <div class="stockRow">
                 <span>库存：</span>
                 <el-input class="num" type="number" size="small" v-model="conf_info.relation_info.content[3].info_con"
-                          placeholder="请输入内容" :maxlength="10"></el-input>
+                          placeholder="请输入内容（10个字符）" :maxlength="10"></el-input>
               </div>
               <div class="tpl-bottom">
                 <span>扫码加入购物车</span>
@@ -367,9 +367,10 @@
       .ad-edit {
         width: 100%;
         height: 100%;
-        background: url('../../../static/img/tplbg.jpg') no-repeat;
+        background-image: url("../../../static/img/tplbg.png");
         background-size: cover;
-
+        background-repeat: no-repeat;
+        background-position center;
         .tpl-tips {
           position: absolute;
           left: 20px;
