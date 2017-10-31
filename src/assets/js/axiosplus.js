@@ -4,7 +4,7 @@ import qs from 'qs'
 import Router from '../../router/index'
 
 const Axios = axios.create({
-  baseURL: 'api/',
+  baseURL: process.env.NODE_ENV === 'production' ? '' : 'api/',
   timeout: 10000,
   headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'}
 })

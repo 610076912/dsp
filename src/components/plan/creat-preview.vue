@@ -10,7 +10,7 @@
         <el-col :span="8">
           <span>投放日期: </span><span>{{ new Date(baseInfo.act_b_time).Format('yyyy-MM-dd hh:mm:ss') }}~{{ new Date(baseInfo.act_e_time).Format('yyyy-MM-dd hh:mm:ss') }}</span>
         </el-col>
-        <el-col :span="8"><span>移动到组: </span><span>{{ baseInfo.group_name }}</span></el-col>
+        <el-col :span="8"><span>分组: </span><span>{{ baseInfo.group_name }}</span></el-col>
       </el-row>
       <el-row class="row">
         <el-col :span="8"><span>计划每日预算: </span><span>{{ baseInfo.day_budget }}</span></el-col>
@@ -136,6 +136,13 @@
       </b></p>
       <div class="pro-box">
         <div class="material-item" v-for="(item, index) in platformName">
+          <component v-bind:is="materialBg[index]" :confinfo="item.confInfo">
+            <!-- 组件在 vm.currentview 变化时改变！ -->
+          </component>
+        </div>
+      </div>
+      <!--<div class="pro-box">
+        <div class="material-item" v-for="(item, index) in platformName">
           <video loop autoplay :src="materialBg[index]" alt=""></video>
           <div class="mask">
             <span>平&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;台：{{item}}</br></span>
@@ -143,7 +150,7 @@
             <span>模板类型：</span>
           </div>
         </div>
-      </div>
+      </div>-->
     </div>
     <div class="button-wrap">
       <el-button @click="back">返回</el-button>
@@ -163,6 +170,11 @@
   import region from '../../../static/json/region.json'
   import tplJson from '../../../static/json/tpl.json'
   import timeData from '../../../static/json/timeData.json'
+  // 引入展示模板
+  import rich1 from '../template/rich1.vue'
+  import rich2 from '../template/rich2.vue'
+  import flash from '../template/tpl-flash.vue'
+  import img from '../template/tpl-img.vue'
 
   // 剧集数据
   const episode = mediaType.mediaType
@@ -281,55 +293,30 @@
         this.$router.go(-1)
       },
       finish () {
-        this.finishLoading = true
-        this.updataGroup(res => {
-          this.finishLoading = false
-          if (res !== false && res.code === 200) {
-            this.oldValue = this.baseInfo.group_name
-          }
-        })
+        this.$router.push('/plan')
       },
       finishto () {
         this.finishtoLoading = true
-        this.updataGroup(res => {
-          this.finishtoLoading = false
-          if (res === false) {
-            // this.$router.push('/creatPreview')
-          } else if (res.code === 200) {
-            // this.$router.push('/creatPreview')
-          }
-        })
         // 审核
         this.$http.post('/api2/send_audit', {
           plan_id: this.$store.state.creatData.planId
         }).then(res => {
+          this.finishtoLoading = false
           if (res.code === 200) {
             this.$alert('提审成功', '成功', {
-              confirmButtonText: '确定'
+              confirmButtonText: '确定',
+              callback: () => {
+                this.$router.push('/plan')
+              }
             })
           }
         })
-      },
-      updataGroup (callback) {
-        if (this.baseInfo.group_name !== this.oldValue) {
-          const thisGroupId = this.options.filter(item => { return item.group_name === this.baseInfo.group_name })[0].group_id
-          // 修改基本组信息
-          this.$http.post('/api/upd_act', {
-            act_id: 10,
-            group_id: thisGroupId
-          }).then(res => {
-            callback(res)
-          })
-        } else {
-          callback(false)
-        }
       },
       // 小时转换
       transformTime (arr) {
         let res = ''
         if (typeof arr === 'string') {
           res = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-          console.log(arr.split(''))
           arr.split('').forEach(function (item) {
             res[strTOarr[item]] = 1
           })
@@ -376,10 +363,11 @@
           this.materialInfo.forEach(function (item) {
             for (let i = 0; i < that.meidaInfo.length; i++) {
               if (item.act_channel_id === that.meidaInfo[i].media_id) {
-                res.push(that.meidaInfo[i].media_name)
+                res.push({mediaId: that.meidaInfo[i].media_name, confInfo: JSON.parse(item.conf_info)})
               }
             }
           })
+          console.log(res)
           return res
         }
       },
@@ -402,7 +390,11 @@
     components: {
       steps,
       'time-bar': timeBar,
-      'week-bar': weekBar
+      'week-bar': weekBar,
+      tplFlash: flash,
+      tplImg: img,
+      tplRich1: rich1,
+      tplRich2: rich2
     }
   }
 </script>
@@ -507,7 +499,7 @@
         overflow: hidden;
         .material-item {
           width: 550px;
-          height: 315px;
+          height: 360px;
           float: left;
           margin-bottom: 40px;
           position: relative;

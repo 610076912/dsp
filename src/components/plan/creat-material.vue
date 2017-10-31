@@ -34,16 +34,16 @@
   import allMedias from '../../../static/json/media.json'
 
   // 素材模板
-  import flash from '../template/tpl-flash.vue'
-  import image from '../template/tpl-image.vue'
-  import relation2 from '../template/tpl-relation2.vue'
-  import relation1 from '../template/tpl-relation1.vue'
+  import flash from '../edit-template/tpl-flash.vue'
+  import image from '../edit-template/tpl-image.vue'
+  import relation2 from '../edit-template/tpl-relation2.vue'
+  import relation1 from '../edit-template/tpl-relation1.vue'
 
   export default {
     data () {
       return {
-        // 用于打包编译时去掉'/api'
-        upLoadUrl: '/api',
+        // 如果为生产环境则去掉'/api'
+        upLoadUrl: process.env.NODE_ENV === 'production' ? '' : 'api/',
         // 模板类型
         collVal: '',
         // 计划id

@@ -4,7 +4,7 @@
     <div class="content">
       <el-form :model="ruleForm" :rules="rules" label-position="left" label-width="150px" class="form" ref="new1form">
         <el-form-item label="计划名称" prop="name" required>
-          <el-input v-model.trim="ruleForm.name" maxlength="20"></el-input>
+          <el-input v-model.trim="ruleForm.name" :maxlength="20"></el-input>
         </el-form-item>
         <el-form-item label="选择分组" prop="group">
           <el-select
@@ -33,8 +33,10 @@
         <el-form-item label="投放日期" prop="date" class="date-time-range">
           <el-date-picker
             v-model="ruleForm.date"
-            range-separator="~"
+            minTime="17:31"
+            range-separator="至"
             type="datetimerange"
+            :picker-options="pickerOptions"
             placeholder="选择日期范围">
           </el-date-picker>
         </el-form-item>
@@ -94,12 +96,19 @@
         }
       }
       return {
+        // 禁止选择当前时间以前的
+        pickerOptions: {
+          disabledDate (time) {
+            console.log(time.getTime())
+            return time.getTime() < (Date.now() - 24 * 60 * 60 * 1000)
+          }
+        },
         ruleForm: {
           name: '',
           group: '',
           day: null,
           all: '',
-          date: [],
+          date: [new Date(), new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)],
           channel: null
         },
         // 验证规则
@@ -112,7 +121,10 @@
               required: true,
               type: 'array',
               // 深度验证
-              fields: {0: {type: 'date', message: '请选择投放日期', required: true}, 1: {type: 'date', message: '请选择投放日期', required: true}},
+              fields: {
+                0: {type: 'date', message: '请选择投放日期', required: true},
+                1: {type: 'date', message: '请选择投放日期', required: true}
+              },
               message: '请选择投放日期',
               trigger: 'blur'
             }

@@ -2,7 +2,7 @@
   <div class="tpl-relation">
     <el-collapse accordion @change="collapseChange" :value="collapseVal">
       <el-collapse-item name="relation2">
-        <template slot="title">关联信息模板2
+        <template slot="title">屏占比4:1 / 适用于电商、票务等信息
           <el-button class="button" size="small" @click.stop="edit" v-show="!isEdit && collapseVal==='relation2'">编辑
           </el-button>
           <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='relation2'">保存</el-button>
