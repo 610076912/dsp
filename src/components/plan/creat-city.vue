@@ -139,7 +139,7 @@
               type: 'citys',
               msg: this.checkedCitys
             })
-            this.$router.push('/creatMedia')
+            this.$router.push('/creatMediaType')
           }
           this.btnLoading = false
         })

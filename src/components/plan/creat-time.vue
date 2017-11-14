@@ -22,7 +22,8 @@
           </div>
         </div>
         <div class="time-right">
-          <module-header-compoent :title="`已选 ${timeNum} 个`" :del="true" @clearchose="timeCheckAll(false)"></module-header-compoent>
+          <module-header-compoent :title="`已选 ${timeNum} 个`" :del="true"
+                                  @clearchose="timeCheckAll(false)"></module-header-compoent>
           <time-bar :timeArr="checkedTime"></time-bar>
         </div>
       </div>
@@ -46,7 +47,8 @@
           </div>
         </div>
         <div class="week-right">
-          <module-header-compoent :title="`已选 ${weekNum} 个`" :del="true" @clearchose="weekCheckAll(false)"></module-header-compoent>
+          <module-header-compoent :title="`已选 ${weekNum} 个`" :del="true"
+                                  @clearchose="weekCheckAll(false)"></module-header-compoent>
           <week-bar :weekArr="checkedWeek"></week-bar>
         </div>
       </div>
@@ -164,17 +166,26 @@
           plan_id: this.$store.state.creatData.planId,
           time_plan: this.transformTime(this.checkedTime),
           week_plan: this.transformWeek(this.checkedWeek)
-        }).then(res => {
-          console.log(res)
-          if (res.code === 200) {
-            this.$store.commit('TIME', {
-              time: that.checkedTime,
-              week: that.checkedWeek
-            })
-            // console.log(this.$store.state.creatTime)
-            this.$router.push('/creatCity')
-          }
         })
+          .then(res => {
+            console.log(res)
+            if (res.code === 200) {
+              this.$store.commit('TIME', {
+                time: that.checkedTime,
+                week: that.checkedWeek
+              })
+              // console.log(this.$store.state.creatTime)
+              // 成功后调取媒体接口
+              return this.$http.post('/api2/upd_media_plan', {
+                plan_id: that.$store.state.creatData.planId
+              })
+            }
+          })
+          .then(res => {
+            if (res.code === 200) {
+              this.$router.push('/creatCity')
+            }
+          })
       },
       // 小时转换
       transformTime (arr) {

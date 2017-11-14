@@ -64,5 +64,47 @@
     "media_name": "搜狐视频",
     "media_url": "./static/img/souhu.png",
     "tpl": ["flash2"]
+  },
+  {
+    "media_id": 1012,
+    "media_name": "暴风TV",
+    "media_url": "./static/img/baofengTV.jpg",
+    "tpl": ["flash2"]
+  },
+  {
+    "media_id": 1013,
+    "media_name": "人人视频",
+    "media_url": "./static/img/renrenshipin.jpg",
+    "tpl": ["flash2"]
+  },
+  {
+    "media_id": 1014,
+    "media_name": "天翼视讯",
+    "media_url": "./static/img/tysx.jpg",
+    "tpl": ["flash2"]
+  },
+  {
+    "media_id": 1015,
+    "media_name": "PPTV",
+    "media_url": "./static/img/PPTV.jpg",
+    "tpl": ["flash2"]
+  },
+  {
+    "media_id": 1016,
+    "media_name": "百视通",
+    "media_url": "./static/img/baishitong.jpg",
+    "tpl": ["flash2"]
+  },
+  {
+    "media_id": 1017,
+    "media_name": "创维",
+    "media_url": "./static/img/chuangwei.jpg",
+    "tpl": ["flash2"]
+  },
+  {
+    "media_id": 1018,
+    "media_name": "酷开电视",
+    "media_url": "./static/img/kukai.jpg",
+    "tpl": ["flash2"]
   }
 ]

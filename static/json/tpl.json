@@ -1,6 +1,6 @@
 {
-  "flash": "http://image.bjvca.com/static/flash.mp4",
-  "image": "http://www.bjvca.com/video/image.mp4",
-  "relation1": "http://www.bjvca.com/video/relation1.mp4",
-  "relation2": "http://www.bjvca.com/video/relation2.mp4"
+  "flash": "tplFlash",
+  "image": "tplImg",
+  "relation1": "tplRich1",
+  "relation2": "tplRich2"
 }

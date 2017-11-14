@@ -480,8 +480,8 @@
         top: 0;
         z-index: 1;
         height: 100%;
-        img {
-          width: 100%;
+        video {
+          height: 100%;
         }
       }
       .ad-edit {

@@ -24,10 +24,13 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="计划每日预算" prop="day" required>
-          <el-input v-model="ruleForm.day"></el-input>
+        <el-form-item label="预算类型" required>
+          <el-radio-group v-model="ruleForm.budgetType">
+            <el-radio :label="0">日预算</el-radio>
+            <el-radio :label="1">总预算</el-radio>
+          </el-radio-group>
         </el-form-item>
-        <el-form-item label="计划总预算" prop="all" required>
+        <el-form-item :label="budgetText" prop="all" required>
           <el-input v-model="ruleForm.all"></el-input>
         </el-form-item>
         <el-form-item label="投放日期" prop="date" class="date-time-range">
@@ -47,6 +50,9 @@
           </el-button>
         </el-form-item>
       </el-form>
+      <ul class="meidas-show-wrap">
+        <li v-for="item in showMediaArr" :style="{backgroundImage:'url('+item.media_url+')'}"></li>
+      </ul>
     </div>
     <div class="border-bottom"></div>
   </div>
@@ -54,7 +60,13 @@
 
 <script type="text/ecmascript-6">
   import setps from './steps-component.vue'
+  import mediaJson from '../../../static/json/media.json'
 
+  const channelMedias = {
+    1: [1001, 1005, 1013, 1014, 1015],
+    2: [1001, 1002, 1004, 1015],
+    3: [1016, 1017, 1018, 1015, 1012, 1003]
+  }
   export default {
     name: 'creatBasics',
     props: {
@@ -64,17 +76,6 @@
     },
     data () {
       // 自定义判断总预算
-      let checkDay = (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('请填写每日预算'))
-        }
-        if (!/^\d+$/.test(value)) {
-          return callback(new Error('请输入数值'))
-        } else {
-          return callback()
-        }
-      }
-      // 自定义判断总预算
       let checkAll = (rule, value, callback) => {
         // 判断是否为空
         if (!value) {
@@ -83,17 +84,8 @@
         // 判断是否为数字
         if (!/^\d+$/.test(value)) {
           return callback(new Error('请输入数值'))
-        } else {
-          // 判断总预算要大于每日预算
-          if (!this.ruleForm.day) {
-            return callback(new Error('请先填写每日预算'))
-          } else {
-            if (this.ruleForm.day > this.ruleForm.all) {
-              return callback(new Error('请填写正确的数值'))
-            }
-          }
-          callback()
         }
+        callback()
       }
       return {
         // 禁止选择当前时间以前的
@@ -106,7 +98,7 @@
         ruleForm: {
           name: '',
           group: '',
-          day: null,
+          budgetType: 0,
           all: '',
           date: [new Date(), new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)],
           channel: null
@@ -114,7 +106,6 @@
         // 验证规则
         rules: {
           name: [{required: true, message: '请输入计划名称(20字符内)', trigger: 'blur', max: 10}],
-          day: [{validator: checkDay, trigger: 'blur'}],
           all: [{validator: checkAll, trigger: 'blur'}],
           date: [
             {
@@ -133,18 +124,33 @@
         },
         groupArray: ['分组1', '分组2', '分组3'],
         // 判断是否调修改接口
-        isEdit: false
+        isEdit: false,
+        // 展示media图标数据
+        showMediaArr: []
       }
     },
-    watch: {},
+    computed: {
+      budgetText () {
+        return this.ruleForm.budgetType === 0 ? '日预算' : '总预算'
+      }
+    },
     created () {
+      // 通过平台类型展示媒体类型
+      const that = this
+      channelMedias[this.activeName].forEach((citem) => {
+        mediaJson.forEach((mitem, index) => {
+          if (mitem.media_id === citem) {
+            that.showMediaArr.push(mediaJson[index])
+          }
+        })
+      })
       // 判断store里是否有数据
       let creatData = this.$store.state.creatData.creatBasice
       if (creatData.name) {
         // 读取vux里的数据
         this.ruleForm.name = creatData.name
         this.ruleForm.group = creatData.group
-        this.ruleForm.day = creatData.day
+        this.ruleForm.budgetType = creatData.budgetType
         this.ruleForm.all = creatData.all
         this.ruleForm.date = creatData.date
         this.activeName = creatData.channel
@@ -161,7 +167,7 @@
             const data = res.data
             this.ruleForm.name = data.plan_name
             this.ruleForm.group = data.group_id
-            this.ruleForm.day = data.plan_day_budget
+            this.ruleForm.budgetType = data.plan_budget_type
             this.ruleForm.all = data.plan_all_budget
             this.activeName = data.plan_channel
             this.$set(this.ruleForm.date, 0, new Date(data.plan_b_time))
@@ -180,16 +186,17 @@
         let that = this
         this.$refs['new1form'].validate((valid) => {
           // 如果验证通过则跳转下一个路由
-          let url, data
+          let url, data, mUrl // 基本设置接口url，基本设置数据，媒体接口url
           if (valid && !that.isEdit) {
             // 添加
             url = '/api2/add_plan'
+            mUrl = '/api2/add_media_plan'
             data = {
               plan_name: that.ruleForm.name,
               plan_b_time: that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'),
               plan_e_time: that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'),
-              plan_day_budget: that.ruleForm.day,
-              plan_all_budget: that.ruleForm.all,
+              plan_budget_type: that.ruleForm.budgetType,
+              plan_budget: that.ruleForm.all,
               plan_channel: that.activeName,
               group_id: that.ruleForm.group
             }
@@ -197,13 +204,14 @@
           if (valid && that.isEdit) {
             // 修改
             url = '/api2/upd_plan'
+            mUrl = '/api2/upd_media_plan'
             data = {
               plan_id: that.$store.state.creatData.planId,
               plan_name: that.ruleForm.name,
               plan_b_time: that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss'),
               plan_e_time: that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss'),
-              plan_day_budget: that.ruleForm.day,
-              plan_all_budget: that.ruleForm.all,
+              plan_budget_type: that.ruleForm.budgetType,
+              plan_budget: that.ruleForm.all,
               plan_channel: that.activeName,
               group_id: that.ruleForm.group
             }
@@ -218,6 +226,15 @@
                 // 保存活动数据
                 that.ruleForm.channel = that.activeName
                 this.$store.commit('BASICE', that.ruleForm)
+                // 成功后调取媒体接口
+                return this.$http.post(mUrl, {
+                  plan_id: that.$store.state.creatData.planId,
+                  channel_id_list: JSON.stringify(channelMedias[this.activeName])
+                })
+              }
+            })
+            .then(res => {
+              if (res.code === 200) {
                 this.$router.push('/creatScene')
               }
             })
@@ -309,10 +326,12 @@
     position: relative;
     padding-bottom: 100px;
     .content {
-      width: 600px;
+      width: 100%;
       padding: 20px 50px;
       overflow: hidden;
       .form {
+        width: 500px;
+        float: left;
         .button-wrap {
           position: absolute;
           bottom: 10px;
@@ -326,6 +345,24 @@
           }
           .next-btn {
             margin-left: 25px;
+          }
+        }
+      }
+      .meidas-show-wrap {
+        width: 550px;
+        height: 300px;
+        float: right;
+        overflow-y: auto;
+        li {
+          width: 170px;
+          height: 60px;
+          float: left;
+          margin: 0 20px 20px 0;
+          background-size: 100%;
+          background-position: center;
+          border: 1px solid #eee;
+          &:nth-of-type(3n) {
+            margin-right: 0;
           }
         }
       }

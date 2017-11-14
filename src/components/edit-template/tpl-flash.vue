@@ -10,7 +10,7 @@
           </el-button>
         </template>
         <div class="flash1">
-          <div class="ad-style" v-show="!isEdit"><img src="../../../static/img/flash150x150.png" alt=""></div>
+          <div class="ad-style" v-show="!isEdit"><video id="flashvideo" loop src="http://www.bjvca.com/video/flash.mp4"></video></div>
           <div class="ad-edit">
             <div class="upload-flash">
               <div class="flash-player1" v-if="conf_info.flash_src">
@@ -81,6 +81,8 @@
     },
     data () {
       return {
+        // video 对象
+        video: '',
         // token
         token: {Authorization: sessionStorage.getItem('token')},
         // 上传接口地址
@@ -107,6 +109,19 @@
       }
     },
     watch: {
+      'collapseVal' (val) {
+        if (val === 'flash') {
+          this.video = document.getElementById('flashvideo')
+          this.video.currentTime = 0
+          this.video.play()
+        } else {
+          this.video = document.getElementById('flashvideo')
+          let that = this
+          setTimeout(function () {
+            that.video.pause()
+          }, 500)
+        }
+      },
       'adCon' (val) {
         if (val && this.collapseVal === 'flash') {
           // this.isEdit = true
@@ -222,8 +237,8 @@
         top: 0;
         z-index: 1;
         height: 100%;
-        img {
-          width: 100%;
+        video {
+          height: 100%;
         }
       }
       .ad-edit {

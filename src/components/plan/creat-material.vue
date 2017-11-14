@@ -124,11 +124,11 @@
     },
     methods: {
       prev () {
-        const L = this.slide.left
+        let L = this.slide.left
         if (L < 0) this.slide.left = L + 100
       },
       next () {
-        const L = this.slide.left
+        let L = this.slide.left
         if (L > (100 - this.slide.width)) this.slide.left = L - 100
       },
       back () {
@@ -296,7 +296,9 @@
             border: 1px solid #c9c9c9
             text-align: center
             overflow: hidden
-
+            &:nth-of-type(5n) {
+              margin-right: 0;
+            }
             img {
               height: 100%
               width: auto
