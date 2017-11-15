@@ -1,24 +1,17 @@
 <template>
   <div id="login" @keyup.enter="login">
-    <div class="head">
-      <h1>智视DSP广告平台</h1>
-    </div>
-    <div class="con">
-      <div class="main-box">
-        <div class="main">
-          <div class="left"></div>
-          <div class="right">
-            <div class="loginCon">
-              <p class="title">用户登录</p>
-              <input class="user" type="text" placeholder="用户名" v-model="username">
-              <input class="pw" type="password" placeholder="密码" v-model="password">
-              <button class="btn" @click="login">{{ info }}</button>
-            </div>
-          </div>
-        </div>
+    <div class="con-wrap">
+      <div class="left">
+        <img src="../../assets/img/login-leftbg.png" alt="智视场景化投放平台">
+      </div>
+      <div class="right">
+        <h1>智视</h1>
+        <h2>Welcome!</h2>
+        <input type="text" class="username" placeholder="请输入用户名" v-model="username">
+        <input type="password" class="password" placeholder="请输入密码" v-model="password">
+        <button @click="login">登录</button>
       </div>
     </div>
-    <div class="foot">©2017北京视联通科技有限公司 京ICP备15041948号</div>
   </div>
 </template>
 
@@ -28,22 +21,22 @@
     data () {
       return {
         username: '',
-        password: '',
-        info: '登陆'
+        password: ''
       }
     },
     methods: {
       login () {
-        this.info = '正在登录...'
         const _this = this
         this.$http.post('/users/login', {
           user_name: this.username,
           password: this.password
         }).then(function (response) {
-          console.log(response)
-          sessionStorage.setItem('token', response.data.token)
-          sessionStorage.setItem('user', response.data.user_name)
-          _this.$router.push('/')
+          if (response.code === 200) {
+            console.log(response)
+            sessionStorage.setItem('token', response.data.token)
+            sessionStorage.setItem('user', response.data.user_name)
+            _this.$router.push('/')
+          }
         })
       }
     }
@@ -52,118 +45,95 @@
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
   #login {
-    width: 100%
-    height: 100%
-    position: absolute
-    left: 0
-    top: 0
-    background: #ffffff
-
-    .head {
-      width: 100%
-      height: 80px
-
-      h1 {
-        width: 1200px
-        height: 100%
-        line-height: 80px
-        margin: 0 auto
-        font-size: 30px
-        color: #4a89db
-        padding-left: 52px
-        background: url('../../assets/img/logo.png') no-repeat center left / auto 70%
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-image: url("../../assets/img/loginbg.png");
+    background-position: center;
+    background-size: cover;
+    .con-wrap {
+      width: 55%;
+      height: 60%;
+      min-height: 460px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      & > div {
+        float: left;
       }
-    }
-    .con {
-      width: 100%
-      height: calc(100% - 175px)
-
-      .main-box{
-        width: 100%
-        height: 50%
-        background: url('../../assets/img/loginbg.jpg') no-repeat top center / cover
-      }
-      .main {
-        width: 1200px
-        height: 100%
-        margin: 0 auto
-
-        .left {
-          width: 50%
-          height: 100%
-          float: left
-          background: url('../../assets/img/loginimg.png') no-repeat center center  / auto 70%
-        }
-        .right {
-          width: 50%
-          height: 100%
-          float: right
-        }
-        .loginCon {
-          width: 340px
-          height: 100%
-          color: #ffffff
-
-          .title {
-            height: 18px
-            line-height: 18px
-            margin: 9vh 0 5vh 0
-            font-size: 18px
-          }
-          .user, .pw, .btn {
-            width: 100%
-            height: 34px
-            margin-bottom: 10px
-            border: none
-            outline: none
-            -webkit-border-radius: 3px
-            -moz-border-radius: 3px
-            border-radius: 3px
-          }
-          .user, .pw {
-            padding: 0 14px
-            font-size: 14px
-            color: #ffffff
-            background: rgba(255, 255, 255, 0.5)
-          }
-          .btn {
-            background: rgba(0, 0, 0, 0.5)
-            color: #ffffff
-            letter-spacing: 6px
-            font-size: 14px
-          }
-          .btn:hover {
-            background: rgba(10, 10, 10, 0.5)
-            color: #dddddd
-          }
-          input:
-          :-webkit-input-placeholder {
-            color: #ffffff
-            font-size: 14px
-          }
-          input:-moz-placeholder {
-            color: #ffffff
-            font-size: 14px
-          }
-          input:
-          :-moz-placeholder {
-            color: #ffffff
-            font-size: 14px
-          }
-          input:-ms-input-placeholder {
-            color: #ffffff
-            font-size: 14px
-          }
+      .left {
+        width: 56%;
+        height: 100%;
+        img {
+          width: 100%;
+          height: 100%;
         }
       }
-    }
-    .foot {
-      width: 100%
-      height: 95px
-      border-top: 1px solid #dedede
-      text-align: center
-      line-height: 95px
-      font-size: 18px
+      .right {
+        width: 44%;
+        height: 100%;
+        background: #f7f7f7;
+        position: relative;
+        h1 {
+          font-size: 30px;
+          color: #8c98cc;
+          position: absolute;
+          top: 20%;
+          left: calc(50% - 30px);
+        }
+        h2 {
+          font-size: 26px;
+          color: #dfdfdf;
+          position: absolute;
+          top: 20%;
+          margin-top: 50px;
+          left: calc(50% - 58px);
+        }
+        .username, .password {
+          width: 57%;
+          height: 40px;
+          border-bottom: 1px solid #e0e0e0;
+          background-color: transparent;
+          text-align: center;
+          font-size: 14px;
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 18%;
+          bottom: 0;
+          margin: auto;
+          color: #6d6d6d;
+        }
+        .username {
+          margin-top: 150px;
+        }
+        .password {
+          margin-top: 200px;
+        }
+        button {
+          width: 55%;
+          height: 40px;
+          background: #8899c7;
+          border: none;
+          border-radius: 15px;
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 18%;
+          bottom: 0;
+          margin: auto;
+          margin-top: 300px;
+          color: #fff;
+          cursor: pointer;
+          outline: none;
+          box-shadow: 0 0 10px 0 #666666;
+        }
+      }
     }
   }
 </style>
