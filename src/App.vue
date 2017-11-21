@@ -4,7 +4,8 @@
       <div class="header-top">
         <div class="center">
           <div class="header-welcome">欢迎您，<span class="header-ggz">广告主</span><span class="header-name">{{username}} <i
-            class="el-icon-caret-bottom"></i></span><span class="logout" @click="signOut">安全退出</span></div>
+            class="el-icon-caret-bottom"></i></span><span class="logout" @click="signOut">安全退出</span>
+          </div>
         </div>
       </div>
       <div class="header-con">
@@ -50,7 +51,7 @@
     name: 'app',
     data () {
       return {
-        name: '王雨晨',
+        username: '',
         path: '首页'
       }
     },
@@ -84,7 +85,7 @@
 
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
+<style lang="stylus" rel="stylesheet/stylus" type="text/stylus" scoped>
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

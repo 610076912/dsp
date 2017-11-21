@@ -18,9 +18,8 @@
               :label="item.group_name"
               :value="item.group_id">
               <span style="float: left">{{item.group_name}}</span>
-              <span @click.stop="delGroup(item.group_id,item.group_name)"
-                    style="float: right; color: #8492a6; font-size: 10px"><i
-                class="el-icon-close"></i></span>
+              <span @click.stop="delGroup(item.group_id,item.group_name)" style="float: right; color: #8492a6; font-size: 10px">
+                <i class="el-icon-close"></i></span>
             </el-option>
           </el-select>
         </el-form-item>
@@ -61,7 +60,7 @@
 <script type="text/ecmascript-6">
   import setps from './steps-component.vue'
   import mediaJson from '../../../static/json/media.json'
-
+  // 移动，pc，大屏端对应的媒体
   const channelMedias = {
     1: [1001, 1005, 1013, 1014, 1015],
     2: [1001, 1002, 1004, 1015],
@@ -70,7 +69,7 @@
   export default {
     name: 'creatBasics',
     props: {
-      activeName: {
+      propsActiveName: {
         default: 1
       }
     },
@@ -88,6 +87,7 @@
         callback()
       }
       return {
+        activeName: this.propsActiveName,
         // 禁止选择当前时间以前的
         pickerOptions: {
           disabledDate (time) {
@@ -135,15 +135,6 @@
       }
     },
     created () {
-      // 通过平台类型展示媒体类型
-      const that = this
-      channelMedias[this.activeName].forEach((citem) => {
-        mediaJson.forEach((mitem, index) => {
-          if (mitem.media_id === citem) {
-            that.showMediaArr.push(mediaJson[index])
-          }
-        })
-      })
       // 判断store里是否有数据
       let creatData = this.$store.state.creatData.creatBasice
       if (creatData.name) {
@@ -155,6 +146,8 @@
         this.ruleForm.date = creatData.date
         this.activeName = creatData.channel
         this.isEdit = true
+        // 必须是获得了activeName这个值以后才能去生成图标所以要放到这里和ajax请求的回调中
+        this.showMedia()
       } else if (this.$store.state.creatData.planId) {
         // 请求服务器数据
         this.$http.get('/api2/get_plan', {
@@ -162,7 +155,6 @@
             plan_id: this.$store.state.creatData.planId
           }
         }).then(res => {
-          console.log(res)
           if (res.code === 200) {
             const data = res.data
             this.ruleForm.name = data.plan_name
@@ -174,13 +166,28 @@
             this.$set(this.ruleForm.date, 1, new Date(data.plan_e_time))
             this.isEdit = true
             this.$store.commit('BASICE', this.ruleForm)
+            // 必须是获得了activeName这个值以后才能去生成图标所以要放到ajax请求的回调中
+            this.showMedia()
           }
         })
+      } else {
+        this.showMedia()
       }
       // 获取活动分组
       this.queryGroupData()
     },
     methods: {
+      // 通过平台类型展示媒体类型
+      showMedia () {
+        const that = this
+        channelMedias[this.activeName].forEach((citem) => {
+          mediaJson.forEach((mitem, index) => {
+            if (mitem.media_id === citem) {
+              that.showMediaArr.push(mediaJson[index])
+            }
+          })
+        })
+      },
       // 下一步
       nextStep () {
         let that = this

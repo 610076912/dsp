@@ -2,7 +2,7 @@
   <div class="creat-mediatype">
     <steps :active="2"></steps>
     <div class="creat-media-content">
-      <creat-header title="媒体定向" text="直投媒体"></creat-header>
+      <creat-header title="媒体定向" text="视频类型"></creat-header>
       <div class="media-wrap">
         <div class="item-wrap" v-for="item in typeData">
           {{item.type}}

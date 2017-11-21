@@ -5,7 +5,9 @@
         <template slot="title">屏占比4:1 / 适用于电商、票务等信息
           <el-button class="button" size="small" @click.stop="edit" v-show="!isEdit && collapseVal==='relation2'">编辑
           </el-button>
-          <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='relation2'">保存</el-button>
+          <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='relation2'">
+            保存
+          </el-button>
         </template>
         <div class="relation">
           <div class="ad-style" v-show="!isEdit">
@@ -414,7 +416,9 @@
             line-height: 20px;
             cursor: pointer;
             overflow: hidden;
-
+            .avatar {
+              line-height: 80px;
+            }
             div, img {
               height: 100%;
               width: 100%;

@@ -9,8 +9,8 @@
         left: confinfo.position === 'left',
         center: confinfo.position === 'center',
         right: confinfo.position === 'right',
-        size150: confinfo.size === '150,150,i_flash1',
-        size210: confinfo.size === '210,90,i_flash2'}">
+        size150: confinfo.size === '150,150,f_size1',
+        size210: confinfo.size === '210,90,f_size2'}">
         <object id="swf"
           @mouseup="flashLink()"
           classid="clsid27CDB6E-AE6D-11cf-96B8-444553540000"
@@ -65,38 +65,38 @@
       img{
        width 100%
       }
-    }
-    .adPosition{
-      position: absolute
-      border: 1px solid #e4e4e4
-      background: rgba(256,256,256,0.5)
-      #swf{
-        height 100%
-        width 100%
+      .adPosition{
+        position: absolute
+        border: 1px solid #e4e4e4
+        background: rgba(256,256,256,0.5)
+        #swf{
+          height 100%
+          width 100%
+        }
       }
-    }
-    .size210{
-      width: 210px
-      height: 90px
-    }
-    .size150{
-      width: 150px
-      height: 150px
-    }
-    .center{
-      top 0
-      left 0
-      bottom 5%
-      right 0
-      margin auto
-    }
-    .left{
-      bottom 5%
-      left 3%
-    }
-    .right{
-      right 3%
-      bottom 5%
+      .size210{
+        width: 150px
+        height: 70px
+      }
+      .size150{
+        width: 100px
+        height: 100px
+      }
+      .center{
+        top 0
+        left 0
+        bottom -70%
+        right 0
+        margin auto
+      }
+      .left{
+        bottom 5%
+        left 3%
+      }
+      .right{
+        right 3%
+        bottom 5%
+      }
     }
   }
 </style>

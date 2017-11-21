@@ -187,17 +187,19 @@
       save (appType, confInfo) {
         // 模板保存
         // 判断是否为修改广告
-        if (this.currentTpl && this.chenkedTpl !== this.currentTpl) {
-          this.$confirm('保存新广告会替换之前设置的广告, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this.addMaterial(appType, confInfo)
-          })
-        } else {
-          this.addMaterial(appType, confInfo)
-        }
+//        if (this.currentTpl && this.chenkedTpl !== this.currentTpl) {
+//          this.$confirm('保存新广告会替换之前设置的广告, 是否继续?', '提示', {
+//            confirmButtonText: '确定',
+//            cancelButtonText: '取消',
+//            type: 'warning'
+//          }).then(() => {
+//            this.addMaterial(appType, confInfo)
+//          })
+//        } else {
+//          this.addMaterial(appType, confInfo)
+//        }
+        // todo 不判断是否添加过模板以后再改
+        this.addMaterial(appType, confInfo)
       },
       // 添加广告信息
       addMaterial (appType, confInfo) {

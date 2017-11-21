@@ -59,7 +59,6 @@
         <p class="minhead"><span>按地区</span></p>
         <div class="label">
           <span class="labels" v-for="item in positionInfo">{{ item.name }}</span>
-          <span class="labels">天津</span>
         </div>
       </div>
     </div>
@@ -74,7 +73,7 @@
       </div>
     </div>
     <div class="episode cons">
-      <p class="head"><span>剧集定向</span><b>
+      <p class="head"><span>视频类型</span><b>
         <router-link to="creatMediatype">编辑信息</router-link>
       </b></p>
       <div class="pro-box">

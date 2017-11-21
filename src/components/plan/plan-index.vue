@@ -92,6 +92,7 @@
             prop="time"
             :formatter="formatter"
             align="center"
+            show-overflow-tooltip
             width="138">
           </el-table-column>
           <el-table-column
@@ -286,11 +287,11 @@
       // 新建按钮
       creatNew () {
         this.$store.commit('CLEARCREATDATA', null)
-        this.$router.push({name: 'creatBasics', params: {activeName: this.activeName}})
+        this.$router.push({name: 'creatBasics', params: {propsActiveName: this.activeName}})
       },
       // 选项卡
       handleClick () {
-        console.log(this.activeName)
+        // console.log(this.activeName)
         this.getActiveList({channel: this.activeName})
       },
       // 当手动选择复选框时触发事件
@@ -369,7 +370,7 @@
       },
       // 格式化时间
       formatter (item) {
-        return new Date(item.plan_b_time).Format('yyyy-MM-dd hh:mm:ss') + ' ' + new Date(item.plan_e_time).Format('yyyy-MM-dd hh:mm:ss')
+        return new Date(item.plan_b_time).Format('yyyy-MM-dd hh:mm:ss') + ' -- ' + new Date(item.plan_e_time).Format('yyyy-MM-dd hh:mm:ss')
       }
     },
     components: {
