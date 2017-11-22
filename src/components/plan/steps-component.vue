@@ -6,7 +6,7 @@
       <el-steps :space="130" :active="active">
         <el-step class="el-step" title="基本设置" icon="my-yuan" @click.native="clickTo('/creatBasics')"></el-step>
         <el-step class="el-step" title="场景化设置" icon="my-yuan" @click.native="clickTo('/creatScene')"></el-step>
-        <el-step class="el-step" title="定向设置" icon="my-yuan" @click.native="clickTo('/creatCity')"></el-step>
+        <el-step class="el-step" title="定向设置" icon="my-yuan" @click.native="clickTo('/creatmediaType')"></el-step>
         <el-step class="el-step" title="投放设置" icon="my-yuan" @click.native="clickTo('/creatStrategy')"></el-step>
         <el-step class="el-step" title="广告素材" icon="my-yuan" @click.native="clickTo('/creatMaterial')"></el-step>
         <el-step class="el-step" title="活动预览" icon="my-yuan" @click.native="clickTo('/creatPreview')"></el-step>

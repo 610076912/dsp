@@ -2,55 +2,68 @@
   "mediaType": [
     {
       "type": "电影",
-      "type_id": "a"
+      "type_id": "a",
+      "type_class": "el-icon-my-dianying1"
     },
     {
       "type": "电视剧",
-      "type_id": "b"
+      "type_id": "b",
+      "type_class": "el-icon-my-dianshi"
     },
     {
       "type": "动漫",
-      "type_id": "c"
+      "type_id": "c",
+      "type_class": "el-icon-my-dongman"
     },
     {
       "type": "少儿",
-      "type_id": "d"
+      "type_id": "d",
+      "type_class": "el-icon-my-ertong"
     },
     {
       "type": "综艺",
-      "type_id": "e"
+      "type_id": "e",
+      "type_class": "el-icon-my-iconfontmaikefeng"
     },
     {
       "type": "体育",
-      "type_id": "f"
+      "type_id": "f",
+      "type_class": "el-icon-my-zuqiu"
     },
     {
       "type": "音乐",
-      "type_id": "g"
+      "type_id": "g",
+      "type_class": "el-icon-my-yinle"
     },
     {
       "type": "育儿",
-      "type_id": "h"
+      "type_id": "h",
+      "type_class": "el-icon-my-faxian_yuerbaodian"
     },
     {
       "type": "汽车",
-      "type_id": "i"
+      "type_id": "i",
+      "type_class": "el-icon-my-qiche"
     },
     {
       "type": "时尚",
-      "type_id": "j"
+      "type_id": "j",
+      "type_class": "el-icon-my-shishang"
     },
     {
       "type": "科技",
-      "type_id": "k"
+      "type_id": "k",
+      "type_class": "el-icon-my-keji"
     },
     {
       "type": "旅游",
-      "type_id": "l"
+      "type_id": "l",
+      "type_class": "el-icon-my-plane"
     },
     {
       "type": "纪录片",
-      "type_id": "m"
+      "type_id": "m",
+      "type_class": "el-icon-my-dianying"
     }
   ]
 }

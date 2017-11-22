@@ -50,7 +50,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    background-image: url("../../assets/img/loginbg.png");
+    background-image: url("../../assets/img/loginbg.jpg");
     background-position: center;
     background-size: cover;
     .con-wrap {

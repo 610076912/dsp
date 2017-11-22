@@ -157,10 +157,11 @@
         }).then(res => {
           if (res.code === 200) {
             const data = res.data
+            console.log(data)
             this.ruleForm.name = data.plan_name
             this.ruleForm.group = data.group_id
             this.ruleForm.budgetType = data.plan_budget_type
-            this.ruleForm.all = data.plan_all_budget
+            this.ruleForm.all = data.plan_budget_type === 1 ? data.plan_all_budget : data.plan_day_budget
             this.activeName = data.plan_channel
             this.$set(this.ruleForm.date, 0, new Date(data.plan_b_time))
             this.$set(this.ruleForm.date, 1, new Date(data.plan_e_time))

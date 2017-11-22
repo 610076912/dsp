@@ -1,9 +1,9 @@
 <template>
   <div class="module-header-component">
     <span class="module-header-component-title">{{title}}</span>
-    <el-checkbox v-if="check" v-model="checkStatus" @change="change" class="module-header-component-check">全选
-    </el-checkbox>
     <span v-if="del" class="module-header-component-del" @click="clearchose"><i class="el-icon-delete"></i>清空选择</span>
+    <span v-if="check" class="module-header-component-all" @click="chackAll"><i
+      class="el-icon-circle-check"></i>所有时间</span>
   </div>
 </template>
 
@@ -41,7 +41,7 @@
       }
     },
     methods: {
-      change () {
+      chackAll () {
         if (this.check) {
           this.$emit('checkall', this.checkStatus)
         }
@@ -65,14 +65,15 @@
       font-size: 14px;
       line-height: 40px;
     }
-    .module-header-component-check {
+    .module-header-component-all {
       display: inline-block;
       float: right;
+      margin-right: 15px;
+      cursor: pointer;
     }
     .module-header-component-del {
       float: right;
       cursor: pointer;
-      color: #169bd5;
     }
   }
 </style>

@@ -42,6 +42,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  // todo 重写！
   import setps from './steps-component.vue'
   import header from './header-component.vue'
   import moduleHeaderCompoent from './module-header-component'
@@ -176,7 +177,7 @@
         }).then(res => {
           if (res.code === 200) {
             this.$store.commit('SCENE', resClassArray)
-            this.$router.push('/creatTime')
+            this.$router.push('/creatMediaType')
           }
         })
       },

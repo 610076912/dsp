@@ -2,32 +2,44 @@
   <div class="weekbar-component">
     <span>周期</span>
     <div class="line"></div>
-    <div class="box" :class="{'box-active':weekArr[0]}">周一</div>
+    <div class="box" :class="{'box-active':weekArr[0]}" @click="clickWeek(0)">周一</div>
     <div class="line"></div>
-    <div class="box" :class="{'box-active':weekArr[1]}">周二</div>
+    <div class="box" :class="{'box-active':weekArr[1]}" @click="clickWeek(1)">周二</div>
     <div class="line"></div>
-    <div class="box" :class="{'box-active':weekArr[2]}">周三</div>
+    <div class="box" :class="{'box-active':weekArr[2]}" @click="clickWeek(2)">周三</div>
     <div class="line"></div>
-    <div class="box" :class="{'box-active':weekArr[3]}">周四</div>
+    <div class="box" :class="{'box-active':weekArr[3]}" @click="clickWeek(3)">周四</div>
     <div class="line"></div>
-    <div class="box" :class="{'box-active':weekArr[4]}">周五</div>
+    <div class="box" :class="{'box-active':weekArr[4]}" @click="clickWeek(4)">周五</div>
     <div class="line"></div>
-    <div class="box" :class="{'box-active':weekArr[5]}">周六</div>
+    <div class="box" :class="{'box-active':weekArr[5]}" @click="clickWeek(5)">周六</div>
     <div class="line"></div>
-    <div class="box" :class="{'box-active':weekArr[6]}">周日</div>
+    <div class="box" :class="{'box-active':weekArr[6]}" @click="clickWeek(6)">周日</div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   export default {
     props: {
-      weekArr: {
+      pWeekArr: {
         type: Array,
         default: [0, 0, 0, 0, 0, 0]
+      },
+      canClick: {
+        type: Boolean,
+        default: false
       }
     },
     data () {
-      return {}
+      return {
+        weekArr: this.pWeekArr
+      }
+    },
+    methods: {
+      clickWeek (data) {
+        if (!this.canClick) return
+        this.$set(this.weekArr, data, this.weekArr[data] === 1 ? 0 : 1)
+      }
     }
   }
 </script>
@@ -55,6 +67,7 @@
       line-height 25px
       color: #169bd5
       font-size 14px
+      cursor pointer
     .box-active
       background #169bd5
       color: #fff

@@ -4,13 +4,11 @@
     <div class="creat-media-content">
       <creat-header title="媒体定向" text="视频类型"></creat-header>
       <div class="media-wrap">
-        <div class="item-wrap" v-for="item in typeData">
+        <el-checkbox v-model="isCheckedAll" @change="checkedAll">全选</el-checkbox>
+        <div class="item-wrap" v-for="(item,index) in typeData" :class="{active: liClass[index]}"
+             @click="clickItem(index, item.type_id)">
+          <i :class="item.type_class"></i>
           {{item.type}}
-          <el-checkbox v-model="chosedType" :label="item.type_id">{{''}}</el-checkbox>
-        </div>
-        <div class="item-wrap all-checked">
-          全选
-          <el-checkbox v-model="isCheckedAll" @change="checkedAll"></el-checkbox>
         </div>
       </div>
     </div>
@@ -33,7 +31,8 @@
       return {
         chosedType: [],
         isCheckedAll: false,
-        typeData: null
+        typeData: null,
+        liClass: [false, false, false, false, false, false, false, false, false, false, false, false, false]
       }
     },
     created () {
@@ -57,7 +56,38 @@
       // 获取类型
       this.typeData = mediaType
     },
+    watch: {
+      chosedType: {
+        handler: 'reloadClassArr',
+        deep: true
+      }
+    },
     methods: {
+      // 根据获取的chosedType来改变class数组
+      reloadClassArr (chosedType) {
+        const that = this
+        this.liClass = [false, false, false, false, false, false, false, false, false, false, false, false, false]
+        chosedType.forEach(function (item) {
+          that.typeData.forEach(function (aItem, index) {
+            if (item === aItem.type_id) {
+              that.$set(that.liClass, index, true)
+            }
+          })
+        })
+        console.log(this.chosedType)
+      },
+      // 点击标签
+      clickItem (index, typeId) {
+        this.$set(this.liClass, index, !this.liClass[index])
+        let indexof = this.chosedType.indexOf(typeId)
+        if (this.liClass[index] && indexof === -1) {
+          this.chosedType.push(typeId)
+        } else {
+          if (indexof !== -1) {
+            this.chosedType.splice(indexof, 1)
+          }
+        }
+      },
       // 全选
       checkedAll () {
         if (this.isCheckedAll) {
@@ -86,7 +116,7 @@
           console.log(res)
           if (res.code === 200) {
             this.$store.commit('MEDIATYPE', this.chosedType)
-            this.$router.push('/creatStrategy')
+            this.$router.push('/creatTime ')
           }
         })
       },
@@ -102,6 +132,7 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
+  @import url('../../assets/font/iconfont.css')
   .creat-mediatype {
     .creat-media-content {
       width: 100%;
@@ -109,32 +140,44 @@
       border-bottom: 1px solid #e4e4e4;
       .media-wrap {
         width: 100%;
-        min-height: 250px;
+        min-height: 280px;
         position: relative;
         padding: 10px 0;
-        overflow: hidden;
         margin-bottom: 70px;
         padding-bottom: 60px;
+        .el-checkbox {
+          position: absolute;
+          top: -55px;
+          right: 50px;
+        }
+        .active {
+          border-color: #169bd5 !important;
+          color: #169bd5 !important;
+          background-color: #fff !important;
+        }
         .item-wrap {
-          width: 23%;
-          height: 60px;
+          width: 14%;
+          height: 50px;
           float: left;
-          margin-right: 30px;
-          border: 1px solid #e4e4e4;
+          background: #f2f2f2;
+          color: #515151;
+          margin-right: 35px;
+          border: 1px solid #797979;
+          border-radius: 3px;
           margin-bottom: 24px;
           padding-left: 20px;
-          line-height 60px;
+          line-height 50px;
           position: relative;
-          label {
-            position absolute;
-            right: 15px;
+          text-indent: 10px;
+          font-size: 18px;
+          cursor: pointer;
+          transition: all .5s;
+          i {
+            font-size: 24px;
           }
-          &:nth-child(4n) {
+          &:nth-of-type(6n) {
             margin-right: 0;
           }
-        }
-        .all-checked {
-          width: 100px;
         }
       }
     }

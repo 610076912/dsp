@@ -4,52 +4,59 @@
     <div class="content">
       <creat-header title="时间周期定向" text="按时间"></creat-header>
       <div class="time">
-        <div class="time-left">
-          <module-header-compoent
-            title="时间"
-            :check="true"
-            :checkBox="timeCheckBox"
-            @checkall="timeCheckAll"></module-header-compoent>
-          <div class="checkbox-wrap">
-            <el-checkbox
-              v-for="(i, index) in timeArray.hour"
-              :true-label="1"
-              :false-label="0"
-              :key="i"
-              v-model="checkedTime[index]">
-              {{i}}
-            </el-checkbox>
-          </div>
-        </div>
         <div class="time-right">
-          <module-header-compoent :title="`已选 ${timeNum} 个`" :del="true"
+          <module-header-compoent :title="`已选 ${timeNum} 个`" :check="true" :del="true"
                                   @clearchose="timeCheckAll(false)"></module-header-compoent>
-          <time-bar :timeArr="checkedTime"></time-bar>
+          <div class="time-wrap">
+            <time-bar :canClick="true" :pTimeArr="checkedTime"></time-bar>
+          </div>
+          <ul class="time-icon">
+            <li>
+              <img src="../../assets/img/time-icon/11.png">
+              <div>
+                <span>黄金时间：7:00 ~ 10:00</span>
+                <p>目标用户：上班路上玩手机</p>
+              </div>
+            </li>
+            <li>
+              <img src="../../assets/img/time-icon/11.png">
+              <div>
+                <span>黄金时间：7:00 ~ 10:00</span>
+                <p>目标用户：上班路上玩手机</p>
+              </div>
+            </li>
+            <li>
+              <img src="../../assets/img/time-icon/11.png">
+              <div>
+                <span>黄金时间：7:00 ~ 10:00</span>
+                <p>目标用户：上班路上玩手机</p>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
       <creat-header title="" text="按周期"></creat-header>
       <div class="week">
-        <div class="week-left">
-          <module-header-compoent
-            title="周期"
-            :check="true"
-            :checkBox="weekCheckBox"
-            @checkall="weekCheckAll"></module-header-compoent>
-          <div class="checkbox-wrap">
-            <el-checkbox
-              v-for="(item, index) in timeArray.week"
-              :true-label="1"
-              :false-label="0"
-              :key="item"
-              v-model="checkedWeek[index]">
-              {{item}}
-            </el-checkbox>
-          </div>
-        </div>
         <div class="week-right">
-          <module-header-compoent :title="`已选 ${weekNum} 个`" :del="true"
+          <module-header-compoent :title="`已选 ${weekNum} 个`" :check="true" :del="true"
                                   @clearchose="weekCheckAll(false)"></module-header-compoent>
-          <week-bar :weekArr="checkedWeek"></week-bar>
+          <div class="week-wrap">
+            <week-bar :canClick="true" :pWeekArr="checkedWeek"></week-bar>
+          </div>
+          <ul class="week-icon">
+            <li>
+              <img src="../../assets/img/time-icon/012.png" alt="">
+            </li>
+            <li>
+              <img src="../../assets/img/time-icon/012.png" alt="">
+            </li>
+            <li>
+              <img src="../../assets/img/time-icon/012.png" alt="">
+            </li>
+            <li>
+              <img src="../../assets/img/time-icon/012.png" alt="">
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -61,6 +68,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  // todo 需要借口返回channel_id字段，以此来展示相应的图片
+  // todo 改变了交互方式，需要修改获取数据的相关逻辑
   import steps from './steps-component.vue'
   import header from './header-component.vue'
   import moduleHeaderCompoent from './module-header-component'
@@ -252,49 +261,86 @@
       border-bottom: 1px solid #cacaca;
       .time, .week {
         width: 100%;
-        height: 670px;
-        .time-left, .week-left {
-          width: 340px;
-          background: #f9f9f9;
-          padding: 15px 35px 30px;
-          float left;
-          height: 662px;
-          .checkbox-wrap {
-            width: 100%;
-            max-height: 90%;
-            overflow-y: auto;
-            &::-webkit-scrollbar {
-              width: 0;
-            }
-            .el-checkbox {
-              width: 100%;
-              height: 47px;
-              border: 1px solid #cacaca;
-              border-bottom: none;
-              margin-left: 0;
-              line-height: 40px;
-              background: #fff;
-              &:nth-last-child(1) {
-                border-bottom: 1px solid #cacaca;
-              }
-              .el-checkbox__input {
-                position: relative;
-                left: 240px;
-              }
-            }
-          }
-        }
+        height: 370px;
         .time-right, .week-right {
-          width: calc(100% - 340px)
-          height: 662px;
+          width: 100%;
+          height: 370px;
           float: left;
           border: 1px solid #f9f9f9;
           padding: 14px 30px;
         }
-        .week-right, .week-left {
-          height: 427px;
+        .time-right {
+          .time-wrap {
+            width: calc(100% - 350px)
+            float left
+          }
+          .time-icon {
+            float left
+            margin-top 30px
+            margin-left: 40px;
+            li {
+              width: 310px;
+              height: 70px;
+              border: 1px solid #f2f2f2;
+              border-radius: 5px;
+              padding: 5px;
+              margin-bottom: 15px;
+              div {
+                float: right;
+                padding: 10px 15px;
+                width: calc(100% - 64px);
+                height: 100%;
+                border-left: 1px solid #f2f2f2;
+                text-align: center;
+                span {
+                  display: inline-block;
+                  width: 170px;
+                  background: #169bd5;
+                  color: #fff;
+                  height: 20px;
+                  line-height: 20px;
+                }
+                p {
+                  display inline-block
+                  width: 170px;
+                  text-align left
+                  margin-top: 6px;
+                }
+              }
+            }
+          }
+        }
+        .week-right {
+          height: 400px;
+
           .weekbar-component {
             margin-top: 110px;
+          }
+          .week-wrap {
+            width: calc(100% - 350px)
+            float left;
+          }
+          .week-icon {
+            float: left;
+            margin-top: 40px;
+            padding-left: 20px;
+            width: 340px;
+            li {
+              width: 150px;
+              height: 100px;
+              border: 1px solid #f2f2f2;
+              border-radius: 5px;
+              padding: 5px 2px;
+              float: left;
+              margin-bottom: 15px;
+              img {
+                width: 100%;
+                height: 100%;
+              }
+              &:nth-of-type(2n) {
+                margin-left: 20px;
+              }
+            }
           }
         }
       }
