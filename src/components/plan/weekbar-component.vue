@@ -23,7 +23,9 @@
     props: {
       pWeekArr: {
         type: Array,
-        default: [0, 0, 0, 0, 0, 0]
+        default () {
+          return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        }
       },
       canClick: {
         type: Boolean,
@@ -33,6 +35,11 @@
     data () {
       return {
         weekArr: this.pWeekArr
+      }
+    },
+    watch: {
+      'pWeekArr': function (val) {
+        this.weekArr = val
       }
     },
     methods: {

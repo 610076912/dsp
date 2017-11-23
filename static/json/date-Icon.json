@@ -4,49 +4,49 @@
       {
         "time": "7:00 ~ 10:00",
         "text": "上班路上玩手机",
-        "img": "11"
+        "img": "./static/img/time-icon/11.png"
       },
       {
         "time": "12:00 ~ 14:00",
         "text": "午休时玩手机",
-        "img": "12"
+        "img": "./static/img/time-icon/12.png"
       },
       {
         "time": "18:00 ~ 23:00",
         "text": "下班后入睡前玩手机",
-        "img": "13"
+        "img": "./static/img/time-icon/13.png"
       }
     ],
     "2": [
       {
         "time": "20:00 ~ 23:00",
         "text": "下班后追剧",
-        "img": "21"
+        "img": "./static/img/time-icon/21.png"
       },
       {
         "time": "8:00 ~ 23:00",
         "text": "周末追剧",
-        "img": "22"
+        "img": "./static/img/time-icon/22.png"
       }
     ],
     "3": [
       {
         "time": "20:00 ~ 23:00",
         "text": "下班后追剧",
-        "img": "31"
+        "img": "./static/img/time-icon/31.png"
       },
       {
         "time": "8:00 ~ 23:00",
         "text": "周末追剧",
-        "img": "32"
+        "img": "./static/img/time-icon/32.png"
       }
     ]
   },
   "week": {
-    "12": ["0121", "0122"],
-    "1" : ["011","012"],
-    "2" : ["021","022","023"],
-    "3" : ["031","032"],
-    "4" : ["041"]
+    "12": ["./static/img/time-icon/0121.png", "./static/img/time-icon/0122.png"],
+    "1" : ["./static/img/time-icon/011.png","./static/img/time-icon/012.png"],
+    "2" : ["./static/img/time-icon/021.png","./static/img/time-icon/022.png","./static/img/time-icon/023.png"],
+    "3" : ["./static/img/time-icon/031.png","./static/img/time-icon/032.png"],
+    "4" : ["./static/img/time-icon/041.png"]
   }
 }

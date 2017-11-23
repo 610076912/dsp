@@ -68,7 +68,9 @@
     props: {
       pTimeArr: {
         type: Array,
-        default: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        default () {
+          return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        }
       },
       canClick: {
         type: Boolean,
@@ -81,7 +83,8 @@
       }
     },
     watch: {
-      data: function () {
+      'pTimeArr': function (val) {
+        this.timeArr = val
       }
     },
     methods: {
@@ -107,7 +110,7 @@
       width 6%
       position relative
       top: -6px
-      margin-top:80px
+      margin-top: 80px
       .left-line
         width: 60%
         border-bottom 2px dashed #169bd5

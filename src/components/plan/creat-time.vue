@@ -8,28 +8,14 @@
           <module-header-compoent :title="`已选 ${timeNum} 个`" :check="true" :del="true"
                                   @clearchose="timeCheckAll(false)"></module-header-compoent>
           <div class="time-wrap">
-            <time-bar :canClick="true" :pTimeArr="checkedTime"></time-bar>
+            <time-bar :canClick="true" :pTimeArr="checkedTime" ref="timeBar"></time-bar>
           </div>
           <ul class="time-icon">
-            <li>
-              <img src="../../assets/img/time-icon/11.png">
+            <li v-for="item in timeIcon">
+              <img :src="item.img">
               <div>
-                <span>黄金时间：7:00 ~ 10:00</span>
-                <p>目标用户：上班路上玩手机</p>
-              </div>
-            </li>
-            <li>
-              <img src="../../assets/img/time-icon/11.png">
-              <div>
-                <span>黄金时间：7:00 ~ 10:00</span>
-                <p>目标用户：上班路上玩手机</p>
-              </div>
-            </li>
-            <li>
-              <img src="../../assets/img/time-icon/11.png">
-              <div>
-                <span>黄金时间：7:00 ~ 10:00</span>
-                <p>目标用户：上班路上玩手机</p>
+                <span>{{item.time}}</span>
+                <p>目标用户：{{item.text}}</p>
               </div>
             </li>
           </ul>
@@ -41,20 +27,11 @@
           <module-header-compoent :title="`已选 ${weekNum} 个`" :check="true" :del="true"
                                   @clearchose="weekCheckAll(false)"></module-header-compoent>
           <div class="week-wrap">
-            <week-bar :canClick="true" :pWeekArr="checkedWeek"></week-bar>
+            <week-bar :canClick="true" :pWeekArr="checkedWeek" ref="weekBar"></week-bar>
           </div>
           <ul class="week-icon">
-            <li>
-              <img src="../../assets/img/time-icon/012.png" alt="">
-            </li>
-            <li>
-              <img src="../../assets/img/time-icon/012.png" alt="">
-            </li>
-            <li>
-              <img src="../../assets/img/time-icon/012.png" alt="">
-            </li>
-            <li>
-              <img src="../../assets/img/time-icon/012.png" alt="">
+            <li v-for="item in weekIcon">
+              <img :src="item" alt="">
             </li>
           </ul>
         </div>
@@ -68,14 +45,13 @@
 </template>
 
 <script type="text/ecmascript-6">
-  // todo 需要借口返回channel_id字段，以此来展示相应的图片
-  // todo 改变了交互方式，需要修改获取数据的相关逻辑
   import steps from './steps-component.vue'
   import header from './header-component.vue'
   import moduleHeaderCompoent from './module-header-component'
   import timeBar from './timebar-component.vue'
   import weekBar from './weekbar-component.vue'
   import hourData from '../../../static/json/timeData.json'
+  import dateIcon from '../../../static/json/date-Icon.json'
 
   const strTOarr = hourData.timeForStr
   export default {
@@ -90,32 +66,41 @@
         weekCheckBox: false,
         // 当前选中了几个
         timeNum: 0,
-        weekNum: 0
+        weekNum: 0,
+        // 平台类型channel_id 移动pc大屏
+        channelId: 0,
+        timeIcon: [],
+        weekIcon: []
       }
     },
     created () {
+      // 获取当前月份，展示节日图标
+      const currentM = new Date().getMonth() + 1
+      this.weekIcon = dateIcon.week[currentM]
+
       this.timeArray = hourData.time
       // 判断vuex中是否有数据
       let creatData = this.$store.state.creatData.creatTime
       // console.log(creatData)
       if (creatData) {
-        console.log(creatData.time, creatData.week)
         this.checkedTime = creatData.time
         this.checkedWeek = creatData.week
+        this.channelId = creatData.channelId
       } else if (this.$store.state.creatData.planId) {
         this.$http.get('/api2/get_time_plan', {
           params: {
             plan_id: this.$store.state.creatData.planId
           }
         }).then(res => {
-          console.log(res)
           if (res.code === 200) {
             this.checkedTime = this.transformTime(res.data.plan_time)
             this.checkedWeek = this.transformWeek(res.data.plan_week)
+            this.channelId = res.data.plan_channel
             // 保存Vuex
             this.$store.commit('TIME', {
               time: this.checkedTime,
-              week: this.checkedWeek
+              week: this.checkedWeek,
+              channelId: this.channelId
             })
           }
         })
@@ -137,20 +122,23 @@
         })
         this.weekNum = chosedNum.length
         this.weekCheckBox = chosedNum.length === val.length
+      },
+      'channelId' (val) {
+        this.timeIcon = dateIcon.time[val]
       }
     },
     methods: {
       timeCheckAll (data) {
-        console.log(data)
         data ? this.checkedTime = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] : this.checkedTime = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       },
       weekCheckAll (data) {
-        console.log(data)
         data ? this.checkedWeek = [1, 1, 1, 1, 1, 1, 1] : this.checkedWeek = [0, 0, 0, 0, 0, 0, 0]
-        console.log(this.checkedWeek)
       },
       // 下一步C
       nextStep () {
+        // 点击下一步的时候拿时间和周期数据
+        this.checkedTime = this.$refs.timeBar.$data.timeArr
+        this.checkedWeek = this.$refs.weekBar.$data.weekArr
         let isTime = this.checkedTime.every(function (item) {
           return item === 0
         })
@@ -177,13 +165,12 @@
           week_plan: this.transformWeek(this.checkedWeek)
         })
           .then(res => {
-            console.log(res)
             if (res.code === 200) {
               this.$store.commit('TIME', {
                 time: that.checkedTime,
-                week: that.checkedWeek
+                week: that.checkedWeek,
+                channelId: that.channelId
               })
-              // console.log(this.$store.state.creatTime)
               // 成功后调取媒体接口
               return this.$http.post('/api2/upd_media_plan', {
                 plan_id: that.$store.state.creatData.planId
@@ -215,7 +202,6 @@
             }
           })
         }
-        console.log(res)
         return res
       },
       // 周期转换
@@ -237,7 +223,6 @@
             }
           })
         }
-        console.log(res)
         return res
       }
     },
