@@ -53,6 +53,7 @@
     background-image: url("../../assets/img/loginbg.jpg");
     background-position: center;
     background-size: cover;
+    background-color: #ffffff;
     .con-wrap {
       width: 55%;
       height: 60%;
