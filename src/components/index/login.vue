@@ -49,7 +49,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    background: url("../../assets/img/loginbg.jpg") #fff;
+    background-image: url("../../assets/img/loginbg.jpg");
     background-position: center;
     background-size: cover;
     background-color: #ffffff;
