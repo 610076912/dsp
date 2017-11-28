@@ -3,13 +3,12 @@
     <div class="con-wrap">
       <div class="left">
         <img src="../../assets/img/login-leftbg.png" alt="智视场景化投放平台">
-      </div>
-      <div class="right">
-        <h1>智视</h1>
-        <h2>Welcome!</h2>
-        <input type="text" class="username" placeholder="请输入用户名" v-model="username">
-        <input type="password" class="password" placeholder="请输入密码" v-model="password">
-        <button @click="login">登录</button>
+        <div class="right">
+          <h1>登录</h1>
+          <input type="text" class="username" placeholder="请输入用户名" v-model="username">
+          <input type="password" class="password" placeholder="请输入密码" v-model="password">
+          <button @click="login">登录</button>
+        </div>
       </div>
     </div>
   </div>
@@ -54,9 +53,8 @@
     background-position: center;
     background-size: cover;
     .con-wrap {
-      width: 55%;
-      height: 60%;
-      min-height: 460px;
+      width: 612px;
+      height: 366px;
       position: absolute;
       left: 0;
       right: 0;
@@ -68,7 +66,7 @@
         float: left;
       }
       .left {
-        width: 56%;
+        width: 100%;
         height: 100%;
         img {
           width: 100%;
@@ -76,63 +74,66 @@
         }
       }
       .right {
-        width: 44%;
+        width: 50%;
         height: 100%;
         background: #f7f7f7;
-        position: relative;
+        position: absolute;
+        right: 0;
+        top: 0;
+        border-radius: 4px;
         h1 {
           font-size: 30px;
-          color: #8c98cc;
+          color: #555555;
           position: absolute;
-          top: 20%;
+          top: 12%;
           left: calc(50% - 30px);
         }
-        h2 {
-          font-size: 26px;
-          color: #dfdfdf;
-          position: absolute;
-          top: 20%;
-          margin-top: 50px;
-          left: calc(50% - 58px);
-        }
         .username, .password {
-          width: 57%;
-          height: 40px;
-          border-bottom: 1px solid #e0e0e0;
+          width: 60%;
+          height: 35px;
+          border: 1px solid #e1e1e1;
+          border-radius: 3px;
           background-color: transparent;
-          text-align: center;
+          text-indent: 15px;
           font-size: 14px;
           position: absolute;
           left: 0;
           right: 0;
-          top: 18%;
+          top: 8%;
           bottom: 0;
           margin: auto;
           color: #6d6d6d;
+          transition: all .5s;
+          &:focus {
+            border-color: #09c0ab;
+            box-shadow: 0px 0px 2px #09c0ab;
+          }
         }
         .username {
-          margin-top: 150px;
+          margin-top: 120px;
         }
         .password {
-          margin-top: 200px;
+          margin-top: 170px;
         }
         button {
-          width: 55%;
-          height: 40px;
-          background: #8899c7;
+          width: 60%;
+          height: 35px;
+          background-image: url("../../assets/img/logbtnbg.png");
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
           border: none;
-          border-radius: 15px;
+          border-radius: 2px;
           position: absolute;
           left: 0;
           right: 0;
           top: 18%;
           bottom: 0;
           margin: auto;
-          margin-top: 300px;
+          margin-top: 210px;
           color: #fff;
           cursor: pointer;
           outline: none;
-          box-shadow: 0 0 10px 0 #666666;
+          box-shadow: 0 0 1px 0 rgba(74 111 205 .6);
         }
       }
     }
