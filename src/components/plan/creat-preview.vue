@@ -41,13 +41,13 @@
       <div class="pro-box">
         <p class="minhead"><span>小时</span></p>
         <div class="label">
-          <time-bar :timeArr="checkedTime"></time-bar>
+          <time-bar :pTimeArr="checkedTime"></time-bar>
         </div>
       </div>
       <div class="pro-box">
         <p class="minhead"><span>星期</span></p>
         <div class="label">
-          <week-bar :weekArr="checkedWeek"></week-bar>
+          <week-bar :pWeekArr="checkedWeek"></week-bar>
         </div>
       </div>
     </div>
@@ -238,6 +238,7 @@
             // 投放时间
             _this.checkedTime = _this.transformTime(result.timeInfo_3.plan_time)
             _this.checkedWeek = _this.transformWeek(result.timeInfo_3.plan_week)
+            console.log(_this.checkedTime, _this.checkedWeek)
           }
           if (result.regionInfo_4) {
             // 地理位置定向
@@ -260,7 +261,6 @@
                 }
               }
             }
-            console.log(_this.meidaInfo)
           }
           if (result.classInfo_6) {
             // 剧集定向
@@ -274,15 +274,12 @@
             }
           }
           if (result.strategyInfo_7) {
-            console.log(result.strategyInfo_7)
             // 投放策略
             _this.strategy = result.strategyInfo_7
-            console.log(_this.strategy)
           }
           if (result.adConfInfo_8) {
             // 广告信息
             _this.materialInfo = result.adConfInfo_8
-            console.log(_this.materialInfo)
           }
         }
       })
@@ -370,7 +367,6 @@
               }
             }
           })
-          console.log(res)
           return res
         }
       },

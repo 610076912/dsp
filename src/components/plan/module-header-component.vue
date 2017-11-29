@@ -2,8 +2,7 @@
   <div class="module-header-component">
     <span class="module-header-component-title">{{title}}</span>
     <span v-if="del" class="module-header-component-del" @click="clearchose"><i class="el-icon-delete"></i>清空选择</span>
-    <span v-if="check" class="module-header-component-all" @click="chackAll"><i
-      class="el-icon-circle-check"></i>所有时间</span>
+    <span v-if="check" class="module-header-component-all" @click="chackAll"><i class="el-icon-circle-check"></i>所有时间</span>
   </div>
 </template>
 

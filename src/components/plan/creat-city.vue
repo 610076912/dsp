@@ -139,7 +139,7 @@
               type: 'citys',
               msg: this.checkedCitys
             })
-            this.$router.push('/creatMediaType')
+            this.$router.push('/creatStrategy')
           }
           this.btnLoading = false
         })

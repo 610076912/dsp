@@ -40,16 +40,16 @@
       margin-top: 20px;
       height: 50px;
       border-bottom: 1px solid #169bd5;
-      background: #f9f9f9;
       span {
         display: block;
-        width: 100px;
+        width: 130px;
         height: 50px;
         background: #169bd5;
-        margin-left: 34px;
         color: #fff;
         line-height: 50px;
         text-align: center;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
       }
     }
   }

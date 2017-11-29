@@ -5,7 +5,7 @@
       <creat-header title="时间周期定向" text="按时间"></creat-header>
       <div class="time">
         <div class="time-right">
-          <module-header-compoent :title="`已选 ${timeNum} 个`" :check="true" :del="true"
+          <module-header-compoent :title="`已选 ${timeNum} 个`" :check="true" :del="true" @checkall="timeCheckAll(true)"
                                   @clearchose="timeCheckAll(false)"></module-header-compoent>
           <div class="time-wrap">
             <time-bar :canClick="true" :pTimeArr="checkedTime" ref="timeBar"></time-bar>
@@ -24,7 +24,7 @@
       <creat-header title="" text="按周期"></creat-header>
       <div class="week">
         <div class="week-right">
-          <module-header-compoent :title="`已选 ${weekNum} 个`" :check="true" :del="true"
+          <module-header-compoent :title="`已选 ${weekNum} 个`" :check="true" :del="true" @checkall="weekCheckAll(true)"
                                   @clearchose="weekCheckAll(false)"></module-header-compoent>
           <div class="week-wrap">
             <week-bar :canClick="true" :pWeekArr="checkedWeek" ref="weekBar"></week-bar>

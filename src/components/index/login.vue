@@ -134,7 +134,7 @@
           color: #fff;
           cursor: pointer;
           outline: none;
-          box-shadow: 0 0 1px 0 rgba(74 111 205 .6);
+          box-shadow: 0 0 1px 0 rgba(74,111,205,.6);
         }
       }
     }
