@@ -13,8 +13,8 @@
         <el-col :span="8"><span>分组: </span><span>{{ baseInfo.group_name }}</span></el-col>
       </el-row>
       <el-row class="row">
-        <el-col :span="8"><span>计划每日预算: </span><span>{{ baseInfo.day_budget }}</span></el-col>
-        <el-col :span="8"><span>计划总预算: </span><span>{{ baseInfo.all_budget }}</span></el-col>
+        <el-col :span="8"><span>计划每日预算: </span><span>{{ baseInfo.day_budget }}元</span></el-col>
+        <el-col :span="8"><span>计划总预算: </span><span>{{ baseInfo.all_budget }}元</span></el-col>
       </el-row>
     </div>
     <div class="scene cons">
@@ -451,7 +451,7 @@
 
         .labels {
           display: inline-block
-          width: 86px
+          width: 120px
           height: 44px
           text-align: center
           line-height: 44px

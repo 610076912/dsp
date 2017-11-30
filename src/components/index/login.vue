@@ -11,6 +11,7 @@
         </div>
       </div>
     </div>
+    <div class="copy"><a href="http://www.bjvca.com" target="_Blank">北京视连通科技有限公司&nbsp;&nbsp;&nbsp;版权所有&copy;2017&nbsp;&nbsp;&nbsp;京ICP备15041948号</a></div>
   </div>
 </template>
 
@@ -53,6 +54,16 @@
     background-position: center;
     background-size: cover;
     background-color: #ffffff;
+    .copy {
+      width: 100%;
+      display inline-block;
+      position: absolute;
+      bottom: 40px;
+      text-align: center;
+      a{
+        color: #fff;
+      }
+    }
     .con-wrap {
       width: 612px;
       height: 366px;
@@ -134,7 +145,7 @@
           color: #fff;
           cursor: pointer;
           outline: none;
-          box-shadow: 0 0 1px 0 rgba(74,111,205,.6);
+          box-shadow: 0 0 1px 0 rgba(74, 111, 205, .6);
         }
       }
     }

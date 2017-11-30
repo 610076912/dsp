@@ -30,7 +30,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="budgetText" prop="all" required>
-          <el-input v-model="ruleForm.all"></el-input>
+          <el-input v-model="ruleForm.all"></el-input>元
         </el-form-item>
         <el-form-item label="投放日期" prop="date" class="date-time-range">
           <el-date-picker

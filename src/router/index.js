@@ -1,24 +1,39 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import index from '@/components/index/index'
+const Index = () => import('@/components/index/index')
+// import index from '@/components/index/index'
 import login from '@/components/index/login'
 // 推广计划及子页面
-import plan from '@/components/plan/plan'
-import planIndex from '@/components/plan/plan-index'
-import creatBasics from '@/components/plan/creat-basics'
-import creatScene from '@/components/plan/creat-scene'
-import creatTime from '@/components/plan/creat-time'
-import creatCity from '@/components/plan/creat-city'
-import creatMedia from '@/components/plan/creat-media'
-import creatMediaType from '@/components/plan/creat-mediatype'
-import creatStrategy from '@/components/plan/creat-strategy'
-import creatPreview from '@/components/plan/creat-preview'
-import creatMaterial from '@/components/plan/creat-material'
-
-import data from '@/components/data/data'
-import plandata from '@/components/data/plandata'
-import mediadata from '@/components/data/mediadata'
-import finance from '@/components/finance/finance'
+const plan = () => import(/* webpackChunkName: "plan" */ '@/components/plan/plan')
+const planIndex = () => import(/* webpackChunkName: "plan" */ '@/components/plan/plan-index')
+const creatBasics = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-basics')
+const creatScene = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-scene')
+const creatTime = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-time')
+const creatCity = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-city')
+const creatMedia = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-media')
+const creatMediaType = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-mediatype')
+const creatStrategy = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-strategy')
+const creatPreview = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-preview')
+const creatMaterial = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-material')
+// import plan from '@/components/plan/plan'
+// import planIndex from '@/components/plan/plan-index'
+// import creatBasics from '@/components/plan/creat-basics'
+// import creatScene from '@/components/plan/creat-scene'
+// import creatTime from '@/components/plan/creat-time'
+// import creatCity from '@/components/plan/creat-city'
+// import creatMedia from '@/components/plan/creat-media'
+// import creatMediaType from '@/components/plan/creat-mediatype'
+// import creatStrategy from '@/components/plan/creat-strategy'
+// import creatPreview from '@/components/plan/creat-preview'
+// import creatMaterial from '@/components/plan/creat-material'
+const data = () => import(/* webpackChunkName: "data" */ '@/components/data/data')
+const plandata = () => import(/* webpackChunkName: "data" */ '@/components/data/plandata')
+const mediadata = () => import(/* webpackChunkName: "data" */ '@/components/data/mediadata')
+const finance = () => import(/* webpackChunkName: "finance" */ '@/components/finance/finance')
+// import data from '@/components/data/data'
+// import plandata from '@/components/data/plandata'
+// import mediadata from '@/components/data/mediadata'
+// import finance from '@/components/finance/finance'
 
 // 引入财务管理页面
 // import finance from '@/components/finance/finance'
@@ -32,12 +47,12 @@ export default new Router({
   routes: [
     {
       path: '*',
-      component: index
+      component: Index
     },
     {
       path: '/',
       name: 'index',
-      component: index,
+      component: Index,
       meta: {Auth: true}
     },
     {
