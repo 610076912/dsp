@@ -12,10 +12,7 @@ import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 import axios from '@/assets/js/axiosplus'
 import './assets/css/reset.styl'
-import echarts from 'echarts/lib/echarts'
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/tooltip'
-import 'echarts/lib/component/title'
+import echarts from '../static/js/echarts.min'
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false

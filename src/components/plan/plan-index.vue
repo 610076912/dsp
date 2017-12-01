@@ -136,7 +136,7 @@
             align="center"
             prop="publish"
             width="100">
-            <template scope="scope">
+            <template slot-scope="scope">
               <el-switch
                 v-model="switchData[scope.$index]"
                 on-color="#ff9900"
@@ -152,7 +152,7 @@
             width="90">
           </el-table-column>
           <el-table-column label="功能操作" align="left" :resizable="false">
-            <template scope="scope">
+            <template slot-scope="scope">
               <span class="operation" @click="details(scope.row.plan_id)">查看&nbsp;</span>
               <span class="operation">复制&nbsp;</span>
               <span class="operation" @click="excentionStatus">状态</span>
@@ -172,7 +172,7 @@
         <el-table-column
           label="开关"
           align="center">
-          <template scope="scope">
+          <template slot-scope="scope">
             <el-switch
               v-model="scope.row.kg"
               on-color="#ff9900">
@@ -181,7 +181,7 @@
         </el-table-column>
         <el-table-column property="status" label="素材状态" align="center" width="120"></el-table-column>
         <el-table-column label="功能操作" align="center">
-          <template scope="scope">
+          <template slot-scope="scope">
             <span>编辑素材</span>
           </template>
         </el-table-column>

@@ -63,9 +63,7 @@
       </div>
     </div>
     <div class="media cons">
-      <p class="head"><span>媒体定向</span><b>
-        <router-link to="creatMedia">编辑信息</router-link>
-      </b></p>
+      <p class="head"><span>媒体定向</span></p>
       <div class="pro-box">
         <div class="label">
           <span class="labels" v-for="item in meidaInfo">{{ item.media_name }}</span>
