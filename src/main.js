@@ -6,7 +6,7 @@ import 'element-ui/lib/theme-default/index.css'
 import App from './App'
 import router from './router'
 import store from './store'
-// axios
+// axios  test
 import es6Promise from 'es6-promise'
 
 es6Promise.polyfill()
