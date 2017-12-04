@@ -289,6 +289,7 @@
         )
           .then(data => {
             if (data.code === 200) {
+              this.ruleForm.group = data.data.group_id
               this.queryGroupData()
             }
           })

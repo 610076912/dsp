@@ -8,8 +8,7 @@
             <div class="user-info"> 欢迎您，{{name}} <span class="self-space">个人中心</span></div>
             <p>推广余额：<span class="color-red">￥{{sum}}</span></p>
             <div class="link-button">
-              <el-button size="small" type="primary">进入推广计划</el-button>
-              <el-button size="small">新建活动</el-button>
+              <el-button size="small" type="primary" @click="toPlan">进入推广计划</el-button>
             </div>
           </div>
         </div>
@@ -227,6 +226,9 @@
       }
     },
     methods: {
+      toPlan () {
+        this.$router.push('plan')
+      },
       toggleTags: function (index) {
         this.indexs = index
       }
