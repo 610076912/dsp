@@ -60,6 +60,10 @@
       this.username = sessionStorage.getItem('user')
     },
     methods: {
+      // 获取用户名。
+      getUserName () {
+        this.username = sessionStorage.getItem('user')
+      },
       signOut () {
         sessionStorage.removeItem('token')
         this.$router.push('/login')

@@ -82,7 +82,6 @@
         this.$http.post('/api2/get_pkg_info', {
           plan_id: this.$store.state.creatData.planId
         }).then(res => {
-          console.log(res)
           if (res.code === 200 && res.data.length > 0) {
             let resData = []
             res.data.forEach(function (item) {
@@ -112,7 +111,6 @@
           this.$refs.tree.$el.children[i].style.marginBottom = '15px'
         }
         c.$el.style.marginBottom = '240px'
-        console.log(this.$refs.tree)
       },
       // tree 结构合上时，
       heshang (a, b, c) {
@@ -145,7 +143,6 @@
                 resultArr.push(obj)
               }
             }
-            console.log(resultArr)
             this.allPack = resultArr
           }
         })
@@ -159,7 +156,6 @@
       // 下一步
       nextStep () {
         let checkedNodes = this.$refs.tree.getCheckedNodes(true)
-        console.log(checkedNodes)
         let resClassArray = []
         if (checkedNodes.length === 0) {
           this.$alert('请选择一个类', '提示', {

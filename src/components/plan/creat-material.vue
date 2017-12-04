@@ -169,7 +169,6 @@
               this.adCon[res.data[0].tpl_cat] = JSON.parse(res.data[0].conf_info)
             } else {
               this.collVal = JSON.parse(res.data[0].conf_info).relation_info.type
-              console.log(this.collVal)
               this.adCon[this.collVal] = JSON.parse(res.data[0].conf_info)
             }
           } else {

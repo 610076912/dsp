@@ -26,12 +26,7 @@
     },
     methods: {
       clickTo (val) {
-        console.log(1)
         this.$router.push(val)
-      },
-      aaaa (event) {
-        console.log(event)
-        console.log(this.$refs.step)
       }
     }
   }

@@ -222,7 +222,6 @@
     created () {
       // 获取分组
       this.$http.get('/api2/get_plan_group').then(data => {
-        console.log(data)
         if (data.code === 200) {
           this.group = data.data
         }
@@ -231,12 +230,6 @@
       this.$nextTick(function () {
         this.getActiveList({})
       })
-    },
-    watch: {
-      // 排序
-      'sort' () {
-        console.log(this.sort)
-      }
     },
     methods: {
       // 获取活动列表
@@ -300,7 +293,6 @@
       },
       // 当选择项发生变化时触发
       selectionChange (selection) {
-        console.log(selection)
         let res = []
         if (selection.length !== 0) {
           selection.forEach(function (item) {
@@ -332,7 +324,6 @@
       },
       // 批量删除按钮方法
       beachDel () {
-        console.log(this.selectedLength)
         if (!this.selectedLength) {
           alert('请选择要删除的项')
           return
@@ -354,7 +345,6 @@
           timeStart: this.seekData.date[0] ? new Date(this.seekData.date[0]).Format('yyyy-MM-dd hh:mm:ss') : null,
           timeEnd: this.seekData.date[1] ? new Date(this.seekData.date[1]).Format('yyyy-MM-dd hh:mm:ss') : null
         }
-        console.log(option)
         this.getActiveList(option)
       },
       // 状态按钮弹出推广状态
@@ -363,7 +353,6 @@
       },
       // 查看按钮
       details (planId) {
-        console.log(planId)
         // 清空store里的老数据并将新id记录下来
         this.$store.commit('CLEARCREATDATA', planId)
         this.$router.push('/creatPreview')

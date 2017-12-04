@@ -85,7 +85,6 @@
     watch: {
       'pTimeArr': function (val) {
         this.timeArr = val
-        console.log(this.timeArr)
       }
     },
     methods: {

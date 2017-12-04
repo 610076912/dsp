@@ -91,7 +91,6 @@
         // 禁止选择当前时间以前的
         pickerOptions: {
           disabledDate (time) {
-            console.log(time.getTime())
             return time.getTime() < (Date.now() - 24 * 60 * 60 * 1000)
           }
         },
@@ -157,7 +156,6 @@
         }).then(res => {
           if (res.code === 200) {
             const data = res.data
-            console.log(data)
             this.ruleForm.name = data.plan_name
             this.ruleForm.group = data.group_id
             this.ruleForm.budgetType = data.plan_budget_type
@@ -230,7 +228,6 @@
               if (res.code === 200) {
                 // 保存活动Id
                 this.$store.commit('PLANID', res.data)
-                console.log(that.$store.state.creatData)
                 // 保存活动数据
                 that.ruleForm.channel = that.activeName
                 this.$store.commit('BASICE', that.ruleForm)
@@ -253,14 +250,11 @@
       },
       // 下拉框改变
       selectChange (val) {
-        console.log(val)
-        console.log(this.ruleForm.group)
         if (val === 'new') {
           this.$prompt('请输入新分组名称', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             inputValidator (value) {
-              console.log(value)
               const reg = /^[^\S]/g
               if (value === null || reg.test(value) || value.length > 5) {
                 return false
@@ -282,7 +276,6 @@
       queryGroupData () {
         // 获取活动分组
         this.$http.get('/api2/get_plan_group').then(data => {
-          console.log(data)
           if (data.code === 200) {
             this.groupArray = data.data
           }

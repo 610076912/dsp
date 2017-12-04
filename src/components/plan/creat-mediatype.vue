@@ -46,7 +46,6 @@
             plan_id: this.$store.state.creatData.planId
           }
         }).then(res => {
-          console.log(res)
           if (res.code === 200) {
             this.chosedType = res.data.class_plan.split('')
             this.$store.commit('MEDIATYPE', this.chosedType)
@@ -74,7 +73,6 @@
             }
           })
         })
-        console.log(this.chosedType)
       },
       // 点击标签
       clickItem (index, typeId) {
@@ -99,7 +97,6 @@
         } else {
           this.chosedType = []
         }
-        console.log(this.chosedType)
       },
       // 下一步
       nextStep () {
@@ -113,7 +110,6 @@
           class_plan: this.chosedType.join(''),
           plan_id: this.$store.state.creatData.planId
         }).then(res => {
-          console.log(res)
           if (res.code === 200) {
             this.$store.commit('MEDIATYPE', this.chosedType)
             this.$router.push('/creatTime ')

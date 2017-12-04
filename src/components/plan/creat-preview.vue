@@ -217,7 +217,6 @@
         if (res.code === 200) {
           const result = res.data
           const _this = this
-          console.log(result)
           if (result.baseInfo_1) {
             // 基本信息
             _this.baseInfo.act_name = result.baseInfo_1.plan_name
@@ -236,7 +235,6 @@
             // 投放时间
             _this.checkedTime = _this.transformTime(result.timeInfo_3.plan_time)
             _this.checkedWeek = _this.transformWeek(result.timeInfo_3.plan_week)
-            console.log(_this.checkedTime, _this.checkedWeek)
           }
           if (result.regionInfo_4) {
             // 地理位置定向

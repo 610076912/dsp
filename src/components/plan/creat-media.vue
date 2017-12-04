@@ -80,7 +80,6 @@
           return
         }
         let url = this.isEdit ? '/api2/upd_media_plan' : '/api2/add_media_plan'
-        console.log(url)
         // 提交媒体定向
         this.$http.post(url, {
           plan_id: this.planId,

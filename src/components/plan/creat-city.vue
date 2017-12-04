@@ -114,10 +114,8 @@
     mounted () {
       const regionArr = this.arrSort(citys.RECORDS, 'area')
       this.regionList = this.filterArr(regionArr, 'area', 'area')
-      console.log(this.regionList)
       const cityArr = this.arrSort(citys.RECORDS, 'city_id')
       this.cityList = this.filterArr(cityArr, 'region', 'region')
-      console.log(this.checkedCitys)
     },
     methods: {
       back () {
@@ -125,7 +123,6 @@
       },
       next () {
         this.btnLoading = true
-        console.log(this.checkedCityId)
         this.$http.post('/api2/add_region_plan', {
           plan_id: this.planId,
           city_id_list: JSON.stringify(this.checkedCityId)

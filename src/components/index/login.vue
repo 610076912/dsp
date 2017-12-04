@@ -35,6 +35,7 @@
             console.log(response)
             sessionStorage.setItem('token', response.data.token)
             sessionStorage.setItem('user', response.data.user_name)
+            _this.$parent.getUserName()
             _this.$router.push('/')
           }
         })
