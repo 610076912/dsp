@@ -11,7 +11,8 @@
         </div>
       </div>
     </div>
-    <div class="copy"><a href="http://www.bjvca.com" target="_Blank">北京视连通科技有限公司&nbsp;&nbsp;&nbsp;版权所有&copy;2017&nbsp;&nbsp;&nbsp;京ICP备15041948号</a></div>
+    <div class="copy"><a href="http://www.bjvca.com" target="_Blank">北京视连通科技有限公司&nbsp;&nbsp;&nbsp;版权所有&copy;2017&nbsp;&nbsp;&nbsp;京ICP备15041948号</a>
+    </div>
   </div>
 </template>
 
@@ -32,11 +33,17 @@
           password: this.password
         }).then(function (response) {
           if (response.code === 200) {
-            console.log(response)
-            sessionStorage.setItem('token', response.data.token)
-            sessionStorage.setItem('user', response.data.user_name)
-            _this.$parent.getUserName()
-            _this.$router.push('/')
+            if (response.data.user_type[0] === '12') {
+              sessionStorage.setItem('token', response.data.token)
+              sessionStorage.setItem('user', response.data.user_name)
+              _this.$parent.getUserName()
+              _this.$router.push('/')
+            } else {
+              _this.$message({
+                message: '您没有权限',
+                type: 'warning'
+              })
+            }
           }
         })
       }
@@ -61,7 +68,7 @@
       position: absolute;
       bottom: 40px;
       text-align: center;
-      a{
+      a {
         color: #fff;
       }
     }
