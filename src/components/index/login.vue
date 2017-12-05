@@ -33,7 +33,7 @@
           password: this.password
         }).then(function (response) {
           if (response.code === 200) {
-            if (response.data.user_type[0] === '12') {
+            if (response.data.user_type[0] === '1') {
               sessionStorage.setItem('token', response.data.token)
               sessionStorage.setItem('user', response.data.user_name)
               _this.$parent.getUserName()
