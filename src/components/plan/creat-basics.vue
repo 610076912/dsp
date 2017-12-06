@@ -30,7 +30,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="budgetText" prop="all" required>
-          <el-input v-model="ruleForm.all"></el-input>元
+          <el-input v-model="ruleForm.all"><template slot="append">元</template></el-input>
         </el-form-item>
         <el-form-item label="投放日期" prop="date" class="date-time-range">
           <el-date-picker
@@ -44,7 +44,7 @@
         </el-form-item>
         <el-form-item class="button-wrap">
           <el-button @click="back">返回</el-button>
-          <el-button class="next-button" type="primary" @click="nextStep">
+          <el-button class="next-button" type="primary" @click="nextStep" :loading="btnLoading">
             下一步
           </el-button>
         </el-form-item>
@@ -87,10 +87,12 @@
         callback()
       }
       return {
+        btnLoading: false,
         activeName: this.propsActiveName,
         // 禁止选择当前时间以前的
         pickerOptions: {
           disabledDate (time) {
+            console.log(time)
             return time.getTime() < (Date.now() - 24 * 60 * 60 * 1000)
           }
         },
@@ -99,8 +101,7 @@
           group: '',
           budgetType: 0,
           all: '',
-          date: [new Date(), new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)],
-          channel: null
+          date: [new Date(), new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)]
         },
         // 验证规则
         rules: {
@@ -142,9 +143,10 @@
         this.ruleForm.group = creatData.group
         this.ruleForm.budgetType = creatData.budgetType
         this.ruleForm.all = creatData.all
-        this.ruleForm.date = creatData.date
-        this.activeName = creatData.channel
+        this.ruleForm.date = creatData.date.map(item => new Date(item))
+        this.activeName = this.$store.state.materialData.act_id
         this.isEdit = true
+        debugger
         // 必须是获得了activeName这个值以后才能去生成图标所以要放到这里和ajax请求的回调中
         this.showMedia()
       } else if (this.$store.state.creatData.planId) {
@@ -165,6 +167,7 @@
             this.$set(this.ruleForm.date, 1, new Date(data.plan_e_time))
             this.isEdit = true
             this.$store.commit('BASICE', this.ruleForm)
+            this.$store.commit('ACTID', data.plan_channel)
             // 必须是获得了activeName这个值以后才能去生成图标所以要放到ajax请求的回调中
             this.showMedia()
           }
@@ -190,6 +193,7 @@
       // 下一步
       nextStep () {
         let that = this
+        this.btnLoading = true
         this.$refs['new1form'].validate((valid) => {
           // 如果验证通过则跳转下一个路由
           let url, data, mUrl // 基本设置接口url，基本设置数据，媒体接口url
@@ -231,6 +235,7 @@
                 // 保存活动数据
                 that.ruleForm.channel = that.activeName
                 this.$store.commit('BASICE', that.ruleForm)
+                this.$store.commit('ACTID', data.plan_channel)
                 // 成功后调取媒体接口
                 return this.$http.post(mUrl, {
                   plan_id: that.$store.state.creatData.planId,
@@ -240,8 +245,12 @@
             })
             .then(res => {
               if (res.code === 200) {
+                this.btnLoading = false
                 this.$router.push('/creatScene')
               }
+            })
+            .catch(err => {
+              alert(err)
             })
         })
       },

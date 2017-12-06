@@ -1,9 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import VuexPersistence from 'vuex-persist'
 import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 
 Vue.use(Vuex)
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage
+})
 
 let state = {
   creatData: {
@@ -13,7 +18,8 @@ let state = {
       group: '',
       day: '',
       all: '',
-      date: []
+      date: [],
+      channel: null
     },
     creatCity: null,
     creatTime: null,
@@ -87,5 +93,6 @@ const mutations = {
 }
 export default new Vuex.Store({
   state,
-  mutations
+  mutations,
+  plugins: [vuexLocal.plugin]
 })
