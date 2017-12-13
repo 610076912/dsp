@@ -79,6 +79,8 @@
       this.weekIcon = dateIcon.week[currentM]
 
       this.timeArray = hourData.time
+      // 如果基础设置中有channelId 则拿出来用
+      this.channelId = this.$store.state.creatData.creatBasice.channel
       // 判断vuex中是否有数据
       let creatData = this.$store.state.creatData.creatTime
       // console.log(creatData)

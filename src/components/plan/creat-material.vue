@@ -166,10 +166,19 @@
             // 判断到底是什么模板，如果是关联信息模板的话，需要解析conf_info才能判断
             if (res.data[0].tpl_cat !== 'relation') {
               this.collVal = res.data[0].tpl_cat
-              this.adCon[res.data[0].tpl_cat] = JSON.parse(res.data[0].conf_info)
+              // 传入广告编辑模板的数据为adCon(广告内容)、gbUrl(曝光链接)、clickUrl(点击url)
+              this.adCon[res.data[0].tpl_cat] = {
+                adCon: JSON.parse(res.data[0].conf_info),
+                bgUrl: res.data[0].bg_url,
+                clickUrl: res.data[0].click_url
+              }
             } else {
               this.collVal = JSON.parse(res.data[0].conf_info).relation_info.type
-              this.adCon[this.collVal] = JSON.parse(res.data[0].conf_info)
+              this.adCon[this.collVal] = {
+                adCon: JSON.parse(res.data[0].conf_info),
+                bgUrl: res.data[0].bg_url,
+                clickUrl: res.data[0].click_url
+              }
             }
           } else {
             // 如果没有请求到广告信息，则使子组件都合上
@@ -214,8 +223,12 @@
           app_type: appType,
           // 模板id
           tpl_cat: appType,
+          // 曝光url
+          bg_url: confInfo.bg_url,
+          // 点击url
+          click_url: confInfo.click_url,
           // 模板广告内容
-          conf_info: JSON.stringify(confInfo)
+          conf_info: JSON.stringify(confInfo.conf_info)
         }).then(res => {
           if (res.code === 200) {
             this.$message({

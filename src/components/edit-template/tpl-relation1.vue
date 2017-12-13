@@ -14,6 +14,14 @@
             <video id="rel1video" loop src="http://www.bjvca.com/video/relation1.mp4" alt=""></video>
           </div>
           <div class="ad-edit">
+            <div class="url-wrap">
+              <el-input placeholder="请输入曝光检测链接" v-model="bgUrl" size="small">
+                <template slot="prepend">曝光检测链接</template>
+              </el-input>
+              <el-input placeholder="请输入点击检测链接" v-model="clickUrl" size="small">
+                <template slot="prepend">点击检测链接</template>
+              </el-input>
+            </div>
             <!--提示-->
             <div class="tpl-tips">
               <div class="tips-select">
@@ -256,7 +264,9 @@
               }
             ]
           }
-        }
+        },
+        bgUrl: '',
+        clickUrl: ''
       }
     },
     watch: {
@@ -274,11 +284,14 @@
         }
       },
       'adCon' (val) {
-        if (val && val.relation_info.type === 'relation1') {
-          this.conf_info = val
+        if (val && val.adCon.relation_info.type === 'relation1') {
+          this.conf_info = val.adCon
           // 对提示信息部分的数据做单独处理
-          this.promptImgUrl = val.prompt_info.content[0].info_con
-          this.promptText = val.prompt_info.content[1] ? val.prompt_info.content[1].info_con : ''
+          this.promptImgUrl = val.adCon.prompt_info.content[0].info_con
+          this.promptText = val.adCon.prompt_info.content[1] ? val.prompt_info.content[1].info_con : ''
+          // 曝光url和点击url
+          this.bgUrl = this.adCon.bgUrl
+          this.clickUrl = this.adCon.clickUrl
         } else {
           // 清空数据，必须是完整的数据结构！
           this.conf_info = {
@@ -362,6 +375,9 @@
               ]
             }
           }
+          // 曝光url和点击url
+          this.bgUrl = ''
+          this.clickUrl = ''
         }
       }
     },
@@ -390,7 +406,11 @@
           }, {info_con: this.promptText, info_exp: '提示信息文字'}]
         }
         // 调父组件的save方法，并把数据传过去。
-        this.$parent.save('relation', this.conf_info)
+        this.$parent.save('relation', {
+          conf_info: this.conf_info,
+          bg_url: this.bgUrl,
+          click_url: this.clickUrl
+        })
       },
       // 点击图片上的设置图标
       editItem (index) {
@@ -492,6 +512,15 @@
         background-size: cover;
         background-repeat: no-repeat;
         background-position center;
+        .url-wrap{
+          width: 300px;
+          position: absolute;
+          left: 20px;
+          bottom: 220px;
+          .el-input{
+            margin-top: 3px;
+          }
+        }
         .tpl-tips {
           position: absolute;
           left: 20px;
@@ -545,8 +574,8 @@
         }
         .ad-con {
           width: 25%;
-          height: calc(100% - 50px);
-          margin: 25px 0;
+          height: calc(100% - 35px);
+          margin: 15px 0;
           float: right;
           background: rgba(0, 0, 0, .6);
           color: #fff;

@@ -51,7 +51,6 @@
       <div class="card-content">
         <el-table
           :data="tableData"
-          ref="indexTable"
           border
           stripe
           @select="select"
@@ -154,7 +153,7 @@
           <el-table-column label="功能操作" align="left" :resizable="false">
             <template slot-scope="scope">
               <span class="operation" @click="details(scope.row.plan_id)">查看&nbsp;</span>
-              <span class="operation">复制&nbsp;</span>
+              <span class="operation" @click="copyPlan(scope.row.plan_id)">复制&nbsp;</span>
               <span class="operation" @click="excentionStatus">状态</span>
               <br>
               <span class="operation">报表&nbsp;</span>
@@ -164,6 +163,17 @@
         </el-table>
       </div>
     </el-tabs>
+    <div class="page-wrap">
+      <el-pagination
+        @size-change="pageSizeChange"
+        @current-change="pageCurrentChange"
+        layout="sizes, prev, pager, next"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        :page-sizes="[10, 20, 30]"
+        :total="pageTotal">
+      </el-pagination>
+    </div>
     <button class="creat-new" @click="creatNew">新建活动</button>
     <el-dialog title="提示" :visible.sync="dialogVisible" size="tiny">
       <el-table :data="exStatus" border="true">
@@ -210,13 +220,17 @@
         },
         // 选中个数，判断是否可以点击批量删除
         selectedLength: 0,
+        selectedArr: [],
         // 表格数据
         tableData: null,
         // 开关数据（单独处理）
         switchData: [],
         dialogVisible: false,
         // 状态数据
-        exStatus: []
+        exStatus: [],
+        currentPage: 1,
+        pageTotal: 0,
+        pageSize: 10
       }
     },
     created () {
@@ -241,6 +255,8 @@
         if (!arguments[0].timeEnd) arguments[0].timeEnd = null
         if (!arguments[0].sort_type) arguments[0].sort_type = null
         if (!arguments[0].channel) arguments[0].channel = 1
+        if (!arguments[0].pageId) arguments[0].pageId = 1
+        if (!arguments[0].pageCount) arguments[0].pageCount = 10
         // Loading
         let loading = this.$loading({
           target: '.card-content',
@@ -253,7 +269,9 @@
           status: option.status,
           time_start: option.timeStart,
           time_end: option.timeEnd,
-          channel: option.channel
+          channel: option.channel,
+          pageId: option.pageId,
+          pageCount: option.pageCount
         }).then((res) => {
           loading.close()
           if (res.code === 200) {
@@ -262,6 +280,7 @@
               this.switchData.push(item.publish === 1)
             })
             this.tableData = res.data
+            this.pageTotal = res.total
           }
           // console.log(res)
         })
@@ -269,13 +288,19 @@
       // 删除
       delActive (planId) {
         const that = this
-        this.$http.post('/api/del_act', {
-          act_id_list: JSON.stringify(planId)
-        }).then(function (res) {
-          if (res.code === 200) {
-            that.seek()
-          }
-        })
+        this.$confirm(`您确定要删除ID为 ${planId} 的计划项吗？`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post('/api2/del_plans', {
+            plan_id_list: JSON.stringify(planId)
+          }).then(function (res) {
+            if (res.code === 200) {
+              that.seek()
+            }
+          })
+        }).catch(() => {})
       },
       // 新建按钮
       creatNew () {
@@ -296,10 +321,11 @@
         let res = []
         if (selection.length !== 0) {
           selection.forEach(function (item) {
-            res.push(item.act_id)
+            res.push(item.plan_id)
           })
         }
-        this.selectedLength = res
+        this.selectedLength = res.length
+        this.selectedArr = res
       },
       // 开关状态改变时调用
       switch1 (result) {
@@ -328,7 +354,13 @@
           alert('请选择要删除的项')
           return
         }
-        this.delActive(this.selectedLength)
+        this.$confirm(`您确定要删除选中的${this.selectedArr.length}项吗？`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.delActive(this.selectedArr)
+        }).catch(() => {})
       },
       // 单项删除
       itemDel (planId) {
@@ -343,7 +375,9 @@
           status: this.seekData.status,
           channel: this.activeName,
           timeStart: this.seekData.date[0] ? new Date(this.seekData.date[0]).Format('yyyy-MM-dd hh:mm:ss') : null,
-          timeEnd: this.seekData.date[1] ? new Date(this.seekData.date[1]).Format('yyyy-MM-dd hh:mm:ss') : null
+          timeEnd: this.seekData.date[1] ? new Date(this.seekData.date[1]).Format('yyyy-MM-dd hh:mm:ss') : null,
+          pageId: this.currentPage,
+          pageCount: this.pageSize
         }
         this.getActiveList(option)
       },
@@ -356,6 +390,31 @@
         // 清空store里的老数据并将新id记录下来
         this.$store.commit('CLEARCREATDATA', planId)
         this.$router.push('/creatPreview')
+      },
+      // 复制
+      copyPlan (planId) {
+        this.$http.post('/api2/copy_plan', {
+          plan_id: planId
+        }).then(res => {
+          if (res.code === 200) {
+            this.$alert(`复制成功！复制的活动id为${res.data}`, '提示', {
+              confirmButtonText: '确定',
+              callback: action => {
+                this.seek()
+              }
+            })
+          }
+        })
+      },
+      // 选择每页多少条
+      pageSizeChange (size) {
+        this.pageSize = size
+        this.seek()
+      },
+      // 翻页
+      pageCurrentChange (page) {
+        this.currentPage = page
+        this.seek()
       },
       // 格式化时间
       formatter (item) {
@@ -373,6 +432,7 @@
     position: relative;
     padding: 30px;
     min-height: calc(100vh - 440px);
+    overflow: hidden;
     .card-header {
       margin-bottom: 10px;
       input {
@@ -412,6 +472,8 @@
     .card-content {
       background: #169bd5;
       width: 100%;
+      min-height: 532px;
+      background: #fff;
       .el-table .cell, .el-table th > div {
         padding: 0 10px;
       }
@@ -423,6 +485,10 @@
           border: none;
         }
       }
+    }
+    .page-wrap {
+      float: right;
+      margin: 10px -3px 0 0;
     }
     .creat-new {
       width: 100px;

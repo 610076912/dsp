@@ -144,9 +144,8 @@
         this.ruleForm.budgetType = creatData.budgetType
         this.ruleForm.all = creatData.all
         this.ruleForm.date = creatData.date.map(item => new Date(item))
-        this.activeName = this.$store.state.materialData.act_id
+        this.activeName = creatData.channel
         this.isEdit = true
-        debugger
         // 必须是获得了activeName这个值以后才能去生成图标所以要放到这里和ajax请求的回调中
         this.showMedia()
       } else if (this.$store.state.creatData.planId) {
@@ -167,7 +166,6 @@
             this.$set(this.ruleForm.date, 1, new Date(data.plan_e_time))
             this.isEdit = true
             this.$store.commit('BASICE', this.ruleForm)
-            this.$store.commit('ACTID', data.plan_channel)
             // 必须是获得了activeName这个值以后才能去生成图标所以要放到ajax请求的回调中
             this.showMedia()
           }
@@ -235,7 +233,6 @@
                 // 保存活动数据
                 that.ruleForm.channel = that.activeName
                 this.$store.commit('BASICE', that.ruleForm)
-                this.$store.commit('ACTID', data.plan_channel)
                 // 成功后调取媒体接口
                 return this.$http.post(mUrl, {
                   plan_id: that.$store.state.creatData.planId,

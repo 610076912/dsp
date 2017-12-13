@@ -10,7 +10,9 @@
           </el-button>
         </template>
         <div class="flash1">
-          <div class="ad-style" v-show="!isEdit"><video id="flashvideo" loop src="http://www.bjvca.com/video/flash.mp4"></video></div>
+          <div class="ad-style" v-show="!isEdit">
+            <video id="flashvideo" loop src="http://www.bjvca.com/video/flash.mp4"></video>
+          </div>
           <div class="ad-edit">
             <div class="upload-flash">
               <div class="flash-player1" v-if="conf_info.flash_src">
@@ -59,6 +61,16 @@
                   <template slot="prepend">跳转链接</template>
                 </el-input>
               </div>
+              <div class="bg-url">
+                <el-input placeholder="请输入曝光检测链接" v-model="bgUrl">
+                  <template slot="prepend">曝光检测链接</template>
+                </el-input>
+              </div>
+              <div class="click-url">
+                <el-input placeholder="请输入点击检测链接" v-model="clickUrl">
+                  <template slot="prepend">点击检测链接</template>
+                </el-input>
+              </div>
             </div>
           </div>
         </div>
@@ -105,7 +117,9 @@
           size: '150,150,f_size1',
           position: 'left',
           out_url: ''
-        }
+        },
+        bgUrl: '',
+        clickUrl: ''
       }
     },
     watch: {
@@ -123,24 +137,27 @@
         }
       },
       'adCon' (val) {
-        if (val && this.collapseVal === 'flash') {
+        if (val && val.adCon && this.collapseVal === 'flash') {
           // this.isEdit = true
-          if (this.adCon.position === 'left') this.isPosition = 1
-          if (this.adCon.position === 'center') {
+          if (this.adCon.adCon.position === 'left') this.isPosition = 1
+          if (this.adCon.adCon.position === 'center') {
             this.isPosition = 2
             this.conf_info.position = 'center'
           }
-          if (this.adCon.position === 'right') {
+          if (this.adCon.adCon.position === 'right') {
             this.isPosition = 3
             this.conf_info.position = 'right'
           }
-          if (this.adCon.size === '150,150,f_size1') this.isSize = 1
-          if (this.adCon.size === '210,90,f_size2') {
+          if (this.adCon.adCon.size === '150,150,f_size1') this.isSize = 1
+          if (this.adCon.adCon.size === '210,90,f_size2') {
             this.isSize = 2
             this.conf_info.size = '210,90,f_size2'
           }
-          this.conf_info.flash_src = this.adCon.flash_src
-          this.conf_info.out_url = this.adCon.out_url
+          this.conf_info.flash_src = this.adCon.adCon.flash_src
+          this.conf_info.out_url = this.adCon.adCon.out_url
+          // 曝光url和点击url
+          this.bgUrl = this.adCon.bgUrl
+          this.clickUrl = this.adCon.clickUrl
         } else {
           this.conf_info = {
             flash_src: '',
@@ -150,6 +167,9 @@
           }
           this.isSize = 1
           this.isPosition = 1
+          // 曝光url和点击url
+          this.bgUrl = ''
+          this.clickUrl = ''
         }
       }
     },
@@ -170,7 +190,11 @@
           return
         }
         // 调父组件的save方法，并把数据传过去。
-        this.$parent.save('flash', this.conf_info)
+        this.$parent.save('flash', {
+          conf_info: this.conf_info,
+          bg_url: this.bgUrl,
+          click_url: this.clickUrl
+        })
       },
       // 选择大小
       changeSize (size, index) {
@@ -322,12 +346,12 @@
           .ad-size {
             width: 301px;
           }
-          .ad-url {
+          .ad-url, .bg-url, .click-url {
             margin-top: 15px;
             width: 400px;
             .el-input-group__prepend {
               width: 100px;
-              padding: 0 26px;
+              text-align: center;
             }
           }
         }

@@ -26,7 +26,8 @@
             width="100%"
             wmode="transparent"
             pluginspage="http://www.macromedia.com/go/getflashplayer"
-            type="application/x-shockwave-flash" swliveconnect="true" play="true"></embed>
+            type="application/x-shockwave-flash" swliveconnect="true" play="true">
+          </embed>
         </object>
       </div>
     </div>

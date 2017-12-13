@@ -40,8 +40,7 @@
       </div>
       <div class="price-wrap">
         <div class="title">推广出价:</div>
-        <el-input disabled></el-input>
-        元
+        <el-input disabled><template slot="append">元</template></el-input>
       </div>
     </div>
     <div class="button-wrap">
@@ -186,7 +185,6 @@
       }
       .el-input {
         width: 500px;
-        display: inline-block;
       }
     }
   }

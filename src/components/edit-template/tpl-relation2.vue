@@ -14,6 +14,14 @@
             <video id="rel2video" loop src="http://www.bjvca.com/video/relation2.mp4" alt=""></video>
           </div>
           <div class="ad-edit">
+            <div class="url-wrap">
+              <el-input placeholder="请输入曝光检测链接" v-model="bgUrl" size="small">
+                <template slot="prepend">曝光检测链接</template>
+              </el-input>
+              <el-input placeholder="请输入点击检测链接" v-model="clickUrl" size="small">
+                <template slot="prepend">点击检测链接</template>
+              </el-input>
+            </div>
             <!-- 提示模版 -->
             <div class="tpl-tips">
               <div class="tips-select">
@@ -191,7 +199,9 @@
                 info_exp: '二维码'
               }]
           }
-        }
+        },
+        bgUrl: '',
+        clickUrl: ''
       }
     },
     watch: {
@@ -209,8 +219,11 @@
         }
       },
       'adCon' (val) {
-        if (val && val.relation_info.type === 'relation2') {
-          this.conf_info = val
+        if (val && val.adCon.relation_info.type === 'relation2') {
+          this.conf_info = val.adCon
+          // 曝光url和点击url
+          this.bgUrl = this.adCon.bgUrl
+          this.clickUrl = this.adCon.clickUrl
         } else {
           this.conf_info = {
             prompt_info: {  // 提示信息
@@ -246,6 +259,9 @@
                 }]
             }
           }
+          // 曝光url和点击url
+          this.bgUrl = ''
+          this.clickUrl = ''
         }
       }
     },
@@ -286,7 +302,11 @@
           }
         }
         // 调父组件的save方法，并把数据传过去。
-        this.$parent.save('relation', this.conf_info)
+        this.$parent.save('relation', {
+          conf_info: this.conf_info,
+          bg_url: this.bgUrl,
+          click_url: this.clickUrl
+        })
       },
       tipsImgSuccess (res, file) {      // 提示图片
         // this.promptImgUrl = this.imgUrl + res.data
@@ -373,6 +393,15 @@
         background-size: cover;
         background-repeat: no-repeat;
         background-position center;
+        .url-wrap{
+          width: 300px;
+          position: absolute;
+          left: 20px;
+          bottom: 220px;
+          .el-input{
+            margin-top: 3px;
+          }
+        }
         .tpl-tips {
           position: absolute;
           left: 20px;
