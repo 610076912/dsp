@@ -156,8 +156,8 @@
               <span class="operation" @click="copyPlan(scope.row.plan_id)">复制&nbsp;</span>
               <span class="operation" @click="excentionStatus">状态</span>
               <br>
-              <span class="operation">报表&nbsp;</span>
-              <span class="operation" @click="itemDel(scope.row.plan_id)">删除&nbsp;</span>
+              <!--<span class="operation">报表&nbsp;</span>-->
+              <!--<span class="operation" @click="itemDel(scope.row.plan_id)">删除&nbsp;</span>-->
             </template>
           </el-table-column>
         </el-table>
@@ -288,7 +288,7 @@
       // 删除
       delActive (planId) {
         const that = this
-        this.$confirm(`您确定要删除ID为 ${planId} 的计划项吗？`, '提示', {
+        this.$confirm(`您确定要删除这 ${planId.length} 项吗？`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -354,13 +354,7 @@
           alert('请选择要删除的项')
           return
         }
-        this.$confirm(`您确定要删除选中的${this.selectedArr.length}项吗？`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.delActive(this.selectedArr)
-        }).catch(() => {})
+        this.delActive(this.selectedArr)
       },
       // 单项删除
       itemDel (planId) {

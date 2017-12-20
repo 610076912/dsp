@@ -42,6 +42,9 @@
             placeholder="选择日期范围">
           </el-date-picker>
         </el-form-item>
+        <el-form-item label="单价">
+          <el-input :disabled="priceInputStatus" v-model="ruleForm.price"><template slot="append">元</template></el-input>
+        </el-form-item>
         <el-form-item class="button-wrap">
           <el-button @click="back">返回</el-button>
           <el-button class="next-button" type="primary" @click="nextStep" :loading="btnLoading">
@@ -62,9 +65,9 @@
   import mediaJson from '../../../static/json/media.json'
   // 移动，pc，大屏端对应的媒体
   const channelMedias = {
-    1: [1001, 1005, 1013, 1014, 1015],
+    1: [1001, 1005, 1013, 1014, 1015, 1019],
     2: [1001, 1002, 1004, 1015],
-    3: [1016, 1017, 1018, 1015, 1012, 1003]
+    3: [1016, 1017, 1018, 1015, 1012, 1003, 1019]
   }
   export default {
     name: 'creatBasics',
@@ -101,8 +104,10 @@
           group: '',
           budgetType: 0,
           all: '',
-          date: [new Date(), new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)]
+          date: [new Date(), new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)],
+          price: ''
         },
+        priceInputStatus: false,
         // 验证规则
         rules: {
           name: [{required: true, message: '请输入计划名称(20字符内)', trigger: 'blur', max: 10}],
@@ -144,6 +149,9 @@
         this.ruleForm.budgetType = creatData.budgetType
         this.ruleForm.all = creatData.all
         this.ruleForm.date = creatData.date.map(item => new Date(item))
+        // 单价 临时增加
+        this.ruleForm.price = creatData.price
+        this.priceInputStatus = true
         this.activeName = creatData.channel
         this.isEdit = true
         // 必须是获得了activeName这个值以后才能去生成图标所以要放到这里和ajax请求的回调中
@@ -161,6 +169,9 @@
             this.ruleForm.group = data.group_id
             this.ruleForm.budgetType = data.plan_budget_type
             this.ruleForm.all = data.plan_budget_type === 1 ? data.plan_all_budget : data.plan_day_budget
+            // 单价临时增加
+            this.ruleForm.price = data.price
+            this.priceInputStatus = true
             this.activeName = data.plan_channel
             this.$set(this.ruleForm.date, 0, new Date(data.plan_b_time))
             this.$set(this.ruleForm.date, 1, new Date(data.plan_e_time))
@@ -206,7 +217,8 @@
               plan_budget_type: that.ruleForm.budgetType,
               plan_budget: that.ruleForm.all,
               plan_channel: that.activeName,
-              group_id: that.ruleForm.group
+              group_id: that.ruleForm.group,
+              price: that.ruleForm.price
             }
           }
           if (valid && that.isEdit) {
