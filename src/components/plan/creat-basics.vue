@@ -256,10 +256,9 @@
               if (res.code === 200) {
                 this.btnLoading = false
                 this.$router.push('/creatScene')
+              } else {
+                this.btnLoading = false
               }
-            })
-            .catch(err => {
-              alert(err)
             })
         })
       },

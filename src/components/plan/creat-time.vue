@@ -80,6 +80,7 @@
 
       this.timeArray = hourData.time
       // 如果基础设置中有channelId 则拿出来用
+      debugger
       this.channelId = this.$store.state.creatData.creatBasice.channel
       // 判断vuex中是否有数据
       let creatData = this.$store.state.creatData.creatTime
@@ -87,13 +88,13 @@
       if (creatData) {
         this.checkedTime = creatData.time
         this.checkedWeek = creatData.week
-        this.channelId = creatData.channelId
       } else if (this.$store.state.creatData.planId) {
         this.$http.get('/api2/get_time_plan', {
           params: {
             plan_id: this.$store.state.creatData.planId
           }
         }).then(res => {
+          debugger
           if (res.code === 200) {
             this.checkedTime = this.transformTime(res.data.plan_time)
             this.checkedWeek = this.transformWeek(res.data.plan_week)

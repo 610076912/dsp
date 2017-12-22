@@ -22,19 +22,18 @@
           </li>
         </ul>
         <div class="tag-items">
-          <div class="tag-item" v-for="(key,index) in datas" v-if="indexs == index">
-
+          <div class="tag-item">
             <el-row class="count-data">
               <el-col :span="6">
-                <div class="grid-content r b"><span>9.1万</span>
+                <div class="grid-content r b"><span>{{totalData.bg_count}}</span>
                   <p>今日曝光量</p></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content r b"><span>522</span>
+                <div class="grid-content r b"><span>{{totalData.click_count}}</span>
                   <p>今日点击量</p></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content r b"><span>0.54</span>
+                <div class="grid-content r b"><span>{{totalData.click_rate}}</span>
                   <p>今日平均点击率</p></div>
               </el-col>
               <el-col :span="6">
@@ -58,7 +57,6 @@
                   <p>今天曝光量</p></div>
               </el-col>
             </el-row>
-
           </div>
         </div>
       </div>
@@ -68,15 +66,15 @@
       <div class="mobile-title"><span>移动营销概况</span></div>
       <div class="mobile-number">
         <el-col :span="6">
-          <div class="mobile-n-grid r"><span>82.7万</span>
+          <div class="mobile-n-grid r"><span>{{mobileData.bgTotal}}</span>
             <p>曝光量（次）</p></div>
         </el-col>
         <el-col :span="6">
-          <div class="mobile-n-grid r"><span>4400次</span>
+          <div class="mobile-n-grid r"><span>{{mobileData.clickTotal}}</span>
             <p>点击量（次）</p></div>
         </el-col>
         <el-col :span="6">
-          <div class="mobile-n-grid r"><span>0.53</span>
+          <div class="mobile-n-grid r"><span>{{mobileData.clickRate}}</span>
             <p>平均点击率（%）</p></div>
         </el-col>
         <el-col :span="6">
@@ -88,29 +86,40 @@
         <div class="mobile-chart-color">
           <div class="mobile-chart-color-l">
             <span></span>
-            <template>
-              <el-select v-model="value" placeholder="曝光量">
-                <!-- <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option> -->
-              </el-select>
-            </template>
+            <el-select v-model="mobileLeftSelect" size="mini"
+                       @change="selectChange(mobileRightSelect, 'mobileData', '0')"
+                       placeholder="请选择">
+              <el-option
+                v-for="item in selectOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </div>
           <div class="mobile-chart-color-r">
             <span></span>
             <template>
-              <el-select v-model="value" placeholder="点击量">
-                <!-- <el-option
-                  v-for="item in options"
+              <el-select v-model="mobileRightSelect" placeholder="请选择" size="mini"
+                         @change="selectChange(mobileRightSelect, 'mobileData', '1')">
+                <el-option
+                  v-for="item in selectOption"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value">
-                </el-option> -->
+                </el-option>
               </el-select>
             </template>
+          </div>
+          <div class="date-wrap">
+            <el-date-picker
+              v-model="mobileDate"
+              type="daterange"
+              align="right"
+              placeholder="选择日期范围"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+            </el-date-picker>
           </div>
         </div>
         <div class="mobile-chart-box">
@@ -143,29 +152,37 @@
         <div class="mobile-chart-color">
           <div class="mobile-chart-color-l">
             <span></span>
-            <template>
-              <el-select v-model="value" placeholder="曝光量">
-                <!-- <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option> -->
-              </el-select>
-            </template>
+            <el-select v-model="pcLeftSelect" size="mini" @change="selectChange(mobileRightSelect, 'pcData', '0')"
+                       placeholder="请选择">
+              <el-option
+                v-for="item in selectOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </div>
           <div class="mobile-chart-color-r">
             <span></span>
-            <template>
-              <el-select v-model="value" placeholder="点击量">
-                <!-- <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option> -->
-              </el-select>
-            </template>
+            <el-select v-model="pcRightSelect" size="mini" @change="selectChange(mobileRightSelect, 'pcData', '1')"
+                       placeholder="请选择">
+              <el-option
+                v-for="item in selectOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="date-wrap">
+            <el-date-picker
+              v-model="pcDate"
+              type="daterange"
+              align="right"
+              placeholder="选择日期范围"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+            </el-date-picker>
           </div>
         </div>
         <div class="mobile-chart-box">
@@ -198,29 +215,37 @@
         <div class="mobile-chart-color">
           <div class="mobile-chart-color-l">
             <span></span>
-            <template>
-              <el-select v-model="value" placeholder="曝光量">
-                <!-- <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option> -->
-              </el-select>
-            </template>
+            <el-select v-model="ottLeftSelect" size="mini" @change="selectChange(mobileRightSelect, 'ottData', '0')"
+                       placeholder="请选择">
+              <el-option
+                v-for="item in selectOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </div>
           <div class="mobile-chart-color-r">
             <span></span>
-            <template>
-              <el-select v-model="value" placeholder="点击量">
-                <!-- <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option> -->
-              </el-select>
-            </template>
+            <el-select v-model="ottRightSelect" size="mini" @change="selectChange(mobileRightSelect, 'ottData', '1')"
+                       placeholder="请选择">
+              <el-option
+                v-for="item in selectOption"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="date-wrap">
+            <el-date-picker
+              v-model="ottDate"
+              type="daterange"
+              align="right"
+              placeholder="选择日期范围"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+            </el-date-picker>
           </div>
         </div>
         <div class="mobile-chart-box">
@@ -232,11 +257,97 @@
 </template>
 
 <script>
+  let selectOption = [{
+    value: 'bgCount',
+    label: '曝光量'
+  }, {
+    value: 'clickCount',
+    label: '点击量'
+  }, {
+    value: 'clickRate',
+    label: '平均点击率'
+  }, {
+    value: 'spend',
+    label: '花费'
+  }]
+  let chartOption = {
+    color: ['#66c4cb', '#b5a4d9'],          // 折线颜色
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+        type: 'cross'            // 默认为直线，可选为：'line' | 'shadow'
+      }
+    },
+    toolbox: {
+      feature: {saveAsImage: {}}
+    },
+    grid: {
+      left: '30px',
+      right: '30px',
+      bottom: '0px',
+      containLabel: true
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: []
+    },
+    yAxis: [
+      {
+        type: 'value',
+        scale: true,
+        splitNumber: 5,
+        minInterval: 1,
+        name: '曝光量'
+      },
+      {
+        type: 'value',
+        scale: true,
+        splitNumber: 5,
+        minInterval: 1,
+        name: '点击量'
+      }
+    ],
+    series: [
+      {
+        name: '曝光量',
+        type: 'line',
+        smooth: true, // 这句就是让曲线变平滑的
+        areaStyle: {normal: {}},  // 填充背景
+        data: []
+      },
+      {
+        name: '点击量',
+        type: 'line',
+        smooth: true, // 这句就是让曲线变平滑的
+        areaStyle: {normal: {}},  // 填充背景
+        data: [0, 0, 0]
+      }
+    ]
+  }
   export default {
     name: 'index',
     data () {
       return {
-        value: '',
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', [start, end])
+            }
+          }, {
+            text: '最近一个月',
+            onClick (picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit('pick', [start, end])
+            }
+          }]
+        },
         name: sessionStorage.getItem('user'),
         msg: 'index',
         location: '首页',
@@ -244,69 +355,211 @@
         tags: ['移动', 'PC', 'OTT'],
         indexs: 0,
         datas: ['我是移动页面', 'pc页面在此', '发生的离开'],
-
-        chartDate: {
-          tooltip: {trigger: 'axis'},
-          legend: {
-            left: '1vw',
-            data: ['访客数']
-          },
-          toolbox: {
-            feature: {saveAsImage: {}}
-          },
-          grid: {
-            left: '1vw',
-            right: '15px',
-            bottom: '1vw',
-            containLabel: true
-          },
-          xAxis: [
-            {
-              type: 'category',
-              boundaryGap: false,
-              data: [1, 2, 3, 4, 5, 6, 7]
-            }
-          ],
-          yAxis: [
-            {
-              type: 'value',
-              scale: true,
-              splitNumber: 5,
-              minInterval: 1,
-              name: '曝光量（万）'
-            }
-          ],
-          series: [
-            {
-              name: '访客数',
-              type: 'line',
-              smooth: true,
-              data: [10.2, 11, 9.3, 8.8, 11.9, 11.7, 9.1, 10.7]
-            }
-          ],
-          color: [
-            '#33A4FE'
-          ]
-        }
+        // 日期选择器 默认最近七天
+        mobileDate: [new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), new Date(Date.now())],
+        pcDate: [new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), new Date(Date.now())],
+        ottDate: [new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), new Date(Date.now())],
+        // 下拉框
+        mobileLeftSelect: 'bgCount',
+        mobileRightSelect: 'clickCount',
+        pcLeftSelect: 'bgCount',
+        pcRightSelect: 'clickCount',
+        ottLeftSelect: 'bgCount',
+        ottRightSelect: 'clickCount',
+        // 下拉框基础数据
+        selectOption: selectOption,
+        // 图标对象
+        mobileChart: null,
+        pcChart: null,
+        ottChart: null,
+        // 每个图标的基础数据
+        mobileChartData: chartOption,
+        pcChartData: chartOption,
+        ottChartData: chartOption,
+        // 请求到的图表数据
+        totalData: {},
+        mobileData: {},
+        pcData: {},
+        ottData: {}
       }
     },
+    created () {
+      // 每日总数据
+      this.getTotalDate()
+      // 各渠道（移动，pc，ott）数据
+      // this.getMChartsData()
+      // this.getPChartsData()
+      // this.getOChartsData()
+      this.$nextTick(() => {
+        console.log(1)
+        // this.mobileChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[0])
+
+        // this.mobileChart.setOption(this.mobileChartData)
+        // this.mobileChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[1])
+        // this.pcChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[1])
+        // this.ottChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[2])
+      })
+    },
     methods: {
+      // get Total Data
+      getTotalDate (channelId) {
+        this.$http.get('http://192.168.1.106:3889/data/total_data', {
+          params: {
+            user_id: sessionStorage.getItem('user_id'),
+            channel_id: channelId
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.totalData = res.data
+          }
+        })
+      },
+      // 获取移动图标数据接口
+      getMChartsData (timeRange) {
+        this.mobileChart.showLoading()
+        this.$http.get('http://192.168.1.106:3889/data/channel_data', {
+          params: {
+            user_id: sessionStorage.getItem('user_id'),
+            channel_id: 1,
+            time_range: timeRange
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            console.log(res)
+            this.mobelData = res.data
+            let option = {
+              xAxis: {
+                data: res.data.datelist
+              },
+              series: [
+                {
+                  data: res.data.clickArr
+                },
+                {
+                  data: res.data.bgArr
+                }
+              ]
+            }
+            this.mobileChart.setOption(option)
+            this.mobileChart.hideLoading()
+          } else {
+            this.mobileChart.hideLoading()
+          }
+        })
+      },
+      // 获取pc图标数据接口
+      getPChartsData (timeRange) {
+        this.$http.get('http://192.168.1.106:3889/data/channel_data', {
+          params: {
+            user_id: sessionStorage.getItem('user_id'),
+            channel_id: 2,
+            time_range: timeRange
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            console.log(res)
+            this.pcData = res.data
+            let option = {
+              xAxis: {
+                data: res.data.datelist
+              },
+              series: [
+                {
+                  data: res.data.clickArr
+                },
+                {
+                  data: res.data.bgArr
+                }
+              ]
+            }
+            this.pcChart.setOption(option)
+            this.pcChart.hideLoading()
+          } else {
+            this.pcChart.hideLoading()
+          }
+        })
+      },
+      // 获取OTT图标数据接口
+      getOChartsData (timeRange) {
+        this.$http.get('http://192.168.1.106:3889/data/channel_data', {
+          params: {
+            user_id: sessionStorage.getItem('user_id'),
+            channel_id: 3,
+            time_range: timeRange
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            console.log(res)
+            this.OTTData = res.data
+            let option = {
+              xAxis: {
+                data: res.data.datelist
+              },
+              series: [
+                {
+                  data: res.data.clickArr
+                },
+                {
+                  data: res.data.bgArr
+                }
+              ]
+            }
+            this.ottChart.setOption(option)
+            this.ottChart.hideLoading()
+          } else {
+            this.ottChart.hideLoading()
+          }
+        })
+      },
+      selectChange (val, dataType, type) {
+        console.log(val)
+        console.log(dataType)
+        console.log(type)
+        let option = {}
+        let arrData = []
+        let yName = ''
+        switch (val) {
+          case 'clickCount':
+            arrData = this[dataType].clickArr
+            yName = '点击量'
+            break
+          case 'bgCount':
+            arrData = this[dataType].bgArr
+            yName = '曝光量'
+            break
+          case 'clickRate':
+            arrData = this[dataType].clickRate
+            yName = '点击率'
+            break
+          case 'spend':
+            arrData = [] // todo 增加花费数据
+            yName = '花费'
+            break
+          default:
+            alert('cuowu')
+        }
+        option.series[type * 1].data = arrData
+        option.yAxis[type * 1].name = yName
+      },
       toPlan () {
         this.$router.push('plan')
       },
       toggleTags: function (index) {
         this.indexs = index
+        this.getTotalDate(index)
       }
     },
     mounted: function () {
-      const mobileChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[0])
-      mobileChart.setOption(this.chartDate, true)
-
-      const pcChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[1])
-      pcChart.setOption(this.chartDate, true)
-
-      const ottChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[2])
-      ottChart.setOption(this.chartDate, true)
+      this.mobileChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[0])
+      this.pcChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[1])
+      this.ottChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[2])
+      this.mobileChart.setOption(this.mobileChartData)
+      this.pcChart.setOption(this.mobileChartData)
+      this.ottChart.setOption(this.mobileChartData)
+      this.getMChartsData()
+      this.getPChartsData()
+      this.getOChartsData()
+      // this.mobileChart.setOption(this.mobileChartData, true)
     }
   }
 </script>
@@ -442,38 +695,59 @@
     }
 
     .mobile-chart {
-      padding: 30px
+      padding: 20px 30px
     }
     .mobile-chart-color {
-      width 100%
-      height 30px;
-      span {
+      .mobile-chart-color-l {
         display inline-block
-        height 20px
-        width 20px
-        position relative
-        top 5px
+        width 200px
+        height 30px;
+        span {
+          display inline-block
+          height 15px
+          width 15px
+          position relative
+          top 2px
+          left 8px
+          border-radius 50%
+          background #66c4cb
+        }
+        input {
+          margin-left 10px
+          height 25px
+          width 150px
+        }
       }
-      input {
-        margin-left 10px
-        height 30px
-        width 100px
+      .mobile-chart-color-r {
+        display inline-block
+        width 200px
+        height 30px;
+        span {
+          display inline-block
+          height 15px
+          width 15px
+          position relative
+          top 2px
+          left 8px
+          border-radius 50%
+          background #b5a4d9
+        }
+        input {
+          margin-left 10px
+          height 25px
+          width 150px
+        }
       }
-    }
-    .mobile-chart-color-l {
-      float left
-      span {
-        background #ff5500
-      }
-    }
-    .mobile-chart-color-r {
-      float right
-      span {
-        background #f7c100
+      .date-wrap {
+        display inline-block
+        float right
+        input {
+          height: 25px;
+        }
       }
     }
     .mobile-chart-box {
-      height 250px
+      height 350px
       width 100%
     }
 

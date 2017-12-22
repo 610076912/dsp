@@ -36,6 +36,7 @@
             if (response.data.user_type[0] === '1') {
               sessionStorage.setItem('token', response.data.token)
               sessionStorage.setItem('user', response.data.user_name)
+              sessionStorage.setItem('user_id', response.data.user_id)
               _this.$parent.getUserName()
               _this.$router.push('/')
             } else {
