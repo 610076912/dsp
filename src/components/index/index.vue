@@ -90,7 +90,7 @@
                        @change="selectChange(mobileLeftSelect, 'mobileData', '0')"
                        placeholder="请选择">
               <el-option
-                v-for="item in selectOption"
+                v-for="item in selectLOption"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
@@ -103,7 +103,7 @@
               <el-select v-model="mobileRightSelect" placeholder="请选择" size="mini"
                          @change="selectChange(mobileRightSelect, 'mobileData', '1')">
                 <el-option
-                  v-for="item in selectOption"
+                  v-for="item in selectROption"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value">
@@ -156,7 +156,7 @@
             <el-select v-model="pcLeftSelect" size="mini" @change="selectChange(pcLeftSelect, 'pcData', '0')"
                        placeholder="请选择">
               <el-option
-                v-for="item in selectOption"
+                v-for="item in selectLOption"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
@@ -168,7 +168,7 @@
             <el-select v-model="pcRightSelect" size="mini" @change="selectChange(pcRightSelect, 'pcData', '1')"
                        placeholder="请选择">
               <el-option
-                v-for="item in selectOption"
+                v-for="item in selectROption"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
@@ -220,7 +220,7 @@
             <el-select v-model="ottLeftSelect" size="mini" @change="selectChange(ottLeftSelect, 'ottData', '0')"
                        placeholder="请选择">
               <el-option
-                v-for="item in selectOption"
+                v-for="item in selectLOption"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
@@ -232,7 +232,7 @@
             <el-select v-model="ottRightSelect" size="mini" @change="selectChange(ottRightSelect, 'ottData', '1')"
                        placeholder="请选择">
               <el-option
-                v-for="item in selectOption"
+                v-for="item in selectROption"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
@@ -260,13 +260,15 @@
 </template>
 
 <script>
-  let selectOption = [{
+  let selectLOption = [{
     value: 'bgCount',
     label: '曝光量'
   }, {
     value: 'clickCount',
     label: '点击量'
-  }, {
+  }]
+
+  let selectROption = [{
     value: 'clickRate',
     label: '平均点击率'
   }, {
@@ -299,18 +301,16 @@
       {
         type: 'value',
         scale: true,
-        position: 'left',
-        splitNumber: 5,
+        splitNumber: 10,
         minInterval: 1,
         name: '曝光量'
       },
       {
         type: 'value',
         scale: true,
-        position: 'right',
-        splitNumber: 5,
+        splitNumber: 10,
         minInterval: 1,
-        name: '点击量'
+        name: '点击率'
       }
     ],
     series: [
@@ -323,7 +323,7 @@
         data: []
       },
       {
-        name: '点击量',
+        name: '点击率',
         type: 'line',
         yAxisIndex: 1,
         smooth: true, // 这句就是让曲线变平滑的
@@ -368,21 +368,18 @@
         ottDate: [new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), new Date(Date.now())],
         // 下拉框
         mobileLeftSelect: 'bgCount',
-        mobileRightSelect: 'clickCount',
+        mobileRightSelect: 'clickRate',
         pcLeftSelect: 'bgCount',
-        pcRightSelect: 'clickCount',
+        pcRightSelect: 'clickRate',
         ottLeftSelect: 'bgCount',
-        ottRightSelect: 'clickCount',
+        ottRightSelect: 'clickRate',
         // 下拉框基础数据
-        selectOption: selectOption,
+        selectLOption: selectLOption,
+        selectROption: selectROption,
         // 图标对象
         mobileChart: null,
         pcChart: null,
         ottChart: null,
-        // 每个图标的基础数据
-        mobileChartData: chartOption,
-        pcChartData: chartOption,
-        ottChartData: chartOption,
         // 请求到的图表数据
         totalData: {},
         mobileData: {},
@@ -395,19 +392,22 @@
           },
           yAxis: [
             {
-              name: '曝光量'
+              name: '曝光量',
+              position: 'left'
+
             },
             {
-              name: '点击量'
+              name: '点击率',
+              position: 'right'
             }
           ],
           series: [
             {
-              name: '曝光量',
+              yAxisIndex: 0,
               data: []
             },
             {
-              name: '点击量',
+              yAxisIndex: 0,
               data: [0, 0, 0]
             }
           ]
@@ -421,16 +421,16 @@
               name: '曝光量'
             },
             {
-              name: '点击量'
+              name: '点击率'
             }
           ],
           series: [
             {
-              name: '曝光量',
+              yAxisIndex: 0,
               data: []
             },
             {
-              name: '点击量',
+              yAxisIndex: 0,
               data: [0, 0, 0]
             }
           ]
@@ -444,16 +444,16 @@
               name: '曝光量'
             },
             {
-              name: '点击量'
+              name: '点击率'
             }
           ],
           series: [
             {
-              name: '曝光量',
+              yAxisIndex: 0,
               data: []
             },
             {
-              name: '点击量',
+              yAxisIndex: 1,
               data: [0, 0, 0]
             }
           ]
@@ -463,19 +463,6 @@
     created () {
       // 每日总数据
       this.getTotalDate()
-      // 各渠道（移动，pc，ott）数据
-      // this.getMChartsData()
-      // this.getPChartsData()
-      // this.getOChartsData()
-      this.$nextTick(() => {
-        console.log(1)
-        // this.mobileChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[0])
-
-        // this.mobileChart.setOption(this.mobileChartData)
-        // this.mobileChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[1])
-        // this.pcChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[1])
-        // this.ottChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[2])
-      })
     },
     methods: {
       // get Total Data
@@ -498,7 +485,7 @@
           params: {
             user_id: sessionStorage.getItem('user_id'),
             channel_id: 1,
-            time_range: timeRange
+            time_range: JSON.stringify(timeRange)
           }
         }).then(res => {
           if (res.code === 200) {
@@ -520,7 +507,7 @@
           params: {
             user_id: sessionStorage.getItem('user_id'),
             channel_id: 2,
-            time_range: timeRange
+            time_range: JSON.stringify(timeRange)
           }
         }).then(res => {
           if (res.code === 200) {
@@ -571,23 +558,27 @@
         // let yName = ''
         switch (val) {
           case 'clickCount':
-            this[typeName + 'Model'].series[type]['data'] = this[dataType].clickArr
             this[typeName + 'Model'].yAxis[type]['name'] = '点击量'
+            this[typeName + 'Model'].series[type]['name'] = '点击量'
+            this[typeName + 'Model'].series[type]['data'] = this[dataType].clickArr
             console.log([typeName + 'Model'])
             break
           case 'bgCount':
-            this[typeName + 'Model'].series[type]['data'] = this[dataType].bgArr
             this[typeName + 'Model'].yAxis[type]['name'] = '曝光量'
+            this[typeName + 'Model'].series[type]['name'] = '曝光量'
+            this[typeName + 'Model'].series[type]['data'] = this[dataType].bgArr
             console.log([typeName + 'Model'])
             break
           case 'clickRate':
-            this[typeName + 'Model'].series[type]['data'] = this[dataType].clickRateArr
             this[typeName + 'Model'].yAxis[type]['name'] = '点击率'
+            this[typeName + 'Model'].series[type]['name'] = '点击率'
+            this[typeName + 'Model'].series[type]['data'] = this[dataType].clickRateArr
             console.log([typeName + 'Model'])
             break
           case 'spend':
-            this[typeName + 'Model'].series[type]['data'] = [] // todo 增加花费数据
             this[typeName + 'Model'].yAxis[type]['name'] = '花费'
+            this[typeName + 'Model'].series[type]['name'] = '花费'
+            this[typeName + 'Model'].series[type]['data'] = [] // todo 增加花费数据
             console.log([typeName + 'Model'])
             break
           default:
@@ -596,7 +587,7 @@
         // this.mobileModel.yAxis[type]['name'] = yName
         // this.mobileModel.series[type]['data'] = arrData
         // console.log(this.mobileModel)
-        console.log(typeName + 'Chart')
+        console.log(this[typeName + 'Model'])
         this[typeName + 'Chart'].setOption(this[typeName + 'Model'])
       },
       chartDateChange (dateArr, type) {
@@ -622,9 +613,9 @@
       this.mobileChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[0])
       this.pcChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[1])
       this.ottChart = this.$echarts.init(document.getElementsByClassName('mobile-chart-box')[2])
-      this.mobileChart.setOption(this.mobileChartData)
-      this.pcChart.setOption(this.mobileChartData)
-      this.ottChart.setOption(this.mobileChartData)
+      this.mobileChart.setOption(chartOption)
+      this.pcChart.setOption(chartOption)
+      this.ottChart.setOption(chartOption)
       this.getMChartsData()
       this.getPChartsData()
       this.getOChartsData()
