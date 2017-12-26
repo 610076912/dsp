@@ -87,7 +87,7 @@
           <div class="mobile-chart-color-l">
             <span></span>
             <el-select v-model="mobileLeftSelect" size="mini"
-                       @change="selectChange(mobileRightSelect, 'mobileData', '0')"
+                       @change="selectChange(mobileLeftSelect, 'mobileData', '0')"
                        placeholder="请选择">
               <el-option
                 v-for="item in selectOption"
@@ -114,6 +114,7 @@
           <div class="date-wrap">
             <el-date-picker
               v-model="mobileDate"
+              @change="chartDateChange(mobileDate, 'mobile')"
               type="daterange"
               align="right"
               placeholder="选择日期范围"
@@ -152,7 +153,7 @@
         <div class="mobile-chart-color">
           <div class="mobile-chart-color-l">
             <span></span>
-            <el-select v-model="pcLeftSelect" size="mini" @change="selectChange(mobileRightSelect, 'pcData', '0')"
+            <el-select v-model="pcLeftSelect" size="mini" @change="selectChange(pcLeftSelect, 'pcData', '0')"
                        placeholder="请选择">
               <el-option
                 v-for="item in selectOption"
@@ -164,7 +165,7 @@
           </div>
           <div class="mobile-chart-color-r">
             <span></span>
-            <el-select v-model="pcRightSelect" size="mini" @change="selectChange(mobileRightSelect, 'pcData', '1')"
+            <el-select v-model="pcRightSelect" size="mini" @change="selectChange(pcRightSelect, 'pcData', '1')"
                        placeholder="请选择">
               <el-option
                 v-for="item in selectOption"
@@ -177,6 +178,7 @@
           <div class="date-wrap">
             <el-date-picker
               v-model="pcDate"
+              @change="chartDateChange(pcDate, 'pc')"
               type="daterange"
               align="right"
               placeholder="选择日期范围"
@@ -214,7 +216,7 @@
         <div class="mobile-chart-color">
           <div class="mobile-chart-color-l">
             <span></span>
-            <el-select v-model="ottLeftSelect" size="mini" @change="selectChange(mobileRightSelect, 'ottData', '0')"
+            <el-select v-model="ottLeftSelect" size="mini" @change="selectChange(ottLeftSelect, 'ottData', '0')"
                        placeholder="请选择">
               <el-option
                 v-for="item in selectOption"
@@ -226,7 +228,7 @@
           </div>
           <div class="mobile-chart-color-r">
             <span></span>
-            <el-select v-model="ottRightSelect" size="mini" @change="selectChange(mobileRightSelect, 'ottData', '1')"
+            <el-select v-model="ottRightSelect" size="mini" @change="selectChange(ottRightSelect, 'ottData', '1')"
                        placeholder="请选择">
               <el-option
                 v-for="item in selectOption"
@@ -239,6 +241,7 @@
           <div class="date-wrap">
             <el-date-picker
               v-model="ottDate"
+              @change="chartDateChange(ottDate, 'ott')"
               type="daterange"
               align="right"
               placeholder="选择日期范围"
@@ -295,6 +298,7 @@
       {
         type: 'value',
         scale: true,
+        position: 'left',
         splitNumber: 5,
         minInterval: 1,
         name: '曝光量'
@@ -302,6 +306,7 @@
       {
         type: 'value',
         scale: true,
+        position: 'right',
         splitNumber: 5,
         minInterval: 1,
         name: '点击量'
@@ -311,6 +316,7 @@
       {
         name: '曝光量',
         type: 'line',
+        yAxisIndex: 0,
         smooth: true, // 这句就是让曲线变平滑的
         areaStyle: {normal: {}},  // 填充背景
         data: []
@@ -318,6 +324,7 @@
       {
         name: '点击量',
         type: 'line',
+        yAxisIndex: 1,
         smooth: true, // 这句就是让曲线变平滑的
         areaStyle: {normal: {}},  // 填充背景
         data: [0, 0, 0]
@@ -379,7 +386,77 @@
         totalData: {},
         mobileData: {},
         pcData: {},
-        ottData: {}
+        ottData: {},
+        // 给每个图表维护一个变动的数据模型，每次更新数据都修改该模型。
+        mobileModel: {
+          xAxis: {
+            data: []
+          },
+          yAxis: [
+            {
+              name: '曝光量'
+            },
+            {
+              name: '点击量'
+            }
+          ],
+          series: [
+            {
+              name: '曝光量',
+              data: []
+            },
+            {
+              name: '点击量',
+              data: [0, 0, 0]
+            }
+          ]
+        },
+        pcModel: {
+          xAxis: {
+            data: []
+          },
+          yAxis: [
+            {
+              name: '曝光量'
+            },
+            {
+              name: '点击量'
+            }
+          ],
+          series: [
+            {
+              name: '曝光量',
+              data: []
+            },
+            {
+              name: '点击量',
+              data: [0, 0, 0]
+            }
+          ]
+        },
+        ottModel: {
+          xAxis: {
+            data: []
+          },
+          yAxis: [
+            {
+              name: '曝光量'
+            },
+            {
+              name: '点击量'
+            }
+          ],
+          series: [
+            {
+              name: '曝光量',
+              data: []
+            },
+            {
+              name: '点击量',
+              data: [0, 0, 0]
+            }
+          ]
+        }
       }
     },
     created () {
@@ -425,21 +502,11 @@
         }).then(res => {
           if (res.code === 200) {
             console.log(res)
-            this.mobelData = res.data
-            let option = {
-              xAxis: {
-                data: res.data.datelist
-              },
-              series: [
-                {
-                  data: res.data.clickArr
-                },
-                {
-                  data: res.data.bgArr
-                }
-              ]
-            }
-            this.mobileChart.setOption(option)
+            this.mobileData = res.data
+            this.mobileModel.xAxis.data = res.data.datelist
+            this.mobileModel.series[0].data = res.data.clickArr
+            this.mobileModel.series[1].data = res.data.bgArr
+            this.mobileChart.setOption(this.mobileModel)
             this.mobileChart.hideLoading()
           } else {
             this.mobileChart.hideLoading()
@@ -458,20 +525,10 @@
           if (res.code === 200) {
             console.log(res)
             this.pcData = res.data
-            let option = {
-              xAxis: {
-                data: res.data.datelist
-              },
-              series: [
-                {
-                  data: res.data.clickArr
-                },
-                {
-                  data: res.data.bgArr
-                }
-              ]
-            }
-            this.pcChart.setOption(option)
+            this.pcModel.xAxis.data = res.data.datelist
+            this.pcModel.series[0].data = res.data.clickArr
+            this.pcModel.series[1].data = res.data.bgArr
+            this.pcChart.setOption(this.pcModel)
             this.pcChart.hideLoading()
           } else {
             this.pcChart.hideLoading()
@@ -484,26 +541,16 @@
           params: {
             user_id: sessionStorage.getItem('user_id'),
             channel_id: 3,
-            time_range: timeRange
+            time_range: JSON.stringify(timeRange)
           }
         }).then(res => {
           if (res.code === 200) {
             console.log(res)
-            this.OTTData = res.data
-            let option = {
-              xAxis: {
-                data: res.data.datelist
-              },
-              series: [
-                {
-                  data: res.data.clickArr
-                },
-                {
-                  data: res.data.bgArr
-                }
-              ]
-            }
-            this.ottChart.setOption(option)
+            this.ottData = res.data
+            this.ottModel.xAxis.data = res.data.datelist
+            this.ottModel.series[0].data = res.data.clickArr
+            this.ottModel.series[1].data = res.data.bgArr
+            this.ottChart.setOption(this.ottModel)
             this.ottChart.hideLoading()
           } else {
             this.ottChart.hideLoading()
@@ -514,31 +561,53 @@
         console.log(val)
         console.log(dataType)
         console.log(type)
-        let option = {}
-        let arrData = []
-        let yName = ''
+        const typeName = dataType.replace(/Data/, '')
+        // let option = {
+        //   series: [{}, {}],
+        //   yAxis: [{}, {}]
+        // }
+        // let arrData = []
+        // let yName = ''
         switch (val) {
           case 'clickCount':
-            arrData = this[dataType].clickArr
-            yName = '点击量'
+            this[typeName + 'Model'].series[type]['data'] = this[dataType].clickArr
+            this[typeName + 'Model'].yAxis[type]['name'] = '点击量'
+            console.log([typeName + 'Model'])
             break
           case 'bgCount':
-            arrData = this[dataType].bgArr
-            yName = '曝光量'
+            this[typeName + 'Model'].series[type]['data'] = this[dataType].bgArr
+            this[typeName + 'Model'].yAxis[type]['name'] = '曝光量'
+            console.log([typeName + 'Model'])
             break
           case 'clickRate':
-            arrData = this[dataType].clickRate
-            yName = '点击率'
+            this[typeName + 'Model'].series[type]['data'] = this[dataType].clickRateArr
+            this[typeName + 'Model'].yAxis[type]['name'] = '点击率'
+            console.log([typeName + 'Model'])
             break
           case 'spend':
-            arrData = [] // todo 增加花费数据
-            yName = '花费'
+            this[typeName + 'Model'].series[type]['data'] = [] // todo 增加花费数据
+            this[typeName + 'Model'].yAxis[type]['name'] = '花费'
+            console.log([typeName + 'Model'])
             break
           default:
             alert('cuowu')
         }
-        option.series[type * 1].data = arrData
-        option.yAxis[type * 1].name = yName
+        // this.mobileModel.yAxis[type]['name'] = yName
+        // this.mobileModel.series[type]['data'] = arrData
+        // console.log(this.mobileModel)
+        console.log(typeName + 'Chart')
+        this[typeName + 'Chart'].setOption(this[typeName + 'Model'])
+      },
+      chartDateChange (dateArr, type) {
+        console.log(dateArr)
+        console.log(type)
+        if (type === 'mobile') {
+          this.getMChartsData(dateArr)
+        } else if (type === 'pc') {
+          this.getPChartsData(dateArr)
+        } else if (type === 'ott') {
+          this.getOChartsData(dateArr)
+        }
       },
       toPlan () {
         this.$router.push('plan')
