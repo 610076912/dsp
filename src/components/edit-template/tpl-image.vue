@@ -9,7 +9,7 @@
           </el-button>
         </template>
         <div class="img">
-          <div class="ad-style" v-show="!isEdit"><video id="imgvideo" loop src="http://www.bjvca.com/video/image.mp4" alt=""></video></div>
+          <div class="ad-style" v-show="!isEdit"><video id="imgvideo" loop src="http://sltimg.adv.ott.cibntv.net/static/video/image.mp4" alt=""></video></div>
           <div class="ad-edit">
             <div class="upload-flash">
               <img v-if="conf_info.image_src" :src="conf_info.image_src" class="avatar">

@@ -1,9 +1,9 @@
 <template>
   <div id="mediadata">
     <p class="header">媒体分析</p>
-    <el-tabs class="tab" v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="媒体分析" name="first"></el-tab-pane>
-    </el-tabs>
+    <div class="nav">
+      <div class="navname">媒体分析数据</div>
+    </div>
 
     <div class="form">
       <div class="top">
@@ -63,18 +63,22 @@
       font-size: 16px
       padding: 0 28px
     }
-    .tab{
-      background: #f9f9f9;
+
+    .nav {
+      height: 44px;
+      line-height: 46px
+      border-bottom 2px solid #4a9cd3
+      .navname {
+        height 100%;
+        width 150px;
+        color #fff;
+        border-radius: 6px 6px 0 0
+        background #4a9cd3
+        text-align center
+        font-size: 16px
+      }
     }
-    .el-tabs__header{
-      padding: 0 28px
-      margin: 0
-      border-bottom: 2px solid #4a9cd3;
-    }
-    .el-tabs__item.is-active{
-      background: #4a9cd3
-      color: #e5f0f8
-    }
+
     .form{
       margin-top: 30px
 

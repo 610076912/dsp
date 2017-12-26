@@ -184,7 +184,6 @@
               placeholder="选择日期范围"
               :picker-options="pickerOptions">
             </el-date-picker>
-            </el-date-picker>
           </div>
         </div>
         <div class="mobile-chart-box">
@@ -657,8 +656,8 @@
       float left;
     }
     .now-location {
-      height 60px;
-      line-height 60px;
+      height 56px;
+      line-height 56px;
     }
     .user-info {
       height 50px;

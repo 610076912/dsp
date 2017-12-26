@@ -11,7 +11,7 @@
         </template>
         <div class="flash1">
           <div class="ad-style" v-show="!isEdit">
-            <video id="flashvideo" loop src="http://www.bjvca.com/video/flash.mp4"></video>
+            <video id="flashvideo" loop src="http://sltimg.adv.ott.cibntv.net/static/video/flash.mp4"></video>
           </div>
           <div class="ad-edit">
             <div class="upload-flash">
