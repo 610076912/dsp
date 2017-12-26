@@ -1,6 +1,6 @@
 <template>
   <div id="data">
-    <p class="data-path">当前位置：</p>
+    <p class="data-path"><b>当前位置：</b>广告数据 > {{ path }}</p>
 
     <div class="data-con">
       <el-row class="tac">
@@ -8,25 +8,11 @@
           <el-menu mode="vertical" default-active="data" class="el-menu-vertical-demo" router>
             <el-submenu index="1">
               <template slot="title"><i class="el-icon-menu"></i>广告数据</template>
-              <el-menu-item index="data">推广数据</el-menu-item>
-              <el-menu-item index="mediadata">媒体分析</el-menu-item>
-              <el-menu-item index="3">地域分析</el-menu-item>
-              <el-menu-item index="timebucket">时段分析</el-menu-item>
+              <el-menu-item index="data" @click="changePath('推广数据')">推广数据</el-menu-item>
+              <el-menu-item index="mediadata" @click="changePath('媒体分析')">媒体分析</el-menu-item>
+              <el-menu-item index="territory"  @click="changePath('地域分析')">地域分析</el-menu-item>
+              <el-menu-item index="timebucket"  @click="changePath('时段分析')">时段分析</el-menu-item>
             </el-submenu>
-            <!-- <el-submenu index="2">
-              <template slot="title"><i class="el-icon-minus"></i>PC广告数据</template>
-              <el-menu-item index="5">推广数据</el-menu-item>
-              <el-menu-item index="6">媒体分析</el-menu-item>
-              <el-menu-item index="7">地域分析</el-menu-item>
-              <el-menu-item index="8">时段分析</el-menu-item>
-            </el-submenu>
-            <el-submenu index="3">
-              <template slot="title"><i class="el-icon-minus"></i>大屏广告数据</template>
-              <el-menu-item index="9">推广数据</el-menu-item>
-              <el-menu-item index="10">媒体分析</el-menu-item>
-              <el-menu-item index="11">地域分析</el-menu-item>
-              <el-menu-item index="12">时段分析</el-menu-item>
-            </el-submenu> -->
           </el-menu>
         </el-col>
         <el-col :span="19" class="data-right">
@@ -42,12 +28,16 @@
     name: 'dataindex',
     data () {
       return {
-        msg: 'data'
+        msg: 'data',
+        path: '推广数据'
       }
     },
     methods: {
       menuRouter (key, keyPath) {
         console.log(key, keyPath)
+      },
+      changePath (path) {
+        this.path = path
       }
     }
   }
@@ -63,9 +53,8 @@
     .data-path{
       display inline-block;
       width: 100%;
-      height: 44px;
-      line-height: 44px;
-      margin-top: 26px;
+      height: 56px;
+      line-height: 56px;
     }
     .data-con {
       width: 100%;

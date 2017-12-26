@@ -30,6 +30,7 @@
               </el-option>
             </el-select>
           </div>
+          <!-- 查询按钮 -->
           <div class="btn">
             <el-button type="primary" @click="search">查询</el-button>
           </div>
@@ -52,7 +53,7 @@
               @change="selectChange()"
               placeholder="请选择">
               <el-option
-                v-for="item in selectLOR"
+                v-for="item in selectO"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
@@ -65,7 +66,7 @@
               @change="selectChange()"
               placeholder="请选择">
               <el-option
-                v-for="item in selectLOR"
+                v-for="item in selectO"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
@@ -111,7 +112,7 @@ export default {
       }],
       device: '1',
       activity: '1',
-      selectLOR: [{      // 选择器选项
+      selectO: [{      // 选择器选项
         value: 'bgcount',
         label: '曝光量'
       }, {
@@ -138,15 +139,10 @@ export default {
     }
   },
   methods: {
-    chartShow () {
-      console.log(this)
-    },
     search () {
       console.log(this.dateValue)
     },
     selectChange () {
-      console.log(this.selectL)
-      console.log(this.selectR)
       this.echarts()
     },
     isWho (me) {
@@ -167,7 +163,7 @@ export default {
         tooltip: {
           trigger: 'axis',
           axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-            type: 'cross'            // 默认为直线，可选为：'line' | 'shadow'
+            type: 'cross'           // 默认为直线，可选为：'line' | 'shadow'
           }
         },
         grid: {                     // 图表位置

@@ -665,8 +665,8 @@
       float left;
     }
     .now-location {
-      height 60px;
-      line-height 60px;
+      height 56px;
+      line-height 56px;
     }
     .user-info {
       height 50px;
