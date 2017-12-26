@@ -182,7 +182,6 @@
               placeholder="选择日期范围"
               :picker-options="pickerOptions">
             </el-date-picker>
-            </el-date-picker>
           </div>
         </div>
         <div class="mobile-chart-box">

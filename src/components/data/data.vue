@@ -7,13 +7,13 @@
         <el-col :span="5" class="data-left">
           <el-menu mode="vertical" default-active="data" class="el-menu-vertical-demo" router>
             <el-submenu index="1">
-              <template slot="title"><i class="el-icon-minus"></i>移动广告数据</template>
+              <template slot="title"><i class="el-icon-menu"></i>广告数据</template>
               <el-menu-item index="data">推广数据</el-menu-item>
               <el-menu-item index="mediadata">媒体分析</el-menu-item>
               <el-menu-item index="3">地域分析</el-menu-item>
-              <el-menu-item index="4">时段分析</el-menu-item>
+              <el-menu-item index="timebucket">时段分析</el-menu-item>
             </el-submenu>
-            <el-submenu index="2">
+            <!-- <el-submenu index="2">
               <template slot="title"><i class="el-icon-minus"></i>PC广告数据</template>
               <el-menu-item index="5">推广数据</el-menu-item>
               <el-menu-item index="6">媒体分析</el-menu-item>
@@ -26,7 +26,7 @@
               <el-menu-item index="10">媒体分析</el-menu-item>
               <el-menu-item index="11">地域分析</el-menu-item>
               <el-menu-item index="12">时段分析</el-menu-item>
-            </el-submenu>
+            </el-submenu> -->
           </el-menu>
         </el-col>
         <el-col :span="19" class="data-right">
@@ -39,7 +39,7 @@
 
 <script>
   export default {
-    name: 'data',
+    name: 'dataindex',
     data () {
       return {
         msg: 'data'

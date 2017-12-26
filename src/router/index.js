@@ -29,6 +29,7 @@ const creatMaterial = () => import(/* webpackChunkName: "plan" */ '@/components/
 const data = () => import(/* webpackChunkName: "data" */ '@/components/data/data')
 const plandata = () => import(/* webpackChunkName: "data" */ '@/components/data/plandata')
 const mediadata = () => import(/* webpackChunkName: "data" */ '@/components/data/mediadata')
+const timebucket = () => import('@/components/data/timebucket')
 const finance = () => import(/* webpackChunkName: "finance" */ '@/components/finance/finance')
 // import data from '@/components/data/data'
 // import plandata from '@/components/data/plandata'
@@ -53,7 +54,7 @@ export default new Router({
       path: '/',
       name: 'index',
       component: Index,
-      meta: {Auth: true}
+      meta: { Auth: true }
     },
     {
       path: '/login',
@@ -64,7 +65,7 @@ export default new Router({
       path: '/plan',
       name: 'plan',
       component: plan,
-      meta: {Auth: true},
+      meta: { Auth: true },
       children: [
         {
           path: '',
@@ -123,7 +124,7 @@ export default new Router({
       path: '/data',
       name: 'data',
       component: data,
-      meta: {Auth: true},
+      meta: { Auth: true },
       children: [
         {
           path: '',
@@ -134,6 +135,11 @@ export default new Router({
           path: '/mediadata',
           name: 'mediadata',
           component: mediadata
+        },
+        {
+          path: '/timebucket',
+          name: '时段分析',
+          component: timebucket
         }
       ]
     },
@@ -141,7 +147,7 @@ export default new Router({
       path: '/finance',
       name: 'finance',
       component: finance,
-      meta: {Auth: true},
+      meta: { Auth: true },
       children: [
         {
           path: '/',
