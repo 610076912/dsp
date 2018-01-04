@@ -148,6 +148,7 @@
             label="活动状态"
             align="center"
             prop="status"
+            :formatter="activity"
             width="90">
           </el-table-column>
           <el-table-column label="功能操作" align="left" :resizable="false">
@@ -301,6 +302,25 @@
             }
           })
         }).catch(() => {})
+      },
+      activity (val) {  // 格式化内容对应文本
+        if (val.status === 1) {
+          return '正在编辑'
+        } else if (val.status === 2) {
+          return '正在审核'
+        } else if (val.status === 3) {
+          return '审核通过'
+        } else if (val.status === 4) {
+          return '审核未通过'
+        } else if (val.status === 5) {
+          return '正在投放'
+        } else if (val.status === 6) {
+          return '投放完成'
+        } else if (val.status === 7) {
+          return '暂停投放'
+        } else if (val.status === 100) {
+          return '异常状态'
+        }
       },
       // 新建按钮
       creatNew () {
