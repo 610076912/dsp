@@ -5,9 +5,10 @@
         <template slot="title">动态图片模板
           <el-button class="button" size="small" @click.stop="edit" v-show="!isEdit && collapseVal==='image'">编辑
           </el-button>
-          <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='image'">保存
+          <el-button :disabled="!canEdit" class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='image'">保存
           </el-button>
         </template>
+        <div class="can-edit" v-if="!canEdit"></div>
         <div class="img">
           <div class="ad-style" v-show="!isEdit"><video id="imgvideo" loop src="http://sltimg.adv.ott.cibntv.net/static/video/image.mp4" alt=""></video></div>
           <div class="ad-edit">
@@ -78,6 +79,8 @@
     },
     data () {
       return {
+        // 是否可修改
+        canEdit: true,
         // video 对象
         video: '',
         // 上传接口地址
@@ -132,7 +135,7 @@
           }
           if (this.adCon.adCon.position === 'right') {
             this.isPosition = 3
-            this.conf_info.size = 'right'
+            this.conf_info.position = 'right'
           }
           // 大小
           if (this.adCon.adCon.size === '380,200,i_size1') this.isSize = 1
@@ -159,6 +162,8 @@
           // 曝光url和点击url
           this.bgUrl = this.adCon.bgUrl
           this.clickUrl = this.adCon.clickUrl
+          // 是否可修改
+          this.canEdit = this.adCon.canEdit
         } else {
           this.conf_info = {
             image_src: '',
@@ -251,6 +256,15 @@
         border-radius: 15px;
         width: 60px;
       }
+    }
+    .el-collapse-item__content {
+      position relative
+    }
+    .can-edit {
+      position absolute
+      z-index 100
+      width: 100%
+      height: 550px
     }
     .img {
       width: 100%;

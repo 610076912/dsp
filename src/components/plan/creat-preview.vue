@@ -3,7 +3,7 @@
     <steps :active="5"></steps>
     <div class="basic cons">
       <p class="head"><span>基本信息</span><b>
-        <router-link to="creatBasics">编辑信息</router-link>
+        <router-link v-if="status.publish !== 0 || status.publish === 6" to="creatBasics">编辑信息</router-link>
       </b></p>
       <el-row class="row">
         <el-col :span="8"><span>推广计划名称: </span><span>{{ baseInfo.act_name }}</span></el-col>
@@ -19,7 +19,7 @@
     </div>
     <div class="scene cons">
       <p class="head"><span>场景化投放设置</span><b>
-        <router-link to="creatScene">编辑信息</router-link>
+        <router-link v-if="status.publish !== 0 || status.publish === 6" to="creatScene">编辑信息</router-link>
       </b></p>
       <div class="pro-box">
         <p class="minhead"><span>广告目标</span></p>
@@ -36,7 +36,7 @@
     </div>
     <div class="date cons">
       <p class="head"><span>投放时间</span><b>
-        <router-link to="creatTime">编辑信息</router-link>
+        <router-link v-if="status.publish !== 0 || status.publish === 6" to="creatTime">编辑信息</router-link>
       </b></p>
       <div class="pro-box">
         <p class="minhead"><span>小时</span></p>
@@ -53,7 +53,7 @@
     </div>
     <div class="position cons">
       <p class="head"><span>地理位置定向</span><b>
-        <router-link to="creatCity">编辑信息</router-link>
+        <router-link v-if="status.publish !== 0 || status.publish === 6" to="creatCity">编辑信息</router-link>
       </b></p>
       <div class="pro-box">
         <p class="minhead"><span>按地区</span></p>
@@ -72,7 +72,7 @@
     </div>
     <div class="episode cons">
       <p class="head"><span>视频类型</span><b>
-        <router-link to="creatMediatype">编辑信息</router-link>
+        <router-link v-if="status.publish !== 0 || status.publish === 6" to="creatMediatype">编辑信息</router-link>
       </b></p>
       <div class="pro-box">
         <div class="label">
@@ -82,7 +82,7 @@
     </div>
     <div class="strategy cons">
       <p class="head"><span>投放策略</span><b>
-        <router-link to="creatStrategy">编辑信息</router-link>
+        <router-link v-if="status.publish !== 0 || status.publish === 6" to="creatStrategy">编辑信息</router-link>
       </b></p>
       <div class="pro-box">
         <div class="bar">
@@ -129,7 +129,7 @@
     </div>
     <div class="material cons">
       <p class="head"><span>广告素材类型</span><b>
-        <router-link to="creatMaterial">编辑信息</router-link>
+        <router-link v-if="status.publish !== 0 || status.publish === 6"  to="creatMaterial">编辑信息</router-link>
       </b></p>
       <div class="pro-box">
         <div class="material-item" v-for="(item, index) in platformName">
@@ -180,6 +180,10 @@
     name: 'creatPreview',
     data () {
       return {
+        // 状态
+        status: {
+          publish: false
+        },
         // 计划id
         planId: this.$store.state.creatData.planId,
         loading: true,
@@ -277,6 +281,9 @@
             // 广告信息
             _this.materialInfo = result.adConfInfo_8
           }
+          // 将状态存到vuex中。
+          this.status = result.status
+          this.$store.commit('STATUS', result.status)
         }
       })
     },

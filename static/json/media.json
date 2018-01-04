@@ -4,132 +4,151 @@
     "media_name": "暴风",
     "media_url": "./static/img/baofeng.png",
     "checked": "0",
-    "alias": "a"
+    "alias": "a",
+    "display": false
   },
   {
     "media_id": 1002,
     "media_name": "华数传媒",
     "media_url": "./static/img/huashu.png",
     "checked": "0",
-    "alias": "b"
+    "alias": "b",
+    "display": true
   },
   {
     "media_id": 1003,
     "media_name": "CIBN",
     "media_url": "./static/img/CIBN.png",
     "checked": "0",
-    "alias": "c"
+    "alias": "c",
+    "display": true
   },
   {
     "media_id": 1004,
     "media_name": "1905电影网",
     "media_url": "./static/img/1905.png",
     "checked": "0",
-    "alias": "d"
+    "alias": "d",
+    "display": true
   },
   {
     "media_id": 1005,
     "media_name": "秒拍",
     "media_url": "./static/img/miaopai.png",
     "checked": "0",
-    "alias": "e"
+    "alias": "e",
+    "display": false
   },
   {
     "media_id": 1006,
     "media_name": "爱奇艺",
     "media_url": "./static/img/aiqiyi.png",
     "checked": "0",
-    "alias": "f"
+    "alias": "f",
+    "display": false
   },
   {
     "media_id": 1007,
     "media_name": "腾讯视频",
     "media_url": "./static/img/tengxun.png",
     "checked": "0",
-    "alias": "g"
+    "alias": "g",
+    "display": false
   },
   {
     "media_id": 1008,
     "media_name": "土豆",
     "media_url": "./static/img/tudou.png",
     "checked": "0",
-    "alias": "h"
+    "alias": "h",
+    "display": false
   },
   {
     "media_id": 1009,
     "media_name": "优酷视频",
     "media_url": "./static/img/youku.png",
     "checked": "0",
-    "alias": "i"
+    "alias": "i",
+    "display": false
   },
   {
     "media_id": 1010,
     "media_name": "乐视视频",
     "media_url": "./static/img/leshi.png",
     "checked": "0",
-    "alias": "j"
+    "alias": "j",
+    "display": false
   },
   {
     "media_id": 1011,
     "media_name": "搜狐视频",
     "media_url": "./static/img/souhu.png",
     "checked": "0",
-    "alias": "k"
+    "alias": "k",
+    "display": false
   },
   {
     "media_id": 1012,
     "media_name": "暴风TV",
     "media_url": "./static/img/baofengTV.jpg",
     "checked": "0",
-    "alias": "l"
+    "alias": "l",
+    "display": false
   },
   {
     "media_id": 1013,
     "media_name": "人人视频",
     "media_url": "./static/img/renrenshipin.jpg",
     "checked": "0",
-    "alias": "m"
+    "alias": "m",
+    "display": false
   },
   {
     "media_id": 1014,
     "media_name": "天翼视讯",
     "media_url": "./static/img/tysx.jpg",
     "checked": "0",
-    "alias": "n"
+    "alias": "n",
+    "display": true
   },
   {
     "media_id": 1015,
     "media_name": "pptv",
     "media_url": "./static/img/PPTV.jpg",
     "checked": "0",
-    "alias": "o"
+    "alias": "o",
+    "display": false
   },
   {
     "media_id": 1016,
     "media_name": "百视通",
     "media_url": "./static/img/baishitong.jpg",
     "checked": "0",
-    "alias": "p"
+    "alias": "p",
+    "display": false
   },
   {
     "media_id": 1017,
     "media_name": "创维",
     "media_url": "./static/img/chuangwei.jpg",
     "checked": "0",
-    "alias": "q"
+    "alias": "q",
+    "display": false
   },
   {
     "media_id": 1018,
     "media_name": "酷开电视",
     "media_url": "./static/img/kukai.jpg",
     "checked": "0",
-    "alias": "r"
+    "alias": "r",
+    "display": false
   },
   {
     "media_id": 1019,
     "media_name": "知了汽车",
     "media_url": "./static/img/zhiliao.png",
     "checked": "0",
-    "alias": "s"
+    "alias": "s",
+    "display": false
   }
 ]

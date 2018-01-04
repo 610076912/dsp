@@ -5,7 +5,7 @@
       <el-tab-pane label="PC推广" name="2"></el-tab-pane>
       <el-tab-pane label="大屏推广" name="3"></el-tab-pane>
       <div class="card-header">
-        <button class="batch-del" @click="beachDel">批量删除</button>
+        <!--<button class="batch-del" @click="beachDel">批量删除</button>-->
         <label>
           排序：
           <el-select v-model="seekData.sort" class="sort-select" clearable>
@@ -38,14 +38,14 @@
             </el-option>
           </el-select>
         </label>
-        <label>
-          状态：
-          <el-select v-model="seekData.status" class="status-select" clearable>
-            <el-option key="time" label="活动推广时间" value="time"></el-option>
-            <el-option key="group" label="分组" value="group"></el-option>
-            <el-option key="kg" label="开关" value="kg"></el-option>
-          </el-select>
-        </label>
+        <!--<label>-->
+          <!--状态：-->
+          <!--<el-select v-model="seekData.status" class="status-select" clearable>-->
+            <!--<el-option key="time" label="活动推广时间" value="time"></el-option>-->
+            <!--<el-option key="group" label="分组" value="group"></el-option>-->
+            <!--<el-option key="kg" label="开关" value="kg"></el-option>-->
+          <!--</el-select>-->
+        <!--</label>-->
         <button class="submit" @click="seek">查询</button>
       </div>
       <div class="card-content">
@@ -154,7 +154,7 @@
             <template slot-scope="scope">
               <span class="operation" @click="details(scope.row.plan_id)">查看&nbsp;</span>
               <span class="operation" @click="copyPlan(scope.row.plan_id)">复制&nbsp;</span>
-              <span class="operation" @click="excentionStatus">状态</span>
+              <!--<span class="operation" @click="excentionStatus">状态</span>-->
               <br>
               <!--<span class="operation">报表&nbsp;</span>-->
               <!--<span class="operation" @click="itemDel(scope.row.plan_id)">删除&nbsp;</span>-->

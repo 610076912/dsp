@@ -5,10 +5,11 @@
         <template slot="title">屏占比4:1 / 适用于明星经纪、品牌推荐等信息
           <el-button class="button" size="small" @click.stop="edit" v-show="!isEdit && collapseVal==='relation1'">编辑
           </el-button>
-          <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='relation1'">
+          <el-button :disabled="!canEdit" class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='relation1'">
             保存
           </el-button>
         </template>
+        <div class="can-edit" v-if="!canEdit"></div>
         <div class="relation1">
           <div class="ad-style" v-show="!isEdit">
             <video id="rel1video" loop src="http://sltimg.adv.ott.cibntv.net/static/video/relation1.mp4" alt=""></video>
@@ -152,6 +153,8 @@
     },
     data () {
       return {
+        // 是否可修改
+        canEdit: true,
         // video 对象
         video: '',
         // 上传接口地址
@@ -292,6 +295,8 @@
           // 曝光url和点击url
           this.bgUrl = this.adCon.bgUrl
           this.clickUrl = this.adCon.clickUrl
+          // 是否可修改
+          this.canEdit = this.adCon.canEdit
         } else {
           // 清空数据，必须是完整的数据结构！
           this.conf_info = {
@@ -482,6 +487,15 @@
         border-radius: 15px;
         width: 60px;
       }
+    }
+    .el-collapse-item__content {
+      position relative
+    }
+    .can-edit {
+      position absolute
+      z-index 100
+      width: 100%
+      height: 550px
     }
     .relation1 {
       width: 100%;
