@@ -18,22 +18,26 @@
               :label="item.group_name"
               :value="item.group_id">
               <span style="float: left">{{item.group_name}}</span>
-              <span @click.stop="delGroup(item.group_id,item.group_name)" style="float: right; color: #8492a6; font-size: 10px">
+              <span @click.stop="delGroup(item.group_id,item.group_name)"
+                    style="float: right; color: #8492a6; font-size: 10px">
                 <i class="el-icon-close"></i></span>
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="预算类型" required>
-          <el-radio-group v-model="ruleForm.budgetType">
+          <el-radio-group :disabled="priceInputStatus" v-model="ruleForm.budgetType">
             <el-radio :label="0">日预算</el-radio>
             <el-radio :label="1">总预算</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item :label="budgetText" prop="all" required>
-          <el-input v-model="ruleForm.all"><template slot="append">元</template></el-input>
+          <el-input :disabled="priceInputStatus" v-model="ruleForm.all">
+            <template slot="append">元</template>
+          </el-input>
         </el-form-item>
         <el-form-item label="投放日期" prop="date" class="date-time-range">
           <el-date-picker
+            :disabled="priceInputStatus"
             v-model="ruleForm.date"
             minTime="17:31"
             range-separator="至"
@@ -42,9 +46,9 @@
             placeholder="选择日期范围">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="单价">
-          <el-input :disabled="priceInputStatus" v-model="ruleForm.price"><template slot="append">元</template></el-input>
-        </el-form-item>
+        <!--<el-form-item label="单价">-->
+        <!--<el-input :disabled="priceInputStatus" v-model="ruleForm.price"><template slot="append">元</template></el-input>-->
+        <!--</el-form-item>-->
         <el-form-item class="button-wrap">
           <el-button @click="back">返回</el-button>
           <el-button class="next-button" type="primary" @click="nextStep" :loading="btnLoading">
@@ -65,9 +69,9 @@
   import mediaJson from '../../../static/json/media.json'
   // 移动，pc，大屏端对应的媒体
   const channelMedias = {
-    1: [1001, 1005, 1013, 1014, 1015, 1019],
-    2: [1001, 1002, 1004, 1015],
-    3: [1016, 1017, 1018, 1015, 1012, 1003, 1019]
+    1: [1014],
+    2: [1002, 1004],
+    3: [1003]
   }
   export default {
     name: 'creatBasics',
@@ -140,6 +144,18 @@
       }
     },
     created () {
+      // 活动状态
+      let status = this.this.$store.state.creatData.status
+      if (status && status.status === 4) {
+        let actidStatus = status.act_ids_status.every(item => {
+          return item.act_ids_status === -2
+        })
+        if (actidStatus) {
+          this.priceInputStatus = false
+        }
+      } else if (status && status.status !== 1) {
+        this.priceInputStatus = true
+      }
       // 判断store里是否有数据
       let creatData = this.$store.state.creatData.creatBasice
       if (creatData.name) {
@@ -150,8 +166,8 @@
         this.ruleForm.all = creatData.all
         this.ruleForm.date = creatData.date.map(item => new Date(item))
         // 单价 临时增加
-        this.ruleForm.price = creatData.price
-        this.priceInputStatus = true
+        // this.ruleForm.price = creatData.price
+        // this.priceInputStatus = true
         this.activeName = creatData.channel
         this.isEdit = true
         // 必须是获得了activeName这个值以后才能去生成图标所以要放到这里和ajax请求的回调中
@@ -170,8 +186,8 @@
             this.ruleForm.budgetType = data.plan_budget_type
             this.ruleForm.all = data.plan_budget_type === 1 ? data.plan_all_budget : data.plan_day_budget
             // 单价临时增加
-            this.ruleForm.price = data.price
-            this.priceInputStatus = true
+            // this.ruleForm.price = data.price
+            // this.priceInputStatus = true
             this.activeName = data.plan_channel
             this.$set(this.ruleForm.date, 0, new Date(data.plan_b_time))
             this.$set(this.ruleForm.date, 1, new Date(data.plan_e_time))
@@ -202,11 +218,11 @@
       // 下一步
       nextStep () {
         let that = this
-        this.btnLoading = true
         this.$refs['new1form'].validate((valid) => {
           // 如果验证通过则跳转下一个路由
           let url, data, mUrl // 基本设置接口url，基本设置数据，媒体接口url
           if (valid && !that.isEdit) {
+            this.btnLoading = true
             // 添加
             url = '/api2/add_plan'
             mUrl = '/api2/add_media_plan'
@@ -217,8 +233,8 @@
               plan_budget_type: that.ruleForm.budgetType,
               plan_budget: that.ruleForm.all,
               plan_channel: that.activeName,
-              group_id: that.ruleForm.group,
-              price: that.ruleForm.price
+              group_id: that.ruleForm.group
+              // price: that.ruleForm.price
             }
           }
           if (valid && that.isEdit) {
@@ -250,6 +266,8 @@
                   plan_id: that.$store.state.creatData.planId,
                   channel_id_list: JSON.stringify(channelMedias[this.activeName])
                 })
+              } else {
+                this.btnLoading = false
               }
             })
             .then(res => {

@@ -5,10 +5,11 @@
         <template slot="title">屏占比4:1 / 适用于电商、票务等信息
           <el-button class="button" size="small" @click.stop="edit" v-show="!isEdit && collapseVal==='relation2'">编辑
           </el-button>
-          <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='relation2'">
+          <el-button :disabled="!canEdit" class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='relation2'">
             保存
           </el-button>
         </template>
+        <div class="can-edit" v-if="!canEdit"></div>
         <div class="relation">
           <div class="ad-style" v-show="!isEdit">
             <video id="rel2video" loop src="http://sltimg.adv.ott.cibntv.net/static/video/relation2.mp4" alt=""></video>
@@ -141,6 +142,8 @@
     },
     data () {
       return {
+        // 是否可修改
+        canEdit: true,
         // video 对象
         video: '',
         // 上传接口地址
@@ -224,6 +227,7 @@
           // 曝光url和点击url
           this.bgUrl = this.adCon.bgUrl
           this.clickUrl = this.adCon.clickUrl
+          this.canEdit = this.adCon.canEdit
         } else {
           this.conf_info = {
             prompt_info: {  // 提示信息
@@ -365,6 +369,15 @@
         height 100%
         width: 100%
       }
+    }
+    .el-collapse-item__content {
+      position relative
+    }
+    .can-edit {
+      position absolute
+      z-index 100
+      width: 100%
+      height: 550px
     }
     .relation {
       width: 100%;

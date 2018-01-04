@@ -2,7 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
+import '../static/ele-theme/index.css' // 使用自定义主题色
 import App from './App'
 import router from './router'
 import store from './store'

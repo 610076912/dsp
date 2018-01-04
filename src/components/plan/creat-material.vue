@@ -7,8 +7,9 @@
       <div class="slide-box">
         <ul v-bind:style="{ width: slide.width+'%', left: slide.left+'%' }">
           <li v-for="(item, index) in medias" :class="{checked: currentIndex===index}"
-              @click="chooseMedia(item.act_id, item.media_id, index)">
+              @click="chooseMedia(item.act_id, item.media_id, index, item.status)">
             <img :src="item.media_url" :title="item.media_name">
+            <span>{{item.statusDesc}}</span>
           </li>
         </ul>
       </div>
@@ -86,6 +87,18 @@
     },
     created () {
       if (this.planId) {
+        // 从vuex获取状态
+        let status = this.$store.state.creatData.status
+        // if (status && status.status === 4) {
+        //   let actidStatus = status.act_ids_status.every(item => {
+        //     return item.act_ids_status === -2
+        //   })
+        //   if (actidStatus) {
+        //     this.priceInputStatus = false
+        //   }
+        // } else if (status && status.status !== 1) {
+        //   this.priceInputStatus = true
+        // }
         // 获取媒体信息
         this.$http.get('/api2/get_media_plan', {
           params: {
@@ -93,18 +106,56 @@
           }
         }).then(res => {
           if (res.code === 200) {
-            let _this = this
+            let that = this
             // 媒体平台数据
             res.data.forEach(function (media) {
               allMedias.forEach(function (item) {
                 if (media.act_channel_id === item.media_id) {
                   item.act_id = media.act_id
-                  _this.medias.push(item)
+                  // 没有状态信息的话，状态码为-100，状态描述为''.可修改
+                  item.status = -100
+                  item.statusDesc = ''
+                  that.medias.push(item)
                 }
               })
             })
+
+            if (status && status.status === 4) {
+              status.act_ids_status.forEach(item => {
+                this.medias.forEach(m => {
+                  if (m.act_id === item.act_id) {
+                    m.status = item.act_ids_status
+                    switch (item.act_ids_status) {
+                      case -1:
+                        m.statusDesc = '编辑中'
+                        break
+                      case 0:
+                        m.statusDesc = '审核中'
+                        break
+                      case 1:
+                        m.statusDesc = '审核通过'
+                        break
+                      case -2:
+                        m.statusDesc = '审核拒绝'
+                        break
+                      case 100:
+                        m.statusDesc = '异常状态'
+                        break
+                      default:
+                        m.statusDesc = ''
+                    }
+                  }
+                })
+              })
+            } else if (status && status.status !== 1) {
+              this.medias.forEach(m => {
+                m.status = -200 // 状态码200，不可修改
+                m.statusDesc = ''
+              })
+            }
+            console.log(this.medias)
             // 计算媒体列表滑动体宽度
-            _this.slide.width = Math.ceil(_this.medias.length / 5) * 100
+            this.slide.width = Math.ceil(this.medias.length / 5) * 100
           }
         })
       }
@@ -138,7 +189,12 @@
         this.$router.push('/creatPreview')
       },
       // 选择媒体平台 获取广告信息
-      chooseMedia (actId, mediaId, index) {
+      chooseMedia (actId, mediaId, index, status) {
+        // 根据状态判断是否可修改
+        let canEdit = false
+        if (status === 100 || status === -2) {
+          canEdit = true
+        }
         // console.log(this.medias)
         // 当前已选索引
         this.currentIndex = index
@@ -170,14 +226,16 @@
               this.adCon[res.data[0].tpl_cat] = {
                 adCon: JSON.parse(res.data[0].conf_info),
                 bgUrl: res.data[0].bg_url,
-                clickUrl: res.data[0].click_url
+                clickUrl: res.data[0].click_url,
+                canEdit: canEdit
               }
             } else {
               this.collVal = JSON.parse(res.data[0].conf_info).relation_info.type
               this.adCon[this.collVal] = {
                 adCon: JSON.parse(res.data[0].conf_info),
                 bgUrl: res.data[0].bg_url,
-                clickUrl: res.data[0].click_url
+                clickUrl: res.data[0].click_url,
+                canEdit: canEdit
               }
             }
           } else {
@@ -310,18 +368,43 @@
             border: 1px solid #c9c9c9
             text-align: center
             overflow: hidden
+            position relative
             &:nth-of-type(5n) {
               margin-right: 0;
             }
             img {
+              position absolute
+              left:0
+              right: 0
+              top: 0
+              bottom: 0
               height: 100%
               width: auto
-              margin: 0 auto
+              margin: auto
               transition: all 0.3s
               -moz-transition: all 0.3s
               -webkit-transition: all 0.3s
               -o-transition: all 0.3s
             }
+            span{
+              display inline-block
+              position absolute
+              left:0
+              right: 0
+              top: 0
+              bottom: 0
+              margin auto
+              line-height 58px
+              width: 0%;
+              height: 0%
+              color: #fff
+              background rgba(0, 0, 0, .5)
+              transition: all 0.3s
+            }
+          }
+          li:hover span {
+            width: 100%
+            height: 100%
           }
           li:hover img {
             transform: scale(1.1)

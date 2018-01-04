@@ -6,9 +6,11 @@
           <el-button class="button" size="small" @click.native.stop="edit" v-show="!isEdit && collapseVal==='flash'">
             编辑
           </el-button>
-          <el-button class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='flash'">保存
+          <el-button :disabled="!canEdit" class="button" size="small" @click.stop="flashSave"
+                     v-show="isEdit && collapseVal==='flash'">保存
           </el-button>
         </template>
+        <div class="can-edit" v-if="!canEdit"></div>
         <div class="flash1">
           <div class="ad-style" v-show="!isEdit">
             <video id="flashvideo" loop src="http://sltimg.adv.ott.cibntv.net/static/video/flash.mp4"></video>
@@ -93,6 +95,8 @@
     },
     data () {
       return {
+        // 是否可修改
+        canEdit: true,
         // video 对象
         video: '',
         // token
@@ -158,6 +162,8 @@
           // 曝光url和点击url
           this.bgUrl = this.adCon.bgUrl
           this.clickUrl = this.adCon.clickUrl
+          // 可修改状态
+          this.canEdit = this.adCon.canEdit
         } else {
           this.conf_info = {
             flash_src: '',
@@ -171,6 +177,7 @@
           this.bgUrl = ''
           this.clickUrl = ''
         }
+        console.log('可修改状态' + this.canEdit)
       }
     },
     methods: {
@@ -243,6 +250,15 @@
         border-radius: 15px;
         width: 60px;
       }
+    }
+    .el-collapse-item__content {
+      position relative
+    }
+    .can-edit {
+      position absolute
+      z-index 100
+      width: 100%
+      height: 550px
     }
     .flash1 {
       width: 100%;

@@ -341,6 +341,7 @@
             onClick (picker) {
               const end = new Date()
               const start = new Date()
+              start.setHours(0, 0, 0, 0)
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
               picker.$emit('pick', [start, end])
             }
@@ -349,6 +350,7 @@
             onClick (picker) {
               const end = new Date()
               const start = new Date()
+              start.setHours(0, 0, 0, 0)
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
               picker.$emit('pick', [start, end])
             }
@@ -549,12 +551,6 @@
         console.log(dataType)
         console.log(type)
         const typeName = dataType.replace(/Data/, '')
-        // let option = {
-        //   series: [{}, {}],
-        //   yAxis: [{}, {}]
-        // }
-        // let arrData = []
-        // let yName = ''
         switch (val) {
           case 'clickCount':
             this[typeName + 'Model'].yAxis[type]['name'] = '点击量'
@@ -583,15 +579,14 @@
           default:
             alert('cuowu')
         }
-        // this.mobileModel.yAxis[type]['name'] = yName
-        // this.mobileModel.series[type]['data'] = arrData
-        // console.log(this.mobileModel)
         console.log(this[typeName + 'Model'])
         this[typeName + 'Chart'].setOption(this[typeName + 'Model'])
       },
-      chartDateChange (dateArr, type) {
+      chartDateChange (timeRange, type) {
+        let dateArr = timeRange.map(item => {
+          return item.getTime()
+        })
         console.log(dateArr)
-        console.log(type)
         if (type === 'mobile') {
           this.getMChartsData(dateArr)
         } else if (type === 'pc') {

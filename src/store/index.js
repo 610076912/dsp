@@ -13,6 +13,8 @@ const vuexLocal = new VuexPersistence({
 let state = {
   creatData: {
     planId: null,
+    // 状态
+    status: null,
     creatBasice: {
       name: '',
       group: '',
@@ -89,6 +91,9 @@ const mutations = {
   },
   ACTID (state, actId) {
     state.materialData.act_id = actId
+  },
+  STATUS (state, status) {
+    state.creatData.status = status
   }
 }
 export default new Vuex.Store({
