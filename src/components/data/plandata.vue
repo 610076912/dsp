@@ -102,7 +102,7 @@ export default {
   name: 'plandata',
   data () {
     return {
-      tableLoading: true,
+      tableLoading: false,
       deviceO: [{     // 设备类型选择器
         value: '1',
         label: 'Mobile'
@@ -168,7 +168,6 @@ export default {
       return chucunArry
     },
     search () {         // 查询按钮
-      this.tableLoading = true
       var data = []
       if (this.media === 'all') {
         for (var i = 0; i < this.mediaO.length; i++) {
@@ -213,6 +212,7 @@ export default {
       })
     },
     getData (arg) {    // 获取数据详细信息
+      this.tableLoading = true
       var bTime
       var eTime
       for (var i = 0; i < this.activityO.length; i++) {
