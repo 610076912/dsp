@@ -7,7 +7,7 @@
         <ul>
           <li v-for="(item, i) in allPack"
               :class="{active: (i === liActindex)}"
-              @click="class1Click(i, item.class2Arr)"><i class="el-icon-edit"></i>{{item.class1_name}}
+              @click="class1Click(i, item.class2Arr)"><i :class="{'el-icon-my-lifangti': i === 0,'el-icon-my-87': i === 1,'el-icon-my-hangweiguanli': i === 2, 'el-icon-my-nvren': i === 3, 'el-icon-my-icon': i === 4}"></i>{{item.class1_name}}
           </li>
         </ul>
         <div class="class2-wrap">
@@ -33,7 +33,7 @@
         <div class="header">子分类</div>
         <ul class="cont">
           <li v-for="(item, index) in class2Data[liActindex]">
-            <el-checkbox v-model="checkedAll[index]" @change="class2Checkedbox(item, index)">全选</el-checkbox>
+            <el-checkbox v-model="checkedAll[item[0].pkg_id]" @change="class2Checkedbox(item, item[0].pkg_id)"></el-checkbox>
             <span>{{item[0].pkg_name}}</span>
             <ul class="class3-cont">
               <li
@@ -62,8 +62,10 @@
     name: 'creatScene',
     data () {
       return {
+        // 一级展示图标
+        iconClass: '',
         // 全选数据
-        checkedAll: [],
+        checkedAll: {},
         seeAllBtn: [false, false, false, false, false],
         liActindex: 0,
         class2Arr: [],
@@ -92,9 +94,10 @@
       // 判断vuex中是否有数据
       let vuexData = this.$store.state.creatData.creatScene
       if (vuexData) {
-        console.log(vuexData)
         this.getAllPkg()
+        // 选中的最终结果
         this.checkedArr = vuexData.checkedArr
+        // 选中的二级pkgId和数组
         this.class2Data = vuexData.class2Data
         this.class2PkgId = vuexData.class2PkgId
         // 分开写 提升从session里那数据时的展示速度。
@@ -109,19 +112,20 @@
             })
             // 请求接口拿数据时必须要等到拿到所有包数据以后执行
             this.getAllPkg(function () {
-              res.data.forEach(function (item) {
+              res.data.forEach(function (item, index) {
+                // todo 子分类全选不能正确展示
                 let class1 = Math.floor(item.pkg_id / 1000)
                 let class2Data
                 that.allPack[class1 - 1].class2Arr.forEach(class2 => {
                   if (class2.pkg_id === item.pkg_id) {
                     class2Data = class2.valueArr
-                    if (!that.class2Data[class1 - 1].includes(class2Data)) {
+                    if (that.class2Data[class1 - 1].indexOf(class2Data) === -1) {
                       that.class2Data[class1 - 1].push(class2Data)
+                      that.class2PkgId[class1 - 1].push(class2.pkg_id)
                     }
                   }
                 })
               })
-              console.log(that.checkedArr, that.class2Data)
             })
           } else {
             this.getAllPkg()
@@ -154,8 +158,7 @@
     methods: {
       // 全选
       class2Checkedbox (val, index) {
-        console.log(val, index)
-        console.log(this.checkedAll[index])
+        console.log(index, this.checkedAll)
         if (this.checkedAll[index]) {
           val.forEach(item => {
             if (!this.checkedArr.includes(item.class_id)) {
@@ -163,6 +166,7 @@
             }
           })
         } else {
+          delete this.checkedAll[index]
           val.forEach(item => {
             let i = this.checkedArr.indexOf(item.class_id)
             if (i !== -1) {
@@ -176,13 +180,10 @@
         this.class2Arr = class2Arr
       },
       class2Click (pkgId, data) {
-        console.log(pkgId)
-        console.log(this.class2PkgId)
         let index = this.class2PkgId[this.liActindex].indexOf(pkgId)
-        console.log(index)
         if (index === -1) {
-          this.class2Data[this.liActindex].push(data)
-          this.class2PkgId[this.liActindex].push(pkgId)
+          this.class2Data[this.liActindex].unshift(data)
+          this.class2PkgId[this.liActindex].unshift(pkgId)
         } else {
           this.class2Data[this.liActindex].splice(index, 1)
           this.class2PkgId[this.liActindex].splice(index, 1)
@@ -205,7 +206,6 @@
           }
         }).then(res => {
           if (res.code === 200) {
-            console.log(res)
             // 数据转换
             let arr = res.data
             let key = 'pkg_id'
@@ -262,7 +262,7 @@
             this.class2Arr = resultArr[0].class2Arr
             // 回调~
             if (callback) callback()
-            console.log(resultArr)
+            console.log(this.allPack)
           }
         })
       },
@@ -320,7 +320,7 @@
             width: 100%;
             height: 45px;
             line-height: 40px;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
             text-indent: 15px;
             border-left: 2px solid transparent;
@@ -328,7 +328,7 @@
             i {
               position: relative;
               left: -12px;
-              font-size: 14px;
+              font-size: 16px;
             }
           }
           .active {
@@ -339,7 +339,7 @@
         .class2-wrap {
           width: calc(100% - 150px);
           height: 100%;
-          min-height: 300px;
+          min-height: 225px;
           background: #fff;
           float: right;
           padding: 15px;
@@ -348,11 +348,14 @@
             margin-bottom: 10px;
             span {
               border-radius: 15px;
+              font-size: 12px;
+              border-left: 1px solid rgb(191, 207, 217);
+              height: 30px;
+              line-height: 9px;
             }
           }
           .class2-cont {
             width: 100%;
-            height: 200px;
             overflow: hidden;
             .active {
               border-color: #169bd5;
@@ -361,8 +364,10 @@
             }
             li {
               display: inline-block;
-              padding: 0 8px;
-              font-size: 14px;
+              width: 104px;
+              padding: 0 10px;
+              text-align: center;
+              font-size: 12px;
               height: 30px;
               line-height: 28px;
               border: 1px solid #E4E4E4;
@@ -383,18 +388,18 @@
         .header {
           font-size: 16px;
           text-indent: 10px;
-          border-bottom: 2px #169bd5 dashed;
+          border-bottom: 1px #169bd5 dashed;
           height: 35px;
           color: #169bd5;
           margin-bottom: 20px;
         }
         .cont {
           li {
+            margin-bottom: 20px;
             & > span {
               display: inline-block;
               height: 25px;
-              border-left: 2px solid #169bd5;
-              font-size: 16px;
+              font-size: 14px;
               padding: 0 8px;
               color: #169bd5;
               line-height: 25px;
@@ -402,6 +407,7 @@
             }
             .class3-cont {
               margin-top: 15px;
+              padding: 0 20px 0 60px;
               .active {
                 border-color: #169bd5;
                 background: #fff;
@@ -409,8 +415,10 @@
               }
               li {
                 display: inline-block;
-                padding: 0 20px;
-                font-size: 14px;
+                width: 160px;
+                padding: 0 10px;
+                text-align: center;
+                font-size: 12px;
                 height: 24px;
                 line-height: 22px;
                 border: 1px solid #E4E4E4;

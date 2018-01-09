@@ -1,8 +1,10 @@
 <template>
   <div class="module-header-component">
     <span class="module-header-component-title">{{title}}</span>
+    <el-checkbox :disabled="!canClick" class="check-box" v-if="checkBox" @change="checkBoxChange" v-model="checkBoxModel">全选</el-checkbox>
     <span v-if="del" class="module-header-component-del" @click="clearchose"><i class="el-icon-delete"></i>清空选择</span>
-    <span v-if="check" class="module-header-component-all" @click="chackAll"><i class="el-icon-circle-check"></i>所有时间</span>
+    <span v-if="check" class="module-header-component-all" @click="chackAll"><i
+      class="el-icon-circle-check"></i>所有时间</span>
   </div>
 </template>
 
@@ -22,24 +24,35 @@
         default: '标题'
       },
       checkBox: {
+        default: true
+      },
+      isAll: {
+        type: Boolean,
         default: false
+      },
+      canClick: {
+        type: Boolean,
+        default: true
       }
     },
     data () {
       return {
-        checkStatus: false
+        checkBoxModel: false
       }
     },
     watch: {
-      'checkBox' (val) {
+      'isAll' (val) {
         if (val) {
-          this.checkStatus = true
+          this.checkBoxModel = true
         } else {
-          this.checkStatus = false
+          this.checkBoxModel = false
         }
       }
     },
     methods: {
+      checkBoxChange () {
+        this.$emit('checkall', this.checkBoxModel)
+      },
       chackAll () {
         if (this.check) {
           this.$emit('checkall', this.checkStatus)
@@ -73,6 +86,9 @@
     .module-header-component-del {
       float: right;
       cursor: pointer;
+    }
+    .check-box {
+      float: right;
     }
   }
 </style>

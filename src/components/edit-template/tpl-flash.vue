@@ -91,12 +91,13 @@
       },
       canSave: {
         default: false
+      },
+      canEdit: {
+        default: true
       }
     },
     data () {
       return {
-        // 是否可修改
-        canEdit: true,
         // video 对象
         video: '',
         // token
@@ -108,8 +109,8 @@
         upLoadLoding: '',
         // 上传图片用的数据
         upLoadData: {
-          mediachannel: this.$store.state.materialData.mediachannel,
-          act_id: this.$store.state.materialData.act_id
+          mediachannel: null,
+          act_id: null
         },
         // 是否为编辑状态
         isEdit: false,
@@ -141,8 +142,9 @@
         }
       },
       'adCon' (val) {
+        // console.log(this.canEdit)
         if (val && val.adCon && this.collapseVal === 'flash') {
-          // this.isEdit = true
+          this.isEdit = true
           if (this.adCon.adCon.position === 'left') this.isPosition = 1
           if (this.adCon.adCon.position === 'center') {
             this.isPosition = 2
@@ -162,8 +164,6 @@
           // 曝光url和点击url
           this.bgUrl = this.adCon.bgUrl
           this.clickUrl = this.adCon.clickUrl
-          // 可修改状态
-          this.canEdit = this.adCon.canEdit
         } else {
           this.conf_info = {
             flash_src: '',
@@ -177,7 +177,6 @@
           this.bgUrl = ''
           this.clickUrl = ''
         }
-        console.log('可修改状态' + this.canEdit)
       }
     },
     methods: {
@@ -188,12 +187,29 @@
       },
       // 编辑
       edit () {
+        // 清数据
+        this.conf_info = {
+          flash_src: '',
+          size: '150,150,f_size1',
+          position: 'left',
+          out_url: ''
+        }
+        this.isSize = 1
+        this.isPosition = 1
+        // 曝光url和点击url
+        this.bgUrl = ''
+        this.clickUrl = ''
+        // 提示
+        if (!this.canSave) {
+          this.$message.warning('请先选择一个平台')
+          return
+        }
         this.isEdit = true
       },
       // 保存
       flashSave () {
         if (!this.canSave) {
-          alert('请先选择一个媒体平台')
+          this.$message.warning('请选择一个平台')
           return
         }
         // 调父组件的save方法，并把数据传过去。
@@ -221,6 +237,9 @@
       },
       // 上传前的钩子函数
       beforeUpload (file) {
+        // 上传前获取上传图片所需要的参数！
+        this.upLoadData.act_id = this.$store.state.materialData.act_id
+        this.upLoadData.mediachannel = this.$store.state.materialData.mediachannel
         const isJPG = file.type === 'application/x-shockwave-flash'
         const isLt2M = file.size / 1024 / 1024 < 2
 

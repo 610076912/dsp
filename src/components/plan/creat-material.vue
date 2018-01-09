@@ -9,7 +9,7 @@
           <li v-for="(item, index) in medias" :class="{checked: currentIndex===index}"
               @click="chooseMedia(item.act_id, item.media_id, index, item.status)">
             <img :src="item.media_url" :title="item.media_name">
-            <span>{{item.statusDesc}}</span>
+            <span v-show="item.statusDesc !== ''">{{item.statusDesc}}</span>
           </li>
         </ul>
       </div>
@@ -17,10 +17,10 @@
     <div class="material">
       <p class="top">广告模板</p>
       <div class="con">
-        <flash :collapseVal.sync="collVal" :adCon="adCon.flash" :canSave="canSave"></flash>
-        <tpl-image :collapseVal.sync="collVal" :adCon="adCon.image"></tpl-image>
-        <tpl-relation1 :collapseVal.sync="collVal" :adCon="adCon.relation1"></tpl-relation1>
-        <tpl-relation2 :collapseVal.sync="collVal" :adCon="adCon.relation2"></tpl-relation2>
+        <!--<flash :collapseVal.sync="collVal" :adCon="adCon.flash" :canSave="canSave" :canEdit="canEdit"></flash>-->
+        <tpl-image :collapseVal.sync="collVal" :adCon="adCon.image" :canSave="canSave" :canEdit="canEdit"></tpl-image>
+        <tpl-relation1 :collapseVal.sync="collVal" :adCon="adCon.relation1" :canSave="canSave" :canEdit="canEdit"></tpl-relation1>
+        <tpl-relation2 :collapseVal.sync="collVal" :adCon="adCon.relation2" :canSave="canSave" :canEdit="canEdit"></tpl-relation2>
       </div>
     </div>
     <div class="button-wrap">
@@ -82,7 +82,8 @@
           image: null,
           relation1: null,
           relation2: null
-        }
+        },
+        canEdit: false
       }
     },
     created () {
@@ -120,7 +121,7 @@
               })
             })
 
-            if (status && status.status === 4) {
+            if (status && status.plan_status === 4) {
               status.act_ids_status.forEach(item => {
                 this.medias.forEach(m => {
                   if (m.act_id === item.act_id) {
@@ -147,13 +148,12 @@
                   }
                 })
               })
-            } else if (status && status.status !== 1) {
+            } else if (status && status.plan_status !== 1) {
               this.medias.forEach(m => {
-                m.status = -200 // 状态码200，不可修改
+                m.status = -200 // 状态码-200，不可修改
                 m.statusDesc = ''
               })
             }
-            console.log(this.medias)
             // 计算媒体列表滑动体宽度
             this.slide.width = Math.ceil(this.medias.length / 5) * 100
           }
@@ -191,9 +191,10 @@
       // 选择媒体平台 获取广告信息
       chooseMedia (actId, mediaId, index, status) {
         // 根据状态判断是否可修改
-        let canEdit = false
-        if (status === 100 || status === -2) {
-          canEdit = true
+        if (status === -100 || status === -2) {
+          this.canEdit = true
+        } else {
+          this.canEdit = false
         }
         // console.log(this.medias)
         // 当前已选索引
@@ -201,6 +202,8 @@
         // 检索当前选中媒体可用模板
         this.currentMediaId = mediaId
         this.$store.commit('MEDIACHANNEL', mediaId)
+        this.$store.commit('ACTID', actId)
+        console.log(this.$store.state.materialData.mediachannel, this.$store.state.materialData.act_id)
         /* for (let key in this.mateTpl) {
           if (this.medias[index].tpl.some(item => { return item === key })) {
             this.mateTpl[key] = true
@@ -210,7 +213,6 @@
         } */
         // 当前选中媒体活动id
         this.currentMediaplanId = actId
-        this.$store.commit('ACTID', actId)
         // 获取广告信息
         this.$http.post('/api2/get_ad_for_channel', {
           act_id: actId
@@ -226,16 +228,14 @@
               this.adCon[res.data[0].tpl_cat] = {
                 adCon: JSON.parse(res.data[0].conf_info),
                 bgUrl: res.data[0].bg_url,
-                clickUrl: res.data[0].click_url,
-                canEdit: canEdit
+                clickUrl: res.data[0].click_url
               }
             } else {
               this.collVal = JSON.parse(res.data[0].conf_info).relation_info.type
               this.adCon[this.collVal] = {
                 adCon: JSON.parse(res.data[0].conf_info),
                 bgUrl: res.data[0].bg_url,
-                clickUrl: res.data[0].click_url,
-                canEdit: canEdit
+                clickUrl: res.data[0].click_url
               }
             }
           } else {
@@ -264,7 +264,6 @@
 //        } else {
 //          this.addMaterial(appType, confInfo)
 //        }
-        // todo 不判断是否添加过模板以后再改
         this.addMaterial(appType, confInfo)
       },
       // 添加广告信息

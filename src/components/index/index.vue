@@ -17,7 +17,7 @@
       </div>
       <div class="statist">
         <ul class="tab-tag">
-          <li v-for="(key,index) in tags" v-bind:class="{ tagActive: (indexs == index) }" @click="toggleTags(index)">
+          <li v-for="(key, index) in tags" v-bind:class="{ tagActive: (indexs == index) }" @click="toggleTags(index)">
             {{key}}
           </li>
         </ul>
@@ -33,28 +33,28 @@
                   <p>今日点击量</p></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content r b"><span>{{totalData.click_rate}}</span>
-                  <p>今日平均点击率</p></div>
+                <div class="grid-content r b"><span>{{Math.round(totalData.click_rate * 100) / 100}}</span>
+                  <p>今日平均点击率（%）</p></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content b"><span>0</span>
+                <div class="grid-content b"><span>--</span>
                   <p>今日消费</p></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content r"><span>2</span>
-                  <p>正在投放</p></div>
+                <div class="grid-content r"><span>{{checkData[indexs + 1][1]}}</span>
+                  <p>审核通过</p></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content r"><span>1</span>
+                <div class="grid-content r"><span>{{checkData[indexs + 1][0]}}</span>
                   <p>待审核</p></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content r"><span>0</span>
+                <div class="grid-content r"><span>{{checkData[indexs + 1][2]}}</span>
                   <p>审核拒绝</p></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content"><span>0</span>
-                  <p>今天曝光量</p></div>
+                <div class="grid-content"><span>{{checkData[indexs + 1][-1]}}</span>
+                  <p>正在编辑</p></div>
               </el-col>
             </el-row>
           </div>
@@ -74,11 +74,11 @@
             <p>点击量（次）</p></div>
         </el-col>
         <el-col :span="6">
-          <div class="mobile-n-grid r"><span>{{mobileData.clickRate}}</span>
+          <div class="mobile-n-grid r"><span>{{Math.round(mobileData.clickRate * 100) / 100}}</span>
             <p>平均点击率（%）</p></div>
         </el-col>
         <el-col :span="6">
-          <div class="mobile-n-grid"><span>0</span>
+          <div class="mobile-n-grid"><span>--</span>
             <p>花费（元）</p></div>
         </el-col>
       </div>
@@ -133,19 +133,19 @@
       <div class="mobile-title"><span>PC营销概况</span></div>
       <div class="mobile-number">
         <el-col :span="6">
-          <div class="mobile-n-grid r"><span>0</span>
+          <div class="mobile-n-grid r"><span>{{pcData.bgTotal}}</span>
             <p>曝光量（次）</p></div>
         </el-col>
         <el-col :span="6">
-          <div class="mobile-n-grid r"><span>0</span>
+          <div class="mobile-n-grid r"><span>{{pcData.clickTotal}}</span>
             <p>点击量（次）</p></div>
         </el-col>
         <el-col :span="6">
-          <div class="mobile-n-grid r"><span>0</span>
+          <div class="mobile-n-grid r"><span>{{Math.round(pcData.clickRate * 100) / 100}}</span>
             <p>平均点击率（%）</p></div>
         </el-col>
         <el-col :span="6">
-          <div class="mobile-n-grid"><span>0</span>
+          <div class="mobile-n-grid"><span>--</span>
             <p>花费（元）</p></div>
         </el-col>
       </div>
@@ -196,19 +196,19 @@
       <div class="mobile-title"><span>OTT营销概况</span></div>
       <div class="mobile-number">
         <el-col :span="6">
-          <div class="mobile-n-grid r"><span>0</span>
+          <div class="mobile-n-grid r"><span>{{ottData.bgTotal}}</span>
             <p>曝光量（次）</p></div>
         </el-col>
         <el-col :span="6">
-          <div class="mobile-n-grid r"><span>0</span>
+          <div class="mobile-n-grid r"><span>{{ottData.clickTotal}}</span>
             <p>点击量（次）</p></div>
         </el-col>
         <el-col :span="6">
-          <div class="mobile-n-grid r"><span>0</span>
+          <div class="mobile-n-grid r"><span>{{Math.round(ottData.clickRate * 100) / 100}}</span>
             <p>平均点击率（%）</p></div>
         </el-col>
         <el-col :span="6">
-          <div class="mobile-n-grid"><span>0</span>
+          <div class="mobile-n-grid"><span>--</span>
             <p>花费（元）</p></div>
         </el-col>
       </div>
@@ -458,17 +458,51 @@
               data: [0, 0, 0]
             }
           ]
+        },
+        // 审核相关数据
+        checkData: {
+          1: {
+            0: 0,
+            1: 0,
+            2: 0,
+            '-1': 0
+          },
+          2: {
+            0: 0,
+            1: 0,
+            2: 0,
+            '-1': 0
+          },
+          3: {
+            0: 0,
+            1: 0,
+            2: 0,
+            '-1': 0
+          }
         }
       }
     },
     created () {
       // 每日总数据
       this.getTotalDate()
+      this.getCheckData()
     },
     methods: {
+      // 获取审核相关数据
+      getCheckData () {
+        this.$http.get('/api2/plan_check_info', {
+          params: {
+            user_id: sessionStorage.getItem('user_id')
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.checkData = res.data
+          }
+        })
+      },
       // get Total Data
       getTotalDate (channelId) {
-        this.$http.get('http://192.168.1.106:3889/data/total_data', {
+        this.$http.get('http://context.bjvca.com:3889/data/total_data', {
           params: {
             user_id: sessionStorage.getItem('user_id'),
             channel_id: channelId
@@ -482,7 +516,7 @@
       // 获取移动图标数据接口
       getMChartsData (timeRange) {
         this.mobileChart.showLoading()
-        this.$http.get('http://192.168.1.106:3889/data/channel_data', {
+        this.$http.get('http://context.bjvca.com:3889/data/channel_data', {
           params: {
             user_id: sessionStorage.getItem('user_id'),
             channel_id: 1,
@@ -490,11 +524,13 @@
           }
         }).then(res => {
           if (res.code === 200) {
-            console.log(res)
+            res.data.clickRateArr.forEach(item => {
+              item = Math.round(item * 100) / 100
+            })
             this.mobileData = res.data
             this.mobileModel.xAxis.data = res.data.datelist
-            this.mobileModel.series[0].data = res.data.clickArr
-            this.mobileModel.series[1].data = res.data.bgArr
+            this.mobileModel.series[0].data = res.data.bgArr
+            this.mobileModel.series[1].data = res.data.clickRateArr
             this.mobileChart.setOption(this.mobileModel)
             this.mobileChart.hideLoading()
           } else {
@@ -504,7 +540,7 @@
       },
       // 获取pc图标数据接口
       getPChartsData (timeRange) {
-        this.$http.get('http://192.168.1.106:3889/data/channel_data', {
+        this.$http.get('http://context.bjvca.com:3889/data/channel_data', {
           params: {
             user_id: sessionStorage.getItem('user_id'),
             channel_id: 2,
@@ -512,11 +548,13 @@
           }
         }).then(res => {
           if (res.code === 200) {
-            console.log(res)
+            res.data.clickRateArr.forEach(item => {
+              item = Math.round(item * 100) / 100
+            })
             this.pcData = res.data
             this.pcModel.xAxis.data = res.data.datelist
-            this.pcModel.series[0].data = res.data.clickArr
-            this.pcModel.series[1].data = res.data.bgArr
+            this.pcModel.series[0].data = res.data.bgArr
+            this.pcModel.series[1].data = res.data.clickRateArr
             this.pcChart.setOption(this.pcModel)
             this.pcChart.hideLoading()
           } else {
@@ -526,7 +564,7 @@
       },
       // 获取OTT图标数据接口
       getOChartsData (timeRange) {
-        this.$http.get('http://192.168.1.106:3889/data/channel_data', {
+        this.$http.get('http://context.bjvca.com:3889/data/channel_data', {
           params: {
             user_id: sessionStorage.getItem('user_id'),
             channel_id: 3,
@@ -534,11 +572,13 @@
           }
         }).then(res => {
           if (res.code === 200) {
-            console.log(res)
+            res.data.clickRateArr.forEach(item => {
+              item = Math.round(item * 100) / 100
+            })
             this.ottData = res.data
             this.ottModel.xAxis.data = res.data.datelist
-            this.ottModel.series[0].data = res.data.clickArr
-            this.ottModel.series[1].data = res.data.bgArr
+            this.ottModel.series[0].data = res.data.bgArr
+            this.ottModel.series[1].data = res.data.clickRateArr
             this.ottChart.setOption(this.ottModel)
             this.ottChart.hideLoading()
           } else {
@@ -547,46 +587,41 @@
         })
       },
       selectChange (val, dataType, type) {
-        console.log(val)
-        console.log(dataType)
-        console.log(type)
         const typeName = dataType.replace(/Data/, '')
         switch (val) {
           case 'clickCount':
             this[typeName + 'Model'].yAxis[type]['name'] = '点击量'
             this[typeName + 'Model'].series[type]['name'] = '点击量'
             this[typeName + 'Model'].series[type]['data'] = this[dataType].clickArr
-            console.log([typeName + 'Model'])
+
             break
           case 'bgCount':
             this[typeName + 'Model'].yAxis[type]['name'] = '曝光量'
             this[typeName + 'Model'].series[type]['name'] = '曝光量'
             this[typeName + 'Model'].series[type]['data'] = this[dataType].bgArr
-            console.log([typeName + 'Model'])
+
             break
           case 'clickRate':
             this[typeName + 'Model'].yAxis[type]['name'] = '点击率'
             this[typeName + 'Model'].series[type]['name'] = '点击率'
             this[typeName + 'Model'].series[type]['data'] = this[dataType].clickRateArr
-            console.log([typeName + 'Model'])
+
             break
           case 'spend':
             this[typeName + 'Model'].yAxis[type]['name'] = '花费'
             this[typeName + 'Model'].series[type]['name'] = '花费'
             this[typeName + 'Model'].series[type]['data'] = [] // todo 增加花费数据
-            console.log([typeName + 'Model'])
+
             break
           default:
             alert('cuowu')
         }
-        console.log(this[typeName + 'Model'])
         this[typeName + 'Chart'].setOption(this[typeName + 'Model'])
       },
       chartDateChange (timeRange, type) {
         let dateArr = timeRange.map(item => {
           return item.getTime()
         })
-        console.log(dateArr)
         if (type === 'mobile') {
           this.getMChartsData(dateArr)
         } else if (type === 'pc') {
@@ -600,7 +635,7 @@
       },
       toggleTags: function (index) {
         this.indexs = index
-        this.getTotalDate(index)
+        this.getTotalDate(index + 1)
       }
     },
     mounted: function () {

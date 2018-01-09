@@ -3,7 +3,7 @@
     <steps :active="5"></steps>
     <div class="basic cons">
       <p class="head"><span>基本信息</span><b>
-        <router-link v-if="status.publish !== 0 || status.publish === 6" to="creatBasics">编辑信息</router-link>
+        <router-link v-if="canEdit" to="creatBasics">编辑信息</router-link>
       </b></p>
       <el-row class="row">
         <el-col :span="8"><span>推广计划名称: </span><span>{{ baseInfo.act_name }}</span></el-col>
@@ -13,13 +13,13 @@
         <el-col :span="8"><span>分组: </span><span>{{ baseInfo.group_name }}</span></el-col>
       </el-row>
       <el-row class="row">
-        <el-col :span="8"><span>计划每日预算: </span><span>{{ baseInfo.day_budget }}元</span></el-col>
+        <el-col :span="8"><span>投放频率: </span><span>{{ baseInfo.plan_budget }}</span></el-col>
         <el-col :span="8"><span>计划总预算: </span><span>{{ baseInfo.all_budget }}元</span></el-col>
       </el-row>
     </div>
     <div class="scene cons">
       <p class="head"><span>场景化投放设置</span><b>
-        <router-link v-if="status.publish !== 0 || status.publish === 6" to="creatScene">编辑信息</router-link>
+        <router-link v-if="canEdit" to="creatScene">编辑信息</router-link>
       </b></p>
       <div class="pro-box">
         <p class="minhead"><span>广告目标</span></p>
@@ -36,7 +36,7 @@
     </div>
     <div class="date cons">
       <p class="head"><span>投放时间</span><b>
-        <router-link v-if="status.publish !== 0 || status.publish === 6" to="creatTime">编辑信息</router-link>
+        <router-link v-if="canEdit" to="creatTime">编辑信息</router-link>
       </b></p>
       <div class="pro-box">
         <p class="minhead"><span>小时</span></p>
@@ -53,7 +53,7 @@
     </div>
     <div class="position cons">
       <p class="head"><span>地理位置定向</span><b>
-        <router-link v-if="status.publish !== 0 || status.publish === 6" to="creatCity">编辑信息</router-link>
+        <router-link v-if="canEdit" to="creatCity">编辑信息</router-link>
       </b></p>
       <div class="pro-box">
         <p class="minhead"><span>按地区</span></p>
@@ -72,7 +72,7 @@
     </div>
     <div class="episode cons">
       <p class="head"><span>视频类型</span><b>
-        <router-link v-if="status.publish !== 0 || status.publish === 6" to="creatMediatype">编辑信息</router-link>
+        <router-link v-if="canEdit" to="creatMediatype">编辑信息</router-link>
       </b></p>
       <div class="pro-box">
         <div class="label">
@@ -80,9 +80,9 @@
         </div>
       </div>
     </div>
-    <div class="strategy cons">
+    <!--<div class="strategy cons">
       <p class="head"><span>投放策略</span><b>
-        <router-link v-if="status.publish !== 0 || status.publish === 6" to="creatStrategy">编辑信息</router-link>
+        <router-link v-if="canEdit" to="creatStrategy">编辑信息</router-link>
       </b></p>
       <div class="pro-box">
         <div class="bar">
@@ -118,18 +118,18 @@
             <p><i class="el-icon-information"></i> 每次点击的有效成本</p>
           </div>
         </div>
-        <!--<div class="bar">
+        &lt;!&ndash;<div class="bar">
           <div class="title">推广出价:</div>
           <div class="inp">
             <span>10</span>
             <span>元</span>
           </div>
-        </div>-->
+        </div>&ndash;&gt;
       </div>
-    </div>
+    </div>-->
     <div class="material cons">
       <p class="head"><span>广告素材类型</span><b>
-        <router-link v-if="status.publish !== 0 || status.publish === 6"  to="creatMaterial">编辑信息</router-link>
+        <router-link v-if="canEdit" to="creatMaterial">编辑信息</router-link>
       </b></p>
       <div class="pro-box">
         <div class="material-item" v-for="(item, index) in platformName">
@@ -181,9 +181,9 @@
     data () {
       return {
         // 状态
-        status: {
-          publish: false
-        },
+        status: null,
+        // 是否可编辑
+        canEdit: true,
         // 计划id
         planId: this.$store.state.creatData.planId,
         loading: true,
@@ -228,8 +228,8 @@
             _this.baseInfo.act_b_time = result.baseInfo_1.plan_b_time
             _this.baseInfo.group_name = result.baseInfo_1.group_name
             _this.oldValue = result.baseInfo_1.group_name
-            _this.baseInfo.day_budget = result.baseInfo_1.plan_day_budget
             _this.baseInfo.all_budget = result.baseInfo_1.plan_all_budget
+            _this.baseInfo.plan_budget = result.baseInfo_1.plan_budget_type === 0 ? '快速投放' : '均匀投放'
           }
           if (result.sceneInfo_2) {
             // 场景化投放设置
@@ -283,6 +283,18 @@
           }
           // 将状态存到vuex中。
           this.status = result.status
+          if (this.status.publish === 1) {
+            this.canEdit = false
+          } else {
+            if (this.status.plan_status === 6) {
+              let all = this.status.act_ids_status.every(item => {
+                return item.act_ids_status === -1
+              })
+              if (!all) {
+                this.canEdit = false
+              }
+            }
+          }
           this.$store.commit('STATUS', result.status)
         }
       })

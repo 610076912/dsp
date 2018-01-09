@@ -5,10 +5,9 @@
       <creat-header title="时间周期定向" text="按时间"></creat-header>
       <div class="time">
         <div class="time-right">
-          <module-header-compoent :title="`已选 ${timeNum} 个`" :check="true" :del="true" @checkall="timeCheckAll(true)"
-                                  @clearchose="timeCheckAll(false)"></module-header-compoent>
+          <module-header-compoent :canClick="canEdit" :title="`已选 ${timeNum} 个`" :check="false" :del="false" :isAll="timeCheckBox" @checkall="timeCheckAll"></module-header-compoent>
           <div class="time-wrap">
-            <time-bar :canClick="true" :pTimeArr="checkedTime" ref="timeBar"></time-bar>
+            <time-bar :canClick="canEdit" :pTimeArr="checkedTime" ref="timeBar"></time-bar>
           </div>
           <ul class="time-icon">
             <li v-for="item in timeIcon">
@@ -24,10 +23,9 @@
       <creat-header title="" text="按周期"></creat-header>
       <div class="week">
         <div class="week-right">
-          <module-header-compoent :title="`已选 ${weekNum} 个`" :check="true" :del="true" @checkall="weekCheckAll(true)"
-                                  @clearchose="weekCheckAll(false)"></module-header-compoent>
+          <module-header-compoent :canClick="canEdit" :title="`已选 ${weekNum} 个`" :check="false" :del="false" :isAll="weekCheckBox" @checkall="weekCheckAll"></module-header-compoent>
           <div class="week-wrap">
-            <week-bar :canClick="true" :pWeekArr="checkedWeek" ref="weekBar"></week-bar>
+            <week-bar :canClick="canEdit" :pWeekArr="checkedWeek" ref="weekBar"></week-bar>
           </div>
           <ul class="week-icon">
             <li v-for="item in weekIcon">
@@ -58,6 +56,8 @@
     name: 'creatTime',
     data () {
       return {
+        // 是否可以修改状态
+        canEdit: true,
         timeArray: {},
         checkedTime: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         checkedWeek: [0, 0, 0, 0, 0, 0, 0],
@@ -74,6 +74,18 @@
       }
     },
     created () {
+      // 判断状态
+      let status = this.$store.state.creatData.status
+      if (status && status.plan_status === 4) {
+        let actidStatus = status.act_ids_status.every(item => {
+          return item.act_ids_status === -2
+        })
+        if (actidStatus) {
+          this.canEdit = true
+        }
+      } else if (status && status.plan_status !== 1 && status.plan_status !== 6) {
+        this.canEdit = false
+      }
       // 获取当前月份，展示节日图标
       const currentM = new Date().getMonth() + 1
       this.weekIcon = dateIcon.week[currentM]
@@ -116,6 +128,7 @@
         })
         this.timeNum = chosedNum.length
         this.timeCheckBox = chosedNum.length === val.length
+        console.log(this.timeCheckBox)
       },
       'checkedWeek' (val) {
         // 选中了几个
@@ -131,9 +144,11 @@
     },
     methods: {
       timeCheckAll (data) {
+        if (!this.canEdit) return
         data ? this.checkedTime = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] : this.checkedTime = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       },
       weekCheckAll (data) {
+        if (!this.canEdit) return
         data ? this.checkedWeek = [1, 1, 1, 1, 1, 1, 1] : this.checkedWeek = [0, 0, 0, 0, 0, 0, 0]
       },
       // 下一步C

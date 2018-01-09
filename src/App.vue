@@ -18,7 +18,7 @@
               <router-link @click.native="onActive('/')" to="/">首页</router-link>
             </li>
             <li>
-              <router-link @click.native="onActive('/plan')" to="plan">推广数据</router-link>
+              <router-link @click.native="onActive('/plan')" to="plan">推广计划</router-link>
             </li>
             <li>
               <router-link @click.native="onActive('/data')" to="data">数据监测</router-link>
@@ -74,7 +74,7 @@
             this.path = '首页'
             break
           case '/plan':
-            this.path = '推广数据'
+            this.path = '推广计划'
             break
           case '/data':
             this.path = '数据监测'

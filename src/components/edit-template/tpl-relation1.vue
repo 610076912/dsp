@@ -5,7 +5,8 @@
         <template slot="title">屏占比4:1 / 适用于明星经纪、品牌推荐等信息
           <el-button class="button" size="small" @click.stop="edit" v-show="!isEdit && collapseVal==='relation1'">编辑
           </el-button>
-          <el-button :disabled="!canEdit" class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='relation1'">
+          <el-button :disabled="!canEdit" class="button" size="small" @click.stop="flashSave"
+                     v-show="isEdit && collapseVal==='relation1'">
             保存
           </el-button>
         </template>
@@ -144,17 +145,102 @@
 </template>
 
 <script type="text/ecmascript-6">
+  let adInfo = {
+    prompt_info: {
+      type: this.value,
+      effect: '',
+      content: [
+        {
+          info_con: '',
+          info_exp: ''
+        }
+      ]
+    },
+    relation_info: {
+      type: 'relation1',
+      content: [
+        {
+          info_con: '',
+          info_exp: '主图片（圆形）'
+        },
+        {
+          info_con: '',
+          info_exp: '主题'
+        },
+        {
+          info_con: '',
+          info_exp: '备注'
+        },
+        {
+          info_con: '',
+          info_exp: '内容'
+        },
+        {
+          info_con: '',
+          info_exp: '第一个块的图片'
+        },
+        {
+          info_con: '',
+          info_exp: '第一个块的关联主题'
+        },
+        {
+          info_con: '',
+          info_exp: '第一个块的外跳链接'
+        },
+        {
+          info_con: '',
+          info_exp: '第二个块的图片'
+        },
+        {
+          info_con: '',
+          info_exp: '第二个块的关联主题'
+        },
+        {
+          info_con: '',
+          info_exp: '第二个块的外跳链接'
+        },
+        {
+          info_con: '',
+          info_exp: '第三个块的图片'
+        },
+        {
+          info_con: '',
+          info_exp: '第三个块的关联主题'
+        },
+        {
+          info_con: '',
+          info_exp: '第三个块的外跳链接'
+        },
+        {
+          info_con: '',
+          info_exp: '第四个块的图片'
+        },
+        {
+          info_con: '',
+          info_exp: '第四个块的关联主题'
+        },
+        {
+          info_con: '',
+          info_exp: '第四个块的外跳链接'
+        }
+      ]
+    }
+  }
   export default {
     props: {
       collapseVal: '',
       adCon: {
         type: Object
+      },
+      canSave: {
+        default: false
+      },
+      canEdit: {
+        default: true
       }
     },
     data () {
       return {
-        // 是否可修改
-        canEdit: true,
         // video 对象
         video: '',
         // 上传接口地址
@@ -166,8 +252,8 @@
         // 上传图片用的数据
         upLoadLoding: '',
         upLoadData: {
-          mediachannel: this.$store.state.materialData.mediachannel,
-          act_id: this.$store.state.materialData.act_id
+          mediachannel: null,
+          act_id: null
         },
         options: [{
           value: 'prompt1',
@@ -187,87 +273,7 @@
         confirmText1: '',
         confirmText2: '',
         confirmImgUrl: '',
-        conf_info: {
-          prompt_info: {
-            type: this.value,
-            effect: '',
-            content: [
-              {
-                info_con: '',
-                info_exp: ''
-              }
-            ]
-          },
-          relation_info: {
-            type: 'relation1',
-            content: [
-              {
-                info_con: '',
-                info_exp: '主图片（圆形）'
-              },
-              {
-                info_con: '',
-                info_exp: '主题'
-              },
-              {
-                info_con: '',
-                info_exp: '备注'
-              },
-              {
-                info_con: '',
-                info_exp: '内容'
-              },
-              {
-                info_con: '',
-                info_exp: '第一个块的图片'
-              },
-              {
-                info_con: '',
-                info_exp: '第一个块的关联主题'
-              },
-              {
-                info_con: '',
-                info_exp: '第一个块的外跳链接'
-              },
-              {
-                info_con: '',
-                info_exp: '第二个块的图片'
-              },
-              {
-                info_con: '',
-                info_exp: '第二个块的关联主题'
-              },
-              {
-                info_con: '',
-                info_exp: '第二个块的外跳链接'
-              },
-              {
-                info_con: '',
-                info_exp: '第三个块的图片'
-              },
-              {
-                info_con: '',
-                info_exp: '第三个块的关联主题'
-              },
-              {
-                info_con: '',
-                info_exp: '第三个块的外跳链接'
-              },
-              {
-                info_con: '',
-                info_exp: '第四个块的图片'
-              },
-              {
-                info_con: '',
-                info_exp: '第四个块的关联主题'
-              },
-              {
-                info_con: '',
-                info_exp: '第四个块的外跳链接'
-              }
-            ]
-          }
-        },
+        conf_info: adInfo,
         bgUrl: '',
         clickUrl: ''
       }
@@ -288,6 +294,8 @@
       },
       'adCon' (val) {
         if (val && val.adCon.relation_info.type === 'relation1') {
+          // 不展示视频，直接展示内容
+          this.isEdit = true
           this.conf_info = val.adCon
           // 对提示信息部分的数据做单独处理
           this.promptImgUrl = val.adCon.prompt_info.content[0].info_con
@@ -295,91 +303,9 @@
           // 曝光url和点击url
           this.bgUrl = this.adCon.bgUrl
           this.clickUrl = this.adCon.clickUrl
-          // 是否可修改
-          this.canEdit = this.adCon.canEdit
         } else {
           // 清空数据，必须是完整的数据结构！
-          this.conf_info = {
-            prompt_info: {
-              type: this.value,
-              effect: '',
-              content: [
-                {
-                  info_con: '',
-                  info_exp: ''
-                }
-              ]
-            },
-            relation_info: {
-              type: 'relation1',
-              content: [
-                {
-                  info_con: '',
-                  info_exp: '主图片（圆形）'
-                },
-                {
-                  info_con: '',
-                  info_exp: '主题'
-                },
-                {
-                  info_con: '',
-                  info_exp: '备注'
-                },
-                {
-                  info_con: '',
-                  info_exp: '内容'
-                },
-                {
-                  info_con: '',
-                  info_exp: '第一个块的图片'
-                },
-                {
-                  info_con: '',
-                  info_exp: '第一个块的关联主题'
-                },
-                {
-                  info_con: '',
-                  info_exp: '第一个块的外跳链接'
-                },
-                {
-                  info_con: '',
-                  info_exp: '第二个块的图片'
-                },
-                {
-                  info_con: '',
-                  info_exp: '第二个块的关联主题'
-                },
-                {
-                  info_con: '',
-                  info_exp: '第二个块的外跳链接'
-                },
-                {
-                  info_con: '',
-                  info_exp: '第三个块的图片'
-                },
-                {
-                  info_con: '',
-                  info_exp: '第三个块的关联主题'
-                },
-                {
-                  info_con: '',
-                  info_exp: '第三个块的外跳链接'
-                },
-                {
-                  info_con: '',
-                  info_exp: '第四个块的图片'
-                },
-                {
-                  info_con: '',
-                  info_exp: '第四个块的关联主题'
-                },
-                {
-                  info_con: '',
-                  info_exp: '第四个块的外跳链接'
-                }
-              ]
-            }
-          }
+          this.conf_info = adInfo
           // 曝光url和点击url
           this.bgUrl = ''
           this.clickUrl = ''
@@ -393,10 +319,23 @@
       },
       // 编辑
       edit () {
+        this.conf_info = adInfo
+        // 曝光url和点击url
+        this.bgUrl = ''
+        this.clickUrl = ''
+        // 验证是否选中了媒体平台，否则提示。
+        if (!this.canSave) {
+          this.$message.warning('请先选择一个平台')
+          return
+        }
         this.isEdit = true
       },
       // 保存
       flashSave () {
+        if (!this.canSave) {
+          this.$message.error('请选择一个平台')
+          return
+        }
         // 先判断提示信息类型，创建数据格式
         if (this.value === 'prompt1') {
           this.conf_info.prompt_info.effect = 'effect1'
@@ -461,6 +400,9 @@
       },
       // 上传前的钩子函数
       beforeUpload (file) {
+        // 上传前获取上传图片所需要的参数！
+        this.upLoadData.act_id = this.$store.state.materialData.act_id
+        this.upLoadData.mediachannel = this.$store.state.materialData.mediachannel
         const isJPG = file.type === 'image/png'
         const isLt2M = file.size / 1024 < 200
 
@@ -501,7 +443,7 @@
       width: 100%;
       height: 550px;
       position: relative;
-    // 上传图片中的 i 标签
+      // 上传图片中的 i 标签
       .uploader-icon {
         font-style: normal;
       }
@@ -526,12 +468,12 @@
         background-size: cover;
         background-repeat: no-repeat;
         background-position center;
-        .url-wrap{
+        .url-wrap {
           width: 300px;
           position: absolute;
           left: 20px;
           bottom: 220px;
-          .el-input{
+          .el-input {
             margin-top: 3px;
           }
         }

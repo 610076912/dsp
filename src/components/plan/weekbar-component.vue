@@ -2,19 +2,19 @@
   <div class="weekbar-component">
     <span>周期</span>
     <div class="line"></div>
-    <div class="box" :class="{'box-active':weekArr[0]}" @click="clickWeek(0)">周一</div>
+    <div class="box" :class="{'box-active':weekArr[0], 'disabled': !canClick}" @click="clickWeek(0)">周一</div>
     <div class="line"></div>
-    <div class="box" :class="{'box-active':weekArr[1]}" @click="clickWeek(1)">周二</div>
+    <div class="box" :class="{'box-active':weekArr[1], 'disabled': !canClick}" @click="clickWeek(1)">周二</div>
     <div class="line"></div>
-    <div class="box" :class="{'box-active':weekArr[2]}" @click="clickWeek(2)">周三</div>
+    <div class="box" :class="{'box-active':weekArr[2], 'disabled': !canClick}" @click="clickWeek(2)">周三</div>
     <div class="line"></div>
-    <div class="box" :class="{'box-active':weekArr[3]}" @click="clickWeek(3)">周四</div>
+    <div class="box" :class="{'box-active':weekArr[3], 'disabled': !canClick}" @click="clickWeek(3)">周四</div>
     <div class="line"></div>
-    <div class="box" :class="{'box-active':weekArr[4]}" @click="clickWeek(4)">周五</div>
+    <div class="box" :class="{'box-active':weekArr[4], 'disabled': !canClick}" @click="clickWeek(4)">周五</div>
     <div class="line"></div>
-    <div class="box" :class="{'box-active':weekArr[5]}" @click="clickWeek(5)">周六</div>
+    <div class="box" :class="{'box-active':weekArr[5], 'disabled': !canClick}" @click="clickWeek(5)">周六</div>
     <div class="line"></div>
-    <div class="box" :class="{'box-active':weekArr[6]}" @click="clickWeek(6)">周日</div>
+    <div class="box" :class="{'box-active':weekArr[6], 'disabled': !canClick}" @click="clickWeek(6)">周日</div>
   </div>
 </template>
 
@@ -78,4 +78,6 @@
     .box-active
       background #169bd5
       color: #fff
+    .disabled
+      cursor not-allowed
 </style>

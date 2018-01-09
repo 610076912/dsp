@@ -9,9 +9,9 @@
             <el-submenu index="1">
               <template slot="title"><i class="el-icon-menu"></i>广告数据</template>
               <el-menu-item index="data" @click="changePath('推广数据')">推广数据</el-menu-item>
-              <el-menu-item index="mediadata" @click="changePath('媒体分析')">媒体分析</el-menu-item>
-              <el-menu-item index="territory"  @click="changePath('地域分析')">地域分析</el-menu-item>
-              <el-menu-item index="timebucket"  @click="changePath('时段分析')">时段分析</el-menu-item>
+              <!--<el-menu-item index="mediadata" @click="changePath('媒体分析')">媒体分析</el-menu-item>-->
+              <!--<el-menu-item index="territory"  @click="changePath('地域分析')">地域分析</el-menu-item>-->
+              <!--<el-menu-item index="timebucket"  @click="changePath('时段分析')">时段分析</el-menu-item>-->
             </el-submenu>
           </el-menu>
         </el-col>
@@ -33,9 +33,6 @@
       }
     },
     methods: {
-      menuRouter (key, keyPath) {
-        console.log(key, keyPath)
-      },
       changePath (path) {
         this.path = path
       }

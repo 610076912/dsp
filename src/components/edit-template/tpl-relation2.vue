@@ -133,17 +133,55 @@
 </template>
 
 <script type="text/ecmascript-6">
+  let adInfo = {
+    prompt_info: {  // 提示信息
+      type: 'prompt1',   // prompt1
+      effect: 'effect1',  // 展示效果 图片：effect1，图文：effect2
+      content: [{
+        info_con: '',
+        info_exp: '提示图片'
+      }]
+    },
+    relation_info: {
+      type: 'relation2',   // relation1
+      content: [
+        {
+          info_con: '',
+          info_exp: '主图片'
+        },
+        {
+          info_con: '',
+          info_exp: '文本域'
+        },
+        {
+          info_con: '',
+          info_exp: '价格'
+        },
+        {
+          info_con: '',
+          info_exp: '库存'
+        },
+        {
+          info_con: '',
+          info_exp: '二维码'
+        }]
+    }
+  }
   export default {
     props: {
       collapseVal: '',
       adCon: {
         type: Object
+      },
+      canSave: {
+        default: false
+      },
+      canEdit: {
+        default: true
       }
     },
     data () {
       return {
-        // 是否可修改
-        canEdit: true,
         // video 对象
         video: '',
         // 上传接口地址
@@ -151,8 +189,8 @@
         imgUrl: 'http://image.bjvca.com:5000',                    // 图片服务器路径
         token: {Authorization: sessionStorage.getItem('token')},  // 上传图片用的数据
         upLoadData: {
-          mediachannel: this.$store.state.materialData.mediachannel,
-          act_id: this.$store.state.materialData.act_id
+          mediachannel: null,
+          act_id: null
         },
         imageUrl: '',
         isEdit: false,
@@ -169,40 +207,7 @@
         price: '',      // 价格
         stock: '',      // 库存
         textarea: '',   // 文本域
-        conf_info: {
-          prompt_info: {  // 提示信息
-            type: 'prompt1',   // prompt1
-            effect: 'effect1',  // 展示效果 图片：effect1，图文：effect2
-            content: [{
-              info_con: '',
-              info_exp: '提示图片'
-            }]
-          },
-          relation_info: {
-            type: 'relation2',   // relation1
-            content: [
-              {
-                info_con: '',
-                info_exp: '主图片'
-              },
-              {
-                info_con: '',
-                info_exp: '文本域'
-              },
-              {
-                info_con: '',
-                info_exp: '价格'
-              },
-              {
-                info_con: '',
-                info_exp: '库存'
-              },
-              {
-                info_con: '',
-                info_exp: '二维码'
-              }]
-          }
-        },
+        conf_info: adInfo,
         bgUrl: '',
         clickUrl: ''
       }
@@ -223,46 +228,14 @@
       },
       'adCon' (val) {
         if (val && val.adCon.relation_info.type === 'relation2') {
+          // 不展示视频，直接展示内容
+          this.isEdit = true
           this.conf_info = val.adCon
           // 曝光url和点击url
           this.bgUrl = this.adCon.bgUrl
           this.clickUrl = this.adCon.clickUrl
-          this.canEdit = this.adCon.canEdit
         } else {
-          this.conf_info = {
-            prompt_info: {  // 提示信息
-              type: 'prompt1',   // prompt1
-              effect: 'effect1',  // 展示效果 图片：effect1，图文：effect2
-              content: [{
-                info_con: '',
-                info_exp: '提示图片'
-              }]
-            },
-            relation_info: {
-              type: 'relation2',   // relation1
-              content: [
-                {
-                  info_con: '',
-                  info_exp: '主图片'
-                },
-                {
-                  info_con: '',
-                  info_exp: '文本域'
-                },
-                {
-                  info_con: '',
-                  info_exp: '价格'
-                },
-                {
-                  info_con: '',
-                  info_exp: '库存'
-                },
-                {
-                  info_con: '',
-                  info_exp: '二维码'
-                }]
-            }
-          }
+          this.conf_info = adInfo
           // 曝光url和点击url
           this.bgUrl = ''
           this.clickUrl = ''
@@ -276,10 +249,24 @@
       },
       // 编辑
       edit () {
+        // 清数据
+        this.conf_info = adInfo
+        // 曝光url和点击url
+        this.bgUrl = ''
+        this.clickUrl = ''
+        // 验证是否选中了媒体平台，否则提示。
+        if (!this.canSave) {
+          this.$message.warning('请先选择一个平台')
+          return
+        }
         this.isEdit = true
       },
       // 保存
       flashSave () {
+        if (!this.canSave) {
+          this.$message.error('请选择一个平台')
+          return
+        }
         if (this.value === 'prompt1') {
           this.conf_info.prompt_info = {  // 提示信息
             type: 'prompt1',
@@ -333,6 +320,9 @@
         // console.log(this.conf_info.relation_info)
       },
       beforeAvatarUpload (file) {
+        // 上传前获取上传图片所需要的参数！
+        this.upLoadData.act_id = this.$store.state.materialData.act_id
+        this.upLoadData.mediachannel = this.$store.state.materialData.mediachannel
         const isPNG = file.type === 'image/png'
         const isLt2M = file.size / 1024 / 1024 < 2
 

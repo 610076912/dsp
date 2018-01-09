@@ -3,13 +3,13 @@
     <span class="setps-title">新建推广计划</span>
     <div class="setps-left"></div>
     <div class="setps-content">
-      <el-steps :space="130" :active="active">
-        <el-step class="el-step" title="基本设置" icon="my-yuan" @click.native="clickTo('/creatBasics')"></el-step>
-        <el-step class="el-step" title="场景化设置" icon="my-yuan" @click.native="clickTo('/creatScene')"></el-step>
-        <el-step class="el-step" title="定向设置" icon="my-yuan" @click.native="clickTo('/creatmediaType')"></el-step>
-        <el-step class="el-step" title="投放设置" icon="my-yuan" @click.native="clickTo('/creatStrategy')"></el-step>
-        <el-step class="el-step" title="广告素材" icon="my-yuan" @click.native="clickTo('/creatMaterial')"></el-step>
-        <el-step class="el-step" title="活动预览" icon="my-yuan" @click.native="clickTo('/creatPreview')"></el-step>
+      <el-steps :space="164" :active="active">
+        <el-step class="el-step" title="基本设置" icon="my-yuan"></el-step>
+        <el-step class="el-step" title="场景化设置" icon="my-yuan"></el-step>
+        <el-step class="el-step" title="定向设置" icon="my-yuan"></el-step>
+        <!--<el-step class="el-step" title="投放设置" icon="my-yuan" @click.native="clickTo('/creatStrategy')"></el-step>-->
+        <el-step class="el-step" title="广告素材" icon="my-yuan"></el-step>
+        <el-step class="el-step" title="活动预览" icon="my-yuan"></el-step>
       </el-steps>
     </div>
     <div class="setps-right"></div>
@@ -70,7 +70,6 @@
       }
       .el-step__head {
         font-size: 20px;
-        cursor pointer;
       }
       .el-step__title {
         font-size: 12px;

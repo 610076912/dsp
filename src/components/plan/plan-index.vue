@@ -39,12 +39,12 @@
           </el-select>
         </label>
         <!--<label>-->
-          <!--状态：-->
-          <!--<el-select v-model="seekData.status" class="status-select" clearable>-->
-            <!--<el-option key="time" label="活动推广时间" value="time"></el-option>-->
-            <!--<el-option key="group" label="分组" value="group"></el-option>-->
-            <!--<el-option key="kg" label="开关" value="kg"></el-option>-->
-          <!--</el-select>-->
+        <!--状态：-->
+        <!--<el-select v-model="seekData.status" class="status-select" clearable>-->
+        <!--<el-option key="time" label="活动推广时间" value="time"></el-option>-->
+        <!--<el-option key="group" label="分组" value="group"></el-option>-->
+        <!--<el-option key="kg" label="开关" value="kg"></el-option>-->
+        <!--</el-select>-->
         <!--</label>-->
         <button class="submit" @click="seek">查询</button>
       </div>
@@ -53,15 +53,8 @@
           :data="tableData"
           border
           stripe
-          @select="select"
           @selection-change="selectionChange"
           style="width: 100%">
-          <el-table-column
-            :resizable="false"
-            type="selection"
-            align="center"
-            width="40">
-          </el-table-column>
           <el-table-column
             :resizable="false"
             label="活动ID"
@@ -75,7 +68,7 @@
             :show-overflow-tooltip="true"
             prop="plan_name"
             align="center"
-            width="140">
+            width="200">
           </el-table-column>
           <el-table-column
             :resizable="false"
@@ -93,13 +86,6 @@
             align="center"
             show-overflow-tooltip
             width="138">
-          </el-table-column>
-          <el-table-column
-            :resizable="false"
-            label="日预算"
-            prop="plan_day_budget"
-            align="center"
-            width="75">
           </el-table-column>
           <el-table-column
             :resizable="false"
@@ -151,7 +137,7 @@
             :formatter="activity"
             width="90">
           </el-table-column>
-          <el-table-column label="功能操作" align="left" :resizable="false">
+          <el-table-column label="功能操作" align="center" :resizable="false">
             <template slot-scope="scope">
               <span class="operation" @click="details(scope.row.plan_id)">查看&nbsp;</span>
               <span class="operation" @click="copyPlan(scope.row.plan_id)">复制&nbsp;</span>
@@ -330,6 +316,7 @@
       // 选项卡
       handleClick () {
         // console.log(this.activeName)
+        this.currentPage = 1
         this.getActiveList({channel: this.activeName})
       },
       // 当手动选择复选框时触发事件
@@ -352,6 +339,10 @@
         if (!this.switchData[result.$index]) {
           this.$http.post('/api2/canclepublish', {
             plan_id: result.row.plan_id
+          }).then(res => {
+            if (res.code === 200) {
+              this.seek()
+            }
           })
         } else {
           this.$http.post('/api2/publish', {
@@ -364,6 +355,8 @@
                   this.$set(this.switchData, result.$index, false)
                 }
               })
+            } else {
+              this.seek()
             }
           })
         }
@@ -495,7 +488,7 @@
         color: #169bd5;
         border-right: 1px solid #000;
         cursor: pointer;
-        &:nth-of-type(3n) {
+        &:nth-of-type(2n) {
           border: none;
         }
       }

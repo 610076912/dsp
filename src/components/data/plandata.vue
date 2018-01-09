@@ -33,7 +33,7 @@
           <!-- 媒体选择框 -->
           <div class="activity">
             <el-select v-model="media" size="small" placeholder="请选择媒体">
-              <el-option value="all" label="全部"></el-option>
+              <el-option value="all" label="全部媒体"></el-option>
               <el-option
                 v-for="item in mediaO"
                 :key="item.mediaId"
@@ -105,10 +105,10 @@ export default {
       tableLoading: true,
       deviceO: [{     // 设备类型选择器
         value: '1',
-        label: 'PC'
+        label: 'Mobile'
       }, {
         value: '2',
-        label: 'Mobile'
+        label: 'PC'
       }, {
         value: '3',
         label: 'OTT'
@@ -194,7 +194,7 @@ export default {
       }
     },
     getActid () {     // 获取选择项，活动媒体id
-      this.$http.get('http://192.168.1.106:3889/data/get_plan_list', {
+      this.$http.get('http://context.bjvca.com:3889/data/get_plan_list', {
         params: {
           user_id: sessionStorage.getItem('user_id')
         }
@@ -221,7 +221,7 @@ export default {
           eTime = this.activityO[i].plan_e_time
         }
       }
-      this.$http.get('http://192.168.1.106:3889/data/get_promotion_data', {
+      this.$http.get('http://context.bjvca.com:3889/data/get_promotion_data', {
         params: {
           actid_list: JSON.stringify(arg),
           plan_b_time: bTime,
@@ -247,8 +247,6 @@ export default {
       })
     },
     echarts () {
-      console.log(this.selectL)
-      console.log(this.isWho(this.selectL))
       var myChart = this.$echarts.init(document.getElementsByClassName('line-chart')[0])
       let echartData = {
         color: ['#66c4cb', '#b5a4d9'],          // 折线颜色

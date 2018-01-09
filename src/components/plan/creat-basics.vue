@@ -18,26 +18,27 @@
               :label="item.group_name"
               :value="item.group_id">
               <span style="float: left">{{item.group_name}}</span>
-              <span @click.stop="delGroup(item.group_id,item.group_name)"
-                    style="float: right; color: #8492a6; font-size: 10px">
-                <i class="el-icon-close"></i></span>
+              <!--删除分组功能屏蔽-->
+              <!--<span @click.stop="delGroup(item.group_id,item.group_name)"-->
+                    <!--style="float: right; color: #8492a6; font-size: 10px">-->
+                <!--<i class="el-icon-close"></i></span>-->
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="预算类型" required>
-          <el-radio-group :disabled="priceInputStatus" v-model="ruleForm.budgetType">
-            <el-radio :label="0">日预算</el-radio>
-            <el-radio :label="1">总预算</el-radio>
+        <el-form-item label="投放频率" required>
+          <el-radio-group :disabled="!canEdit" v-model="ruleForm.budgetType">
+            <el-radio :label="0">快速投放</el-radio>
+            <el-radio :label="1">均匀投放</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item :label="budgetText" prop="all" required>
-          <el-input :disabled="priceInputStatus" v-model="ruleForm.all">
+        <el-form-item label="总预算" prop="all" required>
+          <el-input :disabled="!canEdit" v-model="ruleForm.all">
             <template slot="append">元</template>
           </el-input>
         </el-form-item>
         <el-form-item label="投放日期" prop="date" class="date-time-range">
           <el-date-picker
-            :disabled="priceInputStatus"
+            :disabled="!canEdit"
             v-model="ruleForm.date"
             minTime="17:31"
             range-separator="至"
@@ -47,7 +48,7 @@
           </el-date-picker>
         </el-form-item>
         <!--<el-form-item label="单价">-->
-        <!--<el-input :disabled="priceInputStatus" v-model="ruleForm.price"><template slot="append">元</template></el-input>-->
+        <!--<el-input :disabled="canEdit" v-model="ruleForm.price"><template slot="append">元</template></el-input>-->
         <!--</el-form-item>-->
         <el-form-item class="button-wrap">
           <el-button @click="back">返回</el-button>
@@ -84,7 +85,7 @@
       // 自定义判断总预算
       let checkAll = (rule, value, callback) => {
         // 判断是否为空
-        if (!value) {
+        if (!value || value === '0') {
           return callback(new Error('请填写总预算'))
         }
         // 判断是否为数字
@@ -99,7 +100,6 @@
         // 禁止选择当前时间以前的
         pickerOptions: {
           disabledDate (time) {
-            console.log(time)
             return time.getTime() < (Date.now() - 24 * 60 * 60 * 1000)
           }
         },
@@ -111,11 +111,12 @@
           date: [new Date(), new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)],
           price: ''
         },
-        priceInputStatus: false,
+        canEdit: true,
         // 验证规则
         rules: {
           name: [{required: true, message: '请输入计划名称(20字符内)', trigger: 'blur', max: 10}],
           all: [{validator: checkAll, trigger: 'blur'}],
+          // date: [{validator: checkDate, trigger: 'blur'}],
           date: [
             {
               required: true,
@@ -138,23 +139,23 @@
         showMediaArr: []
       }
     },
-    computed: {
-      budgetText () {
-        return this.ruleForm.budgetType === 0 ? '日预算' : '总预算'
-      }
-    },
+    // computed: {
+    //   budgetText () {
+    //     return this.ruleForm.budgetType === 0 ? '日预算' : '总预算'
+    //   }
+    // },
     created () {
       // 活动状态
-      let status = this.this.$store.state.creatData.status
-      if (status && status.status === 4) {
+      let status = this.$store.state.creatData.status
+      if (status && status.plan_status === 4) {
         let actidStatus = status.act_ids_status.every(item => {
           return item.act_ids_status === -2
         })
-        if (actidStatus) {
-          this.priceInputStatus = false
+        if (!actidStatus) {
+          this.canEdit = false
         }
-      } else if (status && status.status !== 1) {
-        this.priceInputStatus = true
+      } else if (status && status.plan_status !== 1 && status.plan_status !== 6) {
+        this.canEdit = false
       }
       // 判断store里是否有数据
       let creatData = this.$store.state.creatData.creatBasice
@@ -184,7 +185,7 @@
             this.ruleForm.name = data.plan_name
             this.ruleForm.group = data.group_id
             this.ruleForm.budgetType = data.plan_budget_type
-            this.ruleForm.all = data.plan_budget_type === 1 ? data.plan_all_budget : data.plan_day_budget
+            this.ruleForm.all = data.plan_all_budget
             // 单价临时增加
             // this.ruleForm.price = data.price
             // this.priceInputStatus = true
@@ -222,6 +223,11 @@
           // 如果验证通过则跳转下一个路由
           let url, data, mUrl // 基本设置接口url，基本设置数据，媒体接口url
           if (valid && !that.isEdit) {
+            // 验证日期是否一致
+            if (that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss') === that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss')) {
+              that.$message.error('起始时间和结束时间相同')
+              return
+            }
             this.btnLoading = true
             // 添加
             url = '/api2/add_plan'

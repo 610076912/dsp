@@ -123,11 +123,19 @@
       },
       next () {
         this.btnLoading = true
-        this.$http.post('/api2/add_region_plan', {
-          plan_id: this.planId,
-          city_id_list: JSON.stringify(this.checkedCityId)
-        }).then(res => {
-          if (res.code === 200) {
+        Promise.all([
+          this.$http.post('/api2/add_region_plan', {
+            plan_id: this.planId,
+            city_id_list: JSON.stringify(this.checkedCityId)
+          }),
+          this.$http.post('/api2/add_strategy_plan', {
+            plan_id: this.$store.state.creatData.planId,
+            frequency: 0,
+            casttype: 1,
+            billing: 0
+          })
+        ]).then(res => {
+          if (res[0].code === 200) {
             this.$store.commit('CITY', {
               type: 'cityId',
               msg: this.checkedCityId
@@ -136,10 +144,39 @@
               type: 'citys',
               msg: this.checkedCitys
             })
-            this.$router.push('/creatStrategy')
           }
-          this.btnLoading = false
+          if (res[0].code === 200 && res[1].code === 200) {
+            this.$router.push('/creatMaterial')
+          }
         })
+        // this.$http.post('/api2/add_region_plan', {
+        //   plan_id: this.planId,
+        //   city_id_list: JSON.stringify(this.checkedCityId)
+        // }).then(res => {
+        //   if (res.code === 200) {
+        //     this.$store.commit('CITY', {
+        //       type: 'cityId',
+        //       msg: this.checkedCityId
+        //     })
+        //     this.$store.commit('CITY', {
+        //       type: 'citys',
+        //       msg: this.checkedCitys
+        //     })
+        //     // this.$router.push('/creatStrategy')
+        //   }
+        //   this.btnLoading = false
+        // })
+        // // 调投放策略接口
+        // this.$http.post('/api2/add_strategy_plan', {
+        //   plan_id: this.$store.state.creatData.planId,
+        //   frequency: this.times,
+        //   casttype: this.speed,
+        //   billing: this.priceType
+        // }).then(res => {
+        //   if (res.code === 200) {
+        //     this.$router.push('/creatMaterial')
+        //   }
+        // })
       },
       // 排序
       arrSort (arr, key) {

@@ -32,7 +32,7 @@
       width: 100%;
       height: 50px;
       border-bottom: 1px solid #bfcbd9;
-      font-size: 14px;
+      font-size: 16px;
       line-height: 40px;
     }
     .creat-header-wrap {
@@ -42,6 +42,7 @@
       border-bottom: 1px solid #169bd5;
       span {
         display: block;
+        font-size: 14px;
         width: 130px;
         height: 50px;
         background: #169bd5;
