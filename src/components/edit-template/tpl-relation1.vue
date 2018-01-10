@@ -145,87 +145,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-  let adInfo = {
-    prompt_info: {
-      type: this.value,
-      effect: '',
-      content: [
-        {
-          info_con: '',
-          info_exp: ''
-        }
-      ]
-    },
-    relation_info: {
-      type: 'relation1',
-      content: [
-        {
-          info_con: '',
-          info_exp: '主图片（圆形）'
-        },
-        {
-          info_con: '',
-          info_exp: '主题'
-        },
-        {
-          info_con: '',
-          info_exp: '备注'
-        },
-        {
-          info_con: '',
-          info_exp: '内容'
-        },
-        {
-          info_con: '',
-          info_exp: '第一个块的图片'
-        },
-        {
-          info_con: '',
-          info_exp: '第一个块的关联主题'
-        },
-        {
-          info_con: '',
-          info_exp: '第一个块的外跳链接'
-        },
-        {
-          info_con: '',
-          info_exp: '第二个块的图片'
-        },
-        {
-          info_con: '',
-          info_exp: '第二个块的关联主题'
-        },
-        {
-          info_con: '',
-          info_exp: '第二个块的外跳链接'
-        },
-        {
-          info_con: '',
-          info_exp: '第三个块的图片'
-        },
-        {
-          info_con: '',
-          info_exp: '第三个块的关联主题'
-        },
-        {
-          info_con: '',
-          info_exp: '第三个块的外跳链接'
-        },
-        {
-          info_con: '',
-          info_exp: '第四个块的图片'
-        },
-        {
-          info_con: '',
-          info_exp: '第四个块的关联主题'
-        },
-        {
-          info_con: '',
-          info_exp: '第四个块的外跳链接'
-        }
-      ]
-    }
-  }
   export default {
     props: {
       collapseVal: '',
@@ -273,7 +192,87 @@
         confirmText1: '',
         confirmText2: '',
         confirmImgUrl: '',
-        conf_info: adInfo,
+        conf_info: {
+          prompt_info: {
+            type: this.value,
+            effect: '',
+            content: [
+              {
+                info_con: '',
+                info_exp: ''
+              }
+            ]
+          },
+          relation_info: {
+            type: 'relation1',
+            content: [
+              {
+                info_con: '',
+                info_exp: '主图片（圆形）'
+              },
+              {
+                info_con: '',
+                info_exp: '主题'
+              },
+              {
+                info_con: '',
+                info_exp: '备注'
+              },
+              {
+                info_con: '',
+                info_exp: '内容'
+              },
+              {
+                info_con: '',
+                info_exp: '第一个块的图片'
+              },
+              {
+                info_con: '',
+                info_exp: '第一个块的关联主题'
+              },
+              {
+                info_con: '',
+                info_exp: '第一个块的外跳链接'
+              },
+              {
+                info_con: '',
+                info_exp: '第二个块的图片'
+              },
+              {
+                info_con: '',
+                info_exp: '第二个块的关联主题'
+              },
+              {
+                info_con: '',
+                info_exp: '第二个块的外跳链接'
+              },
+              {
+                info_con: '',
+                info_exp: '第三个块的图片'
+              },
+              {
+                info_con: '',
+                info_exp: '第三个块的关联主题'
+              },
+              {
+                info_con: '',
+                info_exp: '第三个块的外跳链接'
+              },
+              {
+                info_con: '',
+                info_exp: '第四个块的图片'
+              },
+              {
+                info_con: '',
+                info_exp: '第四个块的关联主题'
+              },
+              {
+                info_con: '',
+                info_exp: '第四个块的外跳链接'
+              }
+            ]
+          }
+        },
         bgUrl: '',
         clickUrl: ''
       }
@@ -305,7 +304,87 @@
           this.clickUrl = this.adCon.clickUrl
         } else {
           // 清空数据，必须是完整的数据结构！
-          this.conf_info = adInfo
+          this.conf_info = {
+            prompt_info: {
+              type: this.value,
+              effect: '',
+              content: [
+                {
+                  info_con: '',
+                  info_exp: ''
+                }
+              ]
+            },
+            relation_info: {
+              type: 'relation1',
+              content: [
+                {
+                  info_con: '',
+                  info_exp: '主图片（圆形）'
+                },
+                {
+                  info_con: '',
+                  info_exp: '主题'
+                },
+                {
+                  info_con: '',
+                  info_exp: '备注'
+                },
+                {
+                  info_con: '',
+                  info_exp: '内容'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第一个块的图片'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第一个块的关联主题'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第一个块的外跳链接'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第二个块的图片'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第二个块的关联主题'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第二个块的外跳链接'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第三个块的图片'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第三个块的关联主题'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第三个块的外跳链接'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第四个块的图片'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第四个块的关联主题'
+                },
+                {
+                  info_con: '',
+                  info_exp: '第四个块的外跳链接'
+                }
+              ]
+            }
+          }
           // 曝光url和点击url
           this.bgUrl = ''
           this.clickUrl = ''
@@ -319,7 +398,92 @@
       },
       // 编辑
       edit () {
-        this.conf_info = adInfo
+        this.confirmImgUrl = ''
+        this.confirmText1 = ''
+        this.confirmText2 = ''
+        this.promptImgUrl = ''
+        this.promptText = ''
+        this.conf_info = {
+          prompt_info: {
+            type: this.value,
+            effect: '',
+            content: [
+              {
+                info_con: '',
+                info_exp: ''
+              }
+            ]
+          },
+          relation_info: {
+            type: 'relation1',
+            content: [
+              {
+                info_con: '',
+                info_exp: '主图片（圆形）'
+              },
+              {
+                info_con: '',
+                info_exp: '主题'
+              },
+              {
+                info_con: '',
+                info_exp: '备注'
+              },
+              {
+                info_con: '',
+                info_exp: '内容'
+              },
+              {
+                info_con: '',
+                info_exp: '第一个块的图片'
+              },
+              {
+                info_con: '',
+                info_exp: '第一个块的关联主题'
+              },
+              {
+                info_con: '',
+                info_exp: '第一个块的外跳链接'
+              },
+              {
+                info_con: '',
+                info_exp: '第二个块的图片'
+              },
+              {
+                info_con: '',
+                info_exp: '第二个块的关联主题'
+              },
+              {
+                info_con: '',
+                info_exp: '第二个块的外跳链接'
+              },
+              {
+                info_con: '',
+                info_exp: '第三个块的图片'
+              },
+              {
+                info_con: '',
+                info_exp: '第三个块的关联主题'
+              },
+              {
+                info_con: '',
+                info_exp: '第三个块的外跳链接'
+              },
+              {
+                info_con: '',
+                info_exp: '第四个块的图片'
+              },
+              {
+                info_con: '',
+                info_exp: '第四个块的关联主题'
+              },
+              {
+                info_con: '',
+                info_exp: '第四个块的外跳链接'
+              }
+            ]
+          }
+        }
         // 曝光url和点击url
         this.bgUrl = ''
         this.clickUrl = ''
@@ -410,7 +574,7 @@
           this.$message.error('请确认文件格式。')
         }
         if (!isLt2M) {
-          this.$message.error('上传的文件大小不能超过 200KB!')
+          this.$message.error('上传的文件大小不能超过 2M!')
         }
         return isJPG && isLt2M
       }

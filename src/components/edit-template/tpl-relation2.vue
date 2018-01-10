@@ -133,40 +133,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-  let adInfo = {
-    prompt_info: {  // 提示信息
-      type: 'prompt1',   // prompt1
-      effect: 'effect1',  // 展示效果 图片：effect1，图文：effect2
-      content: [{
-        info_con: '',
-        info_exp: '提示图片'
-      }]
-    },
-    relation_info: {
-      type: 'relation2',   // relation1
-      content: [
-        {
-          info_con: '',
-          info_exp: '主图片'
-        },
-        {
-          info_con: '',
-          info_exp: '文本域'
-        },
-        {
-          info_con: '',
-          info_exp: '价格'
-        },
-        {
-          info_con: '',
-          info_exp: '库存'
-        },
-        {
-          info_con: '',
-          info_exp: '二维码'
-        }]
-    }
-  }
   export default {
     props: {
       collapseVal: '',
@@ -207,7 +173,40 @@
         price: '',      // 价格
         stock: '',      // 库存
         textarea: '',   // 文本域
-        conf_info: adInfo,
+        conf_info: {
+          prompt_info: {  // 提示信息
+            type: 'prompt1',   // prompt1
+            effect: 'effect1',  // 展示效果 图片：effect1，图文：effect2
+            content: [{
+              info_con: '',
+              info_exp: '提示图片'
+            }]
+          },
+          relation_info: {
+            type: 'relation2',   // relation1
+            content: [
+              {
+                info_con: '',
+                info_exp: '主图片'
+              },
+              {
+                info_con: '',
+                info_exp: '文本域'
+              },
+              {
+                info_con: '',
+                info_exp: '价格'
+              },
+              {
+                info_con: '',
+                info_exp: '库存'
+              },
+              {
+                info_con: '',
+                info_exp: '二维码'
+              }]
+          }
+        },
         bgUrl: '',
         clickUrl: ''
       }
@@ -235,7 +234,40 @@
           this.bgUrl = this.adCon.bgUrl
           this.clickUrl = this.adCon.clickUrl
         } else {
-          this.conf_info = adInfo
+          this.conf_info = {
+            prompt_info: {  // 提示信息
+              type: 'prompt1',   // prompt1
+              effect: 'effect1',  // 展示效果 图片：effect1，图文：effect2
+              content: [{
+                info_con: '',
+                info_exp: '提示图片'
+              }]
+            },
+            relation_info: {
+              type: 'relation2',   // relation1
+              content: [
+                {
+                  info_con: '',
+                  info_exp: '主图片'
+                },
+                {
+                  info_con: '',
+                  info_exp: '文本域'
+                },
+                {
+                  info_con: '',
+                  info_exp: '价格'
+                },
+                {
+                  info_con: '',
+                  info_exp: '库存'
+                },
+                {
+                  info_con: '',
+                  info_exp: '二维码'
+                }]
+            }
+          }
           // 曝光url和点击url
           this.bgUrl = ''
           this.clickUrl = ''
@@ -250,7 +282,40 @@
       // 编辑
       edit () {
         // 清数据
-        this.conf_info = adInfo
+        this.conf_info = {
+          prompt_info: {  // 提示信息
+            type: 'prompt1',   // prompt1
+            effect: 'effect1',  // 展示效果 图片：effect1，图文：effect2
+            content: [{
+              info_con: '',
+              info_exp: '提示图片'
+            }]
+          },
+          relation_info: {
+            type: 'relation2',   // relation1
+            content: [
+              {
+                info_con: '',
+                info_exp: '主图片'
+              },
+              {
+                info_con: '',
+                info_exp: '文本域'
+              },
+              {
+                info_con: '',
+                info_exp: '价格'
+              },
+              {
+                info_con: '',
+                info_exp: '库存'
+              },
+              {
+                info_con: '',
+                info_exp: '二维码'
+              }]
+          }
+        }
         // 曝光url和点击url
         this.bgUrl = ''
         this.clickUrl = ''
