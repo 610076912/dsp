@@ -49,7 +49,7 @@
                   <p>待审核</p></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content r"><span>{{checkData[indexs + 1][2]}}</span>
+                <div class="grid-content r"><span>{{checkData[indexs + 1][-2]}}</span>
                   <p>审核拒绝</p></div>
               </el-col>
               <el-col :span="6">

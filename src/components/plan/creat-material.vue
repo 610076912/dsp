@@ -6,8 +6,8 @@
       <span class="slide-next btn" @click="next"><i class="el-icon-arrow-right"></i></span>
       <div class="slide-box">
         <ul v-bind:style="{ width: slide.width+'%', left: slide.left+'%' }">
-          <li v-for="(item, index) in medias" :class="{checked: currentIndex===index}"
-              @click="chooseMedia(item.act_id, item.media_id, index, item.status)">
+          <li v-for="(item, index) in medias" :class="{checked: currentIndex===index, canclick: !item.canClick}"
+              @click="chooseMedia(item.act_id, item.media_id, index, item.status, item.canClick)">
             <img :src="item.media_url" :title="item.media_name">
             <span v-show="item.statusDesc !== ''">{{item.statusDesc}}</span>
           </li>
@@ -19,8 +19,10 @@
       <div class="con">
         <!--<flash :collapseVal.sync="collVal" :adCon="adCon.flash" :canSave="canSave" :canEdit="canEdit"></flash>-->
         <tpl-image :collapseVal.sync="collVal" :adCon="adCon.image" :canSave="canSave" :canEdit="canEdit"></tpl-image>
-        <tpl-relation1 :collapseVal.sync="collVal" :adCon="adCon.relation1" :canSave="canSave" :canEdit="canEdit"></tpl-relation1>
-        <tpl-relation2 :collapseVal.sync="collVal" :adCon="adCon.relation2" :canSave="canSave" :canEdit="canEdit"></tpl-relation2>
+        <tpl-relation1 :collapseVal.sync="collVal" :adCon="adCon.relation1" :canSave="canSave"
+                       :canEdit="canEdit"></tpl-relation1>
+        <tpl-relation2 :collapseVal.sync="collVal" :adCon="adCon.relation2" :canSave="canSave"
+                       :canEdit="canEdit"></tpl-relation2>
       </div>
     </div>
     <div class="button-wrap">
@@ -109,18 +111,23 @@
           if (res.code === 200) {
             let that = this
             // 媒体平台数据
-            res.data.forEach(function (media) {
-              allMedias.forEach(function (item) {
+            allMedias.forEach(function (item) {
+              item.canClick = false
+              // 没有状态信息的话，状态码为-100，状态描述为''.可修改
+              item.status = -100
+              item.statusDesc = ''
+              res.data.forEach(media => {
                 if (media.act_channel_id === item.media_id) {
                   item.act_id = media.act_id
-                  // 没有状态信息的话，状态码为-100，状态描述为''.可修改
-                  item.status = -100
-                  item.statusDesc = ''
-                  that.medias.push(item)
+                  item.canClick = true
                 }
               })
+              if (item.canClick === true) {
+                that.medias.unshift(item)
+              } else {
+                that.medias.push(item)
+              }
             })
-
             if (status && status.plan_status === 4) {
               status.act_ids_status.forEach(item => {
                 this.medias.forEach(m => {
@@ -189,7 +196,8 @@
         this.$router.push('/creatPreview')
       },
       // 选择媒体平台 获取广告信息
-      chooseMedia (actId, mediaId, index, status) {
+      chooseMedia (actId, mediaId, index, status, canClick) {
+        if (!canClick) return
         // 根据状态判断是否可修改
         if (status === -100 || status === -2) {
           this.canEdit = true
@@ -203,7 +211,6 @@
         this.currentMediaId = mediaId
         this.$store.commit('MEDIACHANNEL', mediaId)
         this.$store.commit('ACTID', actId)
-        console.log(this.$store.state.materialData.mediachannel, this.$store.state.materialData.act_id)
         /* for (let key in this.mateTpl) {
           if (this.medias[index].tpl.some(item => { return item === key })) {
             this.mateTpl[key] = true
@@ -373,7 +380,7 @@
             }
             img {
               position absolute
-              left:0
+              left: 0
               right: 0
               top: 0
               bottom: 0
@@ -385,10 +392,10 @@
               -webkit-transition: all 0.3s
               -o-transition: all 0.3s
             }
-            span{
+            span {
               display inline-block
               position absolute
-              left:0
+              left: 0
               right: 0
               top: 0
               bottom: 0
@@ -421,6 +428,9 @@
               -webkit-transform: scale(1.1)
               -o-transform: scale(1.1)
             }
+          }
+          li.canclick {
+            cursor: not-allowed;
           }
         }
       }

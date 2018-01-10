@@ -105,13 +105,13 @@ export default {
       tableLoading: false,
       deviceO: [{     // 设备类型选择器
         value: '1',
-        label: 'Mobile'
+        label: '移动推广'
       }, {
         value: '2',
-        label: 'PC'
+        label: 'PC推广'
       }, {
         value: '3',
-        label: 'OTT'
+        label: '大屏推广'
       }],
       planLists: [],  // 所有的平台数据数组
       details: [],    // 数据详情数组

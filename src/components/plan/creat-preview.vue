@@ -22,12 +22,6 @@
         <router-link v-if="canEdit" to="creatScene">编辑信息</router-link>
       </b></p>
       <div class="pro-box">
-        <p class="minhead"><span>广告目标</span></p>
-        <div class="label">
-
-        </div>
-      </div>
-      <div class="pro-box">
         <p class="minhead"><span>场景化内容</span></p>
         <div class="label">
           <span class="labels" v-for="item in sceneInfo">{{ item.class_name }}</span>
@@ -465,14 +459,15 @@
         font-size: 0
 
         .labels {
-          display: inline-block
-          width: 120px
-          height: 44px
-          text-align: center
-          line-height: 44px
-          background: #fcfcfc
-          margin: 10px 10px 0 0
-          font-size: 12px
+          display: inline-block;
+          width: 105px;
+          height: 30px;
+          text-align: center;
+          line-height: 30px;
+          background: #169bd5;
+          margin: 10px 10px 0 0;
+          font-size: 12px;
+          color: #fff;
         }
       }
       .bar {

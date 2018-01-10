@@ -374,7 +374,7 @@
               background: #f2f2f2;
               margin: 0 15px 15px 0;
               cursor: pointer;
-              color: #999;
+              color: #333;
               transition: all .5s;
             }
           }
@@ -425,7 +425,7 @@
                 background: #f2f2f2;
                 margin: 0 15px 15px 0;
                 cursor: pointer;
-                color: #999;
+                color: #333;
                 transition: all .5s;
               }
             }
