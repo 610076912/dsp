@@ -197,10 +197,10 @@
         btnIsShow: true,
         options: [{
           value: 'prompt1',
-          label: '图片提示信息150px*150px'
+          label: '图片提示信息'
         }, {
           value: 'prompt2',
-          label: '图文提示信息210px*60px'
+          label: '图文提示信息'
         }],
         value: 'prompt1',      // 提示选中项
         promptText: '', // 提示文本
