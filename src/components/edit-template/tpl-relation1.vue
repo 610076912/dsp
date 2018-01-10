@@ -48,7 +48,7 @@
                     :show-file-list="false"
                     :before-upload="beforeUpload"
                     :on-success="tipsImgupLoadSuccess">
-                    <i class="uploader-icon">点击上传</br>图片</i>
+                    <i class="uploader-icon">150px*150px</i>
                   </el-upload>
                 </div>
                 <div class="info">
@@ -67,7 +67,7 @@
                     :show-file-list="false"
                     :before-upload="beforeUpload"
                     :on-success="tipsImgupLoadSuccess">
-                    <i class="uploader-icon">300px*300px上传图片</i>
+                    <i class="uploader-icon">300px*300px 上传图片</i>
                   </el-upload>
                 </div>
               </div>
@@ -85,17 +85,17 @@
                     :show-file-list="false"
                     :before-upload="beforeUpload"
                     :on-success="topImgupLoadSuccess">
-                    <i class="uploader-icon">上传图片</i>
+                    <i class="uploader-icon">&nbsp;&nbsp;120*120</i>
                   </el-upload>
                 </div>
-                <el-input v-model="conf_info.relation_info.content[1].info_con" placeholder="主题（10个字）"
+                <el-input v-model="conf_info.relation_info.content[1].info_con" placeholder="主题（8个字）"
+                          size="mini" :maxlength="8"></el-input>
+                <el-input v-model="conf_info.relation_info.content[2].info_con" placeholder="备注（10个字）"
                           size="mini" :maxlength="10"></el-input>
-                <el-input v-model="conf_info.relation_info.content[2].info_con" placeholder="备注（20个字）"
-                          size="mini" :maxlength="20"></el-input>
               </div>
               <div class="ad-text">
                 <el-input v-model="conf_info.relation_info.content[3].info_con" type="textarea" :rows="2"
-                          placeholder="请输入内容(50个字)" :maxlength="50"></el-input>
+                          placeholder="请输入内容(36个字)" :maxlength="36"></el-input>
               </div>
               <div class="ad-list">
                 <div class="ad-item"
@@ -127,7 +127,7 @@
                   :show-file-list="false"
                   :before-upload="beforeUpload"
                   :on-success="itemImgupLoadSuccess">
-                  <i class="uploader-icon">上传图片</i>
+                  <i class="uploader-icon">180px*250px</i>
                 </el-upload>
               </div>
               <div class="confirm-con">
@@ -681,7 +681,7 @@
             z-index: 1;
             text-align: center;
             line-height: 20px;
-            padding-top: 20px
+            padding-top: 28px
             cursor: pointer;
           }
           .info {

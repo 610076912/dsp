@@ -49,7 +49,7 @@
                     :before-upload="beforeAvatarUpload">
                     <div class="imagesbj"
                          :style="{backgroundImage: 'url('+conf_info.prompt_info.content[0].info_con+')', backgroundSize: 'contain'}">
-                      <p v-if="!conf_info.prompt_info.content[0].info_con">上传图片</p>
+                      <p v-if="!conf_info.prompt_info.content[0].info_con">300px*300px 上传图片</p>
                     </div>
                   </el-upload>
                 </div>
@@ -65,7 +65,7 @@
                   :before-upload="beforeAvatarUpload">
                   <div class="avatar"
                        :style="{backgroundImage: 'url('+conf_info.prompt_info.content[0].info_con+')', backgroundSize: 'cover'}">
-                    <p v-if="!conf_info.prompt_info.content[0].info_con">上传图片</p>
+                    <p v-if="!conf_info.prompt_info.content[0].info_con">150px*150px</p>
                   </div>
                 </el-upload>
                 <div class="info">
@@ -86,7 +86,7 @@
                   :show-file-list="false"
                   :on-success="tplImgSuccess"
                   :before-upload="beforeAvatarUpload">
-                  <p v-if="!conf_info.relation_info.content[0].info_con">上传图片</p>
+                  <p v-if="!conf_info.relation_info.content[0].info_con">540px*480px 上传图片</p>
                 </el-upload>
               </div>
               <el-input
@@ -120,7 +120,7 @@
                     :show-file-list="false"
                     :on-success="QRcodeImgSuccess"
                     :before-upload="beforeAvatarUpload">
-                    <p v-if="!conf_info.relation_info.content[4].info_con">二维码</p>
+                    <p v-if="!conf_info.relation_info.content[4].info_con">150px*150px</p>
                   </el-upload>
                 </div>
               </div>
