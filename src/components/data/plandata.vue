@@ -1,12 +1,11 @@
 <template>
   <div id="plandata">
-    <p class="header">推广数据</p>
     <div class="nav">
-      <div class="navname">推广活动数据</div>
+      <div class="navname">推广数据</div>
     </div>
     <div class="chart">
       <div class="top">
-        <div class="name">移动营销概况</div>
+        <div class="name">营销概况</div>
         <div class="top-right">
           <!-- 设备选择框 -->
           <div class="device">
@@ -52,7 +51,7 @@
         <ul>
           <li><p>{{ details.bgCount || 0 }}</p><span>曝光量(次)</span></li>
           <li><p>{{ details.clickCount || 0 }}</p><span>点击量(次)</span></li>
-          <li><p>{{ details.clickRate || 0}}</p><span>点击率(次)</span></li>
+          <li><p>{{ Math.round(details.clickRate * 100) / 100 || 0}}</p><span>点击率(次)</span></li>
           <li><p>0</p><span>花费(元)</span></li>
         </ul>
       </div>
@@ -89,7 +88,7 @@
         <el-table-column prop="actName" label="活动名称"></el-table-column>
         <el-table-column prop="bg" label="曝光量" ></el-table-column>
         <el-table-column prop="click" label="点击量" ></el-table-column>
-        <el-table-column prop="clickRate" label="点击率" ></el-table-column>
+        <el-table-column prop="clickRate" label="点击率" :formatter="clickRateFormate"></el-table-column>
         <el-table-column prop="hf" label="总花费" ></el-table-column>
       </el-table>
     </div>
@@ -97,7 +96,8 @@
 </template>
 
 <script>
-const media = require('../../../static/json/media.json')
+import media from '../../../static/json/media.json'
+// import media from '../../../static/json/test-media.json'
 export default {
   name: 'plandata',
   data () {
@@ -168,6 +168,10 @@ export default {
       return chucunArry
     },
     search () {         // 查询按钮
+      if (this.activity === '') {
+        this.$message.warning('请先选择一个活动')
+        return
+      }
       var data = []
       if (this.media === 'all') {
         for (var i = 0; i < this.mediaO.length; i++) {
@@ -229,6 +233,10 @@ export default {
         }
       }).then(res => {
         if (res.code === 200) {
+          // 处理数据中的小数点位数
+          res.data.clickRateArr.forEach((item, index) => {
+            res.data.clickRateArr[index] = Math.round(item * 100) / 100
+          })
           this.details = res.data
           this.tableData = []
           res.data.dateArr.forEach((item, index) => {
@@ -343,14 +351,9 @@ border-radius();
   .nav {
     height: 44px;
     line-height: 46px
-    border-bottom 2px solid #4a9cd3
+    border-bottom 1px solid #4a9cd3
     .navname {
       height 100%;
-      width 150px;
-      color #fff;
-      border-radius: 6px 6px 0 0
-      background #4a9cd3
-      text-align center
       font-size: 16px
     }
   }

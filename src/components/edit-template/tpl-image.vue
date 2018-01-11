@@ -255,15 +255,14 @@
         this.upLoadData.mediachannel = this.$store.state.materialData.mediachannel
         const isPNG = file.type === 'image/png'
         const isJPG = file.type === 'image/jpeg'
-        const isJIF = file.type === 'image/gif'
+        const isGIF = file.type === 'image/gif'
         const isLt2M = file.size / 1024 / 1024 < 2
-        console.log(file.size)
-        if (!isJPG && !isJIF && !isPNG) {
+        if (!isJPG && !isGIF && !isPNG) {
           this.$message.error('请确认文件格式。')
         } else if (!isLt2M) {
           this.$message.error('上传的文件大小不能超过 2MB!')
         }
-        return isJPG && isLt2M
+        return (isGIF || isJPG || isPNG) && isLt2M
       },
       // 上传中钩子函数
       upLoadProgress () {

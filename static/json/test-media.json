@@ -1,0 +1,10 @@
+[
+  {
+    "media_id": 9999,
+    "media_name": "测试服务器",
+    "media_url": "./static/img/test.png",
+    "checked": "0",
+    "alias": "&",
+    "display": false
+  }
+]

@@ -524,13 +524,13 @@
           }
         }).then(res => {
           if (res.code === 200) {
-            res.data.clickRateArr.forEach(item => {
-              item = Math.round(item * 100) / 100
+            let clickRateArr = res.data.clickRateArr.map(item => {
+              return Math.round(item * 100) / 100
             })
             this.mobileData = res.data
             this.mobileModel.xAxis.data = res.data.datelist
             this.mobileModel.series[0].data = res.data.bgArr
-            this.mobileModel.series[1].data = res.data.clickRateArr
+            this.mobileModel.series[1].data = clickRateArr
             this.mobileChart.setOption(this.mobileModel)
             this.mobileChart.hideLoading()
           } else {
@@ -548,13 +548,13 @@
           }
         }).then(res => {
           if (res.code === 200) {
-            res.data.clickRateArr.forEach(item => {
-              item = Math.round(item * 100) / 100
+            let clickRateArr = res.data.clickRateArr.map(item => {
+              return Math.round(item * 100) / 100
             })
             this.pcData = res.data
             this.pcModel.xAxis.data = res.data.datelist
             this.pcModel.series[0].data = res.data.bgArr
-            this.pcModel.series[1].data = res.data.clickRateArr
+            this.pcModel.series[1].data = clickRateArr
             this.pcChart.setOption(this.pcModel)
             this.pcChart.hideLoading()
           } else {
@@ -572,13 +572,13 @@
           }
         }).then(res => {
           if (res.code === 200) {
-            res.data.clickRateArr.forEach(item => {
-              item = Math.round(item * 100) / 100
+            let clickRateArr = res.data.clickRateArr.map(item => {
+              return Math.round(item * 100) / 100
             })
             this.ottData = res.data
             this.ottModel.xAxis.data = res.data.datelist
             this.ottModel.series[0].data = res.data.bgArr
-            this.ottModel.series[1].data = res.data.clickRateArr
+            this.ottModel.series[1].data = clickRateArr
             this.ottChart.setOption(this.ottModel)
             this.ottChart.hideLoading()
           } else {
@@ -619,8 +619,12 @@
         this[typeName + 'Chart'].setOption(this[typeName + 'Model'])
       },
       chartDateChange (timeRange, type) {
-        let dateArr = timeRange.map(item => {
-          return item.getTime()
+        let dateArr = timeRange.map((item, index) => {
+          if (index === 0) {
+            return item.setHours(0, 0, 0, 0)
+          } else if (index === 1) {
+            return item.setHours(23, 59, 59, 999)
+          }
         })
         if (type === 'mobile') {
           this.getMChartsData(dateArr)

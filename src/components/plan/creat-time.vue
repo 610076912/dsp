@@ -128,7 +128,7 @@
         })
         this.timeNum = chosedNum.length
         this.timeCheckBox = chosedNum.length === val.length
-        console.log(this.timeCheckBox)
+        // console.log(this.timeCheckBox)
       },
       'checkedWeek' (val) {
         // 选中了几个

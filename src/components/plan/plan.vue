@@ -44,7 +44,7 @@
     },
     methods: {
       conRef () {
-        console.log(this.$store.state.creatData.creatBasice)
+        // console.log(this.$store.state.creatData.creatBasice)
       }
     },
     computed: {

@@ -68,11 +68,12 @@
 <script type="text/ecmascript-6">
   import setps from './steps-component.vue'
   import mediaJson from '../../../static/json/media.json'
-  // 移动，pc，大屏端对应的媒体
+  // import mediaJson from '../../../static/json/test-media.json'
+  // 移动，pc，大屏端对应的媒体, 9999为测试渠道号！
   const channelMedias = {
-    1: [1014],
-    2: [1002, 1004],
-    3: [1003]
+    1: [1014, 9999],
+    2: [1002, 1004, 9999],
+    3: [1003, 9999]
   }
   export default {
     name: 'creatBasics',

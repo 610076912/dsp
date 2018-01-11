@@ -158,7 +158,6 @@
     methods: {
       // 全选
       class2Checkedbox (val, index) {
-        console.log(index, this.checkedAll)
         if (this.checkedAll[index]) {
           val.forEach(item => {
             if (!this.checkedArr.includes(item.class_id)) {
@@ -262,7 +261,6 @@
             this.class2Arr = resultArr[0].class2Arr
             // 回调~
             if (callback) callback()
-            console.log(this.allPack)
           }
         })
       },

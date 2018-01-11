@@ -157,6 +157,8 @@
   import weekBar from './weekbar-component.vue'
 
   import medias from '../../../static/json/media.json'
+  // import medias from '../../../static/json/test-media.json'
+
   import mediaType from '../../../static/json/media-type.json'
   import region from '../../../static/json/region.json'
   import tplJson from '../../../static/json/tpl.json'

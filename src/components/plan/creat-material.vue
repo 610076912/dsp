@@ -35,6 +35,7 @@
 <script>
   import setps from './steps-component.vue'
   import allMedias from '../../../static/json/media.json'
+  // import allMedias from '../../../static/json/test-media.json'
 
   // 素材模板
   import flash from '../edit-template/tpl-flash.vue'
