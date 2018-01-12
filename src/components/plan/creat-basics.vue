@@ -67,13 +67,22 @@
 
 <script type="text/ecmascript-6">
   import setps from './steps-component.vue'
-  import mediaJson from '../../../static/json/media.json'
-  // import mediaJson from '../../../static/json/test-media.json'
+  import mediaJsonP from '../../../static/json/media.json'
+  import mediaJsonT from '../../../static/json/test-media.json'
+  let testEnv = process.env.TEST === 'test'
+  let mediaJson = mediaJsonP
+  if (testEnv) {
+    mediaJson = mediaJsonT
+  }
   // 移动，pc，大屏端对应的媒体, 9999为测试渠道号！
-  const channelMedias = {
-    1: [1014, 9999],
-    2: [1002, 1004, 9999],
-    3: [1003, 9999]
+  const channelMedias = process.env.TEST === 'test' ? {
+    1: [9999],
+    2: [9999],
+    3: [9999]
+  } : {
+    1: [1014],
+    2: [1002, 1004],
+    3: [1003]
   }
   export default {
     name: 'creatBasics',

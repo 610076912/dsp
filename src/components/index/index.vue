@@ -259,6 +259,8 @@
 </template>
 
 <script>
+  let searchUrl = process.env.TEST === 'test' ? 'http://47.93.140.7:3889' : 'http://context.bjvca.com:3889'
+
   let selectLOption = [{
     value: 'bgCount',
     label: '曝光量'
@@ -502,7 +504,7 @@
       },
       // get Total Data
       getTotalDate (channelId) {
-        this.$http.get('http://context.bjvca.com:3889/data/total_data', {
+        this.$http.get(searchUrl + '/data/total_data', {
           params: {
             user_id: sessionStorage.getItem('user_id'),
             channel_id: channelId
@@ -516,7 +518,7 @@
       // 获取移动图标数据接口
       getMChartsData (timeRange) {
         this.mobileChart.showLoading()
-        this.$http.get('http://context.bjvca.com:3889/data/channel_data', {
+        this.$http.get(searchUrl + '/data/channel_data', {
           params: {
             user_id: sessionStorage.getItem('user_id'),
             channel_id: 1,
@@ -540,7 +542,7 @@
       },
       // 获取pc图标数据接口
       getPChartsData (timeRange) {
-        this.$http.get('http://context.bjvca.com:3889/data/channel_data', {
+        this.$http.get(searchUrl + '/data/channel_data', {
           params: {
             user_id: sessionStorage.getItem('user_id'),
             channel_id: 2,
@@ -564,7 +566,7 @@
       },
       // 获取OTT图标数据接口
       getOChartsData (timeRange) {
-        this.$http.get('http://context.bjvca.com:3889/data/channel_data', {
+        this.$http.get(searchUrl + '/data/channel_data', {
           params: {
             user_id: sessionStorage.getItem('user_id'),
             channel_id: 3,

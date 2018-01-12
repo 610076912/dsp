@@ -60,7 +60,7 @@
           <div class="mobile-chart-color-l">
             <span></span>
             <el-select v-model="selectL" size="mini"
-              @change="selectChange()">
+                       @change="selectChange()">
               <el-option label="曝光量" value="bgArr"></el-option>
               <el-option label="点击量" value="clickArr"></el-option>
             </el-select>
@@ -68,7 +68,7 @@
           <div class="mobile-chart-color-r">
             <span></span>
             <el-select v-model="selectR" size="mini"
-              @change="selectChange()">
+                       @change="selectChange()">
               <el-option label="点击率" value="clickRateArr"></el-option>
               <el-option label="花费" value="" disabled=""></el-option>
             </el-select>
@@ -83,440 +83,449 @@
         <span class="name">推广数据明细</span>
         <!-- <span class="outform">导出报表</span> -->
       </div>
-      <el-table :data="tableData" stripe border v-loading="tableLoading" style="width: 100%" :default-sort = "{prop: 'date', order: 'descending'}">
-        <el-table-column prop="time" label="时间" ></el-table-column>
+      <el-table :data="tableData" stripe border v-loading="tableLoading" style="width: 100%"
+                :default-sort="{prop: 'date', order: 'descending'}">
+        <el-table-column prop="time" label="时间"></el-table-column>
         <el-table-column prop="actName" label="活动名称"></el-table-column>
-        <el-table-column prop="bg" label="曝光量" ></el-table-column>
-        <el-table-column prop="click" label="点击量" ></el-table-column>
+        <el-table-column prop="bg" label="曝光量"></el-table-column>
+        <el-table-column prop="click" label="点击量"></el-table-column>
         <el-table-column prop="clickRate" label="点击率" :formatter="clickRateFormate"></el-table-column>
-        <el-table-column prop="hf" label="总花费" ></el-table-column>
+        <el-table-column prop="hf" label="总花费"></el-table-column>
       </el-table>
     </div>
   </div>
 </template>
 
 <script>
-import media from '../../../static/json/media.json'
-// import media from '../../../static/json/test-media.json'
-export default {
-  name: 'plandata',
-  data () {
-    return {
-      tableLoading: false,
-      deviceO: [{     // 设备类型选择器
-        value: '1',
-        label: '移动推广'
-      }, {
-        value: '2',
-        label: 'PC推广'
-      }, {
-        value: '3',
-        label: '大屏推广'
-      }],
-      planLists: [],  // 所有的平台数据数组
-      details: [],    // 数据详情数组
-      device: '1',
-      activityO: [],
-      activity: '',
-      mediaO: [],
-      media: '',
-      selectO: [{      // 选择器选项
-        value: 'bgcount',
-        label: '曝光量'
-      }, {
-        value: 'click',
-        label: '点击量'
-      }, {
-        value: 'pjclick',
-        label: '点击率'
-      }, {
-        value: 'huafei',
-        label: '花费'
-      }],
-      selectL: 'bgArr',  // 左边选中状态
-      selectR: 'clickRateArr',    // 右边选中状态
-      tableData: []
-    }
-  },
-  methods: {
-    deviceChange () {         // 设备选择项改变
-      this.activityO = this.planLists[this.device]
-      this.activity = ''
-      this.mediaO = this.translateMedia([])
+  let searchUrl = process.env.TEST === 'test' ? 'http://47.93.140.7:3889' : 'http://context.bjvca.com:3889'
+
+  import mediaJsonP from '../../../static/json/media.json'
+  import mediaJsonT from '../../../static/json/test-media.json'
+
+  let testEnv = process.env.TEST === 'test'
+  let media = mediaJsonP
+  if (testEnv) {
+    media = mediaJsonT
+  }
+  export default {
+    name: 'plandata',
+    data () {
+      return {
+        tableLoading: false,
+        deviceO: [{     // 设备类型选择器
+          value: '1',
+          label: '移动推广'
+        }, {
+          value: '2',
+          label: 'PC推广'
+        }, {
+          value: '3',
+          label: '大屏推广'
+        }],
+        planLists: [],  // 所有的平台数据数组
+        details: [],    // 数据详情数组
+        device: '1',
+        activityO: [],
+        activity: '',
+        mediaO: [],
+        media: '',
+        selectO: [{      // 选择器选项
+          value: 'bgcount',
+          label: '曝光量'
+        }, {
+          value: 'click',
+          label: '点击量'
+        }, {
+          value: 'pjclick',
+          label: '点击率'
+        }, {
+          value: 'huafei',
+          label: '花费'
+        }],
+        selectL: 'bgArr',  // 左边选中状态
+        selectR: 'clickRateArr',    // 右边选中状态
+        tableData: []
+      }
     },
-    activityChange () {       // 活动名选择项改变
-      this.media = 'all'
-      this.activityO.forEach((item, index) => {
-        if (this.activityO[index].plan_id === this.activity) {
-          this.mediaO = this.translateMedia(this.activityO[index].act_ids)
-        }
-      })
-    },
-    translateMedia (arg) {
-      var chucunArry = []
-      // 循环媒体平台id， 循环字典表找对应；注意循环媒体id时没有属性所以不能用item
-      arg.forEach((item, index) => {
-        media.forEach((item1, index1) => {
-          if (parseInt(arg[index].split('_')[1]) === item1.media_id) {
-            chucunArry.push({
-              mediaId: arg[index],
-              mediaName: media[index1].media_name
-            })
+    methods: {
+      deviceChange () {         // 设备选择项改变
+        this.activityO = this.planLists[this.device]
+        this.activity = ''
+        this.mediaO = this.translateMedia([])
+      },
+      activityChange () {       // 活动名选择项改变
+        this.media = 'all'
+        this.activityO.forEach((item, index) => {
+          if (this.activityO[index].plan_id === this.activity) {
+            this.mediaO = this.translateMedia(this.activityO[index].act_ids)
           }
         })
-      })
-      return chucunArry
-    },
-    search () {         // 查询按钮
-      if (this.activity === '') {
-        this.$message.warning('请先选择一个活动')
-        return
-      }
-      var data = []
-      if (this.media === 'all') {
-        for (var i = 0; i < this.mediaO.length; i++) {
-          data.push(this.mediaO[i].mediaId)
+      },
+      translateMedia (arg) {
+        var chucunArry = []
+        // 循环媒体平台id， 循环字典表找对应；注意循环媒体id时没有属性所以不能用item
+        arg.forEach((item, index) => {
+          media.forEach((item1, index1) => {
+            if (parseInt(arg[index].split('_')[1]) === item1.media_id) {
+              chucunArry.push({
+                mediaId: arg[index],
+                mediaName: media[index1].media_name
+              })
+            }
+          })
+        })
+        return chucunArry
+      },
+      search () {         // 查询按钮
+        if (this.activity === '') {
+          this.$message.warning('请先选择一个活动')
+          return
         }
-      } else {
-        data.push(this.media)
-      }
-      this.getData(data)
-    },
-    selectChange () {
-      this.echarts()
-    },
-    isWho (me) {
-      if (me === 'bgArr') {
-        return '曝光量'
-      } else if (me === 'clickArr') {
-        return '点击量'
-      } else if (me === 'clickRateArr') {
-        return '点击率'
-      } else if (me === 'hf') {
-        return '花费'
-      }
-    },
-    getActid () {     // 获取选择项，活动媒体id
-      this.$http.get('http://context.bjvca.com:3889/data/get_plan_list', {
-        params: {
-          user_id: sessionStorage.getItem('user_id')
-        }
-      }).then(res => {
-        if (res.code === 200) {
-          this.planLists = res.data
-          this.activityO = this.planLists['1']
-          this.activity = this.activityO[0].plan_id
-          this.mediaO = this.translateMedia(this.activityO[0].act_ids)
-          var data = []
+        var data = []
+        if (this.media === 'all') {
           for (var i = 0; i < this.mediaO.length; i++) {
             data.push(this.mediaO[i].mediaId)
           }
-          this.getData(data)
+        } else {
+          data.push(this.media)
         }
-      })
-    },
-    getData (arg) {    // 获取数据详细信息
-      this.tableLoading = true
-      var bTime
-      var eTime
-      for (var i = 0; i < this.activityO.length; i++) {
-        if (this.activityO[i].plan_id === this.activity) {
-          bTime = this.activityO[i].plan_b_time
-          eTime = this.activityO[i].plan_e_time
+        this.getData(data)
+      },
+      selectChange () {
+        this.echarts()
+      },
+      isWho (me) {
+        if (me === 'bgArr') {
+          return '曝光量'
+        } else if (me === 'clickArr') {
+          return '点击量'
+        } else if (me === 'clickRateArr') {
+          return '点击率'
+        } else if (me === 'hf') {
+          return '花费'
         }
-      }
-      this.$http.get('http://context.bjvca.com:3889/data/get_promotion_data', {
-        params: {
-          actid_list: JSON.stringify(arg),
-          plan_b_time: bTime,
-          plan_e_time: eTime
+      },
+      getActid () {     // 获取选择项，活动媒体id
+        this.$http.get(searchUrl + '/data/get_plan_list', {
+          params: {
+            user_id: sessionStorage.getItem('user_id')
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            this.planLists = res.data
+            this.activityO = this.planLists['1']
+            this.activity = this.activityO[0].plan_id
+            this.mediaO = this.translateMedia(this.activityO[0].act_ids)
+            var data = []
+            for (var i = 0; i < this.mediaO.length; i++) {
+              data.push(this.mediaO[i].mediaId)
+            }
+            this.getData(data)
+          }
+        })
+      },
+      getData (arg) {    // 获取数据详细信息
+        this.tableLoading = true
+        var bTime
+        var eTime
+        for (var i = 0; i < this.activityO.length; i++) {
+          if (this.activityO[i].plan_id === this.activity) {
+            bTime = this.activityO[i].plan_b_time
+            eTime = this.activityO[i].plan_e_time
+          }
         }
-      }).then(res => {
-        if (res.code === 200) {
-          // 处理数据中的小数点位数
-          res.data.clickRateArr.forEach((item, index) => {
-            res.data.clickRateArr[index] = Math.round(item * 100) / 100
-          })
-          this.details = res.data
-          this.tableData = []
-          res.data.dateArr.forEach((item, index) => {
-            this.tableData.push({
-              time: item,
-              actName: this.activity,
-              bg: res.data.bgArr[index],
-              click: res.data.clickArr[index],
-              clickRate: res.data.clickRateArr[index],
-              hf: '（暂无数据）'
+        this.$http.get(searchUrl + '/data/get_promotion_data', {
+          params: {
+            actid_list: JSON.stringify(arg),
+            plan_b_time: bTime,
+            plan_e_time: eTime
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            // 处理数据中的小数点位数
+            res.data.clickRateArr.forEach((item, index) => {
+              res.data.clickRateArr[index] = Math.round(item * 100) / 100
             })
-          })
-          this.tableLoading = false
-          this.echarts()
+            this.details = res.data
+            this.tableData = []
+            res.data.dateArr.forEach((item, index) => {
+              this.tableData.push({
+                time: item,
+                actName: this.activity,
+                bg: res.data.bgArr[index],
+                click: res.data.clickArr[index],
+                clickRate: res.data.clickRateArr[index],
+                hf: '（暂无数据）'
+              })
+            })
+            this.tableLoading = false
+            this.echarts()
+          }
+        })
+      },
+      echarts () {
+        var myChart = this.$echarts.init(document.getElementsByClassName('line-chart')[0])
+        let echartData = {
+          color: ['#66c4cb', '#b5a4d9'],          // 折线颜色
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+              type: 'cross'           // 默认为直线，可选为：'line' | 'shadow'
+            }
+          },
+          grid: {                     // 图表位置
+            left: '4%',
+            right: '4%',
+            bottom: '1%',
+            containLabel: true
+          },
+          calculable: true,
+          xAxis: [  // 设置x轴
+            {
+              type: 'category',
+              boundaryGap: false,
+              data: this.details.dateArr,
+              splitLine: {
+                lineStyle: {
+                  type: 'dashed'
+                }
+              }
+            }
+          ],
+          yAxis: [    // 设置两个y轴
+            {
+              type: 'value',
+              name: this.isWho(this.selectL),
+              position: 'left',
+              splitLine: {
+                lineStyle: {
+                  type: 'dashed'
+                }
+              }
+            },
+            {
+              type: 'value',
+              name: this.isWho(this.selectR),
+              position: 'right',
+              splitLine: {
+                lineStyle: {
+                  type: 'dashed'
+                }
+              }
+            }
+          ],
+          series: [     // 展示数据
+            {
+              name: this.isWho(this.selectL),
+              type: 'line',
+              smooth: true, // 这句就是让曲线变平滑的
+              areaStyle: {normal: {}},  // 填充背景
+              yAxisIndex: 0,
+              data: this.details[this.selectL]
+            },
+            {
+              name: this.isWho(this.selectR),
+              type: 'line',
+              smooth: true, // 这句就是让曲线变平滑的
+              areaStyle: {normal: {}},
+              yAxisIndex: 1,
+              data: this.details[this.selectR]
+            }
+          ]
         }
-      })
-    },
-    echarts () {
-      var myChart = this.$echarts.init(document.getElementsByClassName('line-chart')[0])
-      let echartData = {
-        color: ['#66c4cb', '#b5a4d9'],          // 折线颜色
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-            type: 'cross'           // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        grid: {                     // 图表位置
-          left: '4%',
-          right: '4%',
-          bottom: '1%',
-          containLabel: true
-        },
-        calculable: true,
-        xAxis: [  // 设置x轴
-          {
-            type: 'category',
-            boundaryGap: false,
-            data: this.details.dateArr,
-            splitLine: {
-              lineStyle: {
-                type: 'dashed'
-              }
-            }
-          }
-        ],
-        yAxis: [    // 设置两个y轴
-          {
-            type: 'value',
-            name: this.isWho(this.selectL),
-            position: 'left',
-            splitLine: {
-              lineStyle: {
-                type: 'dashed'
-              }
-            }
-          },
-          {
-            type: 'value',
-            name: this.isWho(this.selectR),
-            position: 'right',
-            splitLine: {
-              lineStyle: {
-                type: 'dashed'
-              }
-            }
-          }
-        ],
-        series: [     // 展示数据
-          {
-            name: this.isWho(this.selectL),
-            type: 'line',
-            smooth: true, // 这句就是让曲线变平滑的
-            areaStyle: { normal: {} },  // 填充背景
-            yAxisIndex: 0,
-            data: this.details[this.selectL]
-          },
-          {
-            name: this.isWho(this.selectR),
-            type: 'line',
-            smooth: true, // 这句就是让曲线变平滑的
-            areaStyle: { normal: {} },
-            yAxisIndex: 1,
-            data: this.details[this.selectR]
-          }
-        ]
+        myChart.setOption(echartData)
       }
-      myChart.setOption(echartData)
+    },
+    created () {
+      this.getActid()
+      // await this.getData((this.activityO[0].act_ids[0]).split('_')[1])
+    },
+    mounted () {
     }
-  },
-  created () {
-    this.getActid()
-    // await this.getData((this.activityO[0].act_ids[0]).split('_')[1])
-  },
-  mounted () {
   }
-}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
-borderColor = #e4e4e4;
-border-radius();
+  borderColor = #e4e4e4;
+  border-radius();
 
--webkit-border-radius arguments, -moz-border-radius arguments, border-radius arguments, #plandata {
-  .header {
-    height: 60px;
-    line-height: 60px;
-    font-size: 16px;
-    padding: 0 28px;
-  }
-
-  .nav {
-    height: 44px;
-    line-height: 46px
-    border-bottom 1px solid #4a9cd3
-    .navname {
-      height 100%;
-      font-size: 16px
-    }
-  }
-
-  .chart {
-    width: 100%;
-    height: 550px;
-    border: 1px solid borderColor;
-    border-radius(4px);
-    margin-top: 30px;
-
-    .top {
-      width: 100%;
+  -webkit-border-radius arguments, -moz-border-radius arguments, border-radius arguments, #plandata {
+    .header {
       height: 60px;
-      background: #f4f5f9;
+      line-height: 60px;
+      font-size: 16px;
+      padding: 0 28px;
+    }
 
-      .name {
-        height: 100%;
-        line-height: 60px;
-        padding: 0 14px;
-        float: left;
-        font-size: 14px;
-      }
-
-      .top-right {
-        width: 600px;
-        height: 100%;
-        padding-top: 15px
-        float: right;
-        .device, .activity, .dates{
-          width: 150px
-          float left
-          margin-right 15px
-        }
-
-        .btn {
-          width: 80px;
-          height: 30px;
-          float: left;
-
-          .el-button--primary {
-            width: 100%;
-            height: 100%;
-            line-height: 0.5;
-          }
-        }
+    .nav {
+      height: 44px;
+      line-height: 46px
+      border-bottom 1px solid #4a9cd3
+      .navname {
+        height 100%;
+        font-size: 16px
       }
     }
 
-    .data-num {
+    .chart {
       width: 100%;
-      height: 124px;
-      border-top: 1px solid borderColor;
-      border-bottom: 1px solid borderColor;
+      height: 550px;
+      border: 1px solid borderColor;
+      border-radius(4px);
+      margin-top: 30px;
 
-      ul {
+      .top {
         width: 100%;
-        height: 100%;
+        height: 60px;
+        background: #f4f5f9;
 
-        li {
-          width: calc((100% / 4));
+        .name {
           height: 100%;
+          line-height: 60px;
+          padding: 0 14px;
           float: left;
-          border-right: 1px solid borderColor;
-          text-align: center;
-
-          p {
-            display: inline-block;
-            width: 100%;
-            font-size: 26px;
-            margin-top: 40px;
-          }
-
-          span {
-            display: inline-block;
-            width: 100%;
-          }
+          font-size: 14px;
         }
 
-        li:last-of-type {
-          border: none;
-        }
-      }
-    }
-
-    .chart-con {
-      width: 100%;
-
-      .chartSelect {
-        padding: 20px 20px 40px 20px;
-
-        .mobile-chart-color-l {
-          float: left;
-          display: inline-block;
-          width: 200px;
-          height: 30px;
-
-          span {
-            display: inline-block;
-            height: 15px;
-            width: 15px;
-            position: relative;
-            top: 2px;
-            left: 8px;
-            border-radius: 50%;
-            background: #66c4cb;
-            margin-right: 10px;
-          }
-
-          input {
-            height: 25px;
-            width: 150px;
-          }
-        }
-
-        .mobile-chart-color-r {
-          display: inline-block;
+        .top-right {
+          width: 600px;
+          height: 100%;
+          padding-top: 15px
           float: right;
-          width: 200px;
-          height: 30px;
-
-          span {
-            display: inline-block;
-            height: 15px;
-            width: 15px;
-            position: relative;
-            top: 2px;
-            left: 8px;
-            border-radius: 50%;
-            background: #b5a4d9;
-            margin-right: 10px;
+          .device, .activity, .dates {
+            width: 150px
+            float left
+            margin-right 15px
           }
 
-          input {
-            height: 25px;
-            width: 150px;
+          .btn {
+            width: 80px;
+            height: 30px;
+            float: left;
+
+            .el-button--primary {
+              width: 100%;
+              height: 100%;
+              line-height: 0.5;
+            }
           }
         }
       }
-    }
 
-    .line-chart {
-      width: 100%;
-      height: 270px;
-    }
-  }
+      .data-num {
+        width: 100%;
+        height: 124px;
+        border-top: 1px solid borderColor;
+        border-bottom: 1px solid borderColor;
 
-  .form {
-    margin-top: 50px;
+        ul {
+          width: 100%;
+          height: 100%;
 
-    .top {
-      height: 26px;
-      line-height: 26px;
+          li {
+            width: calc((100% / 4));
+            height: 100%;
+            float: left;
+            border-right: 1px solid borderColor;
+            text-align: center;
 
-      .name {
-        float: left;
-        font-size: 14px;
+            p {
+              display: inline-block;
+              width: 100%;
+              font-size: 26px;
+              margin-top: 40px;
+            }
+
+            span {
+              display: inline-block;
+              width: 100%;
+            }
+          }
+
+          li:last-of-type {
+            border: none;
+          }
+        }
       }
 
-      .outform {
-        float: right;
+      .chart-con {
+        width: 100%;
+
+        .chartSelect {
+          padding: 20px 20px 40px 20px;
+
+          .mobile-chart-color-l {
+            float: left;
+            display: inline-block;
+            width: 200px;
+            height: 30px;
+
+            span {
+              display: inline-block;
+              height: 15px;
+              width: 15px;
+              position: relative;
+              top: 2px;
+              left: 8px;
+              border-radius: 50%;
+              background: #66c4cb;
+              margin-right: 10px;
+            }
+
+            input {
+              height: 25px;
+              width: 150px;
+            }
+          }
+
+          .mobile-chart-color-r {
+            display: inline-block;
+            float: right;
+            width: 200px;
+            height: 30px;
+
+            span {
+              display: inline-block;
+              height: 15px;
+              width: 15px;
+              position: relative;
+              top: 2px;
+              left: 8px;
+              border-radius: 50%;
+              background: #b5a4d9;
+              margin-right: 10px;
+            }
+
+            input {
+              height: 25px;
+              width: 150px;
+            }
+          }
+        }
+      }
+
+      .line-chart {
+        width: 100%;
+        height: 270px;
+      }
+    }
+
+    .form {
+      margin-top: 50px;
+
+      .top {
+        height: 26px;
+        line-height: 26px;
+
+        .name {
+          float: left;
+          font-size: 14px;
+        }
+
+        .outform {
+          float: right;
+        }
       }
     }
   }
-}
 </style>

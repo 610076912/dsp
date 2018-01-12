@@ -27,8 +27,14 @@
   import steps from './steps-component.vue'
   import header from './header-component.vue'
 
-  import medias from '../../../static/json/media.json'
-  // import medias from '../../../static/json/test-media.json'
+  import mediaJsonP from '../../../static/json/media.json'
+  import mediaJsonT from '../../../static/json/test-media.json'
+
+  let testEnv = process.env.TEST === 'test'
+  let medias = mediaJsonP
+  if (testEnv) {
+    medias = mediaJsonT
+  }
 
   export default {
     data () {
