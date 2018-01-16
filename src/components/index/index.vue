@@ -259,7 +259,7 @@
 </template>
 
 <script>
-  let searchUrl = process.env.TEST === 'test' ? 'http://47.93.140.7:3889' : 'http://context.bjvca.com:3889'
+  let searchUrl = process.env.TEST === 'test' ? 'http://47.93.140.7:3889' : 'https://tj.videozhishi.com'
 
   let selectLOption = [{
     value: 'bgCount',

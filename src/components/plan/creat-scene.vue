@@ -222,19 +222,19 @@
                 obj['valueArr'] = [arr[i]]
                 switch (Math.floor(arr[i][key] / 1000)) {
                   case 1:
-                    obj.class1_name = '物体'
+                    obj.class1_name = '商品物体类'
                     break
                   case 2:
-                    obj.class1_name = '场景'
+                    obj.class1_name = '静态场景类'
                     break
                   case 3:
-                    obj.class1_name = '行为'
+                    obj.class1_name = '行为动作类'
                     break
                   case 4:
-                    obj.class1_name = '明星'
+                    obj.class1_name = '明星人物类'
                     break
                   case 9:
-                    obj.class1_name = '自定义场景'
+                    obj.class1_name = '其他'
                     break
 
                 }
