@@ -8,6 +8,10 @@
 # install dependencies
 npm install
 
+#增加环境变量TEST (config > prod.env.js > TEST === 'test')
+  如果为test则编译为测试服务器版本，如果不等于test则编译为正式服务器版本
+  对 npm run build 和 npm run dev 都起作用
+
 # serve with hot reload at localhost:8080
 npm run dev
 
