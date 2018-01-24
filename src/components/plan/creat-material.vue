@@ -7,11 +7,31 @@
       <div class="slide-box">
         <ul v-bind:style="{ width: slide.width+'%', left: slide.left+'%' }">
           <li v-for="(item, index) in medias" :class="{checked: currentIndex===index, canclick: !item.canClick}"
-              @click="chooseMedia(item.act_id, item.media_id, index, item.status, item.canClick)">
+              @click="chooseMedia(item.act_id, item.media_id, index, item.status, item.statusDesc, item.canClick)">
             <img :src="item.media_url" :title="item.media_name">
-            <span v-show="item.statusDesc !== ''">{{item.statusDesc}}</span>
           </li>
         </ul>
+      </div>
+      <div class="reason-wrap" v-show="platformStatus.show" :class="{'is-refuse': platformStatus.isRefuse}">
+        <div class="status">审核状态：{{platformStatus.statusDesc}}</div>
+        <div class="admin-reason" v-if="platformStatus.admin_reason">其他拒绝原因：<span>{{platformStatus.admin_reason}}</span>
+        </div>
+        <div class="image-reason" v-if="platformStatus.url_reason">图片拒绝原因：
+          <span>
+            <p>质量：不允许展示质量很差的图片。须图片清晰可辨，内容易于理解，文字清楚易读。</p>
+            <p>欺骗性手段：不允许使用模拟动画功能，如模拟下拉菜单、搜索框或模拟对话框或错误消息。</p>
+            <p>图片规格和像素：图片广告有具体的高度与宽度副符合系统要求，并且需填满所选区域。像素比例适中，不过大。否则，图片广告经系统处理后会变形、模糊无法正常显示。</p>
+            <p>图片广告内容：内容必须是健康的，不得包含任何成人内容、色情内容或不适当的语言。</p>
+          </span>
+        </div>
+        <div class="url-reason" v-if="platformStatus.url_reason">落地页拒绝原因：
+          <span>
+            <p>素材上不能出现敏感字样，如军用，美军，特警，毒品，黄赌毒，等。</p>
+            <p>素材上不能出现夸大产品功效、作用的用词，如最好，全球首款，最佳，最大、世界第一、世界首款，月减20不反弹、投资2万一夜暴富，等。</p>
+            <p>网页中“疗程、治愈率”医疗行业词汇，“最安全、最有效”等关键词，不能出现。</p>
+            <p>广告信息须真实有效，不得有误导消费者的嫌疑，且必须保证广告信息与落地页信息保持一致；</p>
+          </span>
+        </div>
       </div>
     </div>
     <div class="material">
@@ -36,6 +56,7 @@
   import setps from './steps-component.vue'
   import mediaJsonP from '../../../static/json/media.json'
   import mediaJsonT from '../../../static/json/test-media.json'
+
   let testEnv = process.env.TEST === 'test'
   let allMedias = mediaJsonP
   if (testEnv) {
@@ -76,6 +97,8 @@
         currentMediaplanId: '',
         // 当前已选媒体id
         currentMediaId: '',
+        // 当前选中的媒体平台状态
+        currentPlatformStatus: {},
         // 素材模板状态
         isShow: {
           flash1: false,
@@ -121,7 +144,7 @@
               item.canClick = false
               // 没有状态信息的话，状态码为-100，状态描述为''.可修改
               item.status = -100
-              item.statusDesc = ''
+              item.statusDesc = '正在编辑'
               res.data.forEach(media => {
                 if (media.act_channel_id === item.media_id) {
                   item.act_id = media.act_id
@@ -177,6 +200,30 @@
       // 判断是否选中了媒体，如果没选中则模板不能展开或者不能保存
       'canSave' () {
         return this.currentMediaId && this.currentMediaplanId
+      },
+      // 计算当前选中媒体平台的审核状态用来展示，为以后增加需求而增加了一步computed
+      'platformStatus' () {
+        let res = {
+          show: false,
+          isRefuse: false,
+          statusDesc: '',
+          adminReason: '',
+          urlReason: '',
+          imageReason: ''
+        }
+        let status = this.currentPlatformStatus
+        if (status.status) {
+          if (status.status === -2) {
+            res.isRefuse = true
+          }
+          res.show = true
+          res.statusDesc = status.statusDesc
+          res.admin_reason = status.admin_reason
+          res.url_reason = status.url_reason
+          res.image_reason = status.image_reason
+          return res
+        }
+        return res
       }
     },
     watch: {
@@ -202,7 +249,7 @@
         this.$router.push('/creatPreview')
       },
       // 选择媒体平台 获取广告信息
-      chooseMedia (actId, mediaId, index, status, canClick) {
+      chooseMedia (actId, mediaId, index, status, statusDesc, canClick) {
         if (!canClick) return
         // 根据状态判断是否可修改
         if (status === -100 || status === -2) {
@@ -232,6 +279,14 @@
         }).then(res => {
           // console.log(res)
           if (res.code === 200 && res.data.length !== 0) {
+            // 该平台审核状态
+            this.currentPlatformStatus = {
+              status: status,
+              statusDesc: statusDesc,
+              admin_reason: res.data.admin_admin_reason || res.data.media_admin_reason,
+              url_reason: res.data.admin_url_reason || res.data.media_url_reason,
+              image_reason: res.data.admin_image_reason || res.data.media_image_reason
+            }
             this.chenkedTpl = res.data[0].tpl_cat
             this.currentTpl = res.data[0].tpl_cat
             // 判断到底是什么模板，如果是关联信息模板的话，需要解析conf_info才能判断
@@ -340,10 +395,8 @@
     }
     .slide {
       width: 1140px
-      height: 60px
-      margin: 60px auto
+      margin: 60px auto 40px;
       position: relative
-
       .btn {
         width: 42px
         height: 60px
@@ -362,7 +415,7 @@
       }
       .slide-box {
         width: 980px
-        height: 100%
+        height: 60px
         margin: 0 auto
         overflow hidden
         position: relative
@@ -437,6 +490,39 @@
           }
           li.canclick {
             cursor: not-allowed;
+          }
+        }
+      }
+      .reason-wrap {
+        width: 980px;
+        min-height: 120px;
+        border: 1px solid #bababa;
+        margin: 30px 0 0 80px;
+        overflow: hidden;
+        padding: 5px;
+        transition: all .5s;
+        .status {
+          width: 100%;
+          height: 100%;
+          line-height: 120px;
+          text-align: center;
+        }
+      }
+      .is-refuse {
+        .status {
+          width: auto;
+          height: auto;
+          line-height: inherit;
+          text-align: left;
+        }
+        div {
+          line-height: 30px;
+          span {
+            display: inline-block;
+            /* margin-left: 30px; */
+            background: #cacaca;
+            padding: 5px 20px;
+            width: 100%;
           }
         }
       }

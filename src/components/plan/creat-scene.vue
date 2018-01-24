@@ -3,11 +3,35 @@
     <setps :active="1"></setps>
     <div class="content">
       <creat-header title="场景化投放设置" text="场景投放"></creat-header>
+      <el-input class="search-input" placeholder="请输入关键词查询" v-model="searchInput">
+        <el-button slot="append" @click="search">查询</el-button>
+      </el-input>
+      <transition name="fade">
+        <div class="search-res-wrap" v-show="searchArr.length !== 0">
+          <i class="el-icon-close" @click="closeSearchWrap"></i>
+          <ul>
+            <li v-for="item in searchArr" @click="clickSearchLabel(item)">{{item.class_name}}</li>
+          </ul>
+        </div>
+      </transition>
+      <transition name="fade">
+        <div class="checked-wrap" v-show="checkedArr.length !== 0">
+          <span class="checked-num">已选择标签 （{{checkedArrObj.length}}）个</span>
+          <el-button icon="delete2" type="text" @click="clearChecked()">清空已选择标签</el-button>
+          <ul>
+            <li v-for="item in checkedArrObj">
+              {{item.class_name}}
+              <i class="el-icon-close" @click="delChecked(item.class_id)"></i>
+            </li>
+          </ul>
+        </div>
+      </transition>
       <div class="class-wrap">
         <ul>
           <li v-for="(item, i) in allPack"
               :class="{active: (i === liActindex)}"
-              @click="class1Click(i, item.class2Arr)"><i :class="{'el-icon-my-lifangti': i === 0,'el-icon-my-87': i === 1,'el-icon-my-hangweiguanli': i === 2, 'el-icon-my-nvren': i === 3, 'el-icon-my-icon': i === 4}"></i>{{item.class1_name}}
+              @click="class1Click(i, item.class2Arr)"><i
+            :class="{'el-icon-my-lifangti': i === 0,'el-icon-my-87': i === 1,'el-icon-my-hangweiguanli': i === 2, 'el-icon-my-nvren': i === 3, 'el-icon-my-icon': i === 4}"></i>{{item.class1_name}}
           </li>
         </ul>
         <div class="class2-wrap">
@@ -28,22 +52,35 @@
             </li>
           </ul>
         </div>
-      </div>
-      <div class="content-wrap">
-        <div class="header">子分类</div>
-        <ul class="cont">
-          <li v-for="(item, index) in class2Data[liActindex]">
-            <el-checkbox v-model="checkedAll[item[0].pkg_id]" @change="class2Checkedbox(item, item[0].pkg_id)"></el-checkbox>
-            <span>{{item[0].pkg_name}}</span>
-            <ul class="class3-cont">
-              <li
-                v-for="class3 in item"
-                @click="class3Click(class3)"
-                :class="{active: (checkedArr.includes(class3.class_id))}">{{class3.class_name}}
-              </li>
-            </ul>
-          </li>
-        </ul>
+        <div class="content-wrap">
+          <ul class="cont">
+            <li v-for="(item, index) in class2Data[liActindex]">
+              <el-checkbox v-model="checkedAll[item[0].pkg_id]"
+                           @change="class2Checkedbox(item, item[0].pkg_id)"></el-checkbox>
+              <span>{{item[0].pkg_name || item[0].arr[0].pkg_name}}</span>
+              <ul class="class3-cont" v-if="!item[0].py">
+                <li
+                  v-for="class3 in item"
+                  @click="class3Click(class3)"
+                  :class="{active: (checkedArr.includes(class3.class_id))}">{{class3.class_name}}
+                </li>
+              </ul>
+              <ul class="class3-cont-start" v-if="item[0].py">
+                <li class="py-wrap" v-for="pys in item">
+                  <span>{{pys.py}}</span>
+                  <ul>
+                    <li
+                      v-for="start in pys.arr"
+                      :class="{active: (checkedArr.includes(start.class_id))}"
+                      @click="class3Click(start)">
+                      {{start.class_name}}
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="button-wrap">
@@ -86,8 +123,16 @@
           4: []
         },
         allPack: [],
-        // 选中的结果
-        checkedArr: []
+        // 选中的结果 classid
+        checkedArr: [],
+        // 选中的结果，obj
+        checkedArrObj: [],
+        // 搜索输入
+        searchInput: '',
+        // 所有包的原始数据
+        rawAllPkg: [],
+        // 搜索结果数据
+        searchArr: []
       }
     },
     created () {
@@ -97,6 +142,7 @@
         this.getAllPkg()
         // 选中的最终结果
         this.checkedArr = vuexData.checkedArr
+        this.checkedArrObj = vuexData.checkedArrObj
         // 选中的二级pkgId和数组
         this.class2Data = vuexData.class2Data
         this.class2PkgId = vuexData.class2PkgId
@@ -109,11 +155,11 @@
             const that = this
             res.data.forEach(item => {
               this.checkedArr.push(item.class_id)
+              this.checkedArrObj.push(item)
             })
             // 请求接口拿数据时必须要等到拿到所有包数据以后执行
             this.getAllPkg(function () {
               res.data.forEach(function (item, index) {
-                // todo 子分类全选不能正确展示
                 let class1 = Math.floor(item.pkg_id / 1000)
                 let class2Data
                 that.allPack[class1 - 1].class2Arr.forEach(class2 => {
@@ -153,15 +199,146 @@
           })
         },
         deep: true
-      }
+      },
+      // 检测class2Data[3]变化，给明星增加按拼音首字母排序
+      'class2Data.3': {
+        handler: function (val) {
+          val.forEach((item, index) => {
+            let pkgId = item[0].pkg_id
+            let data = item
+            if (pkgId === 4001 || pkgId === 4002 || pkgId === 4003 || pkgId === 4004) {
+              // 先按照拼音首字母排序
+              data.sort(function (a, b) {
+                if (a.letter.toUpperCase() > b.letter.toUpperCase()) {
+                  return 1
+                } else if (b.letter.toUpperCase() > a.letter.toUpperCase()) {
+                  return -1
+                } else {
+                  return 0
+                }
+              })
+              // 按照拼音首字母分组
+              let res = []
+              data.forEach((item, index) => {
+                if (index > 0 && data[index].letter === data[index - 1].letter) {
+                  res[res.length - 1].arr.push(item)
+                } else {
+                  let obj = {}
+                  obj.py = item.letter
+                  obj.arr = [item]
+                  res.push(obj)
+                }
+              })
+              val[index] = res
+            }
+          })
+        },
+        deep: true
+      },
+      // 三级反向全选
+      checkedArrObj: 'watchClass3Allchecked'
     },
     methods: {
+      // 三级反向全选方法，在首次加载和已选中改变时调
+      watchClass3Allchecked (val) {
+        // 判断allPack 是否加载完成
+        if (this.allPack.length === 0) return
+        // 深复制，避免改变被观察者，造成死循环
+        let checkedArr = val.concat()
+        // 分组
+        checkedArr.sort(function (a, b) {
+          return a.pkg_id - b.pkg_id
+        })
+        let pkgArr = []
+        checkedArr.forEach((item, index) => {
+          if (index > 0 && item.pkg_id === checkedArr[index - 1].pkg_id) {
+            pkgArr[pkgArr.length - 1].cont.push(item)
+          } else {
+            let obj = {}
+            obj.pkg_id = item.pkg_id
+            obj.cont = [item]
+            pkgArr.push(obj)
+          }
+        })
+        // 对比
+        pkgArr.forEach(item => {
+          let class1Index = Math.floor(item.pkg_id / 1000)
+          this.allPack[class1Index - 1].class2Arr.forEach(allItem => {
+            if (allItem.pkg_id === item.pkg_id) {
+              let lengthIsEqual = allItem.valueArr.length === item.cont.length
+              this.checkedAll[item.pkg_id] = lengthIsEqual
+            }
+          })
+        })
+      },
+      // 点击搜索结果标签
+      clickSearchLabel (item) {
+        const that = this
+        console.log(item)
+        let isIncludes = this.checkedArr.includes(item.class_id)
+        if (isIncludes) {
+          this.$message({
+            message: '此标签已选中',
+            type: 'warning'
+          })
+        } else {
+          // 增加进三级已选
+          this.checkedArr.push(item.class_id)
+          this.checkedArrObj.push(item)
+          // 对应的2级选中
+          let class1Index = Math.floor(item.pkg_id / 1000)
+          this.allPack[class1Index - 1].class2Arr.forEach(class2 => {
+            if (class2.pkg_id === item.pkg_id) {
+              let index = that.class2PkgId[this.liActindex].indexOf(item.pkg_id)
+              if (index === -1) {
+                that.class2Data[this.liActindex].unshift(class2.valueArr)
+                that.class2PkgId[this.liActindex].unshift(item.pkg_id)
+              }
+            }
+          })
+        }
+      },
+      // 关闭搜索框，清空搜索结果
+      closeSearchWrap () {
+        this.searchArr = []
+        this.searchInput = ''
+      },
+      // 搜索
+      search () {
+        let text = this.searchInput
+        if (text === '') return
+        let reg = new RegExp(text)
+        this.searchArr = this.rawAllPkg.filter(item => {
+          if (reg.test(item.class_name)) {
+            return item
+          }
+        })
+      },
+      // 删除单项
+      delChecked (classId) {
+        console.log(classId)
+        let i = this.checkedArr.indexOf(classId)
+        if (i !== -1) {
+          this.checkedArr.splice(i, 1)
+          this.checkedArrObj.splice(i, 1)
+        }
+      },
+      // 清空所有已选项
+      clearChecked () {
+        this.checkedArr = []
+        this.checkedArrObj = []
+        // 三级全选清空
+        for (let item in this.checkedAll) {
+          this.checkedAll[item] = false
+        }
+      },
       // 全选
       class2Checkedbox (val, index) {
         if (this.checkedAll[index]) {
           val.forEach(item => {
             if (!this.checkedArr.includes(item.class_id)) {
               this.checkedArr.push(item.class_id)
+              this.checkedArrObj.push(item)
             }
           })
         } else {
@@ -170,15 +347,19 @@
             let i = this.checkedArr.indexOf(item.class_id)
             if (i !== -1) {
               this.checkedArr.splice(i, 1)
+              this.checkedArrObj.splice(i, 1)
             }
           })
         }
       },
+      // 点击一级
       class1Click (index, class2Arr) {
         this.liActindex = index
         this.class2Arr = class2Arr
       },
+      // 点击二级
       class2Click (pkgId, data) {
+        console.log(data)
         let index = this.class2PkgId[this.liActindex].indexOf(pkgId)
         if (index === -1) {
           this.class2Data[this.liActindex].unshift(data)
@@ -188,13 +369,18 @@
           this.class2PkgId[this.liActindex].splice(index, 1)
         }
       },
+      // 点击三级
       class3Click (data) {
+        console.log(data)
         let index = this.checkedArr.indexOf(data.class_id)
         if (index === -1) {
           this.checkedArr.push(data.class_id)
+          this.checkedArrObj.push(data)
         } else {
           this.checkedArr.splice(index, 1)
+          this.checkedArrObj.splice(index, 1)
         }
+        console.log(this.checkedArr, this.checkedArrObj)
       },
       // 请求所有包
       getAllPkg (callback) {
@@ -206,6 +392,7 @@
         }).then(res => {
           if (res.code === 200) {
             // 数据转换
+            this.rawAllPkg = res.data
             let arr = res.data
             let key = 'pkg_id'
             arr.sort(function (a, b) {
@@ -259,6 +446,8 @@
             this.allPack = resultArr
             // 默认物体class2数据
             this.class2Arr = resultArr[0].class2Arr
+            // 调class3反向全选方法
+            this.watchClass3Allchecked(this.checkedArrObj)
             // 回调~
             if (callback) callback()
           }
@@ -279,7 +468,10 @@
         }).then(res => {
           if (res.code === 200) {
             this.$store.commit('SCENE', {
-              class2PkgId: this.class2PkgId, class2Data: this.class2Data, checkedArr: this.checkedArr
+              class2PkgId: this.class2PkgId,
+              class2Data: this.class2Data,
+              checkedArr: this.checkedArr,
+              checkedArrObj: this.checkedArrObj
             })
             this.$router.push('/creatMediaType')
           }
@@ -305,13 +497,78 @@
       padding: 15px 30px;
       padding-bottom: 30px;
       border-bottom: 1px solid #cacaca;
+      .search-input {
+        width: 320px;
+        float: right;
+        margin-bottom: 20px;
+      }
+      .checked-wrap, .search-res-wrap {
+        width: 100%;
+        min-height: 100px;
+        border: 1px solid #f2f2f2;
+        float: left;
+        margin-bottom: 25px;
+        padding: 10px;
+        .checked-num {
+          font-size: 14px;
+        }
+        .el-button {
+          padding: 5px 15px;
+          display: block;
+          float: right;
+        }
+        ul {
+          padding-top: 10px;
+          li {
+            width: 95px;
+            height: 25px;
+            display: inline-block;
+            line-height: 25px;
+            padding: 0 6px;
+            color: #fff;
+            background-color: #169bd5;
+            position: relative;
+            user-select: none;
+            margin: 0 18px 10px 0;
+            &:nth-of-type(10n) {
+              margin-right: 0;
+            }
+            i {
+              font-size: 10px;
+              position: absolute;
+              right: 6px;
+              top: 6px;
+              font-weight: 900;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+      .search-res-wrap {
+        position: relative;
+        i {
+          position: absolute
+          right: 10px;
+          top: 8px;
+          cursor: pointer;
+        }
+        ul {
+          padding-top: 20px;
+          li {
+            text-align: center;
+            cursor: pointer;
+          }
+        }
+      }
       .class-wrap {
         width: 100%;
         background: #F2F2F2;
-        padding: 3px;
+        padding: 2px;
         overflow: hidden;
+        position: relative;
+        border-right: 1px solid #f2f2f2;
         & > ul {
-          width: 150px;
+          width: 125px;
           height: 100%;
           float: left;
           li {
@@ -320,7 +577,7 @@
             line-height: 40px;
             font-size: 14px;
             cursor: pointer;
-            text-indent: 15px;
+            text-indent: 10px;
             border-left: 2px solid transparent;
             transition: all .5s;
             i {
@@ -335,11 +592,10 @@
           }
         }
         .class2-wrap {
-          width: calc(100% - 150px);
-          height: 100%;
-          min-height: 225px;
+          width: 500px;
+          height: 450px;
           background: #fff;
-          float: right;
+          float: left;
           padding: 15px;
           .seeAll {
             float: right;
@@ -362,7 +618,7 @@
             }
             li {
               display: inline-block;
-              width: 104px;
+              width: 102px;
               padding: 0 10px;
               text-align: center;
               font-size: 12px;
@@ -377,58 +633,107 @@
             }
           }
         }
-      }
-      .content-wrap {
-        width: 100%
-        overflow: hidden;
-        margin: 15px 0;
-        min-height: 200px;
-        .header {
-          font-size: 16px;
-          text-indent: 10px;
-          border-bottom: 1px #169bd5 dashed;
-          height: 35px;
-          color: #169bd5;
-          margin-bottom: 20px;
-        }
-        .cont {
-          li {
+        .content-wrap {
+          width: 528px;
+          height: 450px;
+          background: #fff;
+          overflow: hidden;
+          padding: 15px 20px;
+          overflow-y: auto;
+          position: absolute;
+          left: 628px;
+          .header {
+            font-size: 16px;
+            text-indent: 10px;
+            border-bottom: 1px #169bd5 dashed;
+            height: 35px;
+            color: #169bd5;
             margin-bottom: 20px;
-            & > span {
-              display: inline-block;
-              height: 25px;
-              font-size: 14px;
-              padding: 0 8px;
-              color: #169bd5;
-              line-height: 25px;
-              margin-left: 3px;
-            }
-            .class3-cont {
-              margin-top: 15px;
-              padding: 0 20px 0 60px;
-              .active {
-                border-color: #169bd5;
-                background: #fff;
-                color: #169bd5;
-              }
-              li {
+          }
+          .cont {
+            li {
+              margin-bottom: 20px;
+              & > span {
                 display: inline-block;
-                width: 160px;
-                padding: 0 10px;
-                text-align: center;
-                font-size: 12px;
-                height: 24px;
-                line-height: 22px;
-                border: 1px solid #E4E4E4;
-                background: #f2f2f2;
-                margin: 0 15px 15px 0;
-                cursor: pointer;
-                color: #333;
-                transition: all .5s;
+                height: 25px;
+                font-size: 14px;
+                padding: 0 8px;
+                color: #169bd5;
+                line-height: 25px;
+                margin-left: 3px;
+                margin-bottom: 15px;
+              }
+              .class3-cont {
+                padding: 0 0px 0 30px;
+                .active {
+                  border-color: #169bd5;
+                  background: #fff;
+                  color: #169bd5;
+                }
+                li {
+                  display: inline-block;
+                  width: 80px;
+                  text-align: center;
+                  font-size: 12px;
+                  height: 24px;
+                  line-height: 22px;
+                  border: 1px solid #E4E4E4;
+                  background: #f2f2f2;
+                  margin: 0 10px 10px 0;
+                  cursor: pointer;
+                  color: #333;
+                  transition: color, background-color, border .5s;
+                  &:nth-of-type(5n) {
+                    margin-right: 0
+                  }
+                }
+              }
+              .class3-cont-start {
+                .py-wrap {
+                  margin-bottom: 0px;
+                  width: 488px;
+                  & > span {
+                    vertical-align: top;
+                    width: 26px;
+                  }
+                  ul {
+                    display: inline-block;
+                    width: 440px;
+                    .active {
+                      border-color: #169bd5;
+                      background: #fff;
+                      color: #169bd5;
+                    }
+                    li {
+                      display: inline-block;
+                      width: 80px;
+                      text-align: center;
+                      font-size: 12px;
+                      height: 24px;
+                      line-height: 22px;
+                      border: 1px solid #E4E4E4;
+                      background: #f2f2f2;
+                      margin: 0 10px 10px 0;
+                      cursor: pointer;
+                      color: #333;
+                      transition: color, background .5s;
+                      &:nth-of-type(5n) {
+                        margin-right: 0
+                      }
+                    }
+                  }
+                }
               }
             }
           }
         }
+      }
+      .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s
+      }
+      .fade-enter, .fade-leave-to /* .fade-leave-active in below version 2.1.8 */
+      {
+        opacity: 0
       }
     }
   }
