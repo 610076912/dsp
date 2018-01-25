@@ -273,15 +273,14 @@
         }
         .time-right {
           .time-wrap {
-            width: calc(100% - 350px)
+            width: calc(100% - 255px)
             float left
           }
           .time-icon {
-            float left
+            float right
             margin-top 30px
-            margin-left: 40px;
             li {
-              width: 310px;
+              width: 255px;
               height: 70px;
               border: 1px solid #f2f2f2;
               border-radius: 5px;
@@ -289,7 +288,7 @@
               margin-bottom: 15px;
               div {
                 float: right;
-                padding: 10px 15px;
+                padding: 10px 5px;
                 width: calc(100% - 64px);
                 height: 100%;
                 border-left: 1px solid #f2f2f2;

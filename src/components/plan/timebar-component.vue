@@ -1,110 +1,114 @@
 <template>
   <div class="time-bar-component">
     <div class="left">
-      <span>AM</span>
+      <span>上午</span>
       <!--<div class="left-line" :class="{'time-bar-line':timeArr[0]}"></div>-->
     </div>
     <div class="time-bar-content">
-      <div class="line" :class="{'time-bar-line':timeArr[0]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[0] || timeArr[1], 'disabled': !canClick}"
-           @click="clickTime(0)">1
+      <div class="circel">0</div>
+      <div class="line" :class="{'time-bar-line':timeArr[0]}" @click="clickTime(0)">
+        <span v-show="timeArr[0]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[1]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[1] || timeArr[2], 'disabled': !canClick}"
-           @click="clickTime(1)">2
+      <div class="circel">1</div>
+      <div class="line" :class="{'time-bar-line':timeArr[1]}" @click="clickTime(1)">
+        <span v-show="timeArr[1]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[2]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[2] || timeArr[3], 'disabled': !canClick}"
-           @click="clickTime(2)">3
+      <div class="circel">2</div>
+      <div class="line" :class="{'time-bar-line':timeArr[2]}" @click="clickTime(2)">
+        <span v-show="timeArr[2]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[3]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[3] || timeArr[4], 'disabled': !canClick}"
-           @click="clickTime(3)">4
+      <div class="circel">3</div>
+      <div class="line" :class="{'time-bar-line':timeArr[3]}" @click="clickTime(3)">
+        <span v-show="timeArr[3]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[4]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[4] || timeArr[5], 'disabled': !canClick}"
-           @click="clickTime(4)">5
+      <div class="circel">4</div>
+      <div class="line" :class="{'time-bar-line':timeArr[4]}" @click="clickTime(4)">
+        <span v-show="timeArr[4]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[5]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[5] || timeArr[6], 'disabled': !canClick}"
-           @click="clickTime(5)">6
+      <div class="circel">5</div>
+      <div class="line" :class="{'time-bar-line':timeArr[5]}" @click="clickTime(5)">
+        <span v-show="timeArr[5]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[6]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[6] || timeArr[7], 'disabled': !canClick}"
-           @click="clickTime(6)">7
+      <div class="circel">6</div>
+      <div class="line" :class="{'time-bar-line':timeArr[6]}" @click="clickTime(6)">
+        <span v-show="timeArr[6]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[7]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[7] || timeArr[8], 'disabled': !canClick}"
-           @click="clickTime(7)">8
+      <div class="circel">7</div>
+      <div class="line" :class="{'time-bar-line':timeArr[7]}" @click="clickTime(7)">
+        <span v-show="timeArr[7]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[8]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[8] || timeArr[9], 'disabled': !canClick}"
-           @click="clickTime(8)">9
+      <div class="circel">8</div>
+      <div class="line" :class="{'time-bar-line':timeArr[8]}" @click="clickTime(8)">
+        <span v-show="timeArr[8]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[9]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[9] || timeArr[10], 'disabled': !canClick}"
-           @click="clickTime(9)">10
+      <div class="circel">9</div>
+      <div class="line" :class="{'time-bar-line':timeArr[9]}" @click="clickTime(9)">
+        <span v-show="timeArr[9]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[10]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[10] || timeArr[11], 'disabled': !canClick}"
-           @click="clickTime(10)">11
+      <div class="circel">10</div>
+      <div class="line" :class="{'time-bar-line':timeArr[10]}" @click="clickTime(10)">
+        <span v-show="timeArr[10]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[11]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[11], 'disabled': !canClick}" @click="clickTime(11)">12
+      <div class="circel">11</div>
+      <div class="line" :class="{'time-bar-line':timeArr[11]}" @click="clickTime(11)">
+        <span v-show="timeArr[11]"></span>
       </div>
+      <div class="circel">12</div>
     </div>
     <div class="left">
-      <span>PM</span>
+      <span>下午</span>
       <!--<div class="left-line" :class="{'time-bar-line':timeArr[12]}"></div>-->
     </div>
     <div class="time-bar-content">
-      <div class="line" :class="{'time-bar-line':timeArr[12]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[12] || timeArr[13], 'disabled': !canClick}"
-           @click="clickTime(12)">1
+      <div class="circel">0</div>
+      <div class="line" :class="{'time-bar-line':timeArr[12]}" @click="clickTime(12)">
+        <span v-show="timeArr[12]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[13]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[13] || timeArr[14], 'disabled': !canClick}"
-           @click="clickTime(13)">2
+      <div class="circel">1</div>
+      <div class="line" :class="{'time-bar-line':timeArr[13]}" @click="clickTime(13)">
+        <span v-show="timeArr[13]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[14]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[14] || timeArr[15], 'disabled': !canClick}"
-           @click="clickTime(14)">3
+      <div class="circel">2</div>
+      <div class="line" :class="{'time-bar-line':timeArr[14]}" @click="clickTime(14)">
+        <span v-show="timeArr[14]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[15]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[15] || timeArr[16], 'disabled': !canClick}"
-           @click="clickTime(15)">4
+      <div class="circel">3</div>
+      <div class="line" :class="{'time-bar-line':timeArr[15]}" @click="clickTime(15)">
+        <span v-show="timeArr[15]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[16]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[16] || timeArr[17], 'disabled': !canClick}"
-           @click="clickTime(16)">5
+      <div class="circel">4</div>
+      <div class="line" :class="{'time-bar-line':timeArr[16]}" @click="clickTime(16)">
+        <span v-show="timeArr[16]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[17]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[17] || timeArr[18], 'disabled': !canClick}"
-           @click="clickTime(17)">6
+      <div class="circel">5</div>
+      <div class="line" :class="{'time-bar-line':timeArr[17]}" @click="clickTime(17)">
+        <span v-show="timeArr[17]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[18]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[18] || timeArr[19], 'disabled': !canClick}"
-           @click="clickTime(18)">7
+      <div class="circel">6</div>
+      <div class="line" :class="{'time-bar-line':timeArr[18]}" @click="clickTime(18)">
+        <span v-show="timeArr[18]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[19]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[19] || timeArr[20], 'disabled': !canClick}"
-           @click="clickTime(19)">8
+      <div class="circel">7</div>
+      <div class="line" :class="{'time-bar-line':timeArr[19]}" @click="clickTime(19)">
+        <span v-show="timeArr[19]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[20]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[20] || timeArr[21], 'disabled': !canClick}"
-           @click="clickTime(20)">9
+      <div class="circel">8</div>
+      <div class="line" :class="{'time-bar-line':timeArr[20]}" @click="clickTime(20)">
+        <span v-show="timeArr[20]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[21]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[21] || timeArr[22], 'disabled': !canClick}"
-           @click="clickTime(21)">10
+      <div class="circel">9</div>
+      <div class="line" :class="{'time-bar-line':timeArr[21]}" @click="clickTime(21)">
+        <span v-show="timeArr[21]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[22]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[22] || timeArr[23], 'disabled': !canClick}"
-           @click="clickTime(22)">11
+      <div class="circel">10</div>
+      <div class="line" :class="{'time-bar-line':timeArr[22]}" @click="clickTime(22)">
+        <span v-show="timeArr[22]"></span>
       </div>
-      <div class="line" :class="{'time-bar-line':timeArr[23]}"></div>
-      <div class="circel" :class="{'time-bar-circel':timeArr[23], 'disabled': !canClick}" @click="clickTime(23)">12
+      <div class="circel">11</div>
+      <div class="line" :class="{'time-bar-line':timeArr[23]}" @click="clickTime(23)">
+        <span v-show="timeArr[23]"></span>
       </div>
+      <div class="circel">12</div>
     </div>
 
   </div>
@@ -173,27 +177,34 @@
       width: 93%
       div
         float left
-        margin-left: 3px
       .circel
-        width 20px
-        height: 20px
-        -webkit-border-radius: 50%
-        -moz-border-radius: 50%
+        width 22px
+        height: 22px
         border-radius: 50%
-        border: 1px solid #169bd5
+        border: 1px solid #c9c9c9
         text-align center
         line-height 20px
-        cursor: pointer
+        background #f2f2f2
       .line
-        width: 4.4%
-        border-bottom 1px dashed #169bd5
+        width: 5%
+        height: 8px;
+        border 1px dashed #c9c9c9
         position relative
-        top: 9px
+        top: 7px
+        border-left: 0
+        border-right 0
+        padding-left: 1.5px
+        cursor pointer
+        span
+          display: inline-block
+          width: 90%
+          height: 2px
+          background #169bd5
+          position: absolute
+          top: 2px
       .time-bar-line
-        border-bottom-style solid
-      .time-bar-circel
-        background #169bd5
-        color: #fff
+        border-style solid
+        background #f2f2f2
       .disabled
         cursor not-allowed
 </style>

@@ -142,9 +142,10 @@
               <span class="operation" @click="details(scope.row.plan_id)">查看&nbsp;</span>
               <span class="operation" @click="copyPlan(scope.row.plan_id)">复制&nbsp;</span>
               <!--<span class="operation" @click="excentionStatus">状态</span>-->
-              <br>
+
               <!--<span class="operation">报表&nbsp;</span>-->
-              <!--<span class="operation" @click="itemDel(scope.row.plan_id)">删除&nbsp;</span>-->
+              <span class="operation" @click="itemDel(scope.row.plan_id)">删除&nbsp;</span>
+              <br>
             </template>
           </el-table-column>
         </el-table>
@@ -381,11 +382,14 @@
           groupId: this.seekData.group,
           status: this.seekData.status,
           channel: this.activeName,
-          timeStart: this.seekData.date[0] ? new Date(this.seekData.date[0]).Format('yyyy-MM-dd hh:mm:ss') : null,
-          timeEnd: this.seekData.date[1] ? new Date(this.seekData.date[1]).Format('yyyy-MM-dd hh:mm:ss') : null,
+          // 使用setHours方法，使开始时间往前1毫秒，结束时间往后1毫秒
+          // 其实包含当前日期下的00:00点的活动
+          timeStart: this.seekData.date[0] ? new Date(this.seekData.date[0].setHours(0, 0, 0, -1)).Format('yyyy-MM-dd hh:mm:ss') : null,
+          timeEnd: this.seekData.date[1] ? new Date(this.seekData.date[1].setHours(23, 59, 59, 1000)).Format('yyyy-MM-dd hh:mm:ss') : null,
           pageId: this.currentPage,
           pageCount: this.pageSize
         }
+        console.log(option)
         this.getActiveList(option)
       },
       // 状态按钮弹出推广状态

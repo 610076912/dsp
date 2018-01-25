@@ -41,6 +41,10 @@
                   <p>今日消费</p></div>
               </el-col>
               <el-col :span="6">
+                <div class="grid-content r"><span>{{checkData[indexs + 1][-1] || 0}}</span>
+                  <p>正在投放</p></div>
+              </el-col>
+              <el-col :span="6">
                 <div class="grid-content r"><span>{{checkData[indexs + 1][1] || 0}}</span>
                   <p>审核通过</p></div>
               </el-col>
@@ -49,12 +53,8 @@
                   <p>待审核</p></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content r"><span>{{checkData[indexs + 1][-2] || 0}}</span>
+                <div class="grid-content"><span>{{checkData[indexs + 1][-2] || 0}}</span>
                   <p>审核拒绝</p></div>
-              </el-col>
-              <el-col :span="6">
-                <div class="grid-content"><span>{{checkData[indexs + 1][-1] || 0}}</span>
-                  <p>正在投放</p></div>
               </el-col>
             </el-row>
           </div>
@@ -531,7 +531,7 @@
     }
     .mobile {
       width 100%
-      margin 20px 0 20px 0
+      margin 20px 0 50px 0
       background #fff
       border-radius 3px
       border 1px solid #e1e1e1
