@@ -56,7 +56,7 @@
           <ul class="cont">
             <li v-for="(item, index) in class2Data[liActindex]">
               <el-checkbox v-model="checkedAll[item[0].pkg_id]"
-                           @change="class2Checkedbox(item, item[0].pkg_id)"></el-checkbox>
+                           @change="class2Checkedbox(item, item[0].pkg_id, item[0].pkg_id)"></el-checkbox>
               <span>{{item[0].pkg_name || item[0].arr[0].pkg_name}}</span>
               <ul class="class3-cont" v-if="!item[0].py">
                 <li
@@ -205,6 +205,8 @@
         handler: function (val) {
           val.forEach((item, index) => {
             let pkgId = item[0].pkg_id
+            // 如果item【0】.arr 存在说明该数据已经被按拼音首字母处理过。则跳过！
+            if (Array.isArray(item[0].arr)) return
             let data = item
             if (pkgId === 4001 || pkgId === 4002 || pkgId === 4003 || pkgId === 4004) {
               // 先按照拼音首字母排序
@@ -226,6 +228,7 @@
                   let obj = {}
                   obj.py = item.letter
                   obj.arr = [item]
+                  obj.pkg_id = item.pkg_id
                   res.push(obj)
                 }
               })
@@ -270,11 +273,11 @@
             }
           })
         })
+        console.log('-----------f----', this.checkedAll)
       },
       // 点击搜索结果标签
       clickSearchLabel (item) {
         const that = this
-        console.log(item)
         let isIncludes = this.checkedArr.includes(item.class_id)
         if (isIncludes) {
           this.$message({
@@ -289,10 +292,10 @@
           let class1Index = Math.floor(item.pkg_id / 1000)
           this.allPack[class1Index - 1].class2Arr.forEach(class2 => {
             if (class2.pkg_id === item.pkg_id) {
-              let index = that.class2PkgId[this.liActindex].indexOf(item.pkg_id)
+              let index = that.class2PkgId[class1Index - 1].indexOf(item.pkg_id)
               if (index === -1) {
-                that.class2Data[this.liActindex].unshift(class2.valueArr)
-                that.class2PkgId[this.liActindex].unshift(item.pkg_id)
+                that.class2Data[class1Index - 1].unshift(class2.valueArr)
+                that.class2PkgId[class1Index - 1].unshift(item.pkg_id)
               }
             }
           })
@@ -316,7 +319,6 @@
       },
       // 删除单项
       delChecked (classId) {
-        console.log(classId)
         let i = this.checkedArr.indexOf(classId)
         if (i !== -1) {
           this.checkedArr.splice(i, 1)
@@ -333,12 +335,21 @@
         }
       },
       // 全选
-      class2Checkedbox (val, index) {
+      class2Checkedbox (val, index, a) {
+        console.log(a)
         if (this.checkedAll[index]) {
           val.forEach(item => {
-            if (!this.checkedArr.includes(item.class_id)) {
+            if (!this.checkedArr.includes(item.class_id) && !item.arr) {
               this.checkedArr.push(item.class_id)
               this.checkedArrObj.push(item)
+            } else if (Array.isArray(item.arr)) {
+              // 增加按字母排序后的数据情况处理
+              item.arr.forEach(class3 => {
+                if (!this.checkedArr.includes(class3.class_id)) {
+                  this.checkedArr.push(class3.class_id)
+                  this.checkedArrObj.push(class3)
+                }
+              })
             }
           })
         } else {
@@ -348,9 +359,18 @@
             if (i !== -1) {
               this.checkedArr.splice(i, 1)
               this.checkedArrObj.splice(i, 1)
+            } else if (i === -1 && Array.isArray(item.arr)) {
+              item.arr.forEach(class3 => {
+                let class3Index = this.checkedArr.indexOf(class3.class_id)
+                if (class3Index !== -1) {
+                  this.checkedArr.splice(class3Index, 1)
+                  this.checkedArrObj.splice(class3Index, 1)
+                }
+              })
             }
           })
         }
+        console.log(this.checkedAll)
       },
       // 点击一级
       class1Click (index, class2Arr) {
@@ -359,7 +379,6 @@
       },
       // 点击二级
       class2Click (pkgId, data) {
-        console.log(data)
         let index = this.class2PkgId[this.liActindex].indexOf(pkgId)
         if (index === -1) {
           this.class2Data[this.liActindex].unshift(data)
@@ -368,10 +387,10 @@
           this.class2Data[this.liActindex].splice(index, 1)
           this.class2PkgId[this.liActindex].splice(index, 1)
         }
+        console.log(this.checkedAll)
       },
       // 点击三级
       class3Click (data) {
-        console.log(data)
         let index = this.checkedArr.indexOf(data.class_id)
         if (index === -1) {
           this.checkedArr.push(data.class_id)
@@ -380,7 +399,6 @@
           this.checkedArr.splice(index, 1)
           this.checkedArrObj.splice(index, 1)
         }
-        console.log(this.checkedArr, this.checkedArrObj)
       },
       // 请求所有包
       getAllPkg (callback) {
@@ -672,7 +690,7 @@
                 }
                 li {
                   display: inline-block;
-                  width: 100px;
+                  width: 98px;
                   text-align: center;
                   font-size: 12px;
                   height: 30px;
