@@ -97,7 +97,7 @@
 </template>
 
 <script>
-  let searchUrl = process.env.TEST === 'test' ? 'http://47.93.140.7:3889' : 'https://tj.videozhishi.com'
+  let searchUrl = process.env.TEST === 'test' ? 'http://test.videozhishi.com:3889' : 'https://tj.videozhishi.com'
 
   import mediaJsonP from '../../../static/json/media.json'
   import mediaJsonT from '../../../static/json/test-media.json'

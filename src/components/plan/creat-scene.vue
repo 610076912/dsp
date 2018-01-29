@@ -55,9 +55,12 @@
         <div class="content-wrap">
           <ul class="cont">
             <li v-for="(item, index) in class2Data[liActindex]">
-              <el-checkbox v-model="checkedAll[item[0].pkg_id]"
-                           @change="class2Checkedbox(item, item[0].pkg_id, item[0].pkg_id)"></el-checkbox>
-              <span>{{item[0].pkg_name || item[0].arr[0].pkg_name}}</span>
+              <label>
+                <input type="checkbox" v-model="checkedAll[item[0].pkg_id]"
+                       @change="class2Checkedbox(item, item[0].pkg_id)">
+                </input>
+                <span>{{item[0].pkg_name || item[0].arr[0].pkg_name}}</span>
+              </label>
               <ul class="class3-cont" v-if="!item[0].py">
                 <li
                   v-for="class3 in item"
@@ -244,6 +247,10 @@
     methods: {
       // 三级反向全选方法，在首次加载和已选中改变时调
       watchClass3Allchecked (val) {
+        if (val.length === 0) {
+          this.checkedAll = {}
+          return
+        }
         // 判断allPack 是否加载完成
         if (this.allPack.length === 0) return
         // 深复制，避免改变被观察者，造成死循环
@@ -269,11 +276,13 @@
           this.allPack[class1Index - 1].class2Arr.forEach(allItem => {
             if (allItem.pkg_id === item.pkg_id) {
               let lengthIsEqual = allItem.valueArr.length === item.cont.length
+              if (item.cont.length === 0) {
+                lengthIsEqual = false
+              }
               this.checkedAll[item.pkg_id] = lengthIsEqual
             }
           })
         })
-        console.log('-----------f----', this.checkedAll)
       },
       // 点击搜索结果标签
       clickSearchLabel (item) {
@@ -335,8 +344,7 @@
         }
       },
       // 全选
-      class2Checkedbox (val, index, a) {
-        console.log(a)
+      class2Checkedbox (val, index) {
         if (this.checkedAll[index]) {
           val.forEach(item => {
             if (!this.checkedArr.includes(item.class_id) && !item.arr) {
@@ -370,7 +378,6 @@
             }
           })
         }
-        console.log(this.checkedAll)
       },
       // 点击一级
       class1Click (index, class2Arr) {
@@ -387,7 +394,6 @@
           this.class2Data[this.liActindex].splice(index, 1)
           this.class2PkgId[this.liActindex].splice(index, 1)
         }
-        console.log(this.checkedAll)
       },
       // 点击三级
       class3Click (data) {
@@ -671,7 +677,15 @@
           .cont {
             li {
               margin-bottom: 20px;
-              & > span {
+              & > label {
+                input {
+                  width: 18px;
+                  height: 18px;
+                  position: relative;
+                  top: 5px;
+                }
+              }
+              span {
                 display: inline-block;
                 height: 25px;
                 font-size: 14px;

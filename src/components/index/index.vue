@@ -64,7 +64,7 @@
     <!-- mobile -->
     <div class="mobile">
       <div class="mobile-title">
-        <span>移动营销概况</span>
+        <span>{{tags[indexs]}}营销概况</span>
         <div class="date-wrap">
           <el-date-picker
             class="date-picker"
@@ -135,7 +135,7 @@
 </template>
 
 <script>
-  let searchUrl = process.env.TEST === 'test' ? 'http://47.93.140.7:3889' : 'https://tj.videozhishi.com'
+  let searchUrl = process.env.TEST === 'test' ? 'http://test.videozhishi.com:3889' : 'https://tj.videozhishi.com'
 
   let selectLOption = [{
     value: 'bgCount',
@@ -460,7 +460,9 @@
     .user-header {
       height 100px;
       width 100px;
-      background #ddd;
+      background-image: url("../../assets/img/avatar.jpg");
+      background-position center
+      background-size cover
       border-radius: 50px;
       float left;
     }

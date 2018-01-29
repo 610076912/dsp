@@ -16,7 +16,7 @@
         <div class="status">审核状态：{{platformStatus.statusDesc}}</div>
         <div class="admin-reason" v-if="platformStatus.admin_reason">其他拒绝原因：<span>{{platformStatus.admin_reason}}</span>
         </div>
-        <div class="image-reason" v-if="platformStatus.url_reason">图片拒绝原因：
+        <div class="image-reason" v-if="platformStatus.image_reason">图片拒绝原因：
           <span>
             <p>质量：不允许展示质量很差的图片。须图片清晰可辨，内容易于理解，文字清楚易读。</p>
             <p>欺骗性手段：不允许使用模拟动画功能，如模拟下拉菜单、搜索框或模拟对话框或错误消息。</p>
@@ -179,7 +179,7 @@
                         m.statusDesc = '异常状态'
                         break
                       default:
-                        m.statusDesc = ''
+                        m.statusDesc = '获取状态失败'
                     }
                   }
                 })
@@ -187,7 +187,7 @@
             } else if (status && status.plan_status !== 1) {
               this.medias.forEach(m => {
                 m.status = -200 // 状态码-200，不可修改
-                m.statusDesc = ''
+                m.statusDesc = '正在审核'
               })
             }
             // 计算媒体列表滑动体宽度
@@ -219,10 +219,11 @@
           res.show = true
           res.statusDesc = status.statusDesc
           res.admin_reason = status.admin_reason
-          res.url_reason = status.url_reason
-          res.image_reason = status.image_reason
+          res.url_reason = status.url_reason === 1
+          res.image_reason = status.image_reason === 1
           return res
         }
+        console.log('----', res)
         return res
       }
     },
@@ -280,13 +281,19 @@
           // console.log(res)
           if (res.code === 200 && res.data.length !== 0) {
             // 该平台审核状态
-            this.currentPlatformStatus = {
-              status: status,
-              statusDesc: statusDesc,
-              admin_reason: res.data.admin_admin_reason || res.data.media_admin_reason,
-              url_reason: res.data.admin_url_reason || res.data.media_url_reason,
-              image_reason: res.data.admin_image_reason || res.data.media_image_reason
-            }
+            // this.currentPlatformStatus = {
+            //   status: status,
+            //   statusDesc: statusDesc,
+            //   admin_reason: res.data[0].admin_admin_reason || res.data[0].media_admin_reason,
+            //   url_reason: res.data[0].admin_url_reason || res.data[0].media_url_reason,
+            //   image_reason: res.data[0].admin_image_reason || res.data[0].media_image_reason
+            // }
+            this.$set(this.currentPlatformStatus, 'status', status)
+            this.$set(this.currentPlatformStatus, 'statusDesc', statusDesc)
+            this.$set(this.currentPlatformStatus, 'admin_reason', res.data[0].admin_admin_reason || res.data[0].media_admin_reason)
+            this.$set(this.currentPlatformStatus, 'url_reason', res.data[0].admin_url_reason || res.data[0].media_url_reason)
+            this.$set(this.currentPlatformStatus, 'image_reason', res.data[0].admin_image_reason || res.data[0].media_image_reason)
+            console.log(this.currentPlatformStatus)
             this.chenkedTpl = res.data[0].tpl_cat
             this.currentTpl = res.data[0].tpl_cat
             // 判断到底是什么模板，如果是关联信息模板的话，需要解析conf_info才能判断
