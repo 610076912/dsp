@@ -157,7 +157,7 @@
                 that.medias.push(item)
               }
             })
-            if (status && status.plan_status === 4) {
+            if (status) {
               status.act_ids_status.forEach(item => {
                 this.medias.forEach(m => {
                   if (m.act_id === item.act_id) {
