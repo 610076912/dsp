@@ -51,7 +51,7 @@
         <ul>
           <li><p>{{ details.bgCount || 0 }}</p><span>曝光量(次)</span></li>
           <li><p>{{ details.clickCount || 0 }}</p><span>点击量(次)</span></li>
-          <li><p>{{ Math.round(details.clickRate * 100) / 100 || 0}}</p><span>点击率(次)</span></li>
+          <li><p>{{ $_toFixed(details.clickRate) * 1000 || 0}}</p><span>点击率(‰)</span></li>
           <li><p>0</p><span>花费(元)</span></li>
         </ul>
       </div>
@@ -89,7 +89,7 @@
         <el-table-column prop="actName" label="活动名称"></el-table-column>
         <el-table-column prop="bg" label="曝光量"></el-table-column>
         <el-table-column prop="click" label="点击量"></el-table-column>
-        <el-table-column prop="clickRate" label="点击率" :formatter="clickRateFormate"></el-table-column>
+        <el-table-column prop="clickRate" label="点击率(‰)"></el-table-column>
         <el-table-column prop="hf" label="总花费"></el-table-column>
       </el-table>
     </div>
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-  let searchUrl = process.env.TEST === 'test' ? 'http://test.videozhishi.com:3889' : 'https://tj.videozhishi.com'
+  let searchUrl = process.env.TEST === 'test' ? '//test-tj.videozhishi.com' : 'https://tj.videozhishi.com'
 
   import mediaJsonP from '../../../static/json/media.json'
   import mediaJsonT from '../../../static/json/test-media.json'
@@ -137,7 +137,7 @@
           label: '点击量'
         }, {
           value: 'pjclick',
-          label: '点击率'
+          label: '点击率（‰）'
         }, {
           value: 'huafei',
           label: '花费'
@@ -200,7 +200,7 @@
         } else if (me === 'clickArr') {
           return '点击量'
         } else if (me === 'clickRateArr') {
-          return '点击率'
+          return '点击率（‰）'
         } else if (me === 'hf') {
           return '花费'
         }
@@ -244,7 +244,7 @@
           if (res.code === 200) {
             // 处理数据中的小数点位数
             res.data.clickRateArr.forEach((item, index) => {
-              res.data.clickRateArr[index] = Math.round(item * 100) / 100
+              res.data.clickRateArr[index] = this.$_toFixed(item) * 1000
             })
             this.details = res.data
             this.tableData = []

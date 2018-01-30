@@ -33,8 +33,8 @@
                   <p>今日点击量</p></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content r b"><span>{{Math.round(totalData.click_rate * 100) / 100 || 0}}</span>
-                  <p>今日平均点击率（%）</p></div>
+                <div class="grid-content r b"><span>{{$_toFixed(totalData.click_rate) * 1000 || 0}}</span>
+                  <p>今日平均点击率（‰）</p></div>
               </el-col>
               <el-col :span="6">
                 <div class="grid-content b"><span>--</span>
@@ -87,8 +87,8 @@
             <p>点击量（次）</p></div>
         </el-col>
         <el-col :span="6">
-          <div class="mobile-n-grid r"><span>{{Math.round(mobileData.clickRate * 100) / 100}}</span>
-            <p>平均点击率（%）</p></div>
+          <div class="mobile-n-grid r"><span>{{$_toFixed(mobileData.clickRate) * 1000}}</span>
+            <p>平均点击率（‰）</p></div>
         </el-col>
         <el-col :span="6">
           <div class="mobile-n-grid"><span>--</span>
@@ -135,8 +135,7 @@
 </template>
 
 <script>
-  let searchUrl = process.env.TEST === 'test' ? 'http://test.videozhishi.com:3889' : 'https://tj.videozhishi.com'
-
+  let searchUrl = process.env.TEST === 'test' ? '//test-tj.videozhishi.com' : 'https://tj.videozhishi.com'
   let selectLOption = [{
     value: 'bgCount',
     label: '曝光量'
@@ -189,7 +188,7 @@
         position: 'right',
         splitNumber: 10,
         minInterval: 0.1,
-        name: '点击率'
+        name: '点击率（‰）'
       }
     ],
     series: [
@@ -202,7 +201,7 @@
         data: []
       },
       {
-        name: '点击率',
+        name: '点击率（‰）',
         type: 'line',
         yAxisIndex: 1,
         smooth: true, // 这句就是让曲线变平滑的
@@ -265,7 +264,7 @@
 
             },
             {
-              name: '点击率',
+              name: '点击率（‰）',
               position: 'right'
             }
           ],
@@ -346,7 +345,7 @@
         }).then(res => {
           if (res.code === 200) {
             let clickRateArr = res.data.clickRateArr.map(item => {
-              return Math.round(item * 100) / 100
+              return this.$_toFixed(item) * 1000
             })
             this.mobileData = res.data
             this.mobileData.clickRateArr = clickRateArr
@@ -384,8 +383,8 @@
 
             break
           case 'clickRate':
-            this[typeName + 'Model'].yAxis[type]['name'] = '点击率'
-            this[typeName + 'Model'].series[type]['name'] = '点击率'
+            this[typeName + 'Model'].yAxis[type]['name'] = '点击率（‰）'
+            this[typeName + 'Model'].series[type]['name'] = '点击率（‰）'
             this[typeName + 'Model'].series[type]['data'] = this[dataType].clickRateArr
 
             break
