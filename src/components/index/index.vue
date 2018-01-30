@@ -220,7 +220,7 @@
               const end = new Date()
               const start = new Date()
               start.setHours(0, 0, 0, 0)
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 6)
               picker.$emit('pick', [start, end])
             }
           }, {
@@ -229,7 +229,7 @@
               const end = new Date()
               const start = new Date()
               start.setHours(0, 0, 0, 0)
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 29)
               picker.$emit('pick', [start, end])
             }
           }]
@@ -240,7 +240,7 @@
         tags: ['移动', 'PC', 'OTT'],
         indexs: 0,
         // 日期选择器 默认最近七天
-        mobileDate: [new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).getTime(), new Date(Date.now()).getTime()],
+        mobileDate: [new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).getTime(), new Date(Date.now()).getTime()],
         // 下拉框
         mobileLeftSelect: 'bgCount',
         mobileRightSelect: 'clickRate',
