@@ -142,9 +142,8 @@
               <span class="operation" @click="details(scope.row.plan_id)">查看&nbsp;</span>
               <span class="operation" @click="copyPlan(scope.row.plan_id)">复制&nbsp;</span>
               <!--<span class="operation" @click="excentionStatus">状态</span>-->
-
               <!--<span class="operation">报表&nbsp;</span>-->
-              <span class="operation" @click="itemDel(scope.row.plan_id)">删除&nbsp;</span>
+              <!--<span class="operation" @click="itemDel(scope.row.plan_id)">删除&nbsp;</span>-->
               <br>
             </template>
           </el-table-column>
