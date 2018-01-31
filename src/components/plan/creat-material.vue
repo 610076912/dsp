@@ -212,7 +212,7 @@
           imageReason: ''
         }
         let status = this.currentPlatformStatus
-        if (status.status) {
+        if (status.status || status.status === 0) {
           if (status.status === -2) {
             res.isRefuse = true
           }
@@ -253,7 +253,7 @@
       chooseMedia (actId, mediaId, index, status, statusDesc, canClick) {
         if (!canClick) return
         // 根据状态判断是否可修改
-        if (status === -100 || status === -2) {
+        if (status === -100 || status === -2 || status === -1) {
           this.canEdit = true
         } else {
           this.canEdit = false
@@ -293,7 +293,6 @@
             this.$set(this.currentPlatformStatus, 'admin_reason', res.data[0].admin_admin_reason || res.data[0].media_admin_reason)
             this.$set(this.currentPlatformStatus, 'url_reason', res.data[0].admin_url_reason || res.data[0].media_url_reason)
             this.$set(this.currentPlatformStatus, 'image_reason', res.data[0].admin_image_reason || res.data[0].media_image_reason)
-            console.log(this.currentPlatformStatus)
             this.chenkedTpl = res.data[0].tpl_cat
             this.currentTpl = res.data[0].tpl_cat
             // 判断到底是什么模板，如果是关联信息模板的话，需要解析conf_info才能判断
