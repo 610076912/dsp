@@ -18,9 +18,9 @@
               </el-option>
             </el-select>
           </div>
-          <!-- 活动选择框 -->
+          <!-- 计划选择框 -->
           <div class="activity">
-            <el-select v-model="activity" @change="activityChange()" size="small" placeholder="请选择活动名">
+            <el-select v-model="activity" @change="activityChange()" size="small" placeholder="请选择计划名">
               <el-option
                 v-for="item in activityO"
                 :key="item.plan_id"
@@ -89,7 +89,7 @@
       <el-table :data="tableData" stripe border v-loading="tableLoading" style="width: 100%"
                 :default-sort="{prop: 'date', order: 'descending'}">
         <el-table-column prop="time" label="时间"></el-table-column>
-        <el-table-column prop="actName" label="活动名称"></el-table-column>
+        <el-table-column prop="actName" label="计划名称"></el-table-column>
         <el-table-column prop="bg" label="曝光量"></el-table-column>
         <el-table-column prop="click" label="点击量"></el-table-column>
         <el-table-column prop="clickRate" label="点击率(‰)"></el-table-column>
@@ -156,7 +156,7 @@
         this.activity = ''
         this.mediaO = this.translateMedia([])
       },
-      activityChange () {       // 活动名选择项改变
+      activityChange () {       // 计划名选择项改变
         this.media = 'all'
         this.activityO.forEach((item, index) => {
           if (this.activityO[index].plan_id === this.activity) {
@@ -181,7 +181,7 @@
       },
       search () {         // 查询按钮
         if (this.activity === '') {
-          this.$message.warning('请先选择一个活动')
+          this.$message.warning('请先选择一个计划')
           return
         }
         var data = []
@@ -208,7 +208,7 @@
           return '花费'
         }
       },
-      getActid () {     // 获取选择项，活动媒体id
+      getActid () {     // 获取选择项，计划媒体id
         this.$http.get(searchUrl + '/data/get_plan_list', {
           params: {
             user_id: sessionStorage.getItem('user_id')
