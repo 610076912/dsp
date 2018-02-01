@@ -11,7 +11,7 @@
       <div class="header-con">
         <div class="center">
           <div class="logo">
-            <router-link to="/">智视广告投放平台</router-link>
+            <router-link to="/">智视场景化投放平台</router-link>
           </div>
           <ul>
             <li>
@@ -98,9 +98,10 @@
     min-height: 100%;
     background: #eeeeee;
     position: relative
-
-    .router-link-exact-active {
-      color: #60a7d6
+    .center > ul {
+      .router-link-exact-active {
+        color: #60a7d6
+      }
     }
     .center {
       width: 1200px;
@@ -186,10 +187,6 @@
       height: 100%;
       width: 100%;
     }
-  }
-
-  .router-link-exact-active {
-    color: #60a7d6
   }
 
   .logo {

@@ -489,7 +489,7 @@
       width 60px;
       float left;
       .tagActive {
-        background #1D8CE0;
+        background #169bd5;
         color #fff;
       }
     }
