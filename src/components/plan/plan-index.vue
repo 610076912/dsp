@@ -9,13 +9,13 @@
         <label>
           排序：
           <el-select v-model="seekData.sort" class="sort-select" clearable>
-            <el-option key="time" label="活动推广时间" value="1"></el-option>
-            <el-option key="group" label="活动ID" value="0"></el-option>
+            <el-option key="time" label="计划推广时间" value="1"></el-option>
+            <el-option key="group" label="计划ID" value="0"></el-option>
           </el-select>
         </label>
         <div class="serch">
           <el-input
-            placeholder="填写活动名称查询"
+            placeholder="填写计划名称查询"
             icon="search"
             v-model="seekData.name">
           </el-input>
@@ -41,7 +41,7 @@
         <!--<label>-->
         <!--状态：-->
         <!--<el-select v-model="seekData.status" class="status-select" clearable>-->
-        <!--<el-option key="time" label="活动推广时间" value="time"></el-option>-->
+        <!--<el-option key="time" label="计划推广时间" value="time"></el-option>-->
         <!--<el-option key="group" label="分组" value="group"></el-option>-->
         <!--<el-option key="kg" label="开关" value="kg"></el-option>-->
         <!--</el-select>-->
@@ -57,14 +57,14 @@
           style="width: 100%">
           <el-table-column
             :resizable="false"
-            label="活动ID"
+            label="计划ID"
             prop="plan_id"
             align="center"
             width="60">
           </el-table-column>
           <el-table-column
             :resizable="false"
-            label="活动名称"
+            label="计划名称"
             :show-overflow-tooltip="true"
             prop="plan_name"
             align="center"
@@ -131,7 +131,7 @@
           </el-table-column>
           <el-table-column
             :resizable="false"
-            label="活动状态"
+            label="计划状态"
             align="center"
             prop="status"
             :formatter="activity"
@@ -161,11 +161,11 @@
         :total="pageTotal">
       </el-pagination>
     </div>
-    <button class="creat-new" @click="creatNew">新建活动</button>
+    <button class="creat-new" @click="creatNew">新建计划</button>
     <el-dialog title="提示" :visible.sync="dialogVisible" size="tiny">
       <el-table :data="exStatus" border="true">
-        <el-table-column property="id" label="活动ID" width="60" align="center"></el-table-column>
-        <el-table-column property="name" label="活动名称" width="110" align="center"></el-table-column>
+        <el-table-column property="id" label="计划ID" width="60" align="center"></el-table-column>
+        <el-table-column property="name" label="计划名称" width="110" align="center"></el-table-column>
         <el-table-column
           label="开关"
           align="center">
@@ -233,7 +233,7 @@
       })
     },
     methods: {
-      // 获取活动列表
+      // 获取计划列表
       getActiveList (option) {
         if (!arguments[0].name) arguments[0].name = null
         if (!arguments[0].groupId) arguments[0].groupId = null
@@ -382,7 +382,7 @@
           status: this.seekData.status,
           channel: this.activeName,
           // 使用setHours方法，使开始时间往前1毫秒，结束时间往后1毫秒
-          // 其实包含当前日期下的00:00点的活动
+          // 其实包含当前日期下的00:00点的计划
           timeStart: this.seekData.date[0] ? new Date(this.seekData.date[0].setHours(0, 0, 0, -1)).Format('yyyy-MM-dd hh:mm:ss') : null,
           timeEnd: this.seekData.date[1] ? new Date(this.seekData.date[1].setHours(23, 59, 59, 1000)).Format('yyyy-MM-dd hh:mm:ss') : null,
           pageId: this.currentPage,
@@ -407,7 +407,7 @@
           plan_id: planId
         }).then(res => {
           if (res.code === 200) {
-            this.$alert(`复制成功！复制的活动id为${res.data}`, '提示', {
+            this.$alert(`复制成功！复制的计划id为${res.data}`, '提示', {
               confirmButtonText: '确定',
               callback: action => {
                 this.seek()

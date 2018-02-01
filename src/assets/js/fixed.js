@@ -1,6 +1,6 @@
 function _toFixed (num, jw) {
   // 默认保留6位小数
-  let ws = jw || 6
+  let ws = jw || 5
   try {
     if (typeof num !== 'number') {
       throw new Error('数字类型错误')
@@ -16,7 +16,7 @@ function _toFixed (num, jw) {
     return err
   }
   let times = Math.pow(10, ws)
-  return Math.round(num * times) / times
+  return (Math.round(num * times) / times).toFixed(ws)
 }
 
 export default {

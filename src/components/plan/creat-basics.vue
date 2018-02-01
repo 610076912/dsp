@@ -155,7 +155,7 @@
     //   }
     // },
     created () {
-      // 活动状态
+      // 计划状态
       let status = this.$store.state.creatData.status
       if (status && status.plan_status === 4) {
         let actidStatus = status.act_ids_status.every(item => {
@@ -211,7 +211,7 @@
       } else {
         this.showMedia()
       }
-      // 获取活动分组
+      // 获取计划分组
       this.queryGroupData()
     },
     methods: {
@@ -272,9 +272,9 @@
             .then(res => {
               // console.log(res)
               if (res.code === 200) {
-                // 保存活动Id
+                // 保存计划Id
                 this.$store.commit('PLANID', res.data)
-                // 保存活动数据
+                // 保存计划数据
                 that.ruleForm.channel = that.activeName
                 this.$store.commit('BASICE', that.ruleForm)
                 // 成功后调取媒体接口
@@ -325,7 +325,7 @@
       },
       // 请求分组数据
       queryGroupData () {
-        // 获取活动分组
+        // 获取计划分组
         this.$http.get('/api2/get_plan_group').then(data => {
           if (data.code === 200) {
             this.groupArray = data.data

@@ -60,6 +60,7 @@
           <div class="mobile-chart-color-l">
             <span></span>
             <el-select v-model="selectL" size="mini"
+                       :disabled="true"
                        @change="selectChange()">
               <el-option label="曝光量" value="bgArr"></el-option>
               <el-option label="点击量" value="clickArr"></el-option>
@@ -68,7 +69,9 @@
           <div class="mobile-chart-color-r">
             <span></span>
             <el-select v-model="selectR" size="mini"
+                       :disabled="true"
                        @change="selectChange()">
+              <el-option label="点击量" value="clickArr"></el-option>
               <el-option label="点击率" value="clickRateArr"></el-option>
               <el-option label="花费" value="" disabled=""></el-option>
             </el-select>
@@ -143,7 +146,7 @@
           label: '花费'
         }],
         selectL: 'bgArr',  // 左边选中状态
-        selectR: 'clickRateArr',    // 右边选中状态
+        selectR: 'clickArr',    // 右边选中状态
         tableData: []
       }
     },
