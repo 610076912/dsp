@@ -100,6 +100,7 @@
           <div class="mobile-chart-color-l">
             <span></span>
             <el-select v-model="mobileLeftSelect" size="mini"
+                       :disabled="true"
                        @change="selectChange(mobileLeftSelect, 'mobileData', '0')"
                        placeholder="请选择">
               <el-option
@@ -114,6 +115,7 @@
             <span></span>
             <template>
               <el-select v-model="mobileRightSelect" placeholder="请选择" size="mini"
+                         :disabled="true"
                          @change="selectChange(mobileRightSelect, 'mobileData', '1')">
                 <el-option
                   v-for="item in selectROption"
@@ -140,16 +142,16 @@
     value: 'bgCount',
     label: '曝光量'
   }, {
-    value: 'clickCount',
-    label: '点击量'
+    value: 'spend',
+    label: '花费'
   }]
 
   let selectROption = [{
-    value: 'clickRate',
-    label: '平均点击率'
+    value: 'clickCount',
+    label: '点击量'
   }, {
-    value: 'spend',
-    label: '花费'
+    value: 'clickRate',
+    label: '点击率（‰）'
   }]
   let chartOption = {
     color: ['#66c4cb', '#b5a4d9'],          // 折线颜色
@@ -188,7 +190,7 @@
         position: 'right',
         splitNumber: 10,
         minInterval: 0.1,
-        name: '点击率（‰）'
+        name: '点击量'
       }
     ],
     series: [
@@ -201,7 +203,7 @@
         data: []
       },
       {
-        name: '点击率（‰）',
+        name: '点击量',
         type: 'line',
         yAxisIndex: 1,
         smooth: true, // 这句就是让曲线变平滑的
@@ -243,7 +245,7 @@
         mobileDate: [new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).getTime(), new Date(Date.now()).getTime()],
         // 下拉框
         mobileLeftSelect: 'bgCount',
-        mobileRightSelect: 'clickRate',
+        mobileRightSelect: 'clickCount',
         // 下拉框基础数据
         selectLOption: selectLOption,
         selectROption: selectROption,
@@ -264,7 +266,7 @@
 
             },
             {
-              name: '点击率（‰）',
+              name: '点击量',
               position: 'right'
             }
           ],
@@ -351,12 +353,12 @@
             this.mobileData.clickRateArr = clickRateArr
             this.mobileModel.xAxis.data = res.data.datelist
             let y0 = res.data.bgArr
-            let y1 = clickRateArr
-            if (this.mobileLeftSelect === 'clickCount') {
-              y0 = res.data.clickArr
+            let y1 = res.data.clickArr
+            if (this.mobileLeftSelect === 'spend') {
+              y0 = []
             }
-            if (this.mobileRightSelect === 'spend') {
-              y1 = []
+            if (this.mobileRightSelect === 'clickRate') {
+              y1 = clickRateArr
             }
             this.mobileModel.series[0].data = y0
             this.mobileModel.series[1].data = y1
