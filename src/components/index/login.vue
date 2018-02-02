@@ -4,9 +4,11 @@
       <div class="left">
         <img src="../../assets/img/login-leftbg.png" alt="智视场景化投放平台">
         <div class="right">
-          <h1>登录</h1>
+          <img src="../../assets/img/login-logo.png" alt="">
           <input type="text" class="username" placeholder="请输入用户名" v-model="username">
+          <i class="el-icon-my-denglu"></i>
           <input type="password" class="password" placeholder="请输入密码" v-model="password">
+          <i class="el-icon-my-mima"></i>
           <button @click="login">登录</button>
         </div>
       </div>
@@ -102,12 +104,24 @@
         right: 0;
         top: 0;
         border-radius: 4px;
-        h1 {
-          font-size: 30px;
+        img {
+          width: 90px;
+          height: 35px;
           color: #555555;
           position: absolute;
-          top: 12%;
-          left: calc(50% - 30px);
+          top: 17%;
+          left: calc(50% - 50px);
+        }
+        i {
+          font-size 16px;
+          color: #565656
+          position absolute
+          top: 158px;
+          left: 70px;
+        }
+        .el-icon-my-mima {
+          top: 208px;
+          font-weight 700;
         }
         .username, .password {
           width: 60%;
@@ -115,7 +129,7 @@
           border: 1px solid #e1e1e1;
           border-radius: 3px;
           background-color: transparent;
-          text-indent: 15px;
+          text-indent: 30px;
           font-size: 14px;
           position: absolute;
           left: 0;
@@ -129,6 +143,15 @@
             border-color: #09c0ab;
             box-shadow: 0px 0px 2px #09c0ab;
           }
+        }
+        input:-webkit-input-placeholder { /* WebKit browsers */
+          font-size: 12px;
+        }
+        input:-moz-placeholder { /* Mozilla Firefox 19+ */
+          font-size: 12px;
+        }
+        input:-ms-input-placeholder { /* Internet Explorer 10+ */
+          font-size: 12px;
         }
         .username {
           margin-top: 120px;

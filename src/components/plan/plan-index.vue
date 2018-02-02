@@ -388,7 +388,7 @@
           pageId: this.currentPage,
           pageCount: this.pageSize
         }
-        console.log(option)
+        // console.log(option)
         this.getActiveList(option)
       },
       // 状态按钮弹出推广状态
