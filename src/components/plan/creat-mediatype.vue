@@ -128,7 +128,6 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
-  @import url('../../assets/font/iconfont.css')
   .creat-mediatype {
     .creat-media-content {
       width: 100%;

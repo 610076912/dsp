@@ -20,8 +20,8 @@
               <span style="float: left">{{item.group_name}}</span>
               <!--删除分组功能屏蔽-->
               <!--<span @click.stop="delGroup(item.group_id,item.group_name)"-->
-                    <!--style="float: right; color: #8492a6; font-size: 10px">-->
-                <!--<i class="el-icon-close"></i></span>-->
+              <!--style="float: right; color: #8492a6; font-size: 10px">-->
+              <!--<i class="el-icon-close"></i></span>-->
             </el-option>
           </el-select>
         </el-form-item>
@@ -42,7 +42,7 @@
             v-model="ruleForm.date"
             minTime="17:31"
             range-separator="至"
-            type="datetimerange"
+            type="daterange"
             :picker-options="pickerOptions"
             placeholder="选择日期范围">
           </el-date-picker>
@@ -69,6 +69,7 @@
   import setps from './steps-component.vue'
   import mediaJsonP from '../../../static/json/media.json'
   import mediaJsonT from '../../../static/json/test-media.json'
+
   let testEnv = process.env.TEST === 'test'
   let mediaJson = mediaJsonP
   if (testEnv) {
@@ -232,12 +233,11 @@
         this.$refs['new1form'].validate((valid) => {
           // 如果验证通过则跳转下一个路由
           let url, data, mUrl // 基本设置接口url，基本设置数据，媒体接口url
+          debugger
+          // 设置日期时间
+          that.ruleForm.date[0] = new Date(that.ruleForm.date[0].setHours(0, 0, 0, 0))
+          that.ruleForm.date[1] = new Date(that.ruleForm.date[1].setHours(23, 59, 59, 999))
           if (valid && !that.isEdit) {
-            // 验证日期是否一致
-            if (that.ruleForm.date[0].Format('yyyy-MM-dd hh:mm:ss') === that.ruleForm.date[1].Format('yyyy-MM-dd hh:mm:ss')) {
-              that.$message.error('起始时间和结束时间相同')
-              return
-            }
             this.btnLoading = true
             // 添加
             url = '/api2/add_plan'

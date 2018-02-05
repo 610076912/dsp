@@ -428,7 +428,7 @@
       },
       // 格式化时间
       formatter (item) {
-        return new Date(item.plan_b_time).Format('yyyy-MM-dd hh:mm:ss') + ' -- ' + new Date(item.plan_e_time).Format('yyyy-MM-dd hh:mm:ss')
+        return new Date(item.plan_b_time).Format('yyyy-MM-dd') + ' -- ' + new Date(item.plan_e_time).Format('yyyy-MM-dd')
       }
     },
     components: {

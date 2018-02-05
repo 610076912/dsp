@@ -4,7 +4,7 @@
       <div class="left">
         <img src="../../assets/img/login-leftbg.png" alt="智视场景化投放平台">
         <div class="right">
-          <img src="../../assets/img/login-logo.png" alt="">
+          <h1>视连通</h1>
           <input type="text" class="username" placeholder="请输入用户名" v-model="username">
           <i class="el-icon-my-denglu"></i>
           <input type="password" class="password" placeholder="请输入密码" v-model="password">
@@ -104,13 +104,15 @@
         right: 0;
         top: 0;
         border-radius: 4px;
-        img {
-          width: 90px;
+        h1 {
+          width: 100%;
           height: 35px;
+          font-size: 28px;
+          letter-spacing: 5px;
           color: #555555;
           position: absolute;
           top: 17%;
-          left: calc(50% - 50px);
+          text-align center;
         }
         i {
           font-size 16px;

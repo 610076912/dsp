@@ -8,7 +8,7 @@
       <el-row class="row">
         <el-col :span="8"><span>推广计划名称: </span><span>{{ baseInfo.act_name }}</span></el-col>
         <el-col :span="8">
-          <span>投放日期: </span><span>{{ new Date(baseInfo.act_b_time).Format('yyyy-MM-dd hh:mm:ss') }}~{{ new Date(baseInfo.act_e_time).Format('yyyy-MM-dd hh:mm:ss') }}</span>
+          <span>投放日期: </span><span>{{ new Date(baseInfo.act_b_time).Format('yyyy-MM-dd') }} 至 {{ new Date(baseInfo.act_e_time).Format('yyyy-MM-dd') }}</span>
         </el-col>
         <el-col :span="8"><span>分组: </span><span>{{ baseInfo.group_name }}</span></el-col>
       </el-row>
@@ -127,9 +127,12 @@
       </b></p>
       <div class="pro-box">
         <div class="material-item" v-for="(item, index) in platformName">
-          <component v-bind:is="materialBg[index]" :confinfo="item.confInfo">
-            <!-- 组件在 vm.currentview 变化时改变！ -->
-          </component>
+          <span>{{item.mediaId}}</span>
+          <div class="tpl-wrap">
+            <component v-bind:is="materialBg[index]" :confinfo="item.confInfo">
+              <!-- 组件在 vm.currentview 变化时改变！ -->
+            </component>
+          </div>
         </div>
       </div>
       <!--<div class="pro-box">
@@ -517,32 +520,18 @@
       .pro-box {
         overflow: hidden;
         .material-item {
-          width: 550px;
-          height: 360px;
+          width: 560px;
+          height: 395px;
           float: left;
           margin-bottom: 40px;
           position: relative;
           overflow: hidden;
-          video {
-            width: 100%;
-          }
           &:nth-of-type(2n-1) {
-            margin-right: 35px;
+            margin-right: 22px;
           }
-          .mask {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, .7);
-            transform: scale(0);
-            transition: all .5s;
-            padding: 100px 130px;
-            span {
-              color: #fff;
-              font-size: 14px;
-            }
+          .tpl-wrap {
+            height: 365px;
+            width: 560px;
           }
           img {
             width: 100%;

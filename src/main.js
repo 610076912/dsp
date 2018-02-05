@@ -12,6 +12,7 @@ import es6Promise from 'es6-promise'
 es6Promise.polyfill()
 import axios from '@/assets/js/axiosplus'
 import './assets/css/reset.styl'
+import './assets/font/iconfont.css'
 import echarts from '../static/js/echarts.min'
 // 自定义处理小数方法
 import fixed from '@/assets/js/fixed'

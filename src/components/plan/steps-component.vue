@@ -33,7 +33,6 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
-  @import url('../../assets/font/iconfont.css')
   .setps {
     width: 100%;
     height: 80px;
