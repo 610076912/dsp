@@ -15,8 +15,7 @@ function _toFixed (num, jw) {
   } catch (err) {
     return err
   }
-  let times = Math.pow(10, ws)
-  return (Math.round(num * times) / times).toFixed(ws)
+  return (num.toFixed(ws) * 1000).toFixed(ws) * 1
 }
 
 export default {

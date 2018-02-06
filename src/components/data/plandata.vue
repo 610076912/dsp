@@ -51,7 +51,7 @@
         <ul>
           <li><p>{{ details.bgCount || 0 }}</p><span>曝光量(次)</span></li>
           <li><p>{{ details.clickCount || 0 }}</p><span>点击量(次)</span></li>
-          <li><p>{{ $_toFixed(details.clickRate) * 1000 || 0}}</p><span>点击率(‰)</span></li>
+          <li><p>{{ $_toFixed(details.clickRate) || 0}}</p><span>点击率(‰)</span></li>
           <li><p>0</p><span>花费(元)</span></li>
         </ul>
       </div>
@@ -231,10 +231,12 @@
         this.tableLoading = true
         var bTime
         var eTime
+        var planName
         for (var i = 0; i < this.activityO.length; i++) {
           if (this.activityO[i].plan_id === this.activity) {
             bTime = this.activityO[i].plan_b_time
             eTime = this.activityO[i].plan_e_time
+            planName = this.activityO[i].plan_name
           }
         }
         this.$http.get(searchUrl + '/data/get_promotion_data', {
@@ -247,14 +249,14 @@
           if (res.code === 200) {
             // 处理数据中的小数点位数
             res.data.clickRateArr.forEach((item, index) => {
-              res.data.clickRateArr[index] = this.$_toFixed(item) * 1000
+              res.data.clickRateArr[index] = this.$_toFixed(item)
             })
             this.details = res.data
             this.tableData = []
             res.data.dateArr.forEach((item, index) => {
               this.tableData.push({
                 time: item,
-                actName: this.activity,
+                actName: planName,
                 bg: res.data.bgArr[index],
                 click: res.data.clickArr[index],
                 clickRate: res.data.clickRateArr[index],

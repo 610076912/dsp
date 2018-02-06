@@ -223,7 +223,7 @@
           res.image_reason = status.image_reason === 1
           return res
         }
-        console.log('----', res)
+        // console.log('----', res)
         return res
       }
     },

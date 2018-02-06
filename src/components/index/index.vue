@@ -33,7 +33,7 @@
                   <p>今日点击量</p></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content r b"><span>{{$_toFixed(totalData.click_rate) * 1000 || 0}}</span>
+                <div class="grid-content r b"><span>{{$_toFixed(totalData.click_rate) || 0}}</span>
                   <p>今日平均点击率（‰）</p></div>
               </el-col>
               <el-col :span="6">
@@ -50,7 +50,7 @@
               </el-col>
               <el-col :span="6">
                 <div class="grid-content r"><span>{{checkData[indexs + 1][0] || 0}}</span>
-                  <p>待审核</p></div>
+                  <p>正在审核</p></div>
               </el-col>
               <el-col :span="6">
                 <div class="grid-content"><span>{{checkData[indexs + 1][-2] || 0}}</span>
@@ -87,7 +87,7 @@
             <p>点击量（次）</p></div>
         </el-col>
         <el-col :span="6">
-          <div class="mobile-n-grid r"><span>{{$_toFixed(mobileData.clickRate) * 1000}}</span>
+          <div class="mobile-n-grid r"><span>{{$_toFixed(mobileData.clickRate)}}</span>
             <p>平均点击率（‰）</p></div>
         </el-col>
         <el-col :span="6">
@@ -180,16 +180,12 @@
         type: 'value',
         scale: true,
         position: 'left',
-        splitNumber: 10,
-        minInterval: 1,
         name: '曝光量'
       },
       {
         type: 'value',
         scale: true,
         position: 'right',
-        splitNumber: 10,
-        minInterval: 0.1,
         name: '点击量'
       }
     ],
@@ -347,7 +343,7 @@
         }).then(res => {
           if (res.code === 200) {
             let clickRateArr = res.data.clickRateArr.map(item => {
-              return this.$_toFixed(item) * 1000
+              return this.$_toFixed(item)
             })
             this.mobileData = res.data
             this.mobileData.clickRateArr = clickRateArr
@@ -489,7 +485,7 @@
       width 60px;
       float left;
       .tagActive {
-        background #1D8CE0;
+        background #169bd5;
         color #fff;
       }
     }
