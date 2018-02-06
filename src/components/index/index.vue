@@ -37,7 +37,7 @@
                   <p>今日平均点击率（‰）</p></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content b"><span>--</span>
+                <div class="grid-content b"><span>{{todayCost}}</span>
                   <p>今日消费</p></div>
               </el-col>
               <el-col :span="6">
@@ -91,7 +91,7 @@
             <p>平均点击率（‰）</p></div>
         </el-col>
         <el-col :span="6">
-          <div class="mobile-n-grid"><span>--</span>
+          <div class="mobile-n-grid"><span>{{$_toFixed(totalCost) / 1000}}</span>
             <p>花费（元）</p></div>
         </el-col>
       </div>
@@ -297,15 +297,39 @@
             2: 0,
             '-1': 0
           }
-        }
+        },
+        // 今日花费
+        todayCost: 0,
+        // 时间段内的总花费
+        totalCost: 0
       }
     },
     created () {
       // 每日总数据
       this.getTotalDate()
       this.getCheckData()
+      this.getCostData(new Date(this.mobileDate[0]), new Date(this.mobileDate[1]), this.indexs + 1)
     },
     methods: {
+      // 获取花费相关数据
+      getCostData (sTime, eTime, channelId) {
+        this.$http.get('/api2/plan_channel_cost', {
+          params: {
+            start_time: sTime,
+            end_time: eTime,
+            plan_channel: channelId
+          }
+        }).then(res => {
+          console.log(res)
+          if (res.code === 200 && res.data.today) {
+            this.todayCost = res.data.today
+            for (let i in res.data) {
+              this.totalCost += res.data[i]
+            }
+            console.log(this.totalCost)
+          }
+        })
+      },
       // 获取审核相关数据
       getCheckData () {
         this.$http.get('/api2/plan_check_info', {
@@ -411,6 +435,11 @@
           }
         })
         this.getMChartsData(dateArr, this.indexs + 1)
+        console.log(new Date(dateArr[0]), new Date(dateArr[1]))
+        // 获取花费数据
+        this.todayCost = 0
+        this.totalCost = 0
+        this.getCostData(new Date(dateArr[0]), new Date(dateArr[1]), this.indexs + 1)
       },
       toPlan () {
         this.$router.push('plan')
@@ -419,6 +448,10 @@
         this.indexs = index
         this.getTotalDate(index + 1)
         this.getMChartsData(this.mobileDate, index + 1)
+        // 获取花费数据
+        this.todayCost = 0
+        this.totalCost = 0
+        this.getCostData(new Date(this.mobileDate[0]), new Date(this.mobileDate[1]), this.indexs + 1)
       }
     },
     mounted: function () {

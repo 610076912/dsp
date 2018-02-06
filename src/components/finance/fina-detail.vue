@@ -47,7 +47,7 @@
         <el-table :data="dialogData" border>
           <el-table-column property="planId" label="活动ID" width="150" align="center"></el-table-column>
           <el-table-column property="planName" label="计划名称" width="200" align="center"></el-table-column>
-          <el-table-column property="planChannel" label="端口" align="center"></el-table-column>
+          <el-table-column property="planChannel" label="端口" align="center" :formatter="channelFormatter"></el-table-column>
           <el-table-column property="pv" label="曝光量" align="center"></el-table-column>
           <el-table-column property="click" label="点击量" align="center"></el-table-column>
           <el-table-column property="cost" label="花费" align="center"></el-table-column>
@@ -223,6 +223,17 @@
             this.totalCost = 0
           }
         })
+      },
+      // 格式化端口
+      channelFormatter (row, col, cellVal) {
+        switch (cellVal) {
+          case 1:
+            return '移动'
+          case 2:
+            return 'PC'
+          case 3:
+            return '大屏'
+        }
       }
     }
   }

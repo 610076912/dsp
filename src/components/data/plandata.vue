@@ -52,7 +52,7 @@
           <li><p>{{ details.bgCount || 0 }}</p><span>曝光量(次)</span></li>
           <li><p>{{ details.clickCount || 0 }}</p><span>点击量(次)</span></li>
           <li><p>{{ $_toFixed(details.clickRate) || 0}}</p><span>点击率(‰)</span></li>
-          <li><p>0</p><span>花费(元)</span></li>
+          <li><p>{{$_toFixed(totalCost) / 1000 || 0}}</p><span>花费(元)</span></li>
         </ul>
       </div>
       <div class="chart-con">
@@ -93,7 +93,7 @@
         <el-table-column prop="bg" label="曝光量"></el-table-column>
         <el-table-column prop="click" label="点击量"></el-table-column>
         <el-table-column prop="clickRate" label="点击率(‰)"></el-table-column>
-        <el-table-column prop="hf" label="总花费"></el-table-column>
+        <el-table-column prop="cost" label="总花费"></el-table-column>
       </el-table>
     </div>
   </div>
@@ -147,10 +147,36 @@
         }],
         selectL: 'bgArr',  // 左边选中状态
         selectR: 'clickArr',    // 右边选中状态
-        tableData: []
+        tableData: [],
+        // 总花费
+        totalCost: 0
       }
     },
     methods: {
+      // 获取花费相关数据
+      getCostData (sTime, eTime, actIdArr) {
+        this.$http.get('/api2/act_ids_cost', {
+          params: {
+            start_time: sTime,
+            end_time: eTime,
+            act_ids: actIdArr
+          }
+        }).then(res => {
+          console.log(res)
+          const that = this
+          if (res.code === 200) {
+            for (let i in res.data) {
+              this.totalCost += res.data[i]
+              this.tableData.forEach((item) => {
+                if (item.time === i) {
+                  item.cost = that.$_toFixed(res.data[i]) / 1000
+                }
+              })
+            }
+            console.log(this.tableData)
+          }
+        })
+      },
       deviceChange () {         // 设备选择项改变
         this.activityO = this.planLists[this.device]
         this.activity = ''
@@ -260,9 +286,10 @@
                 bg: res.data.bgArr[index],
                 click: res.data.clickArr[index],
                 clickRate: res.data.clickRateArr[index],
-                hf: '（暂无数据）'
+                cost: 0
               })
             })
+            this.getCostData(bTime, eTime, JSON.stringify(arg))
             this.tableLoading = false
             this.echarts()
           }
