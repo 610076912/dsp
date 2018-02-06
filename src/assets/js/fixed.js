@@ -13,7 +13,7 @@ function _toFixed (num, jw) {
       }
     }
   } catch (err) {
-    return err
+    return 0
   }
   return (num.toFixed(ws) * 1000).toFixed(ws) * 1
 }

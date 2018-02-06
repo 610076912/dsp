@@ -30,17 +30,15 @@ const data = () => import(/* webpackChunkName: "data" */ '@/components/data/data
 const plandata = () => import(/* webpackChunkName: "data" */ '@/components/data/plandata')
 const mediadata = () => import(/* webpackChunkName: "data" */ '@/components/data/mediadata')
 const timebucket = () => import('@/components/data/timebucket')
+
+// 引入财务管理页面
 const finance = () => import(/* webpackChunkName: "finance" */ '@/components/finance/finance')
+const finaDetail = () => import(/* webpackChunkName: "finance" */ '@/components/finance/fina-detail')
+const finaHistory = () => import(/* webpackChunkName: "finance" */ '@/components/finance/fina-history')
 // import data from '@/components/data/data'
 // import plandata from '@/components/data/plandata'
 // import mediadata from '@/components/data/mediadata'
 // import finance from '@/components/finance/finance'
-
-// 引入财务管理页面
-// import finance from '@/components/finance/finance'
-import finaCWGK from '@/components/finance/finaCWGK'
-import finaCZJL from '@/components/finance/finaCZJL'
-import finaHistory from '@/components/finance/finaHistory'
 
 Vue.use(Router)
 
@@ -150,14 +148,9 @@ export default new Router({
       meta: { Auth: true },
       children: [
         {
-          path: '/',
-          name: 'finaCWGK',
-          component: finaCWGK
-        },
-        {
-          path: '/finaCZJL',
-          name: 'finaCZJL',
-          component: finaCZJL
+          path: '',
+          name: 'finaDetail',
+          component: finaDetail
         },
         {
           path: '/finaHistory',

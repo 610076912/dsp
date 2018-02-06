@@ -23,9 +23,9 @@
             <li>
               <router-link @click.native="onActive('/data')" to="data">数据监测</router-link>
             </li>
-            <!-- <li>
+             <li>
               <router-link @click.native="onActive('/finance')" to="finance">财务管理</router-link>
-            </li> -->
+            </li>
           </ul>
         </div>
       </div>
