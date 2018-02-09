@@ -7,7 +7,7 @@
           <el-menu-item-group title="推广账户">
             <template slot="title"><i class="el-icon-my-denglu"></i>推广账户</template>
             <el-menu-item index="finaDetail" :route="{name: 'finaDetail'}">财务详情</el-menu-item>
-            <el-menu-item index="finaHistory" :route="{name: 'finaHistory'}">历史数据</el-menu-item>
+            <!--<el-menu-item index="finaHistory" :route="{name: 'finaHistory'}">历史数据</el-menu-item>-->
           </el-menu-item-group>
         </el-menu>
       </div>

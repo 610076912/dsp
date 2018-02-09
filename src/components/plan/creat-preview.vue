@@ -327,9 +327,12 @@
                 this.$router.push('/plan')
               }
             })
-            // 调取消发布接口
-            this.$http.post('/api2/canclepublish', {
-              plan_id: this.$store.state.creatData.planId
+          } else if (res.code === 300) {
+            this.$alert(res.msg, '警告', {
+              confirmButtonText: '确定',
+              callback: () => {
+                this.$router.push('/plan')
+              }
             })
           }
         })

@@ -10,6 +10,7 @@
             <el-date-picker
               v-model="date"
               size="small"
+              :editable="false"
               type="month"
               placeholder="选择月">
             </el-date-picker>
@@ -134,7 +135,6 @@
       this.myEchart.setOption(chartData)
     },
     created () {
-      console.log(this.getFDayLDay)
       this.getData(this.getFDayLDay.firstDay, this.getFDayLDay.lastDay)
     },
     computed: {
@@ -143,17 +143,17 @@
       * */
       'getFDayLDay' () {
         let monthNum = this.date.getMonth()
+        let yearNum = this.date.getFullYear()
         // 第一天
-        let firstDay = new Date(new Date(new Date().setMonth(monthNum)).setDate(1))
+        let firstDay = new Date(new Date(new Date(new Date().setFullYear(yearNum)).setMonth(monthNum)).setDate(1))
         // 最后一天
-        let lastDay = new Date(new Date(new Date().setMonth(monthNum + 1)).setDate(0))
+        let lastDay = new Date(new Date(new Date(new Date().setFullYear(yearNum)).setMonth(monthNum + 1)).setDate(0))
         return {firstDay, lastDay}
       }
     },
     methods: {
       // 查看某天详情
       showDetail (daytime) {
-        console.log(daytime)
         this.dialogTableVisible = true
         this.dialogData = []
         this.getDialogData(daytime)
@@ -193,30 +193,33 @@
             end_time: eTime
           }
         }).then((res) => {
-          if (res.code === 200 && res.data.all_costs !== 0) {
-            // 对拿到的数据做小数位处理，保留三位小数
-            res.data.all_costs = this.$_toFixed(res.data.all_costs, 3) / 1000
-            const that = this
-            res.data.cost.forEach((item, i) => {
-              res.data.cost[i] = that.$_toFixed(item, 3) / 1000
-              res.data.balance[i] = that.$_toFixed(res.data.balance[i], 3) / 1000
-              console.log(res.data.cost[i])
-            })
-            this.totalCost = res.data.all_costs
-            // 给图表加载数据
-            this.updateChartData.xAxis[0].data = res.data.daytime
-            this.updateChartData.series[0].data = res.data.cost
-            this.myEchart.setOption(this.updateChartData)
-            // 给表格加载数据
-            res.data.daytime.forEach((item, index) => {
-              let obj = {}
-              obj.date = item
-              obj.balance = res.data.balance[index]
-              obj.click = res.data.click[index]
-              obj.cost = res.data.cost[index]
-              obj.pv = res.data.pv[index]
-              this.tableData.push(obj)
-            })
+          if (res.code === 200) {
+            this.over = res.data.over
+            if (res.data.all_costs !== 0) {
+              // 对拿到的数据做小数位处理，保留三位小数
+              res.data.all_costs = this.$_toFixed(res.data.all_costs, 3) / 1000
+              const that = this
+              res.data.cost.forEach((item, i) => {
+                res.data.cost[i] = that.$_toFixed(item, 3) / 1000
+                res.data.balance[i] = that.$_toFixed(res.data.balance[i], 3) / 1000
+              })
+              this.totalCost = res.data.all_costs
+              // 给图表加载数据
+              this.updateChartData.xAxis[0].data = res.data.daytime
+              this.updateChartData.series[0].data = res.data.cost
+              this.myEchart.setOption(this.updateChartData)
+              // 给表格加载数据
+              this.tableData = []
+              res.data.daytime.forEach((item, index) => {
+                let obj = {}
+                obj.date = item
+                obj.balance = res.data.balance[index]
+                obj.click = res.data.click[index]
+                obj.cost = res.data.cost[index]
+                obj.pv = res.data.pv[index]
+                this.tableData.push(obj)
+              })
+            }
           } else if (res.data.all_costs === 0) {
             this.tableData = []
             this.myEchart.setOption(chartData)

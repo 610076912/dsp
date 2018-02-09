@@ -88,12 +88,12 @@
       </div>
       <el-table :data="tableData" stripe border v-loading="tableLoading" style="width: 100%"
                 :default-sort="{prop: 'date', order: 'descending'}">
-        <el-table-column prop="time" label="时间"></el-table-column>
+        <el-table-column prop="time" label="时间" sortable></el-table-column>
         <el-table-column prop="actName" label="计划名称"></el-table-column>
-        <el-table-column prop="bg" label="曝光量"></el-table-column>
-        <el-table-column prop="click" label="点击量"></el-table-column>
-        <el-table-column prop="clickRate" label="点击率(‰)"></el-table-column>
-        <el-table-column prop="cost" label="总花费"></el-table-column>
+        <el-table-column prop="bg" label="曝光量" sortable></el-table-column>
+        <el-table-column prop="click" label="点击量" sortable></el-table-column>
+        <el-table-column prop="clickRate" label="点击率(‰)" sortable></el-table-column>
+        <el-table-column prop="cost" label="总花费" sortable></el-table-column>
       </el-table>
     </div>
   </div>
@@ -162,9 +162,9 @@
             act_ids: actIdArr
           }
         }).then(res => {
-          console.log(res)
           const that = this
           if (res.code === 200) {
+            this.totalCost = 0
             for (let i in res.data) {
               this.totalCost += res.data[i]
               this.tableData.forEach((item) => {
@@ -173,7 +173,6 @@
                 }
               })
             }
-            console.log(this.tableData)
           }
         })
       },
@@ -280,7 +279,7 @@
             this.details = res.data
             this.tableData = []
             res.data.dateArr.forEach((item, index) => {
-              this.tableData.push({
+              this.tableData.unshift({
                 time: item,
                 actName: planName,
                 bg: res.data.bgArr[index],

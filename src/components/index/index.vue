@@ -37,7 +37,7 @@
                   <p>今日平均点击率（‰）</p></div>
               </el-col>
               <el-col :span="6">
-                <div class="grid-content b"><span>{{todayCost}}</span>
+                <div class="grid-content b"><span>{{todayCost || 0}}</span>
                   <p>今日消费</p></div>
               </el-col>
               <el-col :span="6">
@@ -71,6 +71,7 @@
             v-model="mobileDate"
             @change="chartDateChange(mobileDate, 'mobile')"
             type="daterange"
+            :editable="false"
             align="right"
             placeholder="选择日期范围"
             :picker-options="pickerOptions">
@@ -203,7 +204,8 @@
         type: 'line',
         yAxisIndex: 1,
         smooth: true, // 这句就是让曲线变平滑的
-        areaStyle: {normal: {}}  // 填充背景
+        areaStyle: {normal: {}},  // 填充背景
+        data: []
       }
     ]
   }
@@ -320,13 +322,13 @@
             plan_channel: channelId
           }
         }).then(res => {
-          console.log(res)
-          if (res.code === 200 && res.data.today) {
-            this.todayCost = res.data.today
+          if (res.code === 200 && res.data) {
+            this.todayCost = this.$_toFixed(res.data.today, 3) / 1000
             for (let i in res.data) {
-              this.totalCost += res.data[i]
+              if (i !== 'today') {
+                this.totalCost += res.data[i]
+              }
             }
-            console.log(this.totalCost)
           }
         })
       },
@@ -435,7 +437,6 @@
           }
         })
         this.getMChartsData(dateArr, this.indexs + 1)
-        console.log(new Date(dateArr[0]), new Date(dateArr[1]))
         // 获取花费数据
         this.todayCost = 0
         this.totalCost = 0

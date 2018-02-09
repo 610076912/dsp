@@ -40,8 +40,8 @@
           <el-date-picker
             :disabled="!canEdit"
             v-model="ruleForm.date"
-            minTime="17:31"
             range-separator="至"
+            :editable="false"
             type="daterange"
             :picker-options="pickerOptions"
             placeholder="选择日期范围">
@@ -233,7 +233,6 @@
         this.$refs['new1form'].validate((valid) => {
           // 如果验证通过则跳转下一个路由
           let url, data, mUrl // 基本设置接口url，基本设置数据，媒体接口url
-          debugger
           // 设置日期时间
           that.ruleForm.date[0] = new Date(that.ruleForm.date[0].setHours(0, 0, 0, 0))
           that.ruleForm.date[1] = new Date(that.ruleForm.date[1].setHours(23, 59, 59, 999))
