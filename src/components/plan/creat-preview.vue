@@ -148,8 +148,8 @@
     </div>
     <div class="button-wrap">
       <el-button @click="back">返回</el-button>
-      <el-button @click="finish" :loading="finishLoading">完成</el-button>
-      <el-button type="primary" @click="finishto" :loading="finishtoLoading">提审</el-button>
+      <el-button @click="finish" :loading="finishLoading" v-if="status ? status.plan_status !== 6 : true">完成</el-button>
+      <el-button type="primary" @click="finishto" v-if="status ? status.plan_status  !== 6 : true" :loading="finishtoLoading">提审</el-button>
     </div>
   </div>
 </template>

@@ -123,6 +123,7 @@
             width="100">
             <template slot-scope="scope">
               <el-switch
+                :disabled="!switchDisabled[scope.$index]"
                 v-model="switchData[scope.$index]"
                 on-color="#ff9900"
                 @change="switch1(scope)">
@@ -141,9 +142,9 @@
             <template slot-scope="scope">
               <span class="operation" @click="details(scope.row.plan_id)">查看&nbsp;</span>
               <span class="operation" @click="copyPlan(scope.row.plan_id)">复制&nbsp;</span>
+              <span class="operation" :class="{disabled: scope.row.status !== 1}" @click="itemDel(scope.row.plan_id, scope.row.status === 1)" >删除&nbsp;</span>
+              <span class="operation" :class="{disabled: scope.row.status !== 5}" @click="finish(scope.row.plan_id, scope.row.status === 5)">终止&nbsp;</span>
               <!--<span class="operation" @click="excentionStatus">状态</span>-->
-              <!--<span class="operation">报表&nbsp;</span>-->
-              <!--<span class="operation" @click="itemDel(scope.row.plan_id)">删除&nbsp;</span>-->
               <br>
             </template>
           </el-table-column>
@@ -212,6 +213,8 @@
         tableData: null,
         // 开关数据（单独处理）
         switchData: [],
+        // 开关是否可点数据，根据状态判断。
+        switchDisabled: [],
         dialogVisible: false,
         // 状态数据
         exStatus: [],
@@ -262,9 +265,12 @@
         }).then((res) => {
           loading.close()
           if (res.code === 200) {
+            // 新的请求先清空原来的数据
             this.switchData = []
+            this.switchDisabled = []
             res.data.forEach((item) => {
               this.switchData.push(item.publish === 1)
+              this.switchDisabled.push(item.status === 5 || item.status === 3 || item.status === 7)
             })
             this.tableData = res.data
             this.pageTotal = res.total
@@ -275,38 +281,37 @@
       // 删除
       delActive (planId) {
         const that = this
-        this.$confirm(`您确定要删除这 ${planId.length} 项吗？`, '提示', {
+        this.$confirm(`您确定要删除ID为 ${planId} 的计划项吗？`, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.post('/api2/del_plans', {
-            plan_id_list: JSON.stringify(planId)
+          this.$http.post('/api2/del_plan', {
+            plan_id: planId
           }).then(function (res) {
             if (res.code === 200) {
               that.seek()
             }
           })
-        }).catch(() => {})
+        })
       },
-      activity (val) {  // 格式化内容对应文本
-        if (val.status === 1) {
-          return '正在编辑'
-        } else if (val.status === 2) {
-          return '正在审核'
-        } else if (val.status === 3) {
-          return '审核通过'
-        } else if (val.status === 4) {
-          return '审核未通过'
-        } else if (val.status === 5) {
-          return '正在投放'
-        } else if (val.status === 6) {
-          return '投放完成'
-        } else if (val.status === 7) {
-          return '暂停投放'
-        } else if (val.status === 100) {
-          return '异常状态'
-        }
+      // 终止
+      finish (planId, canFinish) {
+        if (!canFinish) return
+        const that = this
+        this.$confirm(`您确定要终止ID为 ${planId} 的计划项吗？`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post('/api2/over_plan', {
+            plan_id: planId
+          }).then(function (res) {
+            if (res.code === 200) {
+              that.seek()
+            }
+          })
+        })
       },
       // 新建按钮
       creatNew () {
@@ -345,33 +350,53 @@
             }
           })
         } else {
-          this.$http.post('/api2/publish', {
-            plan_id: result.row.plan_id
-          }).then(res => {
-            if (res.code !== 200) {
-              this.$alert(res.msg, '提示', {
-                confirmButtonText: '确定',
-                callback: action => {
-                  this.$set(this.switchData, result.$index, false)
+          // 判断是否为第一次发布，如果是第一次发布则提示扣除计划预算。
+          if (result.row.is_publish === 0) {
+            this.$confirm('计划开始将会从账户中扣除本计划预算金额！', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$http.post('/api2/publish', {
+                plan_id: result.row.plan_id
+              }).then(res => {
+                if (res.code !== 200) {
+                  this.$alert(res.msg, '提示', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                      this.$set(this.switchData, result.$index, false)
+                    }
+                  })
+                } else {
+                  this.seek()
                 }
               })
-            } else {
-              this.seek()
-            }
-          })
+            }).catch(() => {
+              this.$set(this.switchData, result.$index, false)
+            })
+          } else {
+            this.$http.post('/api2/publish', {
+              plan_id: result.row.plan_id
+            }).then(res => {
+              if (res.code !== 200) {
+                this.$alert(res.msg, '提示', {
+                  confirmButtonText: '确定',
+                  callback: action => {
+                    this.$set(this.switchData, result.$index, false)
+                  }
+                })
+              } else {
+                this.seek()
+              }
+            })
+          }
         }
-      },
-      // 批量删除按钮方法
-      beachDel () {
-        if (!this.selectedLength) {
-          alert('请选择要删除的项')
-          return
-        }
-        this.delActive(this.selectedArr)
       },
       // 单项删除
-      itemDel (planId) {
-        this.delActive([planId])
+      itemDel (planId, canDel) {
+        if (canDel) {
+          this.delActive(planId)
+        }
       },
       // 查询按钮
       seek () {
@@ -429,6 +454,25 @@
       // 格式化时间
       formatter (item) {
         return new Date(item.plan_b_time).Format('yyyy-MM-dd') + ' -- ' + new Date(item.plan_e_time).Format('yyyy-MM-dd')
+      },
+      activity (val) {  // 格式化内容对应文本
+        if (val.status === 1) {
+          return '正在编辑'
+        } else if (val.status === 2) {
+          return '正在审核'
+        } else if (val.status === 3) {
+          return '审核通过'
+        } else if (val.status === 4) {
+          return '审核未通过'
+        } else if (val.status === 5) {
+          return '正在投放'
+        } else if (val.status === 6) {
+          return '投放完成'
+        } else if (val.status === 7) {
+          return '暂停投放'
+        } else if (val.status === 100) {
+          return '异常状态'
+        }
       }
     },
     components: {
@@ -491,9 +535,13 @@
         color: #169bd5;
         border-right: 1px solid #000;
         cursor: pointer;
-        &:nth-of-type(2n) {
+        &:nth-of-type(4n) {
           border: none;
         }
+      }
+      .disabled {
+        color: #8c939d;
+        cursor: not-allowed;
       }
     }
     .page-wrap {

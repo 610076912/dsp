@@ -1,8 +1,8 @@
 <template>
   <div class="basic">
-    <div class="basic-title"><span>推广数据</span></div>
+    <div class="basic-title"><span>财务详情</span></div>
     <div class="basic-data">
-      <h3>账户余额：{{over}}</h3>
+      <h3>账户余额：{{over}} 元</h3>
       <div class="money-chart bro">
         <div class="money-chart-title">
           <span>推广账户花费走势</span>
@@ -247,16 +247,15 @@
     height 100%
     width 100%
     .basic-title {
+      margin: 30px 30px 0px;
       height 46px
-      border-bottom 1px solid #e1e1e1
+      border-bottom 1px solid #1d8ce0
       font-size 14px
-      color #1d8ce0
       span {
         display inline-block
-        padding: 0 30px
+        font-size: 16px;
         height 46px
         line-height 50px
-        border-bottom 2px solid #1d8ce0
       }
     }
     .basic-data {

@@ -1,13 +1,13 @@
 <template>
   <div class="finance">
-    <div class="now-location"><b>当前位置：</b>财务管理 > {{location[isActive]}}</div>
+    <div class="now-location"><b>当前位置：</b>财务管理 > {{isActive}}</div>
     <div class="finance-content">
       <div class="finance-content-nav">
-        <el-menu mode="vertical" default-active="finaDetail" router>
-          <el-menu-item-group title="推广账户">
-            <template slot="title"><i class="el-icon-my-denglu"></i>推广账户</template>
-            <el-menu-item index="finaDetail" :route="{name: 'finaDetail'}">财务详情</el-menu-item>
-            <!--<el-menu-item index="finaHistory" :route="{name: 'finaHistory'}">历史数据</el-menu-item>-->
+        <el-menu mode="vertical" :default-active="currentIndex" router>
+          <el-menu-item-group title="财务管理">
+            <template slot="title"><i class="el-icon-my-denglu"></i>财务管理</template>
+            <el-menu-item index="finance" @click="toogleTag('财务详情')">财务详情</el-menu-item>
+            <el-menu-item index="finaHistory" @click="toogleTag('历史数据')">历史数据</el-menu-item>
           </el-menu-item-group>
         </el-menu>
       </div>
@@ -23,9 +23,15 @@
     name: 'finance',
     data () {
       return {
-        msg: 'finance',
-        isActive: 0,
-        location: ['财务概况', '充值记录', '花费记录']
+        currentIndex: 'finance',
+        isActive: '财务详情'
+      }
+    },
+    created () {
+      // 当在历史数据栏刷新的时候保证选中状态还为历史数据栏
+      if (this.$router.currentRoute.fullPath === '/finaHistory') {
+        this.currentIndex = 'finaHistory'
+        this.isActive = '历史数据'
       }
     },
     methods: {
@@ -52,13 +58,18 @@
     }
     .finance-content-nav {
       height 100%
-      width 200px
+      width 18%
       float left
       .el-menu {
         background: White;
       }
       .el-menu-item-group__title {
         margin-bottom: 10px;
+        font-size: 16px;
+        color: #000;
+        i {
+          margin-right: 8px;
+        }
       }
       .el-menu--horizontal.el-menu--dark .el-submenu .el-menu-item.is-active, .el-menu-item.is-active {
         background: #4a9cd3;
@@ -67,10 +78,11 @@
       .el-menu-item, .el-submenu__title {
         height: 44px;
         line-height: 44px;
+        text-indent: 20px;
       }
     }
     .finance-content-data {
-      width 998px;
+      width 82%;
       float right
       border-left 1px solid #e1e1e1
     }
