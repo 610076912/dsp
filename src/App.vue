@@ -3,7 +3,7 @@
     <div class="header">
       <div class="header-top">
         <div class="center">
-          <div class="header-welcome">欢迎您，<span class="header-ggz">广告主</span><span class="header-name">{{username}} <i
+          <div class="header-welcome">欢迎您，<span class="header-ggz">{{userType}}</span><span class="header-name">{{username}} <i
             class="el-icon-caret-bottom"></i></span><span class="logout" @click="signOut">安全退出</span>
           </div>
         </div>
@@ -52,17 +52,23 @@
     data () {
       return {
         username: '',
+        userType: '',
         path: '首页'
       }
     },
     created () {
       this.onActive(this.$router.currentRoute.fullPath)
-      this.username = sessionStorage.getItem('user')
+      this.getUserName()
     },
     methods: {
       // 获取用户名。
       getUserName () {
         this.username = sessionStorage.getItem('user')
+        let userTypeNum1 = sessionStorage.getItem('user_type')[0]
+        this.userType = '广告主'
+        if (userTypeNum1 === '4') {
+          this.userType = '代理商'
+        }
       },
       signOut () {
         sessionStorage.removeItem('token')
