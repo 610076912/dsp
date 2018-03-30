@@ -1,6 +1,6 @@
 <template>
   <div class="rechange-log">
-    <div class="rechange-title"><span>{{path}}</span></div> 
+    <div class="rechange-title"><span>{{path}}</span></div>
     <!-- 表单father -->
     <div class="rechange-table">
       <!-- 表单title -->
@@ -29,7 +29,7 @@
           <el-table-column prop="actClick" label="点击量" sortable></el-table-column>
           <el-table-column prop="actJump" label="跳转量" sortable></el-table-column>
           <el-table-column prop="actClickRate" label="点击率" sortable></el-table-column>
-          <el-table-column prop="actPay" label="总花费" sortable></el-table-column>
+          <el-table-column prop="actPay" label="总花费（元）" sortable></el-table-column>
         </el-table>
       </div>
     </div>
@@ -65,21 +65,21 @@
       height 46px
       border-bottom 1px solid #e1e1e1
       font-size 14px
-      color #1d8ce0      
+      color #1d8ce0
       span{
         display inline-block
         padding: 0 30px
         height 46px
         line-height 50px
-        border-bottom 2px solid #1d8ce0 
+        border-bottom 2px solid #1d8ce0
       }
     }
     .rechange-table{
       padding: 30px
     }
     .rechange-title-select{
-      border 1px solid #e1e1e1 
-      border-bottom none 
+      border 1px solid #e1e1e1
+      border-bottom none
       border-radius: 3px 3px 0 0
       overflow hidden
       height: 50px;

@@ -21,8 +21,8 @@
           <el-table-column prop="plan_name" label="推广计划名称" align="center" width="200"></el-table-column>
           <el-table-column prop="plan_b_time" label="推广计划时间" :formatter="dateFormatter" width="200"
                            align="center"></el-table-column>
-          <el-table-column prop="plan_all_budget" label="预算" align="center"></el-table-column>
-          <el-table-column prop="consume" label="花费金额" align="center"></el-table-column>
+          <el-table-column prop="plan_all_budget" label="预算（元）" align="center"></el-table-column>
+          <el-table-column prop="consume" label="花费金额（元）" align="center"></el-table-column>
           <el-table-column prop="cv" label="点击量" align="center"></el-table-column>
           <el-table-column prop="pv" label="曝光量" align="center"></el-table-column>
           <el-table-column prop="plan_channel" label="端口" :formatter="dkFormatter" align="center"></el-table-column>

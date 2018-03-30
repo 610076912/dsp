@@ -52,7 +52,7 @@
           <li><p>{{ details.bgCount || 0 }}</p><span>曝光量(次)</span></li>
           <li><p>{{ details.clickCount || 0 }}</p><span>点击量(次)</span></li>
           <li><p>{{ $_toFixed(details.clickRate) || 0}}</p><span>点击率(‰)</span></li>
-          <li><p>{{$_toFixed(totalCost) / 1000 || 0}}</p><span>花费(元)</span></li>
+          <li><p>{{$_toFixed(totalCost, 2) / 1000 || 0}}</p><span>花费(元)</span></li>
         </ul>
       </div>
       <div class="chart-con">
@@ -93,7 +93,7 @@
         <el-table-column prop="bg" label="曝光量" sortable></el-table-column>
         <el-table-column prop="click" label="点击量" sortable></el-table-column>
         <el-table-column prop="clickRate" label="点击率(‰)" sortable></el-table-column>
-        <el-table-column prop="cost" label="总花费" sortable></el-table-column>
+        <el-table-column prop="cost" label="总花费（元）" sortable></el-table-column>
       </el-table>
     </div>
   </div>
@@ -169,7 +169,7 @@
               this.totalCost += res.data[i]
               this.tableData.forEach((item) => {
                 if (item.time === i) {
-                  item.cost = that.$_toFixed(res.data[i]) / 1000
+                  item.cost = that.$_toFixed(res.data[i], 2) / 1000
                 }
               })
             }

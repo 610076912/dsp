@@ -38,7 +38,7 @@
               </el-col>
               <el-col :span="6">
                 <div class="grid-content b"><span>{{todayCost || 0}}</span>
-                  <p>今日消费</p></div>
+                  <p>今日消费（元）</p></div>
               </el-col>
               <el-col :span="6">
                 <div class="grid-content r"><span>{{checkData[indexs + 1][-1] || 0}}</span>
@@ -92,7 +92,7 @@
             <p>平均点击率（‰）</p></div>
         </el-col>
         <el-col :span="6">
-          <div class="mobile-n-grid"><span>{{$_toFixed(totalCost) / 1000}}</span>
+          <div class="mobile-n-grid"><span>{{$_toFixed(totalCost, 2) / 1000}}</span>
             <p>花费（元）</p></div>
         </el-col>
       </div>
@@ -323,7 +323,7 @@
           }
         }).then(res => {
           if (res.code === 200 && res.data) {
-            this.todayCost = this.$_toFixed(res.data.today, 3) / 1000
+            this.todayCost = this.$_toFixed(res.data.today, 2) / 1000
             for (let i in res.data) {
               if (i !== 'today') {
                 this.totalCost += res.data[i]

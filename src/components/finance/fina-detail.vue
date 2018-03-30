@@ -26,15 +26,15 @@
       <div class="form">
         <h3>
           <span class="name">推广账户花费列表</span>
-          <p>总花费：{{totalCost}}</p>
+          <p>总花费：{{totalCost}} 元</p>
         </h3>
         <div class="form-data">
           <el-table :data="tableData" border style="width: 100%">
             <el-table-column prop="date" label="时间" sortable :resizable="false" align="center"></el-table-column>
             <el-table-column prop="pv" label="曝光量" sortable :resizable="false" align="center"></el-table-column>
             <el-table-column prop="click" label="点击量" sortable :resizable="false" align="center"></el-table-column>
-            <el-table-column prop="cost" label="花费金额" sortable :resizable="false" align="center"></el-table-column>
-            <el-table-column prop="balance" label="计划余额" sortable :resizable="false" align="center"></el-table-column>
+            <el-table-column prop="cost" label="花费金额（元）" sortable :resizable="false" align="center"></el-table-column>
+            <el-table-column prop="balance" label="计划余额（元）" sortable :resizable="false" align="center"></el-table-column>
             <el-table-column prop="actClickRate" label="功能" align="center">
               <template slot-scope="scope">
                 <span class="operation" @click="showDetail(scope.row.date)">查看详情</span>
@@ -51,8 +51,8 @@
           <el-table-column property="planChannel" label="端口" align="center" :formatter="channelFormatter"></el-table-column>
           <el-table-column property="pv" label="曝光量" align="center"></el-table-column>
           <el-table-column property="click" label="点击量" align="center"></el-table-column>
-          <el-table-column property="cost" label="花费" align="center"></el-table-column>
-          <el-table-column property="balance" label="计划余额" align="center"></el-table-column>
+          <el-table-column property="cost" label="花费（元）" align="center"></el-table-column>
+          <el-table-column property="balance" label="计划余额（元）" align="center"></el-table-column>
         </el-table>
       </el-dialog>
     </div>
@@ -197,11 +197,11 @@
             this.over = res.data.over
             if (res.data.all_costs !== 0) {
               // 对拿到的数据做小数位处理，保留三位小数
-              res.data.all_costs = this.$_toFixed(res.data.all_costs, 3) / 1000
+              res.data.all_costs = this.$_toFixed(res.data.all_costs, 2) / 1000
               const that = this
               res.data.cost.forEach((item, i) => {
-                res.data.cost[i] = that.$_toFixed(item, 3) / 1000
-                res.data.balance[i] = that.$_toFixed(res.data.balance[i], 3) / 1000
+                res.data.cost[i] = that.$_toFixed(item, 2) / 1000
+                res.data.balance[i] = that.$_toFixed(res.data.balance[i], 2) / 1000
               })
               this.totalCost = res.data.all_costs
               // 给图表加载数据
