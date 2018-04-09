@@ -150,5 +150,13 @@
     "checked": "0",
     "alias": "s",
     "display": false
+  },
+  {
+    "media_id": 1020,
+    "media_name": "1905电影网",
+    "media_url": "./static/img/1905.png",
+    "checked": "0",
+    "alias": "t",
+    "display": true
   }
 ]
