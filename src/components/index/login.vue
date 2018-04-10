@@ -3,8 +3,18 @@
     <div class="con-wrap">
       <div class="left">
         <img src="../../assets/img/login-leftbg.png" alt="智视场景化投放平台">
+        <div class="box">
+          <div class="animationBox">
+            <div class="animationLogo"></div>
+            <ul>
+              <li class="round1"><span></span></li>
+              <li class="round2"><span></span></li>
+              <li class="round3"><span></span></li>
+            </ul>
+          </div>
+        </div>
         <div class="right">
-          <h1>视连通</h1>
+          <h1></h1>
           <input type="text" class="username" placeholder="请输入用户名" v-model="username">
           <i class="el-icon-my-denglu"></i>
           <input type="password" class="password" placeholder="请输入密码" v-model="password">
@@ -92,6 +102,7 @@
       .left {
         width: 100%;
         height: 100%;
+        position: relative;
         img {
           width: 100%;
           height: 100%;
@@ -107,13 +118,23 @@
         border-radius: 4px;
         h1 {
           width: 100%;
-          height: 35px;
+          height: 26px;
           font-size: 28px;
           letter-spacing: 5px;
           color: #555555;
           position: absolute;
           top: 17%;
           text-align center;
+          background: url("../../assets/img/vcalogo.png") no-repeat center
+          background-size: contain;
+          /* width: 100%;
+          height: 35px;
+          font-size: 28px;
+          letter-spacing: 5px;
+          color: #555555;
+          position: absolute;
+          top: 17%;
+          text-align center; */
         }
         i {
           font-size 16px;
@@ -182,6 +203,94 @@
           outline: none;
           box-shadow: 0 0 1px 0 rgba(74, 111, 205, .6);
         }
+      }
+    }
+    .box {
+      width: 150px;
+      height: 150px;
+      position: absolute;
+      left: 80px;
+      top: 50px;
+    }
+
+    .animationBox {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      perspective: 4000px;
+      -webkit-perspective: 4000px;
+      transform-style: preserve-3d;
+      transform: rotateY(75deg);
+    }
+
+    .animationLogo {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: url('../../assets/img/animationLogo.png') no-repeat center;
+      transform: rotateY(-75deg);
+    }
+
+    .animationBox ul {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: rotateX(0deg);
+      transform-origin: 50% 50%;
+      transform-style: preserve-3d;
+      animation: rotate3D 20s linear infinite;
+    }
+
+    .animationBox ul li {
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+      border: 3px solid #ffffff;
+      border-radius: 50%;
+      position: absolute;
+      padding: 4px;
+    }
+
+    .animationBox ul li span {
+      display: inline-block;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: url('../../assets/img/animationRound.png') no-repeat;
+      background-size: cover;
+      animation: rotate 5s linear infinite;
+    }
+
+    .round1 {
+      transform: rotateX(0deg);
+    }
+
+    .round2 {
+      transform: rotateX(120deg);
+    }
+
+    .round3 {
+      transform: rotateX(240deg);
+    }
+
+    @keyframes rotate3D {
+      from {
+        transform: rotateX(0deg);
+      }
+      to {
+        transform: rotateX(-360deg);
+      }
+    }
+    @keyframes rotate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
       }
     }
   }
