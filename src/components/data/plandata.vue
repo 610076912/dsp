@@ -239,7 +239,7 @@
             user_id: sessionStorage.getItem('user_id')
           }
         }).then(res => {
-          if (res.code === 200) {
+          if (res.code === 200 && res.data['1'].length > 0) {
             this.planLists = res.data
             this.activityO = this.planLists['1']
             this.activity = this.activityO[0].plan_id
