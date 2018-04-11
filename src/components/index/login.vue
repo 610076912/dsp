@@ -206,11 +206,11 @@
       }
     }
     .box {
-      width: 150px;
-      height: 150px;
+      width: 120px;
+      height: 120px;
       position: absolute;
-      left: 80px;
-      top: 50px;
+      left: 96px;
+      top: 74px;
     }
 
     .animationBox {
@@ -230,6 +230,7 @@
       top: 0;
       left: 0;
       background: url('../../assets/img/animationLogo.png') no-repeat center;
+      background-size: cover;
       transform: rotateY(-75deg);
     }
 
@@ -249,7 +250,7 @@
       box-sizing: border-box;
       width: 100%;
       height: 100%;
-      border: 3px solid #ffffff;
+      border: 2px solid #ffffff;
       border-radius: 50%;
       position: absolute;
       padding: 4px;
