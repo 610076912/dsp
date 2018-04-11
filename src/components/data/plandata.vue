@@ -261,6 +261,10 @@
           if (this.activityO[i].plan_id === this.activity) {
             bTime = this.activityO[i].plan_b_time
             eTime = this.activityO[i].plan_e_time
+            // 如果项目结束时间超过当前时间则为当前时间，否则就用项目结束时间。
+            if ((new Date(eTime)).getTime() > (new Date()).getTime()) {
+              eTime = new Date()
+            }
             planName = this.activityO[i].plan_name
           }
         }
