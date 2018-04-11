@@ -47,7 +47,7 @@
           </el-checkbox-button>
           <ul class="class2-cont">
             <li v-for="class2 in class2Arr"
-                :class="{active: (class2PkgId[liActindex].includes(class2.pkg_id))}"
+                :class="{active: (class2PkgId[liActindex].indexOf(class2.pkg_id) !== -1)}"
                 @click="class2Click(class2.pkg_id, class2.valueArr)">{{class2.class_name}}
             </li>
           </ul>
@@ -58,14 +58,13 @@
               <label>
                 <input type="checkbox" v-model="checkedAll[item[0].pkg_id]"
                        @change="class2Checkedbox(item, item[0].pkg_id)">
-                </input>
                 <span>{{item[0].pkg_name || item[0].arr[0].pkg_name}}</span>
               </label>
               <ul class="class3-cont" v-if="!item[0].py">
                 <li
                   v-for="class3 in item"
                   @click="class3Click(class3)"
-                  :class="{active: (checkedArr.includes(class3.class_id))}">{{class3.class_name}}
+                  :class="{active: (checkedArr.indexOf(class3.class_id) !== -1)}">{{class3.class_name}}
                 </li>
               </ul>
               <ul class="class3-cont-start" v-if="item[0].py">
@@ -74,7 +73,7 @@
                   <ul>
                     <li
                       v-for="start in pys.arr"
-                      :class="{active: (checkedArr.includes(start.class_id))}"
+                      :class="{active: (checkedArr.indexOf(start.class_id) !== -1)}"
                       @click="class3Click(start)">
                       {{start.class_name}}
                     </li>
@@ -287,7 +286,7 @@
       // 点击搜索结果标签
       clickSearchLabel (item) {
         const that = this
-        let isIncludes = this.checkedArr.includes(item.class_id)
+        let isIncludes = this.checkedArr.indexOf(item.class_id) !== -1
         if (isIncludes) {
           this.$message({
             message: '此标签已选中',
@@ -347,13 +346,13 @@
       class2Checkedbox (val, index) {
         if (this.checkedAll[index]) {
           val.forEach(item => {
-            if (!this.checkedArr.includes(item.class_id) && !item.arr) {
+            if (this.checkedArr.indexOf(item.class_id) === -1 && !item.arr) {
               this.checkedArr.push(item.class_id)
               this.checkedArrObj.push(item)
             } else if (Array.isArray(item.arr)) {
               // 增加按字母排序后的数据情况处理
               item.arr.forEach(class3 => {
-                if (!this.checkedArr.includes(class3.class_id)) {
+                if (this.checkedArr.indexOf(class3.class_id) === -1) {
                   this.checkedArr.push(class3.class_id)
                   this.checkedArrObj.push(class3)
                 }

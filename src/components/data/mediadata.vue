@@ -17,7 +17,7 @@
         <el-table-column prop="medClick" label="点击量" sortable></el-table-column>
         <el-table-column prop="medJump" label="跳转量" sortable></el-table-column>
         <el-table-column prop="medClickRate" label="点击率" sortable></el-table-column>
-        <el-table-column prop="medPay" label="总花费" sortable></el-table-column>
+        <el-table-column prop="medPay" label="总花费（元）" sortable></el-table-column>
       </el-table>
     </div>
   </div>

@@ -117,7 +117,7 @@
     "media_url": "./static/img/PPTV.jpg",
     "checked": "0",
     "alias": "o",
-    "display": false
+    "display": true
   },
   {
     "media_id": 1016,
@@ -150,5 +150,21 @@
     "checked": "0",
     "alias": "s",
     "display": false
+  },
+  {
+    "media_id": 1020,
+    "media_name": "1905电影网",
+    "media_url": "./static/img/1905.png",
+    "checked": "0",
+    "alias": "t",
+    "display": true
+  },
+  {
+    "media_id": 1021,
+    "media_name": "pptv_pc",
+    "media_url": "./static/img/PPTV.jpg",
+    "checked": "0",
+    "alias": "u",
+    "display": true
   }
 ]

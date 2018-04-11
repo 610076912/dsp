@@ -568,7 +568,7 @@
         this.upLoadData.act_id = this.$store.state.materialData.act_id
         this.upLoadData.mediachannel = this.$store.state.materialData.mediachannel
         const isJPG = file.type === 'image/png'
-        const isLt2M = file.size / 1024 < 200
+        const isLt2M = file.size / 1024 / 1024 < 2
 
         if (!isJPG) {
           this.$message.error('请确认文件格式。')
