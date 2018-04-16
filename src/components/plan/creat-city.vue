@@ -7,7 +7,13 @@
         <div class="area">
           <div class="top">
             <span class="title">大区划分（快捷选择）</span>
-            <el-checkbox class="fr">全选</el-checkbox>
+            <el-checkbox
+              class="fr"
+              v-model="regionCheckbox"
+              @change="regionCheckboxChange"
+              :indeterminate="regionIndeterminate">
+              全选
+            </el-checkbox>
           </div>
           <div class="con">
             <el-tree ref="regionTree" :data="regionList" show-checkbox node-key="lable" :props="regionProps"
@@ -17,7 +23,13 @@
         <div class="city">
           <div class="top">
             <span class="title">国内城市</span>
-            <el-checkbox class="fr">全选</el-checkbox>
+            <el-checkbox
+              class="fr"
+              v-model="cityCheckbox"
+              @change="cityCheckboxChange"
+              :indeterminate="cityIndeterminate">
+              全选
+            </el-checkbox>
           </div>
           <div class="con">
             <el-tree ref="cityTree" :data="cityList" show-checkbox node-key="city_id" :props="cityProps"
@@ -44,7 +56,7 @@
 <script>
   import setps from './steps-component.vue'
   import header from './header-component.vue'
-  import citys from '../../../static/json/city.json'
+  import citys from '../../../static/json/city1.json'
 
   export default {
     name: 'creatCity',
@@ -81,7 +93,13 @@
         allCityId: [],
         btnLoading: false,
         loading: true,
-        timer: null
+        timer: null,
+        // 地区全选
+        regionCheckbox: false,
+        regionIndeterminate: false,
+        // 城市全选
+        cityCheckbox: false,
+        cityIndeterminate: false
       }
     },
     created () {
@@ -109,10 +127,10 @@
         }
       }
       // 默认全选
-      this.$nextTick(res => {
-        this.$refs.regionTree.setCheckedKeys(['东北', '华东', '华中', '华北', '华南', '西北', '西南'])
-        this.loading = false
-      })
+      // this.$nextTick(res => {
+      //   this.$refs.regionTree.setCheckedKeys(['东北', '华东', '华中', '华北', '华南', '西北', '西南'])
+      //   this.loading = false
+      // })
       this.loading = false
     },
     mounted () {
@@ -126,14 +144,12 @@
         this.$router.go(-1)
       },
       next () {
-        // 使提交的数据为全部数据
-        this.allCityId = this.checkedCityId
         this.btnLoading = true
         Promise.all([
           this.$http.post('/api2/add_region_plan', {
             plan_id: this.planId,
             // city_id_list: JSON.stringify(this.checkedCityId)
-            city_id_list: JSON.stringify(this.allCityId)
+            city_id_list: JSON.stringify(this.checkedCityId)
           }),
           this.$http.post('/api2/add_strategy_plan', {
             plan_id: this.$store.state.creatData.planId,
@@ -156,34 +172,30 @@
             this.$router.push('/creatMaterial')
           }
         })
-        // this.$http.post('/api2/add_region_plan', {
-        //   plan_id: this.planId,
-        //   city_id_list: JSON.stringify(this.checkedCityId)
-        // }).then(res => {
-        //   if (res.code === 200) {
-        //     this.$store.commit('CITY', {
-        //       type: 'cityId',
-        //       msg: this.checkedCityId
-        //     })
-        //     this.$store.commit('CITY', {
-        //       type: 'citys',
-        //       msg: this.checkedCitys
-        //     })
-        //     // this.$router.push('/creatStrategy')
-        //   }
-        //   this.btnLoading = false
-        // })
-        // // 调投放策略接口
-        // this.$http.post('/api2/add_strategy_plan', {
-        //   plan_id: this.$store.state.creatData.planId,
-        //   frequency: this.times,
-        //   casttype: this.speed,
-        //   billing: this.priceType
-        // }).then(res => {
-        //   if (res.code === 200) {
-        //     this.$router.push('/creatMaterial')
-        //   }
-        // })
+      },
+      // 地区全选
+      regionCheckboxChange () {
+        if (!this.regionCheckbox) {
+          this.$refs.regionTree.setCheckedKeys([])
+          this.regionIndeterminate = false
+          this.regionCheckbox = false
+        } else {
+          this.$refs.regionTree.setCheckedKeys(['东北', '华东', '华中', '华北', '华南', '西北', '西南'])
+          this.regionIndeterminate = false
+          this.regionCheckbox = true
+        }
+      },
+      // 城市全选
+      cityCheckboxChange () {
+        if (!this.cityCheckbox) {
+          this.$refs.regionTree.setCheckedKeys([])
+          this.cityIndeterminate = false
+          this.cityCheckbox = false
+        } else {
+          this.$refs.regionTree.setCheckedKeys(['东北', '华东', '华中', '华北', '华南', '西北', '西南'])
+          this.cityIndeterminate = false
+          this.cityCheckbox = true
+        }
       },
       // 排序
       arrSort (arr, key) {
@@ -215,6 +227,16 @@
       // 获取大区已选city_id
       getRegionChecked () {
         const regions = this.$refs.regionTree.getCheckedKeys(true)
+        // 目前地区json文件中的大区共有7个，以此来判断是否全选
+        if (regions.length === 7) {
+          this.regionIndeterminate = false
+          this.regionCheckbox = true
+        } else if (regions.length === 0) {
+          this.regionIndeterminate = false
+          this.regionCheckbox = false
+        } else {
+          this.regionIndeterminate = true
+        }
         let checkAreas = []
         for (let i in regions) {
           for (let j in citys.RECORDS) {
@@ -232,7 +254,17 @@
         clearTimeout(this.timer)
         this.timer = setTimeout(function () {
           _this.checkedCityId = _this.$refs.cityTree.getCheckedKeys(true)
-        }, 0)
+          // 城市总个数354个，判断城市是否全选
+          if (_this.checkedCityId.length === 354) {
+            _this.cityIndeterminate = false
+            _this.cityCheckbox = true
+          } else if (_this.checkedCityId.length === 0) {
+            _this.cityIndeterminate = false
+            _this.cityCheckbox = false
+          } else {
+            _this.cityIndeterminate = true
+          }
+        }, 50)
       }
     },
     watch: {
