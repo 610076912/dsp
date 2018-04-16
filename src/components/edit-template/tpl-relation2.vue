@@ -170,6 +170,8 @@
         }],
         value: 'prompt1',      // 提示选中项
         promptText: '', // 提示文本
+        promptNaturalWidth: 0,
+        promptNaturalHeight: 0,
         price: '',      // 价格
         stock: '',      // 库存
         textarea: '',   // 文本域
@@ -341,6 +343,12 @@
               info_exp: '提示图片'
             }]
           }
+
+          // 验证图片尺寸
+          if (this.promptNaturalWidth !== 300 || this.promptNaturalHeight !== 300) {
+            this.$message.error('图片错误')
+            return
+          }
         } else if (this.value === 'prompt2') {
           this.conf_info.prompt_info = {  // 提示信息
             type: 'prompt2',
@@ -356,6 +364,12 @@
               }
             ]
           }
+
+          // 验证图片尺寸
+          if (this.promptNaturalWidth !== 150 || this.promptNaturalHeight !== 150) {
+            this.$message.error('图片错误')
+            return
+          }
         }
         // 调父组件的save方法，并把数据传过去。
         this.$parent.save('relation', {
@@ -364,15 +378,37 @@
           click_url: this.clickUrl
         })
       },
+      // 获取图片原始尺寸
+      getNaturalSize (imgUrl, callback) {
+        // 获取图片原始尺寸
+        const loadImg = new Image()
+        loadImg.src = imgUrl
+        loadImg.onload = () => {
+          callback({
+            'naturalWidth': loadImg.naturalWidth,
+            'naturalHeight': loadImg.naturalHeight
+          })
+        }
+      },
       tipsImgSuccess (res, file) {      // 提示图片
         // this.promptImgUrl = this.imgUrl + res.data
         this.conf_info.prompt_info.content[0].info_con = this.imgUrl + res.data
         // console.log(this.conf_info.prompt_info)
+
+        this.getNaturalSize(this.imgUrl + res.data, naturalSize => {
+          this.promptNaturalWidth = naturalSize.naturalWidth
+          this.promptNaturalHeight = naturalSize.naturalHeight
+        })
       },
       tipsImgTextSuccess (res, file) {  // 提示图文图片
         // this.promptImgTextUrl = this.imgUrl + res.data
         this.conf_info.prompt_info.content[0].info_con = this.imgUrl + res.data
         // console.log(this.conf_info.prompt_info)
+
+        this.getNaturalSize(this.imgUrl + res.data, naturalSize => {
+          this.promptNaturalWidth = naturalSize.naturalWidth
+          this.promptNaturalHeight = naturalSize.naturalHeight
+        })
       },
       tplImgSuccess (res, file) {
         // this.tplImgUrl = this.imgUrl + res.data

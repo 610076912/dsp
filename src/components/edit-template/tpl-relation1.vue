@@ -185,6 +185,8 @@
         promptText: '', // 提示文本
         // 提示图片url
         promptImgUrl: '',
+        promptNaturalWidth: 0,
+        promptNaturalHeight: 0,
         isEdit: false,
         isItem: false,
         itemIndex: 1,
@@ -505,6 +507,12 @@
           this.conf_info.prompt_info.effect = 'effect1'
           this.conf_info.prompt_info.type = 'prompt1'
           this.conf_info.prompt_info.content = [{info_con: this.promptImgUrl, info_exp: '提示信息图片'}]
+
+          // 验证图片尺寸
+          if (this.promptNaturalWidth !== 300 || this.promptNaturalHeight !== 300) {
+            this.$message.error('图片错误')
+            return
+          }
         } else {
           this.conf_info.prompt_info.effect = 'effect2'
           this.conf_info.prompt_info.type = 'prompt2'
@@ -512,6 +520,12 @@
             info_con: this.promptImgUrl,
             info_exp: '提示信息图片'
           }, {info_con: this.promptText, info_exp: '提示信息文字'}]
+
+          // 验证图片尺寸
+          if (this.promptNaturalWidth !== 150 || this.promptNaturalHeight !== 150) {
+            this.$message.error('图片错误')
+            return
+          }
         }
         // 调父组件的save方法，并把数据传过去。
         this.$parent.save('relation', {
@@ -542,6 +556,18 @@
       itemCancel () {
         this.isItem = false
       },
+      // 获取图片原始尺寸
+      getNaturalSize (imgUrl, callback) {
+        // 获取图片原始尺寸
+        const loadImg = new Image()
+        loadImg.src = imgUrl
+        loadImg.onload = () => {
+          callback({
+            'naturalWidth': loadImg.naturalWidth,
+            'naturalHeight': loadImg.naturalHeight
+          })
+        }
+      },
       // topImg 上传成功回调
       topImgupLoadSuccess (res) {
         if (res.code === 200) {
@@ -560,6 +586,10 @@
           // this.$set(this.conf_info.relation_info.content[1 + 3 * this.itemIndex], 'info_con', this.imgUrl + res.data)
           this.promptImgUrl = this.imgUrl + res.data
           // this.conf_info.relation_info.content[0].info_con = this.imgUrl + res.data
+          this.getNaturalSize(this.imgUrl + res.data, naturalSize => {
+            this.promptNaturalWidth = naturalSize.naturalWidth
+            this.promptNaturalHeight = naturalSize.naturalHeight
+          })
         }
       },
       // 上传前的钩子函数

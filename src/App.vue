@@ -118,6 +118,7 @@
 
   .header {
     width: 100%;
+    min-width: 1200px;
     height: 160px;
   }
 
