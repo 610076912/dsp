@@ -206,11 +206,11 @@
       }
     }
     .box {
-      width: 120px;
-      height: 120px;
+      width: 135px;
+      height: 135px;
       position: absolute;
-      left: 96px;
-      top: 74px;
+      left: 88.5px;
+      top: 66px;
     }
 
     .animationBox {
