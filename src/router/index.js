@@ -9,7 +9,7 @@ const planIndex = () => import(/* webpackChunkName: "plan" */ '@/components/plan
 const creatBasics = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-basics')
 const creatScene = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-scene')
 const creatTime = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-time')
-const creatCity = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-city')
+const creatCity = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-city1')
 const creatMedia = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-media')
 const creatMediaType = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-mediatype')
 const creatStrategy = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-strategy')

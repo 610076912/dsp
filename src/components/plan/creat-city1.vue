@@ -4,44 +4,62 @@
     <div class="content">
       <creat-header title="地理位置定向" text="按地区"></creat-header>
       <div class="citys" v-loading="loading">
-        <div class="area">
+        <div class="city">
           <div class="top">
-            <span class="title">大区划分（快捷选择）</span>
-            <el-checkbox
-              class="fr"
-              v-model="regionCheckbox"
-              @change="regionCheckboxChange"
-              :indeterminate="regionIndeterminate">
-              全选
-            </el-checkbox>
+            <el-radio
+              class="fl"
+              label="K"
+              v-model="areaType">
+              K执行单价100
+            </el-radio>
           </div>
-          <div class="con">
-            <el-tree ref="regionTree" :data="regionList" show-checkbox node-key="lable" :props="regionProps"
-                     @check-change="getRegionChecked"></el-tree>
-          </div>
+          <ul class="con">
+            <li v-for="item in cityTypeList.K">
+              {{item}}
+            </li>
+          </ul>
         </div>
         <div class="city">
           <div class="top">
-            <span class="title">国内城市</span>
-            <el-checkbox
-              class="fr"
-              v-model="cityCheckbox"
-              @change="cityCheckboxChange"
-              :indeterminate="cityIndeterminate">
-              全选
-            </el-checkbox>
+            <el-radio
+              class="fl"
+              label="1"
+              v-model="areaType">
+              A执行单价60
+            </el-radio>
           </div>
-          <div class="con">
-            <el-tree ref="cityTree" :data="cityList" show-checkbox node-key="city_id" :props="cityProps"
-                     @check-change="getCityChecked"></el-tree>
-          </div>
+          <ul class="con">
+            <li v-for="item in cityTypeList.A">
+              {{item}}
+            </li>
+          </ul>
         </div>
-        <div class="checked-city">
+        <div class="city">
           <div class="top">
-            <span class="title">已选（{{ checkedCitysNum }}）位置</span>
+            <el-radio
+              class="fl"
+              label="1"
+              v-model="areaType">
+              B执行单价40
+            </el-radio>
+          </div>
+          <ul class="con">
+            <li v-for="item in cityTypeList.B">
+              {{item}}
+            </li>
+          </ul>
+        </div>
+        <div class="city">
+          <div class="top">
+            <el-radio
+              class="fl"
+              label="2"
+              v-model="areaType">
+              全国执行单价35
+            </el-radio>
           </div>
           <div class="con">
-            <el-tree ref="checkedCityTree" :data="checkedCitys" :props="checkedCityProps"></el-tree>
+            <el-tree ref="cityTree" :data="cityList" node-key="city_id" :props="cityProps"></el-tree>
           </div>
         </div>
       </div>
@@ -62,17 +80,11 @@
     name: 'creatCity',
     data () {
       return {
-        // 城市数据状态仓库
-        cityStore: this.$store.state.creatData.creatCity,
         // 活动id
         planId: this.$store.state.creatData.planId,
-        // 大区列表
-        regionList: [],
-        regionProps: {
-          label: 'lable',
-          disabled: 'disabled'
-        },
-        // 城市列表
+        // 分类列表
+        cityTypeList: {},
+        // 全国列表
         cityList: [],
         cityProps: {
           children: 'region_val',
@@ -81,25 +93,12 @@
         },
         // 已选中城市数
         checkedCitysNum: 0,
-        // 已选城市列表
-        checkedCitys: [],
-        checkedCityProps: {
-          children: 'region_val',
-          label: 'lable'
-        },
-        // 已选城市id
-        checkedCityId: [],
         // 全有城市列表
         allCityId: [],
         btnLoading: false,
         loading: true,
         timer: null,
-        // 地区全选
-        regionCheckbox: false,
-        regionIndeterminate: false,
-        // 城市全选
-        cityCheckbox: false,
-        cityIndeterminate: false
+        areaType: 1
       }
     },
     created () {
@@ -126,11 +125,7 @@
           this.loading = false
         }
       }
-      // 默认全选
-      // this.$nextTick(res => {
-      //   this.$refs.regionTree.setCheckedKeys(['东北', '华东', '华中', '华北', '华南', '西北', '西南'])
-      //   this.loading = false
-      // })
+      this.getCityTypeList()
       this.loading = false
     },
     mounted () {
@@ -173,30 +168,6 @@
           }
         })
       },
-      // 地区全选
-      regionCheckboxChange () {
-        if (!this.regionCheckbox) {
-          this.$refs.regionTree.setCheckedKeys([])
-          this.regionIndeterminate = false
-          this.regionCheckbox = false
-        } else {
-          this.$refs.regionTree.setCheckedKeys(['东北', '华东', '华中', '华北', '华南', '西北', '西南', '港澳台'])
-          this.regionIndeterminate = false
-          this.regionCheckbox = true
-        }
-      },
-      // 城市全选
-      cityCheckboxChange () {
-        if (!this.cityCheckbox) {
-          this.$refs.regionTree.setCheckedKeys([])
-          this.cityIndeterminate = false
-          this.cityCheckbox = false
-        } else {
-          this.$refs.regionTree.setCheckedKeys(['东北', '华东', '华中', '华北', '华南', '西北', '西南', '港澳台'])
-          this.cityIndeterminate = false
-          this.cityCheckbox = true
-        }
-      },
       // 排序
       arrSort (arr, key) {
         return arr.sort(function (a, b) {
@@ -224,47 +195,13 @@
         }
         return resultArr
       },
-      // 获取大区已选city_id
-      getRegionChecked () {
-        const regions = this.$refs.regionTree.getCheckedKeys(true)
-        // 目前地区json文件中的大区共有7个，以此来判断是否全选
-        if (regions.length === 7) {
-          this.regionIndeterminate = false
-          this.regionCheckbox = true
-        } else if (regions.length === 0) {
-          this.regionIndeterminate = false
-          this.regionCheckbox = false
-        } else {
-          this.regionIndeterminate = true
-        }
-        let checkAreas = []
-        for (let i in regions) {
-          for (let j in citys.RECORDS) {
-            if (regions[i] === citys.RECORDS[j].area) {
-              checkAreas.push(citys.RECORDS[j].city_id)
-            }
+      getCityTypeList () {
+        this.$http.get('/api2/get_region_by_kab').then(res => {
+          console.log(res)
+          if (res.code === 200) {
+            this.cityTypeList = res.data
           }
-        }
-        this.$refs.cityTree.setCheckedKeys(checkAreas, true)
-      },
-      // 获取省级已选city_id
-      getCityChecked () {
-        // 阻止change事件频繁触发
-        let _this = this
-        clearTimeout(this.timer)
-        this.timer = setTimeout(function () {
-          _this.checkedCityId = _this.$refs.cityTree.getCheckedKeys(true)
-          // 城市总个数354个，判断城市是否全选
-          if (_this.checkedCityId.length === 354) {
-            _this.cityIndeterminate = false
-            _this.cityCheckbox = true
-          } else if (_this.checkedCityId.length === 0) {
-            _this.cityIndeterminate = false
-            _this.cityCheckbox = false
-          } else {
-            _this.cityIndeterminate = true
-          }
-        }, 50)
+        })
       }
     },
     watch: {
@@ -293,8 +230,8 @@
 
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
   #creatcity {
-    .fr {
-      float: right
+    .fl {
+      float: left
     }
     .content {
       width: 100%;
@@ -305,7 +242,7 @@
         width: 100%
         height: 550px
         background: #f9f9f9
-
+        padding: 0 35px;
         .top {
           width: 100%
           border-bottom: 2px solid #169bd5
@@ -318,7 +255,14 @@
           background: #ffffff
           overflow-y: auto
           border: 1px solid #c9c9c9
-
+          li {
+            width: 100%;
+            height: 46px;
+            line-height: 46px;
+            padding: 0 20px;
+            font-size: 14px;
+            border: .5px solid #999;
+          }
           .el-tree {
             border: none
           }
@@ -335,28 +279,18 @@
             }
           }
         }
-        .area, .city {
-          width: 270px
+        .city {
+          width: 240px
           height: 100%
           float: left
-          margin: 0 40px
+          margin-right: 40px
 
           .top {
             height: 60px
             line-height: 60px
           }
-        }
-        .checked-city {
-          width: 458px;
-          height: 546px;
-          background: #fff;
-          float: left;
-          margin-top: 2px;
-          padding: 0 40px
-
-          .top {
-            height: 58px
-            line-height: 58px
+          &:last-of-type {
+            margin-right: 0;
           }
         }
         .el-tree-node__children {
