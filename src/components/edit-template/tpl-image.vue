@@ -13,7 +13,7 @@
           <div class="ad-style" v-show="!isEdit"><video id="imgvideo" loop src="http://sltimg.adv.ott.cibntv.net/static/video/image.mp4" alt=""></video></div>
           <div class="ad-edit">
             <div class="upload-flash">
-              <img v-if="conf_info.image_src" :src="conf_info.image_src" class="avatar">
+              <img v-if="conf_info.image_src" :src="conf_info.image_src" class="avatar" id="loadImg">
               <el-upload
                 class="avatar-uploader"
                 ref="upload"
@@ -21,12 +21,13 @@
                 :data="upLoadData"
                 :headers="token"
                 :show-file-list="false"
+                :auto-upload="false"
+                :on-change="upLoadChange"
                 :on-success="upLoadSuccess"
                 :on-progress="upLoadProgress"
                 :before-upload="beforeUpload">
                 <i class="el-icon-plus avatar-uploader-icon">上传图片</i>
               </el-upload>
-              <p v-show="!isCorrectSize" class="upload-error">图片尺寸不是{{conf_info.size.split(',')[0]}} * {{conf_info.size.split(',')[1]}}，请确认后重新上传</p>
             </div>
             <div class="ad-con">
               <div class="ad-title"><span>* </span> 图片规范：格式PNG、JPG、GIF，大小2M以内、主体内容明显</div>
@@ -116,8 +117,7 @@
         bgUrl: '',
         clickUrl: '',
         naturalWidth: 0,
-        naturalHeight: 0,
-        isCorrectSize: true
+        naturalHeight: 0
       }
     },
     watch: {
@@ -225,12 +225,13 @@
           return
         }
         // 验证图片尺寸
+        const ELoadImg = document.getElementById('loadImg')
         const needSize = this.conf_info.size.split(',')
-        if (this.naturalWidth !== needSize[0] * 1 || this.naturalHeight !== needSize[1] * 1) {
-          this.$message.error('图片错误')
-          this.isCorrectSize = false
-          return
+        if (ELoadImg.naturalWidth !== needSize[0] * 1 || ELoadImg.naturalHeight !== needSize[1] * 1) {
+          this.$message.error('图片尺寸与已选尺寸不符!')
+          return false
         }
+
         // 调父组件的save方法，并把数据传过去。
         this.$parent.save('image', {
           conf_info: this.conf_info,
@@ -242,7 +243,6 @@
       changeSize (size, index) {
         this.conf_info.size = size
         this.isSize = index
-        this.isCorrectSize = true
       },
       // 选择位置
       changePosition (po, index) {
@@ -259,18 +259,15 @@
         if (res.code === 200) {
           this.upLoadLoding.close()
           this.conf_info.image_src = this.imgUrl + res.data
-
-          // 获取图片原始尺寸
-          const loadImg = new Image()
-          loadImg.src = this.imgUrl + res.data
-          loadImg.onload = () => {
-            this.naturalWidth = loadImg.naturalWidth
-            this.naturalHeight = loadImg.naturalHeight
-          }
         }
       },
-      // 同步加载本地图片 (废弃)
-      async imgChange (file) {
+      /**
+       * 选择文件事件
+       * 验证图片类型、大小、尺寸
+       * file
+       * 当图片上传成功后，会同时触发该方法，为防止成功后再次触发，通过file下是否有response对象来判断是否为上传前触发的
+       */
+      async upLoadChange (file) {
         if (!file.response) {
           const getNaturalSize = files => new Promise((resolve, reject) => {
             const fileReader = new FileReader()
@@ -283,15 +280,34 @@
             }
             fileReader.readAsDataURL(files)
           })
-          const naturalSize = await getNaturalSize(file.raw)
-          this.conf_info.image_src = naturalSize.imgSrc
+          const naturalSize = await getNaturalSize(file.raw)  // 获取图片原始尺寸
+
+          // 验证图片尺寸
           const needSize = this.conf_info.size.split(',')
-          this.isCorrectSize = (naturalSize.naturalWidth === needSize[0] * 1 && naturalSize.naturalHeight === needSize[1] * 1)
-          if (this.isCorrectSize) {
-            this.$refs.upload.submit()
-          } else {
-            this.$message.error('图片尺寸不符要求')
+          const isCorrectSize = (naturalSize.naturalWidth === needSize[0] * 1 && naturalSize.naturalHeight === needSize[1] * 1)
+          if (!isCorrectSize) {
+            this.$message.error('图片尺寸不是' + needSize[0] * 1 + 'px*' + needSize[1] * 1 + 'px，请重新上传')
           }
+
+          // 验证图片大小
+          const isLt2M = file.raw.size / 1024 / 1024 < 2
+          if (!isLt2M) {
+            this.$message.error('上传的文件大小不能超过 2MB!')
+          }
+
+          // 验证图片类型
+          const isType = (/^[image/]+(jpg|png|gif)$/).test(file.raw.type)
+          if (!isType) {
+            this.$message.error('请确认文件格式!')
+          }
+
+          if (!isCorrectSize && !isLt2M && !isType) {
+            this.$refs.upload.clearFiles()  // 清空文件列表
+            return false
+          }
+
+          // 提交上传
+          this.$refs.upload.submit()
         }
       },
       // 上传前的钩子函数
@@ -299,17 +315,7 @@
         // 上传前获取上传图片所需要的参数！
         this.upLoadData.act_id = this.$store.state.materialData.act_id
         this.upLoadData.mediachannel = this.$store.state.materialData.mediachannel
-        const isPNG = file.type === 'image/png'
-        const isJPG = file.type === 'image/jpeg'
-        const isGIF = file.type === 'image/gif'
-        const isLt2M = file.size / 1024 / 1024 < 2
-        if (!isJPG && !isGIF && !isPNG) {
-          this.$message.error('请确认文件格式。')
-        } else if (!isLt2M) {
-          this.$message.error('上传的文件大小不能超过 2MB!')
-        }
         this.conf_info.image_src = ''
-        return (isGIF || isJPG || isPNG) && isLt2M
       },
       // 上传中钩子函数
       upLoadProgress () {
@@ -380,8 +386,8 @@
           position: relative;
           overflow: hidden;
           img {
-            width: 100%;
-            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
           }
           &:hover .avatar-uploader {
             top: 0;
