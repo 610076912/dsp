@@ -251,8 +251,8 @@
             // 地理位置定向
             for (let index in region) {
               for (let i in result.regionInfo_4) {
-                console.log(result.regionInfo_4[i].region_id.toString(), result.regionInfo_4[i].region_id.toString().substr(4, 2), region[index].id)
-                if (result.regionInfo_4[i].region_id.toString().substr(4, 2) === region[index].id) {
+//                console.log(result.regionInfo_4[i].region_id.toString(), result.regionInfo_4[i].region_id.toString().substr(4, 2), region[index].id)
+                if (result.regionInfo_4[i].region_id.toString().substr(0, 6) === region[index].id) {
                   _this.positionInfo.push(region[index])
                   break
                 }

@@ -232,6 +232,7 @@
       background: url('../../assets/img/animationLogo.png') no-repeat center;
       background-size: cover;
       transform: rotateY(-75deg);
+
     }
 
     .animationBox ul {

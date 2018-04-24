@@ -66,12 +66,16 @@
         cityStore: this.$store.state.creatData.creatCity,
         // 活动id
         planId: this.$store.state.creatData.planId,
+
         // 大区列表
         regionList: [],
+        regionCheckbox: false,  // 是否大区全选
+        regionIndeterminate: false, // 是否部分选中
         regionProps: {
           label: 'lable',
           disabled: 'disabled'
         },
+
         // 城市列表
         cityList: [],
         cityProps: {
@@ -79,27 +83,23 @@
           label: 'lable',
           disabled: 'disabled'
         },
-        // 已选中城市数
-        checkedCitysNum: 0,
-        // 已选城市列表
-        checkedCitys: [],
+        cityCheckbox: false,  // 是否城市全选
+        cityIndeterminate: false, // 是否部分选中
+        checkedCityId: [],  // 已选城市id
+
+        // 右侧选中城市列表
         checkedCityProps: {
           children: 'region_val',
           label: 'lable'
         },
-        // 已选城市id
-        checkedCityId: [],
+        checkedCitysNum: 0, // 已选中城市数
+        checkedCitys: [], // 已选城市列表
+
         // 全有城市列表
         allCityId: [],
         btnLoading: false,
         loading: true,
-        timer: null,
-        // 地区全选
-        regionCheckbox: false,
-        regionIndeterminate: false,
-        // 城市全选
-        cityCheckbox: false,
-        cityIndeterminate: false
+        timer: null
       }
     },
     created () {
@@ -112,25 +112,30 @@
             }
           }).then(res => {
             if (res.code === 200) {
-              this.checkedCityId = res.data
+              // 提取已选中城市id
+              let thisCityId = []
+              let index
+              for (index in res.data) {
+                thisCityId.push(res.data[index].region_id)
+              }
+
+              this.checkedCityId = thisCityId
+              this.setCityCheckBox()
+
               this.$store.commit('CITY', {
                 type: 'cityId',
-                msg: res.data
+                msg: thisCityId
               })
-              this.loading = false
+//              this.loading = false
             }
           })
           this.loading = false
         } else {
           this.checkedCityId = this.cityStore.cityId
+          this.setCityCheckBox()
           this.loading = false
         }
       }
-      // 默认全选
-      // this.$nextTick(res => {
-      //   this.$refs.regionTree.setCheckedKeys(['东北', '华东', '华中', '华北', '华南', '西北', '西南'])
-      //   this.loading = false
-      // })
       this.loading = false
     },
     mounted () {
@@ -138,6 +143,10 @@
       this.regionList = this.filterArr(regionArr, 'area', 'area')
       const cityArr = this.arrSort(citys.RECORDS, 'city_id')
       this.cityList = this.filterArr(cityArr, 'region', 'region')
+      let index
+      for (index in citys.RECORDS) {
+        this.allCityId.push(citys.RECORDS[index].city_id)
+      }
     },
     methods: {
       back () {
@@ -173,31 +182,60 @@
           }
         })
       },
-      // 地区全选
+      // 大区全选
       regionCheckboxChange () {
         if (!this.regionCheckbox) {
           this.$refs.regionTree.setCheckedKeys([])
-          this.regionIndeterminate = false
-          this.regionCheckbox = false
         } else {
           this.$refs.regionTree.setCheckedKeys(['东北', '华东', '华中', '华北', '华南', '西北', '西南', '港澳台'])
-          this.regionIndeterminate = false
-          this.regionCheckbox = true
         }
       },
       // 城市全选
       cityCheckboxChange () {
         if (!this.cityCheckbox) {
+          this.checkedCityId = []
           this.$refs.regionTree.setCheckedKeys([])
-          this.cityIndeterminate = false
-          this.cityCheckbox = false
         } else {
-          this.$refs.regionTree.setCheckedKeys(['东北', '华东', '华中', '华北', '华南', '西北', '西南', '港澳台'])
-          this.cityIndeterminate = false
-          this.cityCheckbox = true
+          this.checkedCityId = this.allCityId
         }
       },
-      // 排序
+      // 获取大区已选city_id
+      getRegionChecked () {
+        const regions = this.$refs.regionTree.getCheckedKeys(true)
+        // 目前地区json文件中的大区共有8个，以此来判断是否全选
+        // 是否全选
+        this.regionCheckbox = regions.length === 8
+        // 是否部分选中
+        this.regionIndeterminate = regions.length > 0 && regions.length < 8
+
+        let checkAreas = []
+        for (let i in regions) {
+          for (let j in citys.RECORDS) {
+            if (regions[i] === citys.RECORDS[j].area) {
+              checkAreas.push(citys.RECORDS[j].city_id)
+            }
+          }
+        }
+        this.$refs.cityTree.setCheckedKeys(checkAreas, true)
+      },
+      // 获取省级已选city_id
+      getCityChecked () {
+        // 阻止change事件频繁触发
+        clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
+          this.checkedCityId = this.$refs.cityTree.getCheckedKeys(true)
+          this.setCityCheckBox()
+        }, 0)
+      },
+      // 设置城市选择框中状态
+      setCityCheckBox () {
+        // 城市总个数345个，判断城市是否全选
+        // 是否全选
+        this.cityCheckbox = this.checkedCityId.length === 345
+        // 是否部分选中
+        this.cityIndeterminate = this.checkedCityId.length > 0 && this.checkedCityId.length < 345
+      },
+      // 按key值排序
       arrSort (arr, key) {
         return arr.sort(function (a, b) {
           return a[key].toString().localeCompare(b[key].toString())
@@ -223,48 +261,6 @@
           }
         }
         return resultArr
-      },
-      // 获取大区已选city_id
-      getRegionChecked () {
-        const regions = this.$refs.regionTree.getCheckedKeys(true)
-        // 目前地区json文件中的大区共有7个，以此来判断是否全选
-        if (regions.length === 7) {
-          this.regionIndeterminate = false
-          this.regionCheckbox = true
-        } else if (regions.length === 0) {
-          this.regionIndeterminate = false
-          this.regionCheckbox = false
-        } else {
-          this.regionIndeterminate = true
-        }
-        let checkAreas = []
-        for (let i in regions) {
-          for (let j in citys.RECORDS) {
-            if (regions[i] === citys.RECORDS[j].area) {
-              checkAreas.push(citys.RECORDS[j].city_id)
-            }
-          }
-        }
-        this.$refs.cityTree.setCheckedKeys(checkAreas, true)
-      },
-      // 获取省级已选city_id
-      getCityChecked () {
-        // 阻止change事件频繁触发
-        let _this = this
-        clearTimeout(this.timer)
-        this.timer = setTimeout(function () {
-          _this.checkedCityId = _this.$refs.cityTree.getCheckedKeys(true)
-          // 城市总个数354个，判断城市是否全选
-          if (_this.checkedCityId.length === 354) {
-            _this.cityIndeterminate = false
-            _this.cityCheckbox = true
-          } else if (_this.checkedCityId.length === 0) {
-            _this.cityIndeterminate = false
-            _this.cityCheckbox = false
-          } else {
-            _this.cityIndeterminate = true
-          }
-        }, 50)
       }
     },
     watch: {
