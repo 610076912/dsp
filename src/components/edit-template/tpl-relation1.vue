@@ -28,7 +28,7 @@
             <div class="tpl-tips">
               <div class="tips-select">
                 <template>
-                  <el-select class="select-self" v-model="value" size="small" placeholder="请选择">
+                  <el-select class="select-self" @change="selectChange" v-model="value" size="small" placeholder="请选择">
                     <el-option
                       v-for="item in options"
                       :key="item.value"
@@ -42,10 +42,13 @@
                 <div class="circular" :style="{backgroundImage: 'url('+promptImgUrl+')', backgroundSize: 'cover'}">
                   <el-upload
                     class="avatar-uploader"
+                    ref="uploadPrompt2"
                     :action="upLoadImg"
                     :data="upLoadData"
                     :headers="token"
                     :show-file-list="false"
+                    :auto-upload="false"
+                    :on-change="prompt2UpLoadChange"
                     :before-upload="beforeUpload"
                     :on-success="tipsImgupLoadSuccess">
                     <i class="uploader-icon">150px*150px</i>
@@ -61,10 +64,13 @@
                   :style="{backgroundImage: 'url('+promptImgUrl+')', backgroundSize: 'contain'}">
                   <el-upload
                     class="avatar-uploader"
+                    ref="uploadPrompt1"
                     :action="upLoadImg"
                     :data="upLoadData"
                     :headers="token"
                     :show-file-list="false"
+                    :auto-upload="false"
+                    :on-change="prompt1UpLoadChange"
                     :before-upload="beforeUpload"
                     :on-success="tipsImgupLoadSuccess">
                     <i class="uploader-icon">300px*300px 上传图片</i>
@@ -79,10 +85,13 @@
                      :style="{backgroundImage: 'url('+this.conf_info.relation_info.content[0].info_con+')', backgroundSize: 'cover'}">
                   <el-upload
                     class="avatar-uploader"
+                    ref="uploadTopImg"
                     :action="upLoadImg"
                     :data="upLoadData"
                     :headers="token"
                     :show-file-list="false"
+                    :auto-upload="false"
+                    :on-change="topImgUpLoadChange"
                     :before-upload="beforeUpload"
                     :on-success="topImgupLoadSuccess">
                     <i class="uploader-icon">&nbsp;&nbsp;120*120</i>
@@ -121,10 +130,13 @@
                    :style="{backgroundImage: 'url('+confirmImgUrl+')', backgroundSize: 'contain'}">
                 <el-upload
                   class="avatar-uploader"
+                  ref="uploadItemImg"
                   :action="upLoadImg"
                   :data="upLoadData"
                   :headers="token"
                   :show-file-list="false"
+                  :auto-upload="false"
+                  :on-change="itemImgUpLoadChange"
                   :before-upload="beforeUpload"
                   :on-success="itemImgupLoadSuccess">
                   <i class="uploader-icon">180px*250px</i>
@@ -507,12 +519,6 @@
           this.conf_info.prompt_info.effect = 'effect1'
           this.conf_info.prompt_info.type = 'prompt1'
           this.conf_info.prompt_info.content = [{info_con: this.promptImgUrl, info_exp: '提示信息图片'}]
-
-          // 验证图片尺寸
-          if (this.promptNaturalWidth !== 300 || this.promptNaturalHeight !== 300) {
-            this.$message.error('图片错误')
-            return
-          }
         } else {
           this.conf_info.prompt_info.effect = 'effect2'
           this.conf_info.prompt_info.type = 'prompt2'
@@ -520,12 +526,6 @@
             info_con: this.promptImgUrl,
             info_exp: '提示信息图片'
           }, {info_con: this.promptText, info_exp: '提示信息文字'}]
-
-          // 验证图片尺寸
-          if (this.promptNaturalWidth !== 150 || this.promptNaturalHeight !== 150) {
-            this.$message.error('图片错误')
-            return
-          }
         }
         // 调父组件的save方法，并把数据传过去。
         this.$parent.save('relation', {
@@ -556,15 +556,39 @@
       itemCancel () {
         this.isItem = false
       },
-      // 获取图片原始尺寸
-      getNaturalSize (imgUrl, callback) {
-        // 获取图片原始尺寸
-        const loadImg = new Image()
-        loadImg.src = imgUrl
-        loadImg.onload = () => {
-          callback({
-            'naturalWidth': loadImg.naturalWidth,
-            'naturalHeight': loadImg.naturalHeight
+      // 提示信息选择器选择事件
+      selectChange (val) {
+        // 切换提示信息时清楚图片
+        this.promptImgUrl = ''
+      },
+      // 加载本地图片获取尺寸
+      async loadLocImg (file, callback) {
+        const getNaturalSize = files => new Promise((resolve, reject) => {
+          const fileReader = new FileReader()
+          const locImg = new Image()
+          fileReader.onload = evt => {
+            locImg.src = evt.target.result
+          }
+          locImg.onload = () => {
+            resolve({'naturalWidth': locImg.naturalWidth, 'naturalHeight': locImg.naturalHeight, 'imgSrc': locImg.src})
+          }
+          fileReader.readAsDataURL(files)
+        })
+        const naturalSize = await getNaturalSize(file)  // 获取图片原始尺寸
+        callback(naturalSize)
+      },
+      // topImg 选择文件事件
+      topImgUpLoadChange (file) {
+        if (!file.response) {
+          this.loadLocImg(file.raw, naturalSize => {
+            // 验证图片尺寸
+            if (naturalSize.naturalWidth !== 120 && naturalSize.naturalHeight !== 120) {
+              this.$message.error('图片尺寸不是120px*120px，请重新上传')
+              this.$refs.uploadTopImg.clearFiles()  // 清空文件列表
+              return false
+            }
+            // 提交上传
+            this.$refs.uploadTopImg.submit()
           })
         }
       },
@@ -574,6 +598,22 @@
           this.$set(this.conf_info.relation_info.content[0], 'info_con', this.imgUrl + res.data)
         }
       },
+      // itemImg 选择文件事件
+      itemImgUpLoadChange (file) {
+        if (!file.response) {
+          this.loadLocImg(file.raw, naturalSize => {
+            // 验证图片尺寸
+            if (naturalSize.naturalWidth !== 180 && naturalSize.naturalHeight !== 250) {
+              this.$message.error('图片尺寸不是180px*250px，请重新上传')
+              this.$refs.uploadItemImg.clearFiles()  // 清空文件列表
+              return false
+            }
+            // 提交上传
+            this.$refs.uploadItemImg.submit()
+          })
+        }
+      },
+      // itemImg 上传成功回调
       itemImgupLoadSuccess (res) {
         if (res.code === 200) {
           // this.$set(this.conf_info.relation_info.content[1 + 3 * this.itemIndex], 'info_con', this.imgUrl + res.data)
@@ -581,15 +621,42 @@
           // this.conf_info.relation_info.content[0].info_con = this.imgUrl + res.data
         }
       },
+      // 提示信息1选择文件事件
+      prompt1UpLoadChange (file) {
+        if (!file.response) {
+          this.loadLocImg(file.raw, naturalSize => {
+            // 验证图片尺寸
+            if (naturalSize.naturalWidth !== 300 && naturalSize.naturalHeight !== 300) {
+              this.$message.error('图片尺寸不是300px*300px，请重新上传')
+              this.$refs.uploadPrompt1.clearFiles()  // 清空文件列表
+              return false
+            }
+            // 提交上传
+            this.$refs.uploadPrompt1.submit()
+          })
+        }
+      },
+      // 提示信息2选择文件事件
+      prompt2UpLoadChange (file) {
+        if (!file.response) {
+          this.loadLocImg(file.raw, naturalSize => {
+            // 验证图片尺寸
+            if (naturalSize.naturalWidth !== 150 && naturalSize.naturalHeight !== 150) {
+              this.$message.error('图片尺寸不是150px*150px，请重新上传')
+              this.$refs.uploadPrompt2.clearFiles()  // 清空文件列表
+              return false
+            }
+            // 提交上传
+            this.$refs.uploadPrompt2.submit()
+          })
+        }
+      },
+      // 提示信息图片上传成功
       tipsImgupLoadSuccess (res) {
         if (res.code === 200) {
           // this.$set(this.conf_info.relation_info.content[1 + 3 * this.itemIndex], 'info_con', this.imgUrl + res.data)
           this.promptImgUrl = this.imgUrl + res.data
           // this.conf_info.relation_info.content[0].info_con = this.imgUrl + res.data
-          this.getNaturalSize(this.imgUrl + res.data, naturalSize => {
-            this.promptNaturalWidth = naturalSize.naturalWidth
-            this.promptNaturalHeight = naturalSize.naturalHeight
-          })
         }
       },
       // 上传前的钩子函数
@@ -597,16 +664,16 @@
         // 上传前获取上传图片所需要的参数！
         this.upLoadData.act_id = this.$store.state.materialData.act_id
         this.upLoadData.mediachannel = this.$store.state.materialData.mediachannel
-        const isJPG = file.type === 'image/png'
+        const isType = (/^[image/]+(jpg|jpeg|png|gif)$/).test(file.type)
         const isLt2M = file.size / 1024 / 1024 < 2
 
-        if (!isJPG) {
-          this.$message.error('请确认文件格式。')
+        if (!isType) {
+          this.$message.error('请确认文件格式!')
         }
         if (!isLt2M) {
           this.$message.error('上传的文件大小不能超过 2M!')
         }
-        return isJPG && isLt2M
+        return isType && isLt2M
       }
     }
   }

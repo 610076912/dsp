@@ -27,7 +27,7 @@
             <div class="tpl-tips">
               <div class="tips-select">
                 <template>
-                  <el-select class="select-self" v-model="value" size="small" placeholder="请选择">
+                  <el-select class="select-self" @change="selectChange" v-model="value" size="small" placeholder="请选择">
                     <el-option
                       v-for="item in options"
                       :key="item.value"
@@ -41,10 +41,13 @@
                 <div class="images">
                   <el-upload
                     class="avatar-uploader"
+                    ref="uploadPrompt1"
                     :action="upLoadImg"
                     :data="upLoadData"
                     :headers="token"
                     :show-file-list="false"
+                    :auto-upload="false"
+                    :on-change="prompt1UpLoadChange"
                     :on-success="tipsImgSuccess"
                     :before-upload="beforeAvatarUpload">
                     <div class="imagesbj"
@@ -57,10 +60,13 @@
               <div class="selectOption" v-else-if="value === 'prompt2'">
                 <el-upload
                   class="circular"
+                  ref="uploadPrompt2"
                   :action="upLoadImg"
                   :data="upLoadData"
                   :headers="token"
                   :show-file-list="false"
+                  :auto-upload="false"
+                  :on-change="prompt2UpLoadChange"
                   :on-success="tipsImgTextSuccess"
                   :before-upload="beforeAvatarUpload">
                   <div class="avatar"
@@ -80,10 +86,13 @@
                    :style="{backgroundImage: 'url('+conf_info.relation_info.content[0].info_con+')', backgroundSize: 'cover'}">
                 <el-upload
                   class="avatar-uploader circular"
+                  ref="uploadTplImg"
                   :action="upLoadImg"
                   :data="upLoadData"
                   :headers="token"
                   :show-file-list="false"
+                  :auto-upload="false"
+                  :on-change="tplImgUpLoadChange"
                   :on-success="tplImgSuccess"
                   :before-upload="beforeAvatarUpload">
                   <p v-if="!conf_info.relation_info.content[0].info_con">540px*480px 上传图片</p>
@@ -114,10 +123,13 @@
                      :style="{backgroundImage: 'url('+conf_info.relation_info.content[4].info_con+')', backgroundSize: 'cover'}">
                   <el-upload
                     class="avatar-uploader"
+                    ref="uploadQRcodeImg"
                     :action="upLoadImg"
                     :data="upLoadData"
                     :headers="token"
                     :show-file-list="false"
+                    :auto-upload="false"
+                    :on-change="QRcodeImgUpLoadChange"
                     :on-success="QRcodeImgSuccess"
                     :before-upload="beforeAvatarUpload">
                     <p v-if="!conf_info.relation_info.content[4].info_con">150px*150px</p>
@@ -343,12 +355,6 @@
               info_exp: '提示图片'
             }]
           }
-
-          // 验证图片尺寸
-          if (this.promptNaturalWidth !== 300 || this.promptNaturalHeight !== 300) {
-            this.$message.error('图片错误')
-            return
-          }
         } else if (this.value === 'prompt2') {
           this.conf_info.prompt_info = {  // 提示信息
             type: 'prompt2',
@@ -364,12 +370,6 @@
               }
             ]
           }
-
-          // 验证图片尺寸
-          if (this.promptNaturalWidth !== 150 || this.promptNaturalHeight !== 150) {
-            this.$message.error('图片错误')
-            return
-          }
         }
         // 调父组件的save方法，并把数据传过去。
         this.$parent.save('relation', {
@@ -378,62 +378,126 @@
           click_url: this.clickUrl
         })
       },
-      // 获取图片原始尺寸
-      getNaturalSize (imgUrl, callback) {
-        // 获取图片原始尺寸
-        const loadImg = new Image()
-        loadImg.src = imgUrl
-        loadImg.onload = () => {
-          callback({
-            'naturalWidth': loadImg.naturalWidth,
-            'naturalHeight': loadImg.naturalHeight
+      // 提示信息选择器选择事件
+      selectChange (val) {
+        // 切换提示信息时清楚图片
+        this.conf_info.prompt_info.content[0].info_con = ''
+      },
+      // 加载本地图片获取尺寸
+      async loadLocImg (file, callback) {
+        const getNaturalSize = files => new Promise((resolve, reject) => {
+          const fileReader = new FileReader()
+          const locImg = new Image()
+          fileReader.onload = evt => {
+            locImg.src = evt.target.result
+          }
+          locImg.onload = () => {
+            resolve({'naturalWidth': locImg.naturalWidth, 'naturalHeight': locImg.naturalHeight, 'imgSrc': locImg.src})
+          }
+          fileReader.readAsDataURL(files)
+        })
+        const naturalSize = await getNaturalSize(file)  // 获取图片原始尺寸
+        callback(naturalSize)
+      },
+      // 提示信息1选择文件事件
+      prompt1UpLoadChange (file) {
+        if (!file.response) {
+          this.loadLocImg(file.raw, naturalSize => {
+            // 验证图片尺寸
+            if (naturalSize.naturalWidth !== 300 && naturalSize.naturalHeight !== 300) {
+              this.$message.error('图片尺寸不是300px*300px，请重新上传')
+              this.$refs.uploadPrompt1.clearFiles()  // 清空文件列表
+              return false
+            }
+            // 提交上传
+            this.$refs.uploadPrompt1.submit()
           })
         }
       },
-      tipsImgSuccess (res, file) {      // 提示图片
+      // 提示图片
+      tipsImgSuccess (res, file) {
         // this.promptImgUrl = this.imgUrl + res.data
         this.conf_info.prompt_info.content[0].info_con = this.imgUrl + res.data
         // console.log(this.conf_info.prompt_info)
-
-        this.getNaturalSize(this.imgUrl + res.data, naturalSize => {
-          this.promptNaturalWidth = naturalSize.naturalWidth
-          this.promptNaturalHeight = naturalSize.naturalHeight
-        })
       },
-      tipsImgTextSuccess (res, file) {  // 提示图文图片
+      // 提示信息2选择文件事件
+      prompt2UpLoadChange (file) {
+        if (!file.response) {
+          this.loadLocImg(file.raw, naturalSize => {
+            // 验证图片尺寸
+            if (naturalSize.naturalWidth !== 150 && naturalSize.naturalHeight !== 150) {
+              this.$message.error('图片尺寸不是150px*150px，请重新上传')
+              this.$refs.uploadPrompt2.clearFiles()  // 清空文件列表
+              return false
+            }
+            // 提交上传
+            this.$refs.uploadPrompt2.submit()
+          })
+        }
+      },
+      // 提示图文图片上传成功
+      tipsImgTextSuccess (res, file) {
         // this.promptImgTextUrl = this.imgUrl + res.data
         this.conf_info.prompt_info.content[0].info_con = this.imgUrl + res.data
         // console.log(this.conf_info.prompt_info)
-
-        this.getNaturalSize(this.imgUrl + res.data, naturalSize => {
-          this.promptNaturalWidth = naturalSize.naturalWidth
-          this.promptNaturalHeight = naturalSize.naturalHeight
-        })
       },
+      // 模板右侧图片选择
+      tplImgUpLoadChange (file) {
+        if (!file.response) {
+          this.loadLocImg(file.raw, naturalSize => {
+            // 验证图片尺寸
+            if (naturalSize.naturalWidth !== 540 && naturalSize.naturalHeight !== 480) {
+              this.$message.error('图片尺寸不是540px*480px，请重新上传')
+              this.$refs.uploadTplImg.clearFiles()  // 清空文件列表
+              return false
+            }
+            // 提交上传
+            this.$refs.uploadTplImg.submit()
+          })
+        }
+      },
+      // 模板右侧图片上传成功
       tplImgSuccess (res, file) {
         // this.tplImgUrl = this.imgUrl + res.data
         this.conf_info.relation_info.content[0].info_con = this.imgUrl + res.data
         // console.log(this.conf_info.relation_info)
       },
+      // 二维码图片选择
+      QRcodeImgUpLoadChange (file) {
+        if (!file.response) {
+          this.loadLocImg(file.raw, naturalSize => {
+            // 验证图片尺寸
+            if (naturalSize.naturalWidth !== 150 && naturalSize.naturalHeight !== 150) {
+              this.$message.error('图片尺寸不是150px*150px，请重新上传')
+              this.$refs.uploadQRcodeImg.clearFiles()  // 清空文件列表
+              return false
+            }
+            // 提交上传
+            this.$refs.uploadQRcodeImg.submit()
+          })
+        }
+      },
+      // 二维码图片上传成功
       QRcodeImgSuccess (res, file) {
         // this.QRcodeImgUrl = this.imgUrl + res.data
         this.conf_info.relation_info.content[4].info_con = this.imgUrl + res.data
         // console.log(this.conf_info.relation_info)
       },
+      // 图片上传前钩子
       beforeAvatarUpload (file) {
         // 上传前获取上传图片所需要的参数！
         this.upLoadData.act_id = this.$store.state.materialData.act_id
         this.upLoadData.mediachannel = this.$store.state.materialData.mediachannel
-        const isPNG = file.type === 'image/png'
+        const isType = (/^[image/]+(jpg|jpeg|png|gif)$/).test(file.type)
         const isLt2M = file.size / 1024 / 1024 < 2
 
-        if (!isPNG) {
-          this.$message.error('上传头像图片只能是 png 格式!')
+        if (!isType) {
+          this.$message.error('请确认文件格式!')
         }
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!')
         }
-        return isPNG && isLt2M
+        return isType && isLt2M
       }
     }
   }

@@ -296,16 +296,14 @@
           }
 
           // 验证图片类型
-          const isType = (/^[image/]+(jpg|png|gif)$/).test(file.raw.type)
+          const isType = (/^[image/]+(jpg|jpeg|png|gif)$/).test(file.raw.type)
           if (!isType) {
             this.$message.error('请确认文件格式!')
           }
-
-          if (!isCorrectSize && !isLt2M && !isType) {
+          if (!isCorrectSize || !isLt2M || !isType) {
             this.$refs.upload.clearFiles()  // 清空文件列表
             return false
           }
-
           // 提交上传
           this.$refs.upload.submit()
         }
