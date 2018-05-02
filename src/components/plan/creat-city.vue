@@ -157,7 +157,6 @@
         Promise.all([
           this.$http.post('/api2/add_region_plan', {
             plan_id: this.planId,
-            // city_id_list: JSON.stringify(this.checkedCityId)
             city_id_list: JSON.stringify(this.checkedCityId)
           }),
           this.$http.post('/api2/add_strategy_plan', {

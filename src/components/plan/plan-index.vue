@@ -142,8 +142,10 @@
             <template slot-scope="scope">
               <span class="operation" @click="details(scope.row.plan_id)">查看&nbsp;</span>
               <span class="operation" @click="copyPlan(scope.row.plan_id)">复制&nbsp;</span>
-              <span class="operation" :class="{disabled: scope.row.status !== 1}" @click="itemDel(scope.row.plan_id, scope.row.status === 1)" >删除&nbsp;</span>
-              <span class="operation" :class="{disabled: scope.row.status !== 5}" @click="finish(scope.row.plan_id, scope.row.status === 5)">终止&nbsp;</span>
+              <span class="operation" :class="{disabled: scope.row.status !== 1}"
+                    @click="itemDel(scope.row.plan_id, scope.row.status === 1)">删除&nbsp;</span>
+              <span class="operation" :class="{disabled: scope.row.status !== 5}"
+                    @click="finish(scope.row.plan_id, scope.row.status === 5)">终止&nbsp;</span>
               <!--<span class="operation" @click="excentionStatus">状态</span>-->
               <br>
             </template>
@@ -162,7 +164,7 @@
         :total="pageTotal">
       </el-pagination>
     </div>
-    <button class="creat-new" @click="creatNew">新建计划</button>
+    <el-button class="creat-new" type="primary" @click="creatNew" :disabled="activeName.indexOf(canCreat) < 0">新建计划</el-button>
     <el-dialog title="提示" :visible.sync="dialogVisible" size="tiny">
       <el-table :data="exStatus" border="true">
         <el-table-column property="id" label="计划ID" width="60" align="center"></el-table-column>
@@ -220,7 +222,9 @@
         exStatus: [],
         currentPage: 1,
         pageTotal: 0,
-        pageSize: 10
+        pageSize: 10,
+        // 判断移动、PC、大屏哪个可创建
+        canCreat: []
       }
     },
     created () {
@@ -234,6 +238,27 @@
       this.$nextTick(function () {
         this.getActiveList({})
       })
+      // 通过用户的putchannelids判断用户可以在什么媒体端创建广告
+      let media = {
+        1: [1014, 1015, 1020],
+        2: [1002, 1004, 1021],
+        3: [1003]
+      }
+      let putChannelIds = JSON.parse(sessionStorage.getItem('putChannelIds'))
+      let flag = false
+      putChannelIds.forEach(putItem => {
+        for (let i in media) {
+          if (flag) continue
+          media[i].forEach(item => {
+            if (putItem * 1 === item) {
+              this.canCreat.push(i)
+              flag = true
+            }
+          })
+        }
+      })
+      console.log(this.canCreat)
+      console.log(putChannelIds)
     },
     methods: {
       // 获取计划列表
@@ -551,10 +576,6 @@
     .creat-new {
       width: 100px;
       height: 35px;
-      color: #fff;
-      background: #169bd5;
-      border: none;
-      outline: none;
       border-radius: 3px;
       position: absolute;
       top: 32px;

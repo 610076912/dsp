@@ -8,7 +8,7 @@
           <div class="top">
             <el-radio
               class="fl"
-              label="K"
+              label="1"
               v-model="areaType">
               K执行单价100
             </el-radio>
@@ -23,7 +23,7 @@
           <div class="top">
             <el-radio
               class="fl"
-              label="1"
+              label="2"
               v-model="areaType">
               A执行单价60
             </el-radio>
@@ -38,7 +38,7 @@
           <div class="top">
             <el-radio
               class="fl"
-              label="1"
+              label="3"
               v-model="areaType">
               B执行单价40
             </el-radio>
@@ -53,7 +53,7 @@
           <div class="top">
             <el-radio
               class="fl"
-              label="2"
+              label="4"
               v-model="areaType">
               全国执行单价35
             </el-radio>
@@ -82,6 +82,8 @@
       return {
         // 活动id
         planId: this.$store.state.creatData.planId,
+        // 城市数据状态仓库
+        cityStore: this.$store.state.creatData.creatCity,
         // 分类列表
         cityTypeList: {},
         // 全国列表
@@ -103,17 +105,17 @@
     },
     created () {
       if (this.planId) {
-        if (!this.cityStore) {
+        if (!this.cityStore.kab) {
           // 获取已选城市
-          this.$http.get('/api2/get_region_plan', {
+          this.$http.get('/api2/get_region_plan_by_kab', {
             params: {
               plan_id: this.planId
             }
           }).then(res => {
             if (res.code === 200) {
-              this.checkedCityId = res.data
+              this.areaType = res.data
               this.$store.commit('CITY', {
-                type: 'cityId',
+                type: 'kab',
                 msg: res.data
               })
               this.loading = false
@@ -121,7 +123,7 @@
           })
           this.loading = false
         } else {
-          this.checkedCityId = this.cityStore.cityId
+          this.areaType = this.cityStore.kab
           this.loading = false
         }
       }
@@ -141,10 +143,10 @@
       next () {
         this.btnLoading = true
         Promise.all([
-          this.$http.post('/api2/add_region_plan', {
+          this.$http.post('/api2/add_region_plan_by_kab', {
             plan_id: this.planId,
             // city_id_list: JSON.stringify(this.checkedCityId)
-            city_id_list: JSON.stringify(this.checkedCityId)
+            kab: this.areaType
           }),
           this.$http.post('/api2/add_strategy_plan', {
             plan_id: this.$store.state.creatData.planId,
@@ -155,12 +157,8 @@
         ]).then(res => {
           if (res[0].code === 200) {
             this.$store.commit('CITY', {
-              type: 'cityId',
-              msg: this.checkedCityId
-            })
-            this.$store.commit('CITY', {
-              type: 'citys',
-              msg: this.checkedCitys
+              type: 'kab',
+              msg: this.areaType
             })
           }
           if (res[0].code === 200 && res[1].code === 200) {
@@ -261,7 +259,7 @@
             line-height: 46px;
             padding: 0 20px;
             font-size: 14px;
-            border: .5px solid #999;
+            border-bottom: 1px solid #c9c9c9;
           }
           .el-tree {
             border: none
