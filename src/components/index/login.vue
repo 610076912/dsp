@@ -45,7 +45,6 @@
           password: this.password
         }).then(function (response) {
           if (response.code === 200) {
-            console.log(response)
             if (response.data.user_type[0] === '1' || response.data.user_type[0] === '4') {
               sessionStorage.setItem('token', response.data.token)
               sessionStorage.setItem('user', response.data.user_name)

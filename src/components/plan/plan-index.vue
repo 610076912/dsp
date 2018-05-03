@@ -257,8 +257,6 @@
           })
         }
       })
-      console.log(this.canCreat)
-      console.log(putChannelIds)
     },
     methods: {
       // 获取计划列表

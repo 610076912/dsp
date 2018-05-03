@@ -8,7 +8,7 @@
           <div class="top">
             <el-radio
               class="fl"
-              label="1"
+              :label="1"
               v-model="areaType">
               K执行单价100
             </el-radio>
@@ -23,7 +23,7 @@
           <div class="top">
             <el-radio
               class="fl"
-              label="2"
+              :label="2"
               v-model="areaType">
               A执行单价60
             </el-radio>
@@ -38,7 +38,7 @@
           <div class="top">
             <el-radio
               class="fl"
-              label="3"
+              :label="3"
               v-model="areaType">
               B执行单价40
             </el-radio>
@@ -53,7 +53,7 @@
           <div class="top">
             <el-radio
               class="fl"
-              label="4"
+              :label="4"
               v-model="areaType">
               全国执行单价35
             </el-radio>
@@ -105,7 +105,7 @@
     },
     created () {
       if (this.planId) {
-        if (!this.cityStore.kab) {
+        if (!this.cityStore) {
           // 获取已选城市
           this.$http.get('/api2/get_region_plan_by_kab', {
             params: {
@@ -113,7 +113,7 @@
             }
           }).then(res => {
             if (res.code === 200) {
-              this.areaType = res.data
+              this.areaType = res.data.kab
               this.$store.commit('CITY', {
                 type: 'kab',
                 msg: res.data
@@ -122,8 +122,8 @@
             }
           })
           this.loading = false
-        } else {
-          this.areaType = this.cityStore.kab
+        } else if (this.cityStore.kab) {
+          this.areaType = this.cityStore.kab.kab
           this.loading = false
         }
       }
@@ -141,7 +141,6 @@
         this.$router.go(-1)
       },
       next () {
-        this.btnLoading = true
         Promise.all([
           this.$http.post('/api2/add_region_plan_by_kab', {
             plan_id: this.planId,
@@ -195,7 +194,6 @@
       },
       getCityTypeList () {
         this.$http.get('/api2/get_region_by_kab').then(res => {
-          console.log(res)
           if (res.code === 200) {
             this.cityTypeList = res.data
           }

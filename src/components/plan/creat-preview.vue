@@ -47,7 +47,7 @@
     </div>
     <div class="position cons">
       <p class="head"><span>地理位置定向</span><b>
-        <router-link v-if="canEdit" to="creatCity">编辑信息</router-link>
+        <router-link v-if="canEdit" :to="cityRouter">编辑信息</router-link>
       </b></p>
       <div class="pro-box">
         <p class="minhead"><span>按地区</span></p>
@@ -149,7 +149,9 @@
     <div class="button-wrap">
       <el-button @click="back">返回</el-button>
       <el-button @click="finish" :loading="finishLoading" v-if="status ? status.plan_status !== 6 : true">完成</el-button>
-      <el-button type="primary" @click="finishto" v-if="status ? status.plan_status  !== 6 : true" :loading="finishtoLoading">提审</el-button>
+      <el-button type="primary" @click="finishto" v-if="status ? status.plan_status  !== 6 : true"
+                 :loading="finishtoLoading">提审
+      </el-button>
     </div>
   </div>
 </template>
@@ -217,7 +219,8 @@
         radio: 'true',
         finishLoading: false,
         finishtoLoading: false,
-        materialInfo: []
+        materialInfo: [],
+        cityRouter: JSON.parse(sessionStorage.getItem('flags')).isKab === 1 ? 'creatKabCity' : 'creatCity'
       }
     },
     created () {

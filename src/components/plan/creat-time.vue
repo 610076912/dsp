@@ -198,12 +198,11 @@
             if (res.code === 200) {
               // 从session中判断是否为Kab类型
               let isKab = JSON.parse(sessionStorage.getItem('flags')).isKab
-              if (!isKab) {
+              if (isKab === 1) {
                 this.$router.push('/creatKabCity')
               } else {
                 this.$router.push('/creatCity')
               }
-              console.log(isKab)
             }
           })
       },
