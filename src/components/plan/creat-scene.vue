@@ -30,8 +30,9 @@
         <ul>
           <li v-for="(item, i) in allPack"
               :class="{active: (i === liActindex)}"
-              @click="class1Click(i, item.class2Arr)"><i
-            :class="{'el-icon-my-lifangti': i === 0,'el-icon-my-87': i === 1,'el-icon-my-hangweiguanli': i === 2, 'el-icon-my-nvren': i === 3, 'el-icon-my-icon': i === 4}"></i>{{item.class1_name}}
+              @click="class1Click(i, item.class2Arr)">
+            <el-checkbox v-model="class1CheckboxArr[i]" @change="class1CheckboxChange(i, item)"></el-checkbox>
+            {{item.class1_name}}
           </li>
         </ul>
         <div class="class2-wrap">
@@ -134,7 +135,9 @@
         // 所有包的原始数据
         rawAllPkg: [],
         // 搜索结果数据
-        searchArr: []
+        searchArr: [],
+        // 一级全选框选中状态
+        class1CheckboxArr: new Array(5).fill(false)
       }
     },
     created () {
@@ -258,6 +261,22 @@
         checkedArr.sort(function (a, b) {
           return a.pkg_id - b.pkg_id
         })
+        // 按一级分组
+        let classArr = []
+        console.log(checkedArr)
+        checkedArr.forEach((item, index) => {
+          let class1Index = Math.floor(item.pkg_id / 1000)
+          if (index > 0 && class1Index === Math.floor(checkedArr[index - 1].pkg_id / 1000)) {
+            classArr[classArr.length - 1].cont.push(item)
+          } else {
+            let obj = {}
+            obj.class1Index = class1Index
+            obj.cont = [item]
+            classArr.push(obj)
+          }
+        })
+        console.log(classArr)
+        // 按二级分组
         let pkgArr = []
         checkedArr.forEach((item, index) => {
           if (index > 0 && item.pkg_id === checkedArr[index - 1].pkg_id) {
@@ -269,7 +288,11 @@
             pkgArr.push(obj)
           }
         })
-        // 对比
+        // 对比1级是否全选
+        classArr.forEach(item => {
+          this.class1CheckboxArr[item.class1Index - 1] = this.allPack[item.class1Index - 1].valueArr.length === item.cont.length
+        })
+        // 对比2级是否全选
         pkgArr.forEach(item => {
           let class1Index = Math.floor(item.pkg_id / 1000)
           this.allPack[class1Index - 1].class2Arr.forEach(allItem => {
@@ -342,7 +365,34 @@
           this.checkedAll[item] = false
         }
       },
-      // 全选
+      // 1级全选
+      class1CheckboxChange (index, data) {
+        if (this.class1CheckboxArr[index]) {
+          // 处理二级
+          data.class2Arr.forEach(item => {
+            this.class2Data[index].push(item.valueArr)
+            this.class2PkgId[index].push(item.pkg_id)
+          })
+          // 处理三级
+          data.valueArr.forEach(item => {
+            if (this.checkedArr.indexOf(item.class_id) === -1) {
+              this.checkedArr.push(item.class_id)
+              this.checkedArrObj.push(item)
+            }
+          })
+        } else {
+          this.class2PkgId[index] = []
+          this.class2Data[index] = []
+          data.valueArr.forEach(item => {
+            let i = this.checkedArr.indexOf(item.class_id)
+            if (i !== -1) {
+              this.checkedArr.splice(i, 1)
+              this.checkedArrObj.splice(i, 1)
+            }
+          })
+        }
+      },
+      // 2级全选
       class2Checkedbox (val, index) {
         if (this.checkedAll[index]) {
           val.forEach(item => {
@@ -600,13 +650,11 @@
             line-height: 40px;
             font-size: 14px;
             cursor: pointer;
-            text-indent: 10px;
+            text-indent: 5px;
             border-left: 2px solid transparent;
             transition: all .5s;
-            i {
-              position: relative;
-              left: -12px;
-              font-size: 16px;
+            .el-checkbox {
+              float: left;
             }
           }
           .active {
