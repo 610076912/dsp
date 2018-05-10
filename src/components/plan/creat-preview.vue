@@ -166,11 +166,12 @@
   import mediaJsonP from '../../../static/json/media.json'
   import mediaJsonT from '../../../static/json/test-media.json'
 
-  let testEnv = process.env.TEST === 'test'
-  let medias = mediaJsonP
-  if (testEnv) {
-    medias = mediaJsonT
-  }
+  // let testEnv = process.env.TEST === 'test'
+  // let medias = mediaJsonP
+  // if (testEnv) {
+  //   medias = mediaJsonT
+  // }
+  let medias = process.env.TEST === 'test' ? mediaJsonT : mediaJsonP
 
   import mediaType from '../../../static/json/media-type.json'
   import region from '../../../static/json/region.json'
@@ -230,16 +231,15 @@
       }).then(res => {
         if (res.code === 200) {
           const result = res.data
-          const _this = this
           if (result.baseInfo_1) {
             // 基本信息
-            _this.baseInfo.act_name = result.baseInfo_1.plan_name
-            _this.baseInfo.act_e_time = result.baseInfo_1.plan_e_time
-            _this.baseInfo.act_b_time = result.baseInfo_1.plan_b_time
-            _this.baseInfo.group_name = result.baseInfo_1.group_name
-            _this.oldValue = result.baseInfo_1.group_name
-            _this.baseInfo.all_budget = result.baseInfo_1.plan_all_budget
-            _this.baseInfo.plan_budget = result.baseInfo_1.plan_budget_type === 0 ? '快速投放' : '均匀投放'
+            this.baseInfo.act_name = result.baseInfo_1.plan_name
+            this.baseInfo.act_e_time = result.baseInfo_1.plan_e_time
+            this.baseInfo.act_b_time = result.baseInfo_1.plan_b_time
+            this.baseInfo.group_name = result.baseInfo_1.group_name
+            this.oldValue = result.baseInfo_1.group_name
+            this.baseInfo.all_budget = result.baseInfo_1.plan_all_budget
+            this.baseInfo.plan_budget = result.baseInfo_1.plan_budget_type === 0 ? '快速投放' : '均匀投放'
           }
           if (result.sceneInfo_2) {
             // 场景化投放设置
@@ -247,8 +247,8 @@
           }
           if (result.timeInfo_3) {
             // 投放时间
-            _this.checkedTime = _this.transformTime(result.timeInfo_3.plan_time)
-            _this.checkedWeek = _this.transformWeek(result.timeInfo_3.plan_week)
+            this.checkedTime = this.transformTime(result.timeInfo_3.plan_time)
+            this.checkedWeek = this.transformWeek(result.timeInfo_3.plan_week)
           }
           if (result.regionInfo_4) {
             // 地理位置定向
@@ -256,7 +256,7 @@
               for (let i in result.regionInfo_4) {
 //                console.log(result.regionInfo_4[i].region_id.toString(), result.regionInfo_4[i].region_id.toString().substr(4, 2), region[index].id)
                 if (result.regionInfo_4[i].region_id.toString().substr(0, 6) === region[index].id) {
-                  _this.positionInfo.push(region[index])
+                  this.positionInfo.push(region[index])
                   break
                 }
               }
@@ -267,7 +267,7 @@
             for (let index in medias) {
               for (let i in result.meidaInfo_5) {
                 if (result.meidaInfo_5[i].act_channel_id === medias[index].media_id) {
-                  _this.meidaInfo.push(medias[index])
+                  this.meidaInfo.push(medias[index])
                   break
                 }
               }
@@ -278,7 +278,7 @@
             for (let index in episode) {
               for (let i in result.classInfo_6.class_plan) {
                 if (result.classInfo_6.class_plan[i] === episode[index].type_id) {
-                  _this.episodeInfo.push(episode[index])
+                  this.episodeInfo.push(episode[index])
                   break
                 }
               }
@@ -286,11 +286,11 @@
           }
           if (result.strategyInfo_7) {
             // 投放策略
-            _this.strategy = result.strategyInfo_7
+            this.strategy = result.strategyInfo_7
           }
           if (result.adConfInfo_8) {
             // 广告信息
-            _this.materialInfo = result.adConfInfo_8
+            this.materialInfo = result.adConfInfo_8
           }
           // 将状态存到vuex中。
           this.status = result.status

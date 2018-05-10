@@ -263,7 +263,6 @@
         })
         // 按一级分组
         let classArr = []
-        console.log(checkedArr)
         checkedArr.forEach((item, index) => {
           let class1Index = Math.floor(item.pkg_id / 1000)
           if (index > 0 && class1Index === Math.floor(checkedArr[index - 1].pkg_id / 1000)) {
@@ -275,7 +274,6 @@
             classArr.push(obj)
           }
         })
-        console.log(classArr)
         // 按二级分组
         let pkgArr = []
         checkedArr.forEach((item, index) => {
@@ -360,6 +358,8 @@
       clearChecked () {
         this.checkedArr = []
         this.checkedArrObj = []
+        // 清空一级全选
+        this.class1CheckboxArr = new Array(5).fill(false)
         // 三级全选清空
         for (let item in this.checkedAll) {
           this.checkedAll[item] = false
