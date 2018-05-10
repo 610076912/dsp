@@ -13,6 +13,7 @@ const creatCity = () => import(/* webpackChunkName: "plan" */ '@/components/plan
 const creatKabCity = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-city1')
 const creatMedia = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-media')
 const creatMediaType = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-mediatype')
+const creatEpisode = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-episode')
 const creatStrategy = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-strategy')
 const creatPreview = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-preview')
 const creatMaterial = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-material')
@@ -80,6 +81,11 @@ export default new Router({
           path: '/creatScene',
           name: 'creatScene',
           component: creatScene
+        },
+        {
+          path: '/creatEpisode',
+          name: 'creatEpisode',
+          component: creatEpisode
         },
         {
           path: '/creatTime',
