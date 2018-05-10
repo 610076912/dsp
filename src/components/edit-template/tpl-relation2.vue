@@ -95,7 +95,7 @@
                   :on-change="tplImgUpLoadChange"
                   :on-success="tplImgSuccess"
                   :before-upload="beforeAvatarUpload">
-                  <p v-if="!conf_info.relation_info.content[0].info_con">540px*480px 上传图片</p>
+                  <p v-if="!conf_info.relation_info.content[0].info_con">480px*540px 上传图片</p>
                 </el-upload>
               </div>
               <el-input
@@ -446,7 +446,7 @@
         if (!file.response) {
           this.loadLocImg(file.raw, naturalSize => {
             // 验证图片尺寸
-            if (naturalSize.naturalWidth !== 540 && naturalSize.naturalHeight !== 480) {
+            if (naturalSize.naturalWidth !== 480 && naturalSize.naturalHeight !== 540) {
               this.$message.error('图片尺寸不是540px*480px，请重新上传')
               this.$refs.uploadTplImg.clearFiles()  // 清空文件列表
               return false
