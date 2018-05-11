@@ -4,12 +4,51 @@
     <div class="creat-media-content">
       <h3>视频定向</h3>
       <div class="top">
-        <span>指定投放视频</span>
+        <span class="model-name">指定投放视频</span>
         <div class="search-wrap">
-
+          <el-input placeholder="请输入内容">
+            <el-button slot="append" icon="search" size="mini" type="primary">搜索</el-button>
+          </el-input>
         </div>
         <div class="result-wrap">
+          <span class="search-title">全部：（<span></span>）个视频搜索结果</span>
+          <span class="clear-search"><i class="el-icon-delete2"></i>清空搜索结果</span>
+          <ul class="search-result">
 
+          </ul>
+        </div>
+      </div>
+      <div class="bottom">
+        <span class="model-name">选择视频分类</span>
+        <div class="media-type-wrap">
+          <div>
+            频道：
+            <el-button size="small">全部</el-button>
+            <el-checkbox-group size="small">
+              <el-checkbox-button>全部</el-checkbox-button>
+            </el-checkbox-group>
+          </div>
+          <div>
+            地区：
+            <el-button size="small">全部</el-button>
+            <el-checkbox-group size="small">
+              <el-checkbox-button>全部</el-checkbox-button>
+            </el-checkbox-group>
+          </div>
+          <div>
+            类型：
+            <el-button size="small">全部</el-button>
+            <el-checkbox-group size="small">
+              <el-checkbox-button>全部</el-checkbox-button>
+            </el-checkbox-group>
+          </div>
+          <div>
+            年代：
+            <el-button size="small">全部</el-button>
+            <el-checkbox-group size="small">
+              <el-checkbox-button>全部</el-checkbox-button>
+            </el-checkbox-group>
+          </div>
         </div>
       </div>
     </div>
@@ -80,30 +119,89 @@
         font-size: 16px;
         margin-bottom: 15px;
       }
+      .model-name {
+        height: 20px;
+        line-height: 20px;
+        font-size: 14px;
+        padding-left: 10px;
+        display: block;
+        border-left: 3px solid #1d8ce0;
+        margin-bottom: 10px;
+      }
       .top {
+        overflow: hidden;
         width: 100%;
         height: 160px;
         margin-bottom: 40px;
-        span {
-          height: 20px;
-          line-height: 20px;
-          font-size: 14px;
-          padding-left: 10px;
-          display: block;
-          border-left: 3px solid #1d8ce0;
-          margin-bottom: 10px;
-        }
         .search-wrap {
           width: 405px;
           height: 130px;
           border: 1px solid #e4e4e4;
           float: left;
+          padding: 40px 30px;
+          .el-input-group__append {
+            background-color: #169bd5;
+            color: #fff;
+            span {
+              border: none;
+            }
+          }
         }
         .result-wrap {
           width: 705px;
           height: 130px;
           border: 1px solid #e4e4e4;
           float: right;
+          overflow: hidden;
+          padding: 10px;
+          .search-title {
+
+          }
+          .clear-search {
+            float: right;
+            vertical-align: top;
+            cursor: pointer;
+            i {
+              vertical-align: bottom;
+              padding-right: 3px;
+            }
+          }
+        }
+      }
+      .bottom {
+        .media-type-wrap {
+          border: 1px solid #e4e4e4;
+          padding: 15px;
+          div {
+            color: #999;
+            margin-bottom: 10px;
+            .el-button--small {
+              border-radius: 15px;
+              margin-right: 10px;
+              background-color: #e4e4e4;
+              &:hover {
+                border-color: #c4c4c4;
+                color: #000;
+              }
+              &:active {
+                border-color: #c4c4c4;
+                color: #000;
+              }
+              &:focus {
+                border-color: #c4c4c4;
+                color: #000;
+              }
+            }
+            .el-checkbox-group {
+              display: inline-block;
+              .el-checkbox-button {
+                margin-right: 10px;
+                .el-checkbox-button__inner {
+                  border-radius: 15px;
+                }
+              }
+            }
+          }
         }
       }
     }
