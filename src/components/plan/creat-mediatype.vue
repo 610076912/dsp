@@ -112,7 +112,7 @@
         }).then(res => {
           if (res.code === 200) {
             this.$store.commit('MEDIATYPE', this.chosedType)
-            this.$router.push('/creatTime')
+            this.$router.push('/creatEpisode')
           }
         })
       },

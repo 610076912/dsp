@@ -64,13 +64,23 @@
         </div>
       </div>
     </div>
-    <div class="episode cons">
+    <div class="media cons">
       <p class="head"><span>视频类型</span><b>
         <router-link v-if="canEdit" to="creatMediatype">编辑信息</router-link>
       </b></p>
       <div class="pro-box">
         <div class="label">
-          <span class="labels" v-for="item in episodeInfo">{{ item.type }}</span>
+          <span class="labels" v-for="item in mediaTypeInfo">{{ item.type }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="episode cons">
+      <p class="head"><span>剧集定向</span><b>
+        <router-link v-if="canEdit" to="creatEpisode">编辑信息</router-link>
+      </b></p>
+      <div class="pro-box">
+        <div class="label">
+          <span class="labels" v-for="item in episodeInfo">{{ item.name }}</span>
         </div>
       </div>
     </div>
@@ -173,7 +183,7 @@
   // }
   let medias = process.env.TEST === 'test' ? mediaJsonT : mediaJsonP
 
-  import mediaType from '../../../static/json/media-type.json'
+  import mediaData from '../../../static/json/media-type.json'
   import region from '../../../static/json/region.json'
   import tplJson from '../../../static/json/tpl.json'
   import timeData from '../../../static/json/timeData.json'
@@ -184,7 +194,7 @@
   import img from '../template/tpl-img.vue'
 
   // 剧集数据
-  const episode = mediaType.mediaType
+  const mediaType = mediaData.mediaType
   const strTOarr = timeData.timeForStr
   export default {
     name: 'creatPreview',
@@ -215,6 +225,7 @@
         checkedWeek: [0, 0, 0, 0, 0, 0, 0],
         positionInfo: [],
         meidaInfo: [],
+        mediaTypeInfo: [],
         episodeInfo: [],
         strategy: {},
         radio: 'true',
@@ -274,15 +285,19 @@
             }
           }
           if (result.classInfo_6) {
-            // 剧集定向
-            for (let index in episode) {
+            // 视频类型定向
+            for (let index in mediaType) {
               for (let i in result.classInfo_6.class_plan) {
-                if (result.classInfo_6.class_plan[i] === episode[index].type_id) {
-                  this.episodeInfo.push(episode[index])
+                if (result.classInfo_6.class_plan[i] === mediaType[index].type_id) {
+                  this.mediaTypeInfo.push(mediaType[index])
                   break
                 }
               }
             }
+          }
+          if (result.dramas) {
+            // 剧集定向
+            this.episodeInfo = result.dramas
           }
           if (result.strategyInfo_7) {
             // 投放策略

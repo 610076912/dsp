@@ -29,6 +29,7 @@ let state = {
     creatStrategy: null,
     creatMedia: null,
     creatMediaType: null,
+    creatEpisode: null,
     creatScene: null
   },
   materialData: {
@@ -82,6 +83,9 @@ const mutations = {
   },
   MEDIATYPE (state, mediatype) {
     state.creatData.creatMediaType = mediatype
+  },
+  EPISODE (state, episode) {
+    state.creatData.creatEpisode = episode
   },
   STRATEGY (state, strategy) {
     state.creatData.creatStrategy = strategy
