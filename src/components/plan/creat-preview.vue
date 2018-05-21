@@ -568,5 +568,13 @@
     .button-wrap {
       border-top: 1px solid #e4e4e4;
     }
+    .episode {
+      .pro-box {
+        .labels {
+          width: auto;
+          padding: 0 15px;
+        }
+      }
+    }
   }
 </style>

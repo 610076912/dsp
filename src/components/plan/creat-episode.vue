@@ -1,5 +1,5 @@
 <template>
-  <div class="creat-episode">
+  <div class="creat-episode" @keyup.enter="searchEpisode">
     <steps :active="2"></steps>
     <div class="creat-media-content">
       <h3>视频定向</h3>
@@ -35,6 +35,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  let searchUrl = process.env.TEST === 'test' ? '//test-tj.videozhishi.com' : 'https://tj.videozhishi.com'
   import steps from './steps-component.vue'
   import header from './header-component.vue'
 
@@ -59,7 +60,6 @@
             plan_id: planId
           }
         }).then(res => {
-          console.log(res)
           if (res.code === 200) {
             this.selectedEpisode = res.data
           }
@@ -90,12 +90,11 @@
       },
       // 搜索
       searchEpisode () {
-        this.$http.get('http://192.168.1.106:3889/data/search_episode', {
+        this.$http.get(searchUrl + '/data/search_episode', {
           params: {
             search_text: this.searchText
           }
         }).then(res => {
-          console.log(res)
           this.episodeResult = res.data
         })
       },
@@ -106,7 +105,6 @@
       },
       // 下一步
       nextStep () {
-        console.log(this.selectedEpisode)
         if (this.selectedEpisode.length === 0) {
           this.$router.push('/creatTime')
           return
