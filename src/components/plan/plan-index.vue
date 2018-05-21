@@ -164,7 +164,7 @@
         :total="pageTotal">
       </el-pagination>
     </div>
-    <el-button class="creat-new" type="primary" @click="creatNew" :disabled="activeName.indexOf(canCreat) < 0">新建计划</el-button>
+    <el-button class="creat-new" type="primary" @click="creatNew" :disabled="canCreat.indexOf(activeName) < 0">新建计划</el-button>
     <el-dialog title="提示" :visible.sync="dialogVisible" size="tiny">
       <el-table :data="exStatus" border="true">
         <el-table-column property="id" label="计划ID" width="60" align="center"></el-table-column>
@@ -224,7 +224,7 @@
         pageTotal: 0,
         pageSize: 10,
         // 判断移动、PC、大屏哪个可创建
-        canCreat: []
+        canCreat: ''
       }
     },
     created () {
@@ -246,17 +246,23 @@
       }
       let putChannelIds = JSON.parse(sessionStorage.getItem('putChannelIds'))
       let flag = false
-      putChannelIds.forEach(putItem => {
-        for (let i in media) {
-          if (flag) continue
-          media[i].forEach(item => {
-            if (putItem * 1 === item) {
-              this.canCreat.push(i)
-              flag = true
-            }
-          })
-        }
-      })
+      if (putChannelIds.length > 0) {
+        putChannelIds.forEach(putItem => {
+          flag = false
+          for (let i in media) {
+            if (flag) continue
+            media[i].forEach(item => {
+              if (putItem * 1 === item) {
+                // this.canCreat.push(i)
+                this.canCreat += i
+                flag = true
+              }
+            })
+          }
+        })
+      } else {
+        this.canCreat = '123'
+      }
     },
     methods: {
       // 获取计划列表
