@@ -514,6 +514,18 @@
           this.$message.error('请选择一个平台')
           return
         }
+        console.log(this.conf_info)
+        for (let i = 0; i < 4; i++) {
+          if (!this.conf_info.relation_info.content[6 + 3 * i].info_con) {
+            this.$message.error(`请输入跳转链接(${i + 1})`)
+            return false
+          } else if (!/^(https|http){1}:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i.test(this.conf_info.relation_info.content[6 + 3 * i].info_con)) {
+            this.$message.error(`跳转链接不合法(${i + 1})`)
+            return false
+          }
+        }
+        this.conf_info.relation_info.content[3 + 3 * this.itemIndex].info_con
+
         // 先判断提示信息类型，创建数据格式
         if (this.value === 'prompt1') {
           this.conf_info.prompt_info.effect = 'effect1'

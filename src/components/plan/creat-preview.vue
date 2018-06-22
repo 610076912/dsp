@@ -354,6 +354,13 @@
               }
             })
           }
+          // 埋点
+          this.$_send({
+            describe: 'submitPlan',
+            planId: this.$store.state.creatData.planId,
+            code: res.code,
+            msg: res.msg
+          })
         })
       },
       // 小时转换

@@ -374,13 +374,19 @@
           this.$http.post('/api2/canclepublish', {
             plan_id: result.row.plan_id
           }).then(res => {
-            if (res.code === 200) {
-              this.seek()
-            }
+            this.seek()
+            // 埋点
+            this.$_send({
+              describe: 'planOff',
+              planId: result.row.plan_id,
+              code: res.code,
+              msg: res.msg
+            })
           })
         } else {
           // 判断是否为第一次发布，如果是第一次发布则提示扣除计划预算。
           if (result.row.is_publish === 0) {
+            debugger
             this.$confirm('计划开始将会从账户中扣除本计划预算金额！', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
@@ -389,6 +395,13 @@
               this.$http.post('/api2/publish', {
                 plan_id: result.row.plan_id
               }).then(res => {
+                // 埋点
+                this.$_send({
+                  describe: 'firstDeduction',
+                  code: res.code,
+                  msg: res.msg,
+                  planId: result.row.plan_id
+                })
                 if (res.code !== 200) {
                   this.$alert(res.msg, '提示', {
                     confirmButtonText: '确定',
@@ -404,6 +417,7 @@
               this.$set(this.switchData, result.$index, false)
             })
           } else {
+            debugger
             this.$http.post('/api2/publish', {
               plan_id: result.row.plan_id
             }).then(res => {
@@ -417,6 +431,13 @@
               } else {
                 this.seek()
               }
+              // 埋点
+              this.$_send({
+                describe: 'planOn',
+                planId: result.row.plan_id,
+                code: res.code,
+                msg: res.msg
+              })
             })
           }
         }

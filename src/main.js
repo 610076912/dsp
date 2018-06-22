@@ -6,7 +6,8 @@ import '../static/ele-theme/index.css' // 使用自定义主题色
 import App from './App'
 import router from './router'
 import store from './store'
-// axios  test
+import analysis from './assets/js/analysis'
+// axios
 import es6Promise from 'es6-promise'
 
 es6Promise.polyfill()
@@ -23,6 +24,7 @@ Vue.config.performance = true
 Vue.prototype.$echarts = echarts
 Vue.use(axios)
 Vue.use(fixed)
+Vue.use(analysis)
 
 // 登录页面router钩子函数
 router.beforeEach((to, from, next) => {
