@@ -76,14 +76,17 @@
     created () {
       // 判断状态
       let status = this.$store.state.creatData.status
-      if (status && status.plan_status === 4) {
-        let actidStatus = status.act_ids_status.every(item => {
-          return item.act_ids_status === -2
-        })
-        if (actidStatus) {
-          this.canEdit = true
-        }
-      } else if (status && status.plan_status !== 1 && status.plan_status !== 6) {
+      // if (status && status.plan_status === 4) {
+      //   let actidStatus = status.act_ids_status.every(item => {
+      //     return item.act_ids_status === -2
+      //   })
+      //   if (actidStatus) {
+      //     this.canEdit = true
+      //   }
+      // } else if (status && status.plan_status !== 1 && status.plan_status !== 6) {
+      //   this.canEdit = false
+      // }
+      if (status.plan_status === 5 || status.plan_status === 6) {
         this.canEdit = false
       }
       // 获取当前月份，展示节日图标

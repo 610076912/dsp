@@ -68,7 +68,7 @@
             :show-overflow-tooltip="true"
             prop="plan_name"
             align="center"
-            width="200">
+            width="190">
           </el-table-column>
           <el-table-column
             :resizable="false"
@@ -145,8 +145,8 @@
               <span class="operation" :class="{disabled: scope.row.status !== 1}"
                     @click="itemDel(scope.row.plan_id, scope.row.status === 1)">删除&nbsp;</span>
               <span class="operation" :class="{disabled: scope.row.status !== 5}"
-                    @click="finish(scope.row.plan_id, scope.row.status === 5)">终止&nbsp;</span>
-              <!--<span class="operation" @click="excentionStatus">状态</span>-->
+                    @click="finish(scope.row.plan_id, scope.row.status)">终止&nbsp;</span>
+              <span class="operation" @click="excentionStatus(scope.row.plan_id)">金额</span>
               <br>
             </template>
           </el-table-column>
@@ -164,28 +164,32 @@
         :total="pageTotal">
       </el-pagination>
     </div>
-    <el-button class="creat-new" type="primary" @click="creatNew" :disabled="canCreat.indexOf(activeName) < 0">新建计划</el-button>
-    <el-dialog title="提示" :visible.sync="dialogVisible" size="tiny">
-      <el-table :data="exStatus" border="true">
-        <el-table-column property="id" label="计划ID" width="60" align="center"></el-table-column>
-        <el-table-column property="name" label="计划名称" width="110" align="center"></el-table-column>
-        <el-table-column
-          label="开关"
-          align="center">
-          <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.kg"
-              on-color="#ff9900">
-            </el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column property="status" label="素材状态" align="center" width="120"></el-table-column>
-        <el-table-column label="功能操作" align="center">
-          <template slot-scope="scope">
-            <span>编辑素材</span>
-          </template>
-        </el-table-column>
-      </el-table>
+    <el-button class="creat-new" type="primary" @click="creatNew" :disabled="canCreat.indexOf(activeName) < 0">新建计划
+    </el-button>
+    <el-dialog title="计划金额" :visible.sync="dialogVisible" size="tiny" @open="dialogOpen">
+      <div class="dialog-left">
+        <span>账户余额:{{$_toFixed(userBalance, 2) / 1000}}</span><br>
+        <span>计划余额:{{$_toFixed(planBalance, 2) / 1000}}</span>
+        <el-input icon="plus" placeholder="调整计划余额" v-model="plusPlanBalance"></el-input>
+        <el-input icon="minus" placeholder="调整计划余额" v-model="minusPlanBalance"></el-input>
+        <el-button type="primary" @click="changePlanBalance">确定</el-button>
+        <el-radio-group v-model="planDayBudgetType" @change="planDayBudgetTypeChange">
+          <el-radio :label="0">快速投放</el-radio>
+          <el-radio :label="1">每日定额</el-radio>
+        </el-radio-group>
+        <span>计划每日定额: {{planDayBudget}}</span>
+        <el-input placeholder="修改计划每日定额" v-model="editPlanDayBudget" :disabled="!planDayBudgetType"></el-input>
+        <el-button type="primary" @click="changePlanDayBudget">确定</el-button>
+      </div>
+      <div class="dialog-right">
+        <span>计划金额调整记录</span>
+        <ul>
+          <li v-for="item in recordList">
+            <span class="info">{{new Date(item.time).Format('yyyy-MM-dd hh:mm:ss')}}</span> 计划金额
+            <span class="info">{{item.value}}</span>元
+          </li>
+        </ul>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -217,7 +221,26 @@
         switchData: [],
         // 开关是否可点数据，根据状态判断。
         switchDisabled: [],
+        // dialog
         dialogVisible: false,
+        // 当前dialog的planid
+        dialogPlanId: null,
+        // dialog内的数据。获取的账户余额
+        userBalance: 0,
+        // dialog内的数据。获取的计划余额
+        planBalance: 0,
+        // dialog内的数据。获取的日预算
+        planDayBudget: 0,
+        // dialog内的数据。修改记录
+        recordList: [],
+        // dialog内的数据。 用户填写的加计划余额
+        plusPlanBalance: null,
+        // dialog内的数据。 用户填写的减计划余额
+        minusPlanBalance: null,
+        // dialog内的数据。 用户填写的每日定额
+        editPlanDayBudget: null,
+        // dialog内的数据。 计划投放类型
+        planDayBudgetType: 0,
         // 状态数据
         exStatus: [],
         currentPage: 1,
@@ -319,14 +342,19 @@
             plan_id: planId
           }).then(function (res) {
             if (res.code === 200) {
+              // 埋点
+              this.$_send({
+                describe: 'deletePlan',
+                planId: planId
+              })
               that.seek()
             }
           })
         })
       },
       // 终止
-      finish (planId, canFinish) {
-        if (!canFinish) return
+      finish (planId, status) {
+        if (status !== 5) return
         const that = this
         this.$confirm(`您确定要终止ID为 ${planId} 的计划项吗？`, '提示', {
           confirmButtonText: '确定',
@@ -337,6 +365,11 @@
             plan_id: planId
           }).then(function (res) {
             if (res.code === 200) {
+              // 埋点
+              this.$_send({
+                describe: 'overPlan',
+                planId: planId
+              })
               that.seek()
             }
           })
@@ -386,7 +419,6 @@
         } else {
           // 判断是否为第一次发布，如果是第一次发布则提示扣除计划预算。
           if (result.row.is_publish === 0) {
-            debugger
             this.$confirm('计划开始将会从账户中扣除本计划预算金额！', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
@@ -417,7 +449,6 @@
               this.$set(this.switchData, result.$index, false)
             })
           } else {
-            debugger
             this.$http.post('/api2/publish', {
               plan_id: result.row.plan_id
             }).then(res => {
@@ -467,8 +498,103 @@
         this.getActiveList(option)
       },
       // 状态按钮弹出推广状态
-      excentionStatus () {
+      excentionStatus (planId) {
+        this.dialogPlanId = planId
         this.dialogVisible = !this.dialogVisible
+      },
+      // dialog打开
+      dialogOpen () {
+        this.$http.get('/api2/account_record', {
+          params: {
+            plan_id: this.dialogPlanId
+          }
+        }).then(res => {
+          console.log(res)
+          if (res.code === 200) {
+            this.recordList = res.data.recordList
+            this.userBalance = res.data.userBalance
+            this.planDayBudget = res.data.planDayBudget
+            this.planBalance = res.data.planBalance
+            this.planDayBudgetType = res.data.planBudgetType
+          }
+        })
+      },
+      // 调整计划预算
+      changePlanBalance () {
+        if ((this.plusPlanBalance && this.minusPlanBalance) || (!this.plusPlanBalance && !this.minusPlanBalance)) {
+          return this.$message({
+            message: '只能选择增加计划余额或减少计划余额',
+            type: 'warning'
+          })
+        } else {
+          if (this.plusPlanBalance && !/^[1-9]\d*$/.test(this.plusPlanBalance)) {
+            return this.$message({
+              message: '请输入正确的金额',
+              type: 'warning'
+            })
+          } else if (this.minusPlanBalance && !/^[1-9]\d*$/.test(this.minusPlanBalance)) {
+            return this.$message({
+              message: '请输入正确的金额',
+              type: 'warning'
+            })
+          }
+        }
+        let balance = this.plusPlanBalance || this.minusPlanBalance * -1
+        console.log(balance)
+        this.$http.post('/api2/edit_plan_account', {
+          plan_id: this.dialogPlanId,
+          change_budget: balance
+        }).then(res => {
+          if (res.code === 200) {
+            this.$message('修改成功')
+            this.plusPlanBalance = null
+            this.minusPlanBalance = null
+            this.dialogOpen()
+            // 埋点
+            this.$_send({
+              describe: 'editPlanBudget',
+              planId: this.dialogPlanId,
+              change_budget: balance
+            })
+          }
+        })
+      },
+      // 计划投放类型改变
+      planDayBudgetTypeChange (arg) {
+        if (!arg) {
+          this.editPlanDayBudget = null
+        }
+      },
+      // 修改计划每日定额
+      changePlanDayBudget () {
+        if (!this.editPlanDayBudget && this.planDayBudgetType) {
+          return this.$message({
+            message: '请输入每日定额',
+            type: 'warning'
+          })
+        } else if (!/^[1-9]\d*$/.test(this.editPlanDayBudget) && this.planDayBudgetType) {
+          return this.$message({
+            message: '请输入正确的金额',
+            type: 'warning'
+          })
+        }
+        this.$http.post('/api2/edit_day_account', {
+          plan_id: this.dialogPlanId,
+          day_account: this.editPlanDayBudget,
+          budget_type: this.planDayBudgetType
+        }).then(res => {
+          if (res.code === 200) {
+            this.$message('修改成功')
+            this.dialogOpen()
+            // 埋点
+            this.$_send({
+              describe: 'editDayBudget',
+              planId: this.dialogPlanId,
+              day_account: this.editPlanDayBudget,
+              budget_type: this.planDayBudgetType
+            })
+          }
+        })
       },
       // 查看按钮
       details (planId) {
@@ -482,6 +608,12 @@
           plan_id: planId
         }).then(res => {
           if (res.code === 200) {
+            // 埋点
+            this.$_send({
+              describe: 'copyPlan',
+              new: res.data,
+              planId: planId
+            })
             this.$alert(`复制成功！复制的计划id为${res.data}`, '提示', {
               confirmButtonText: '确定',
               callback: action => {
@@ -585,7 +717,7 @@
         color: #169bd5;
         border-right: 1px solid #000;
         cursor: pointer;
-        &:nth-of-type(4n) {
+        &:nth-of-type(5n) {
           border: none;
         }
       }
@@ -613,6 +745,51 @@
         top: 0;
         width: 100%;
         height: 100%;
+      }
+    }
+    .el-dialog__header {
+      background-color: #000;
+      padding-top: 5px;
+      .el-dialog__title {
+        color: #fff;
+        line-height: 38px;
+      }
+      .el-dialog__headerbtn {
+        padding: 8px;
+      }
+    }
+    .el-dialog__body {
+      overflow: hidden;
+      padding: 0;
+      & > div {
+        width: 50%;
+        float: left;
+        padding: 30px;
+      }
+      .dialog-left {
+        border-right: 1px solid #d8d8d8;
+        & > span {
+          font-size: 14px;
+          font-family: '黑体';
+          margin-right: 10px;
+        }
+        .el-radio-group {
+          display: block;
+          margin-bottom: 10px;
+        }
+        & > div {
+          margin-top: 10px;
+        }
+        .el-button {
+          width: 100%;
+          margin-top: 10px;
+          margin-bottom: 35px;
+        }
+      }
+      .dialog-right {
+        .info {
+          color: #169bd5;
+        }
       }
     }
   }

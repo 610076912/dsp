@@ -35,6 +35,9 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import mediaChannelIdForplatform from '../../../static/json/mediachannle-platform'
+
+  const channelMedias = process.env.TEST === 'test' ? mediaChannelIdForplatform.test : mediaChannelIdForplatform.product
   let searchUrl = process.env.TEST === 'test' ? '//test-tj.videozhishi.com' : 'https://tj.videozhishi.com'
   import steps from './steps-component.vue'
   import header from './header-component.vue'
@@ -45,15 +48,19 @@
       return {
         searchText: '',
         episodeResult: [],
-        selectedEpisode: []
+        selectedEpisode: [],
+        mediaChannelId: []
       }
     },
     created () {
       // 判断Vuex中是否有数据
       let planId = this.$store.state.creatData.planId
       let storeEpisode = this.$store.state.creatData.creatEpisode
-      if (storeEpisode) {
+      // 从vuex中取出平台（移动、pc 、大屏）
+      let activeName = this.$store.state.creatData.creatBasice.channel
+      if (storeEpisode && activeName) {
         this.selectedEpisode = storeEpisode
+        this.mediaChannelId = channelMedias[activeName]
       } else if (planId) {
         this.$http.get('/api2/get_drama_plan', {
           params: {
@@ -61,7 +68,8 @@
           }
         }).then(res => {
           if (res.code === 200) {
-            this.selectedEpisode = res.data
+            this.selectedEpisode = res.data.res1
+            this.mediaChannelId = channelMedias[res.data.res2.plan_channel]
           }
         })
       }
@@ -92,7 +100,8 @@
       searchEpisode () {
         this.$http.get(searchUrl + '/data/search_episode', {
           params: {
-            search_text: this.searchText
+            search_text: this.searchText,
+            channel_ids: JSON.stringify(this.mediaChannelId)
           }
         }).then(res => {
           this.episodeResult = res.data
