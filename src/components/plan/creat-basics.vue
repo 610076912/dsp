@@ -301,7 +301,8 @@
             .then(res => {
               if (res.code === 200) {
                 this.btnLoading = false
-                this.$router.push('/creatScene')
+                // this.$router.push('/creatScene')
+                this.$router.push('/creatUserDevice')
               } else {
                 this.btnLoading = false
               }

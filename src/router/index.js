@@ -17,6 +17,7 @@ const creatEpisode = () => import(/* webpackChunkName: "plan" */ '@/components/p
 const creatStrategy = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-strategy')
 const creatPreview = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-preview')
 const creatMaterial = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-material')
+const creatUserDevice = () => import('@/components/plan/creat-user&device')
 // import plan from '@/components/plan/plan'
 // import planIndex from '@/components/plan/plan-index'
 // import creatBasics from '@/components/plan/creat-basics'
@@ -76,6 +77,11 @@ export default new Router({
           name: 'creatBasics',
           component: creatBasics,
           props: true
+        },
+        {
+          path: '/creatUserDevice',
+          name: 'creatUserDevice',
+          component: creatUserDevice
         },
         {
           path: '/creatScene',
