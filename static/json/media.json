@@ -166,5 +166,13 @@
     "checked": "0",
     "alias": "u",
     "display": true
+  },
+  {
+    "media_id": 1022,
+    "media_name": "乐播投屏",
+    "media_url": "./static/img/lebo.png",
+    "checked": "0",
+    "alias": "v",
+    "display": true
   }
 ]

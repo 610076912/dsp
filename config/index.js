@@ -28,12 +28,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api' : {
+      '/api': {
         // 180
-        // target: 'http://192.168.1.180:5000/',
+        // target: 'http://localhost:5001',
         // 正式
         // target: 'https://context.videozhishi.com',
         // 测试
+        target: 'http://192.168.1.163:7001',
         // target: 'https://test-context.videozhishi.com',
         changeOrigin: true,
         pathRewrite: {

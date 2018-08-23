@@ -15,6 +15,7 @@
       <el-row class="row">
         <el-col :span="8"><span>投放频率: </span><span>{{ baseInfo.plan_budget }}</span></el-col>
         <el-col :span="8"><span>计划总预算: </span><span>{{ baseInfo.all_budget }}元</span></el-col>
+        <el-col :span="8" v-if="baseInfo.planBudgetType === 1"><span>计划每日定额: </span><span>{{ baseInfo.day_budget }}元</span></el-col>
       </el-row>
     </div>
     <div class="scene cons">
@@ -214,7 +215,8 @@
           act_b_time: '',
           group_name: '',
           day_budget: '',
-          all_budget: ''
+          all_budget: '',
+          planBudgetType: 0
         },
         sceneInfo: [],
         timeInfo: {
@@ -249,8 +251,10 @@
             this.baseInfo.act_b_time = result.baseInfo_1.plan_b_time
             this.baseInfo.group_name = result.baseInfo_1.group_name
             this.oldValue = result.baseInfo_1.group_name
+            this.baseInfo.planBudgetType = result.baseInfo_1.plan_budget_type
             this.baseInfo.all_budget = result.baseInfo_1.plan_all_budget
-            this.baseInfo.plan_budget = result.baseInfo_1.plan_budget_type === 0 ? '快速投放' : '均匀投放'
+            this.baseInfo.day_budget = result.baseInfo_1.plan_day_budget
+            this.baseInfo.plan_budget = result.baseInfo_1.plan_budget_type === 0 ? '快速投放' : '每日定额'
           }
           if (result.sceneInfo_2) {
             // 场景化投放设置
@@ -354,6 +358,13 @@
               }
             })
           }
+          // 埋点
+          this.$_send({
+            describe: 'submitPlan',
+            planId: this.$store.state.creatData.planId,
+            code: res.code,
+            msg: res.msg
+          })
         })
       },
       // 小时转换

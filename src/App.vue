@@ -4,7 +4,7 @@
       <div class="header-top">
         <div class="center">
           <div class="header-welcome">欢迎您，<span class="header-ggz">{{userType}}</span><span class="header-name">{{username}} <i
-            class="el-icon-caret-bottom"></i></span><span class="logout" @click="signOut">安全退出</span>
+            class="el-icon-caret-bottom"></i></span><span class="logout bp" describe="signOut" @click="signOut">安全退出</span>
           </div>
         </div>
       </div>

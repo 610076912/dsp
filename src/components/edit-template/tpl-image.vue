@@ -13,7 +13,7 @@
           <div class="ad-style" v-show="!isEdit"><video id="imgvideo" loop src="http://sltimg.adv.ott.cibntv.net/static/video/image.mp4" alt=""></video></div>
           <div class="ad-edit">
             <div class="upload-flash">
-              <img v-if="conf_info.image_src" :src="conf_info.image_src" class="avatar" id="loadImg">
+              <img v-show="conf_info.image_src" :src="conf_info.image_src" class="avatar" id="loadImg">
               <el-upload
                 class="avatar-uploader"
                 ref="upload"
@@ -50,7 +50,7 @@
                 <span @click="changePosition('right', 3)" :class="{'option-border':isPosition===3}">屏幕居右</span>
               </div>
               <div class="ad-url">
-                <el-input v-model="conf_info.out_url" placeholder="请输跳转链接（40字符）">
+                <el-input v-model="conf_info.out_url" placeholder="请输跳转链接">
                   <template slot="prepend">跳转链接</template>
                 </el-input>
               </div>
@@ -229,6 +229,15 @@
         const needSize = this.conf_info.size.split(',')
         if (ELoadImg.naturalWidth !== needSize[0] * 1 || ELoadImg.naturalHeight !== needSize[1] * 1) {
           this.$message.error('图片尺寸与已选尺寸不符!')
+          return false
+        }
+        // 验证跳转链接
+        if (!this.conf_info.out_url) {
+          this.$message.error('请输入跳转链接')
+          return false
+        }
+        if (!/^(https|http){1}:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i.test(this.conf_info.out_url)) {
+          this.$message.error('跳转链接url地址不合法')
           return false
         }
 

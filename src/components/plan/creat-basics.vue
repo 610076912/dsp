@@ -28,7 +28,12 @@
         <el-form-item label="投放频率" required>
           <el-radio-group :disabled="!canEdit" v-model="ruleForm.budgetType">
             <el-radio :label="0">快速投放</el-radio>
-            <el-radio :label="1">均匀投放</el-radio>
+            <el-radio :label="1">
+              每日定额
+              <el-input :disabled="!ruleForm.budgetType || !canEdit" size="small" v-model="ruleForm.planDayBudget">
+                <template slot="append">元</template>
+              </el-input>
+            </el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="总预算" prop="all" required>
@@ -69,6 +74,7 @@
   import setps from './steps-component.vue'
   import mediaJsonP from '../../../static/json/media.json'
   import mediaJsonT from '../../../static/json/test-media.json'
+  import mediaChannelIdForplatform from '../../../static/json/mediachannle-platform'
 
   let testEnv = process.env.TEST === 'test'
   let mediaJson = mediaJsonP
@@ -76,15 +82,7 @@
     mediaJson = mediaJsonT
   }
   // 移动，pc，大屏端对应的媒体, 9999为测试渠道号！
-  const channelMedias = process.env.TEST === 'test' ? {
-    1: [9999],
-    2: [9999],
-    3: [9999]
-  } : {
-    1: [1014, 1015, 1020],
-    2: [1002, 1004, 1021],
-    3: [1003]
-  }
+  const channelMedias = process.env.TEST === 'test' ? mediaChannelIdForplatform.test : mediaChannelIdForplatform.product
   export default {
     name: 'creatBasics',
     props: {
@@ -102,6 +100,8 @@
         // 判断是否为数字
         if (!/^\d+$/.test(value)) {
           return callback(new Error('请输入数值'))
+        } else {
+          if (!value > 0) return callback(new Error('请填入正确的数值'))
         }
         callback()
       }
@@ -120,7 +120,7 @@
           budgetType: 0,
           all: '',
           date: [new Date(), new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)],
-          price: ''
+          planDayBudget: null
         },
         canEdit: true,
         // 验证规则
@@ -177,8 +177,8 @@
         this.ruleForm.budgetType = creatData.budgetType
         this.ruleForm.all = creatData.all
         this.ruleForm.date = creatData.date.map(item => new Date(item))
-        // 单价 临时增加
-        // this.ruleForm.price = creatData.price
+        // 每日定额
+        this.ruleForm.planDayBudget = creatData.planDayBudget
         // this.priceInputStatus = true
         this.activeName = creatData.channel
         this.isEdit = true
@@ -197,8 +197,8 @@
             this.ruleForm.group = data.group_id
             this.ruleForm.budgetType = data.plan_budget_type
             this.ruleForm.all = data.plan_all_budget
-            // 单价临时增加
-            // this.ruleForm.price = data.price
+            // 每日定额
+            this.ruleForm.planDayBudget = data.plan_day_budget
             // this.priceInputStatus = true
             this.activeName = data.plan_channel
             this.$set(this.ruleForm.date, 0, new Date(data.plan_b_time))
@@ -231,6 +231,7 @@
       nextStep () {
         let that = this
         this.$refs['new1form'].validate((valid) => {
+          console.log(valid)
           // 如果验证通过则跳转下一个路由
           let url, data, mUrl // 基本设置接口url，基本设置数据，媒体接口url
           // 设置日期时间
@@ -248,8 +249,8 @@
               plan_budget_type: that.ruleForm.budgetType,
               plan_budget: that.ruleForm.all,
               plan_channel: that.activeName,
-              group_id: that.ruleForm.group
-              // price: that.ruleForm.price
+              group_id: that.ruleForm.group,
+              plan_day_budget: that.ruleForm.planDayBudget
             }
           }
           if (valid && that.isEdit) {
@@ -264,7 +265,19 @@
               plan_budget_type: that.ruleForm.budgetType,
               plan_budget: that.ruleForm.all,
               plan_channel: that.activeName,
-              group_id: that.ruleForm.group
+              group_id: that.ruleForm.group,
+              plan_day_budget: that.ruleForm.planDayBudget
+            }
+          }
+          // 表单验证不通过则return
+          if (!valid) return
+          // 验证金额
+          if (this.ruleForm.budgetType === 1) {
+            if (!/^[1-9]\d*$/.test(this.ruleForm.planDayBudget)) {
+              return this.$message({
+                message: '请输入正确的日定额',
+                type: 'warning'
+              })
             }
           }
           that.$http.post(url, data)
@@ -288,7 +301,8 @@
             .then(res => {
               if (res.code === 200) {
                 this.btnLoading = false
-                this.$router.push('/creatScene')
+                // this.$router.push('/creatScene')
+                this.$router.push('/creatUserDevice')
               } else {
                 this.btnLoading = false
               }
@@ -384,6 +398,11 @@
       .form {
         width: 500px;
         float: left;
+        .el-radio {
+          .el-input {
+            width: 165px;
+          }
+        }
         .button-wrap {
           position: absolute;
           bottom: 10px;

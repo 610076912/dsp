@@ -43,7 +43,7 @@
         this.$http.post('/users/login', {
           user_name: this.username,
           password: this.password
-        }).then(function (response) {
+        }).then((response) => {
           if (response.code === 200) {
             if (response.data.user_type[0] === '1' || response.data.user_type[0] === '4') {
               sessionStorage.setItem('token', response.data.token)
@@ -62,6 +62,10 @@
                 type: 'warning'
               })
             }
+            // 埋点
+            this.$_send({
+              describe: 'signIn'
+            })
           }
         })
       }
