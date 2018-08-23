@@ -34,8 +34,7 @@ module.exports = {
         // 正式
         // target: 'https://context.videozhishi.com',
         // 测试
-        target: 'http://192.168.1.163:7001',
-        // target: 'https://test-context.videozhishi.com',
+        target: 'https://test-context.videozhishi.com',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
