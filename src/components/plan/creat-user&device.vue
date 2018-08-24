@@ -177,7 +177,7 @@ export default {
   created () {
     this.$http.get('http://192.168.1.163:7001/findUserAndDevice', {
       params: {
-        plan_id: 'plan9999'
+        plan_id: this.$store.state.creatData.planId
       }
     }).then(res => {
       if (res.code === 200) {
@@ -232,7 +232,7 @@ export default {
     },
     nextStep () {
       this.$http.post('http://192.168.1.163:7001/setUserAndDevice', {
-        plan_id: 'plan9999',
+        plan_id: this.$store.state.creatData.planId,
         sex: this.sexChecked,
         age: this.ageChecked.join(','),
         marriage: this.marriageChecked.join(','),
