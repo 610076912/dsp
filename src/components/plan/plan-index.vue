@@ -340,7 +340,7 @@
           text: '努力加载中'
         })
         //   /api2/get_plan_list
-        this.$http.post('http://192.168.1.106:7001/get_plan_list', {
+        this.$http.post('http://47.93.140.7:7001/get_plan_list', {
           user_id: sessionStorage.getItem('user_id'),
           sort_type: option.sort_type,
           plan_name: option.name,
@@ -684,7 +684,7 @@
         } else {
           mediaSwitch = 1
         }
-        this.$http.post('http://127.0.0.1:7001/act_switch_change', {
+        this.$http.post('http://47.93.140.7:7001/act_switch_change', {
           act_id: scope.row.act_id,
           status: mediaSwitch
         }).then(res => {

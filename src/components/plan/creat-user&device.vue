@@ -175,7 +175,7 @@ export default {
     }
   },
   created () {
-    this.$http.get('http://192.168.1.163:7001/findUserAndDevice', {
+    this.$http.get('http://47.93.140.7:7001/findUserAndDevice', {
       params: {
         plan_id: this.$store.state.creatData.planId
       }
@@ -231,7 +231,7 @@ export default {
       }
     },
     nextStep () {
-      this.$http.post('http://192.168.1.163:7001/setUserAndDevice', {
+      this.$http.post('http://47.93.140.7:7001/setUserAndDevice', {
         plan_id: this.$store.state.creatData.planId,
         sex: this.sexChecked,
         age: this.ageChecked.join(','),
