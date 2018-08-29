@@ -28,9 +28,10 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api' : {
+      '/api': {
         // 180
         // target: 'http://localhost:7001',
+        // target: 'http://localhost:5001',
         // 正式
         // target: 'https://context.videozhishi.com',
         // 测试
