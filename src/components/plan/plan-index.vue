@@ -51,6 +51,7 @@
       <div class="card-content">
         <el-table
           :data="tableData"
+          @cell-click="mediaStatus"
           border
           stripe
           @selection-change="selectionChange"
@@ -96,27 +97,6 @@
           </el-table-column>
           <el-table-column
             :resizable="false"
-            label="媒体状态"
-            prop="meidanum"
-            align="center"
-            width="75">
-          </el-table-column>
-          <el-table-column
-            :resizable="false"
-            label="广告素材"
-            align="center"
-            prop="adnum"
-            width="75">
-          </el-table-column>
-          <el-table-column
-            :resizable="false"
-            label="投放策略"
-            align="center"
-            prop="billing"
-            width="75">
-          </el-table-column>
-          <el-table-column
-            :resizable="false"
             label="开关"
             align="center"
             prop="publish"
@@ -137,6 +117,14 @@
             prop="status"
             :formatter="activity"
             width="90">
+          </el-table-column>
+          <el-table-column
+            :resizable="false"
+            label="媒体状态"
+            align="center"
+            prop="actInfo"
+            :formatter="activity"
+            width="180">
           </el-table-column>
           <el-table-column label="功能操作" align="center" :resizable="false">
             <template slot-scope="scope">
@@ -166,12 +154,13 @@
     </div>
     <el-button class="creat-new" type="primary" @click="creatNew" :disabled="canCreat.indexOf(activeName) < 0">新建计划
     </el-button>
-    <el-dialog title="计划金额" :visible.sync="dialogVisible" size="tiny" @open="dialogOpen">
+    <el-dialog title="计划金额" :visible.sync="dialogVisible" size="tiny" @open="dialogOpen" class="budgetDialog">
       <div class="dialog-left">
         <span>账户余额:{{$_toFixed(userBalance, 2) / 1000}}</span><br>
         <span>计划余额:{{$_toFixed(planBalance, 2) / 1000}}</span>
-        <el-input icon="plus" placeholder="调整计划余额" v-model="plusPlanBalance"></el-input>
-        <el-input icon="minus" placeholder="调整计划余额" v-model="minusPlanBalance"></el-input>
+        <el-input icon="plus" placeholder="调整计划余额" v-model="plusPlanBalance" @change="clearAnother('minus')"></el-input>
+        <el-input icon="minus" placeholder="调整计划余额" v-model="minusPlanBalance"
+                  @change="clearAnother('plus')"></el-input>
         <el-button type="primary" @click="changePlanBalance">确定</el-button>
         <el-radio-group v-model="planDayBudgetType" @change="planDayBudgetTypeChange">
           <el-radio :label="0">快速投放</el-radio>
@@ -191,11 +180,51 @@
         </ul>
       </div>
     </el-dialog>
+    <el-dialog :title="mediaChannelDialogName + ' 媒体状态'" :visible.sync="mediaStatusDialog" size="tiny">
+      <el-table border :data="mediaChannelTableData">
+        <el-table-column
+          :resizable="false"
+          label="媒体平台"
+          align="center"
+          prop="act_channel_id"
+          :formatter="mediaChannelFormatter"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          :resizable="false"
+          label="开关"
+          align="center"
+          prop="act_flag"
+          width="100">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="mediaSwitchData[scope.$index]"
+              on-color="#ff9900"
+              @change="mediaSwitchChange(scope)">
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :resizable="false"
+          label="状态"
+          align="center"
+          prop="publish"
+          width="130">
+        </el-table-column>
+        <el-table-column
+          :resizable="false"
+          label="功能操作"
+          align="center"
+          prop="publish">
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import setps from './steps-component.vue'
+  import mediaChannelData from '../../../static/json/media'
 
   export default {
     name: 'plan',
@@ -247,7 +276,13 @@
         pageTotal: 0,
         pageSize: 10,
         // 判断移动、PC、大屏哪个可创建
-        canCreat: ''
+        canCreat: '',
+        // 媒体平台dialog
+        mediaChannelDialogName: '',
+        mediaStatusDialog: false,
+        // 平台媒体表格数据
+        mediaChannelTableData: [],
+        mediaSwitchData: []
       }
     },
     created () {
@@ -304,7 +339,9 @@
           target: '.card-content',
           text: '努力加载中'
         })
-        this.$http.post('/api2/get_plan_list', {
+        //   /api2/get_plan_list
+        this.$http.post('http://192.168.1.106:7001/get_plan_list', {
+          user_id: sessionStorage.getItem('user_id'),
           sort_type: option.sort_type,
           plan_name: option.name,
           group_id: option.groupId,
@@ -509,7 +546,7 @@
             plan_id: this.dialogPlanId
           }
         }).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.code === 200) {
             this.recordList = res.data.recordList
             this.userBalance = res.data.userBalance
@@ -518,6 +555,11 @@
             this.planDayBudgetType = res.data.planBudgetType
           }
         })
+      },
+      // 清空另一个输入框
+      clearAnother (arg) {
+        // console.log(arg + 'PlanBalance')
+        this[arg + 'PlanBalance'] = ''
       },
       // 调整计划预算
       changePlanBalance () {
@@ -529,12 +571,12 @@
         } else {
           if (this.plusPlanBalance && !/^[1-9]\d*$/.test(this.plusPlanBalance)) {
             return this.$message({
-              message: '请输入正确的金额',
+              message: '请不要输入小数、负数、字母、特殊符号',
               type: 'warning'
             })
           } else if (this.minusPlanBalance && !/^[1-9]\d*$/.test(this.minusPlanBalance)) {
             return this.$message({
-              message: '请输入正确的金额',
+              message: '请不要输入小数、负数、字母、特殊符号',
               type: 'warning'
             })
           }
@@ -574,7 +616,7 @@
           })
         } else if (!/^[1-9]\d*$/.test(this.editPlanDayBudget) && this.planDayBudgetType) {
           return this.$message({
-            message: '请输入正确的金额',
+            message: '请不要输入小数、负数、字母、特殊符号',
             type: 'warning'
           })
         }
@@ -623,6 +665,33 @@
           }
         })
       },
+      // 媒体状态详情Dialog
+      mediaStatus (row, column) {
+        if (column.label !== '媒体状态') return
+        this.mediaSwitchData = []
+        this.mediaStatusDialog = true
+        this.mediaChannelTableData = row.actInfo
+        this.mediaChannelDialogName = row.plan_name
+        this.mediaChannelTableData.forEach(item => {
+          this.mediaSwitchData.push(item.act_flag === 1)
+        })
+      },
+      // 媒体开关改变
+      mediaSwitchChange (scope) {
+        let mediaSwitch = 1
+        if (scope.row.act_flag) {
+          mediaSwitch = 0
+        } else {
+          mediaSwitch = 1
+        }
+        this.$http.post('http://127.0.0.1:7001/act_switch_change', {
+          act_id: scope.row.act_id,
+          status: mediaSwitch
+        }).then(res => {
+          this.seek()
+          this.mediaStatusDialog = false
+        })
+      },
       // 选择每页多少条
       pageSizeChange (size) {
         this.pageSize = size
@@ -632,6 +701,17 @@
       pageCurrentChange (page) {
         this.currentPage = page
         this.seek()
+      },
+      // 格式化媒体状态平台名称
+      mediaChannelFormatter (mediaChannelId) {
+        const mediaData = mediaChannelData
+        let res = ''
+        mediaData.forEach(item => {
+          if (item.media_id * 1 === mediaChannelId.act_channel_id * 1) {
+            res = item.media_name
+          }
+        })
+        return res
       },
       // 格式化时间
       formatter (item) {
@@ -758,39 +838,45 @@
         padding: 8px;
       }
     }
-    .el-dialog__body {
-      overflow: hidden;
-      padding: 0;
-      & > div {
-        width: 50%;
-        float: left;
-        padding: 30px;
+    .budgetDialog {
+      .el-dialog {
+        min-width: 550px;
       }
-      .dialog-left {
-        border-right: 1px solid #d8d8d8;
-        & > span {
-          font-size: 14px;
-          font-family: '黑体';
-          margin-right: 10px;
-        }
-        .el-radio-group {
-          display: block;
-          margin-bottom: 10px;
-        }
+      .el-dialog__body {
+        overflow: hidden;
+        padding: 0;
         & > div {
-          margin-top: 10px;
+          width: 50%;
+          float: left;
+          padding: 30px;
         }
-        .el-button {
-          width: 100%;
-          margin-top: 10px;
-          margin-bottom: 35px;
+        .dialog-left {
+          border-right: 1px solid #d8d8d8;
+          & > span {
+            font-size: 14px;
+            font-family: '黑体';
+            margin-right: 10px;
+          }
+          .el-radio-group {
+            display: block;
+            margin-bottom: 10px;
+          }
+          & > div {
+            margin-top: 10px;
+          }
+          .el-button {
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 35px;
+          }
         }
-      }
-      .dialog-right {
-        .info {
-          color: #169bd5;
+        .dialog-right {
+          .info {
+            color: #169bd5;
+          }
         }
       }
     }
+
   }
 </style>
