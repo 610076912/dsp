@@ -55,7 +55,7 @@
             <span v-for="(item, index) in OS"
               :class="{active: item.id === '0'}">{{item.name}}</span>
           </li>
-          <li>
+          <li v-if="channel === 1">
             <p>手机品牌：</p>
             <span v-for="(item, index) in phone_brand"
               :class="{active: item.id === '0'}">{{item.name}}</span>
@@ -261,6 +261,7 @@ export default {
       planId: this.$store.state.creatData.planId,
       loading: true,
       options: [],
+      channel: null,
       oldValue: '',
       baseInfo: {
         act_name: '',
@@ -316,6 +317,7 @@ export default {
           this.baseInfo.all_budget = result.baseInfo_1.plan_all_budget
           this.baseInfo.day_budget = result.baseInfo_1.plan_day_budget
           this.baseInfo.plan_budget = result.baseInfo_1.plan_budget_type === 0 ? '快速投放' : '每日定额'
+          this.channel = result.baseInfo_1.plan_channel
         }
         if (result.userDeviceInfo_plus) {
           // 用户、设备定向数据
