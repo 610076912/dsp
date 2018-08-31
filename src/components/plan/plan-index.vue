@@ -123,8 +123,8 @@
             label="媒体状态"
             align="center"
             prop="actInfo"
-            :formatter="activity"
-            width="180">
+            :formatter="actStatusFormatter"
+            width="185">
           </el-table-column>
           <el-table-column label="功能操作" align="center" :resizable="false">
             <template slot-scope="scope">
@@ -198,6 +198,7 @@
           width="100">
           <template slot-scope="scope">
             <el-switch
+              :disabled="!mediaSwitchDisabled[scope.$index]"
               v-model="mediaSwitchData[scope.$index]"
               on-color="#ff9900"
               @change="mediaSwitchChange(scope)">
@@ -208,14 +209,16 @@
           :resizable="false"
           label="状态"
           align="center"
-          prop="publish"
+          :formatter="mediaStatusFormatter"
           width="130">
         </el-table-column>
         <el-table-column
           :resizable="false"
           label="功能操作"
-          align="center"
-          prop="publish">
+          align="center">
+          <template slot-scope="scope">
+            <span>编辑素材&nbsp;</span>
+          </template>
         </el-table-column>
       </el-table>
     </el-dialog>
@@ -282,7 +285,10 @@
         mediaStatusDialog: false,
         // 平台媒体表格数据
         mediaChannelTableData: [],
-        mediaSwitchData: []
+        // 平台媒体开关
+        mediaSwitchData: [],
+        // 平台媒体开关是否可点数据，根据状态判断。
+        mediaSwitchDisabled: []
       }
     },
     created () {
@@ -340,7 +346,7 @@
           text: '努力加载中'
         })
         //   /api2/get_plan_list
-        this.$http.post('http://192.168.1.106:7001/get_plan_list', {
+        this.$http.post('//47.93.140.7:7001/get_plan_list', {
           user_id: sessionStorage.getItem('user_id'),
           sort_type: option.sort_type,
           plan_name: option.name,
@@ -582,7 +588,6 @@
           }
         }
         let balance = this.plusPlanBalance || this.minusPlanBalance * -1
-        console.log(balance)
         this.$http.post('/api2/edit_plan_account', {
           plan_id: this.dialogPlanId,
           change_budget: balance
@@ -670,10 +675,11 @@
         if (column.label !== '媒体状态') return
         this.mediaSwitchData = []
         this.mediaStatusDialog = true
-        this.mediaChannelTableData = row.actInfo
+        this.mediaChannelTableData = row.actStatusArr
         this.mediaChannelDialogName = row.plan_name
         this.mediaChannelTableData.forEach(item => {
           this.mediaSwitchData.push(item.act_flag === 1)
+          this.mediaSwitchDisabled.push(item.act_ids_status === 1)
         })
       },
       // 媒体开关改变
@@ -684,7 +690,7 @@
         } else {
           mediaSwitch = 1
         }
-        this.$http.post('http://127.0.0.1:7001/act_switch_change', {
+        this.$http.post('//47.93.140.7:7001/act_switch_change', {
           act_id: scope.row.act_id,
           status: mediaSwitch
         }).then(res => {
@@ -734,6 +740,68 @@
           return '暂停投放'
         } else if (val.status === 100) {
           return '异常状态'
+        }
+      },
+      // 计划列表的媒体状态formatter
+      actStatusFormatter (val) {
+        if (!val.actStatusArr) return
+        let toufang = []
+        let jujue = []
+        let tongguo = []
+        let shenheing = []
+        let bianji = []
+        let zanting = []
+        val.actStatusArr.forEach(item => {
+          if (item.act_flag) {
+            toufang.push(item)
+          } else {
+            if (item.is_act_flag) {
+              zanting.push(item)
+              return
+            }
+            if (item.act_ids_status === -1) {
+              bianji.push(item)
+            }
+            if (item.act_ids_status === -2) {
+              jujue.push(item)
+            }
+            if (item.act_ids_status === 0) {
+              shenheing.push(item)
+            }
+            if (item.act_ids_status === 1) {
+              tongguo.push(item)
+            }
+            if (item.act_ids_status === 3) {
+              zanting.push(item)
+            }
+          }
+        })
+        let resSting = `正在投放（${toufang.length}）| 审核拒绝（${jujue.length}） 审核通过（${tongguo.length}）| 审核中（${shenheing.length}） 编辑中（${bianji.length}）| 已暂停（${zanting.length}）`
+        return resSting
+      },
+      // 媒体dialog中的状态formatter
+      mediaStatusFormatter (val) {
+        if (val.act_flag) {
+          return '正在投放'
+        } else {
+          if (val.is_act_flag) {
+            return '暂停投放'
+          }
+          if (val.act_ids_status === -1) {
+            return '正在编辑'
+          }
+          if (val.act_ids_status === -2) {
+            return '审核拒绝'
+          }
+          if (val.act_ids_status === 0) {
+            return '正在审核'
+          }
+          if (val.act_ids_status === 1) {
+            return '审核通过'
+          }
+          if (val.act_ids_status === 3) {
+            return '管理员暂停'
+          }
         }
       }
     },
