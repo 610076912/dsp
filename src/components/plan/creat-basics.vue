@@ -302,6 +302,7 @@
               if (res.code === 200) {
                 this.btnLoading = false
                 // this.$router.push('/creatScene')
+                this.$store.commit('CHANNEL', this.activeName)
                 this.$router.push('/creatUserDevice')
               } else {
                 this.btnLoading = false
