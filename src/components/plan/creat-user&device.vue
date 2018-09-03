@@ -176,7 +176,7 @@ export default {
     }
   },
   created () {
-    // console.log({channel: this.$store.state.creatData.channel})
+    console.log({channel: this.$store.state.creatData.channel})
     this.$http.get('http://47.93.140.7:7001/findUserAndDevice', {
       params: {
         plan_id: this.$store.state.creatData.planId
