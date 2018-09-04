@@ -154,12 +154,12 @@
     </div>
     <el-button class="creat-new" type="primary" @click="creatNew" :disabled="canCreat.indexOf(activeName) < 0">新建计划
     </el-button>
-    <el-dialog title="计划金额" :visible.sync="dialogVisible" size="tiny" @open="dialogOpen" class="budgetDialog">
+    <el-dialog title="计划预算调整" :visible.sync="dialogVisible" size="tiny" @open="dialogOpen" class="budgetDialog">
       <div class="dialog-left">
         <span>账户余额:{{$_toFixed(userBalance, 2) / 1000}}</span><br>
-        <span>计划余额:{{$_toFixed(planBalance, 2) / 1000}}</span>
-        <el-input icon="plus" placeholder="调整计划余额" v-model="plusPlanBalance" @change="clearAnother('minus')"></el-input>
-        <el-input icon="minus" placeholder="调整计划余额" v-model="minusPlanBalance"
+        <span>计划预算:{{$_toFixed(planBalance, 2) / 1000}}</span>
+        <el-input icon="plus" placeholder="调整计划预算" v-model="plusPlanBalance" @change="clearAnother('minus')"></el-input>
+        <el-input icon="minus" placeholder="调整计划预算" v-model="minusPlanBalance"
                   @change="clearAnother('plus')"></el-input>
         <el-button type="primary" @click="changePlanBalance">确定</el-button>
         <el-radio-group v-model="planDayBudgetType" @change="planDayBudgetTypeChange">
@@ -174,13 +174,14 @@
         <span>计划金额调整记录</span>
         <ul>
           <li v-for="item in recordList">
-            <span class="info">{{new Date(item.time).Format('yyyy-MM-dd hh:mm:ss')}}</span> 计划金额
+            <span class="info">{{new Date(item.time).Format('yyyy-MM-dd hh:mm:ss')}}</span> 计划预算
             <span class="info">{{item.value}}</span>元
           </li>
         </ul>
       </div>
     </el-dialog>
-    <el-dialog :title="mediaChannelDialogName + ' 媒体状态'" :visible.sync="mediaStatusDialog" size="tiny">
+    <el-dialog class="mediaStatusDialog" :title="mediaChannelDialogName + ' 媒体状态'" :visible.sync="mediaStatusDialog"
+               size="tiny">
       <el-table border :data="mediaChannelTableData">
         <el-table-column
           :resizable="false"
@@ -287,7 +288,7 @@
         mediaChannelTableData: [],
         // 平台媒体开关
         mediaSwitchData: [],
-        // 平台媒体开关是否可点数据，根据状态判断。
+        // 平台媒体开关是否可用数据，根据状态判断。
         mediaSwitchDisabled: []
       }
     },
@@ -547,6 +548,10 @@
       },
       // dialog打开
       dialogOpen () {
+        this.plusPlanBalance = null
+        this.minusPlanBalance = null
+        this.editPlanDayBudget = null
+        this.planDayBudgetType = 0
         this.$http.get('/api2/account_record', {
           params: {
             plan_id: this.dialogPlanId
@@ -673,7 +678,9 @@
       // 媒体状态详情Dialog
       mediaStatus (row, column) {
         if (column.label !== '媒体状态') return
+        // 保证每次打开dialog显示的是当前计划的act状态。
         this.mediaSwitchData = []
+        this.mediaSwitchDisabled = []
         this.mediaStatusDialog = true
         this.mediaChannelTableData = row.actStatusArr
         this.mediaChannelDialogName = row.plan_name
@@ -946,5 +953,10 @@
       }
     }
 
+    .mediaStatusDialog {
+      .el-dialog {
+        min-width: 570px;
+      }
+    }
   }
 </style>
