@@ -123,7 +123,7 @@
               :class="{active: OSchecked.indexOf(item.id) >= 0}"
               @click="checks(item.id, 'OSchecked')">{{item.name}}</span>
           </li>
-          <li v-if="channel =='1'">
+          <li v-if="channel ==1">
             <p>手机品牌：</p>
             <span
               v-for="(item, index) in phone_brand"
@@ -172,23 +172,24 @@ export default {
       OSchecked: [],
       phoneChecked: [],
       priceChecked: [],
-      channel: this.$store.state.creatData.creatBasice.channel
+      channel: this.$store.state.creatData.channel
     }
   },
   created () {
+    console.log({channel: this.$store.state.creatData.channel})
     this.$http.get('http://47.93.140.7:7001/findUserAndDevice', {
       params: {
         plan_id: this.$store.state.creatData.planId
       }
     }).then(res => {
       if (res.code === 200) {
-        if (this.channel === '1') {
+        if (this.channel === 1) {
           // 移动只显示手机操作系统
           res.data.dic.OS.splice(3)
-        } else if (this.channel === '2') {
+        } else if (this.channel === 2) {
           // PC显示pc操作系统
           res.data.dic.OS.splice(1, 2)
-        } else if (this.channel === '3') {
+        } else if (this.channel === 3) {
           // 大屏只选择android
           res.data.dic.OS.splice(2)
         }

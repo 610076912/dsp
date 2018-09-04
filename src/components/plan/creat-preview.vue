@@ -318,6 +318,7 @@ export default {
           this.baseInfo.day_budget = result.baseInfo_1.plan_day_budget
           this.baseInfo.plan_budget = result.baseInfo_1.plan_budget_type === 0 ? '快速投放' : '每日定额'
           this.channel = result.baseInfo_1.plan_channel
+          this.$store.commit('CHANNEL', result.baseInfo_1.plan_channel)
         }
         if (result.userDeviceInfo_plus) {
           // 用户、设备定向数据
