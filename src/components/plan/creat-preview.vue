@@ -227,14 +227,14 @@ import weekBar from './weekbar-component.vue'
 // import medias from '../../../static/json/media.json'
 // import medias from '../../../static/json/test-media.json'
 import mediaJsonP from '../../../static/json/media.json'
-import mediaJsonT from '../../../static/json/test-media.json'
+// import mediaJsonT from '../../../static/json/test-media.json'
 
 // let testEnv = process.env.TEST === 'test'
 // let medias = mediaJsonP
 // if (testEnv) {
 //   medias = mediaJsonT
 // }
-let medias = process.env.TEST === 'test' ? mediaJsonT : mediaJsonP
+let medias = mediaJsonP
 
 import mediaData from '../../../static/json/media-type.json'
 import region from '../../../static/json/region.json'
