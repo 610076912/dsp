@@ -175,7 +175,7 @@ export default {
     }
   },
   created () {
-    this.$http.get('/findUserAndDevice', {
+    this.$http.get('http://127.0.0.1:7001/findUserAndDevice', {
       params: {
         plan_id: 'plan9999'
       }
@@ -231,7 +231,7 @@ export default {
       }
     },
     nextStep () {
-      this.$http.post('/setUserAndDevice', {
+      this.$http.post('http://127.0.0.1:7001/setUserAndDevice', {
         plan_id: 'plan9999',
         sex: this.sexChecked,
         age: this.ageChecked.join(','),
