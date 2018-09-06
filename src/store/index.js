@@ -30,7 +30,8 @@ let state = {
     creatMedia: null,
     creatMediaType: null,
     creatEpisode: null,
-    creatScene: null
+    creatScene: null,
+    channel: null // 用来判别当前计划投放什么类型设备
   },
   materialData: {
     mediachannel: null,
@@ -57,8 +58,13 @@ const mutations = {
       creatStrategy: null,
       creatMedia: null,
       creatMediaType: null,
-      creatScene: null
+      creatScene: null,
+      channel: null
     }
+  },
+  CHANNEL (state, channel) {
+    // 改变id的方法
+    state.creatData.channel = channel
   },
   PLANID (state, planId) {
     // 改变id的方法

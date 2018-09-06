@@ -55,13 +55,13 @@
 <script>
   import setps from './steps-component.vue'
   import mediaJsonP from '../../../static/json/media.json'
-  import mediaJsonT from '../../../static/json/test-media.json'
+  // import mediaJsonT from '../../../static/json/test-media.json'
 
-  let testEnv = process.env.TEST === 'test'
+  // let testEnv = process.env.TEST === 'test'
   let allMedias = mediaJsonP
-  if (testEnv) {
-    allMedias = mediaJsonT
-  }
+  // if (testEnv) {
+  //   allMedias = mediaJsonT
+  // }
 
   // 素材模板
   import flash from '../edit-template/tpl-flash.vue'

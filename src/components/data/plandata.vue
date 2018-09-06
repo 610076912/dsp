@@ -104,13 +104,13 @@
   let searchUrl = process.env.TEST === 'test' ? '//test-tj.videozhishi.com' : 'https://tj.videozhishi.com'
 
   import mediaJsonP from '../../../static/json/media.json'
-  import mediaJsonT from '../../../static/json/test-media.json'
+  // import mediaJsonT from '../../../static/json/test-media.json'
 
-  let testEnv = process.env.TEST === 'test'
+  // let testEnv = process.env.TEST === 'test'
   let media = mediaJsonP
-  if (testEnv) {
-    media = mediaJsonT
-  }
+  // if (testEnv) {
+  //   media = mediaJsonT
+  // }
   export default {
     name: 'plandata',
     data () {

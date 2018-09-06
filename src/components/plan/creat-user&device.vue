@@ -8,7 +8,7 @@
     border-bottom: 1px solid #cacaca;
 
     .user_content, .device_content {
-      padding: 60px 0;
+      padding: 50px 0;
     }
 
     li {
@@ -175,7 +175,7 @@ export default {
     }
   },
   created () {
-    this.$http.get('http://127.0.0.1:7001/findUserAndDevice', {
+    this.$http.get('/findUserAndDevice', {
       params: {
         plan_id: 'plan9999'
       }
@@ -231,7 +231,7 @@ export default {
       }
     },
     nextStep () {
-      this.$http.post('http://127.0.0.1:7001/setUserAndDevice', {
+      this.$http.post('/setUserAndDevice', {
         plan_id: 'plan9999',
         sex: this.sexChecked,
         age: this.ageChecked.join(','),

@@ -73,14 +73,14 @@
 <script type="text/ecmascript-6">
   import setps from './steps-component.vue'
   import mediaJsonP from '../../../static/json/media.json'
-  import mediaJsonT from '../../../static/json/test-media.json'
+  // import mediaJsonT from '../../../static/json/test-media.json'
   import mediaChannelIdForplatform from '../../../static/json/mediachannle-platform'
 
-  let testEnv = process.env.TEST === 'test'
+  // let testEnv = process.env.TEST === 'test'
   let mediaJson = mediaJsonP
-  if (testEnv) {
-    mediaJson = mediaJsonT
-  }
+  // if (testEnv) {
+  //   mediaJson = mediaJsonT
+  // }
   // 移动，pc，大屏端对应的媒体, 9999为测试渠道号！
   const channelMedias = process.env.TEST === 'test' ? mediaChannelIdForplatform.test : mediaChannelIdForplatform.product
   export default {
@@ -302,6 +302,7 @@
               if (res.code === 200) {
                 this.btnLoading = false
                 // this.$router.push('/creatScene')
+                this.$store.commit('CHANNEL', Number(this.activeName))
                 this.$router.push('/creatUserDevice')
               } else {
                 this.btnLoading = false
