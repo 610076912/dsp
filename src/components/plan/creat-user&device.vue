@@ -1,72 +1,72 @@
 <style lang="stylus" scoped>
-.userAndDevice {
-  .content {
-    width: 100%;
-    overflow: hidden;
-    padding: 15px 30px;
-    padding-bottom: 30px;
-    border-bottom: 1px solid #cacaca;
-
-    .user_content, .device_content {
-      padding: 50px 0;
-    }
-
-    li {
-      line-height: 27px;
-
-      p {
-        display: inline-block;
-        text-align: right;
-        height: 28px;
-        margin: 10px;
-        width: 90px;
-      }
-
-      span:first-of-type {
-        border-radius: 14px;
-      }
-
-      span {
-        cursor: pointer;
-        display: inline-block;
-        text-align: center;
-        height: 28px;
-        border: 1px solid #cacaca;
-        margin: 10px;
-        width: 100px;
-        transition: all 0.2s;
-      }
-
-      .active {
-        background: #169bd5;
-        color: #fff;
-      }
-    }
-
-    .device {
-    }
-
-    .mytitle {
+  .userAndDevice {
+    .content {
       width: 100%;
-      margin-top: 20px;
-      height: 50px;
-      border-bottom: 1px solid #169bd5;
+      overflow: hidden;
+      padding: 15px 30px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid #cacaca;
 
-      .txt {
-        display: block;
-        font-size: 14px;
-        width: 130px;
+      .user_content, .device_content {
+        padding: 50px 0;
+      }
+
+      li {
+        line-height: 27px;
+
+        p {
+          display: inline-block;
+          text-align: right;
+          height: 28px;
+          margin: 10px;
+          width: 90px;
+        }
+
+        span:first-of-type {
+          border-radius: 14px;
+        }
+
+        span {
+          cursor: pointer;
+          display: inline-block;
+          text-align: center;
+          height: 28px;
+          border: 1px solid #cacaca;
+          margin: 10px;
+          width: 100px;
+          transition: all 0.2s;
+        }
+
+        .active {
+          background: #169bd5;
+          color: #fff;
+        }
+      }
+
+      .device {
+      }
+
+      .mytitle {
+        width: 100%;
+        margin-top: 20px;
         height: 50px;
-        background: #169bd5;
-        color: #fff;
-        line-height: 50px;
-        text-align: center;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
+        border-bottom: 1px solid #169bd5;
+
+        .txt {
+          display: block;
+          font-size: 14px;
+          width: 130px;
+          height: 50px;
+          background: #169bd5;
+          color: #fff;
+          line-height: 50px;
+          text-align: center;
+          border-top-left-radius: 10px;
+          border-top-right-radius: 10px;
+        }
       }
     }
   }
-}
 </style>
 
 <template>
@@ -123,7 +123,7 @@
               :class="{active: OSchecked.indexOf(item.id) >= 0}"
               @click="checks(item.id, 'OSchecked')">{{item.name}}</span>
           </li>
-          <li>
+          <li v-if="channel ==1">
             <p>手机品牌：</p>
             <span
               v-for="(item, index) in phone_brand"
@@ -148,108 +148,123 @@
   </div>
 </template>
 <script>
-import setps from './steps-component.vue'
-import header from './header-component.vue'
+  import setps from './steps-component.vue'
+  import header from './header-component.vue'
 
-export default {
-  components: {
-    setps,
-    'creat-header': header
-  },
-  data () {
-    return {
-      sex: [],
-      age: [],
-      marriage: [],
-      habit: [],
-      OS: [],
-      phone_brand: [],
-      price: [],
-      sexChecked: '',
-      ageChecked: [],
-      marriageChecked: [],
-      habitChecked: [],
-      OSchecked: [],
-      phoneChecked: [],
-      priceChecked: []
-    }
-  },
-  created () {
-    this.$http.get('/findUserAndDevice', {
-      params: {
-        plan_id: 'plan9999'
-      }
-    }).then(res => {
-      if (res.code === 200) {
-        this.OS = res.data.dic.OS
-        this.age = res.data.dic.age
-        this.habit = res.data.dic.habit
-        this.marriage = res.data.dic.marriage
-        this.phone_brand = res.data.dic.phone_brand
-        this.price = res.data.dic.price
-        this.sex = res.data.dic.sex
+  let testEnv = process.env.TEST === 'test'
+  let eggDspUrl = testEnv ? '//47.93.140.7:7001' : '//dspegg.videozhishi.com'
 
-        this.OSchecked = res.data.checked.OS.split(',')
-        this.ageChecked = res.data.checked.age.split(',')
-        this.habitChecked = res.data.checked.habit.split(',')
-        this.marriageChecked = res.data.checked.marriage.split(',')
-        this.phoneChecked = res.data.checked.phone_brand.split(',')
-        this.priceChecked = res.data.checked.price.split(',')
-        this.sexChecked = res.data.checked.sex
-      }
-    })
-  },
-  methods: {
-    check (val) {
-      if (this.sexChecked === val) {
-        this.sexChecked = ''
-      } else {
-        this.sexChecked = val
+  export default {
+    components: {
+      setps,
+      'creat-header': header
+    },
+    data () {
+      return {
+        sex: [],
+        age: [],
+        marriage: [],
+        habit: [],
+        OS: [],
+        phone_brand: [],
+        price: [],
+        sexChecked: '',
+        ageChecked: [],
+        marriageChecked: [],
+        habitChecked: [],
+        OSchecked: [],
+        phoneChecked: [],
+        priceChecked: [],
+        channel: this.$store.state.creatData.channel
       }
     },
-    checks (id, check) {
-      // 判断是不是第一个选项（不限），进行操作
-      if (id === '0') {
-        // 如果没不曾选中过（不限），就选中
-        if (this[check].indexOf(id) < 0) {
-          console.log('没有全选，即将全选')
-          this[check] = [id]
-        } else {
-          this[check] = []
+    created () {
+      console.log({channel: this.$store.state.creatData.channel})
+      this.$http.get(eggDspUrl + '/findUserAndDevice', {
+        params: {
+          plan_id: this.$store.state.creatData.planId
         }
-      } else {
-        // 如果点击其他选项，并且之前已经选中过（不限）要先清除（不限）
-        if (this[check].indexOf('0') >= 0) {
-          this[check].splice(this[check].indexOf('0'), 1)
-        }
-        // 如果当前选项为不曾选中，就制为选中
-        if (this[check].indexOf(id) < 0) {
-          this[check].push(id)
-        } else {
-          this[check].splice(this[check].indexOf(id), 1)
-        }
-      }
-    },
-    nextStep () {
-      this.$http.post('/setUserAndDevice', {
-        plan_id: 'plan9999',
-        sex: this.sexChecked,
-        age: this.ageChecked.join(','),
-        marriage: this.marriageChecked.join(','),
-        habit: this.habitChecked.join(','),
-        OS: this.OSchecked.join(','),
-        phone_brand: this.phoneChecked.join(','),
-        price: this.priceChecked.join(',')
       }).then(res => {
-        console.log(res)
         if (res.code === 200) {
-          this.$router.push('/creatScene')
+          if (this.channel === 1) {
+            // 移动只显示手机操作系统
+            res.data.dic.OS.splice(3)
+          } else if (this.channel === 2) {
+            // PC显示pc操作系统
+            res.data.dic.OS.splice(1, 2)
+          } else if (this.channel === 3) {
+            // 大屏只选择android
+            res.data.dic.OS.splice(2)
+          }
+          this.OS = res.data.dic.OS
+          this.age = res.data.dic.age
+          this.habit = res.data.dic.habit
+          this.marriage = res.data.dic.marriage
+          this.phone_brand = res.data.dic.phone_brand
+          this.price = res.data.dic.price
+          this.sex = res.data.dic.sex
+
+          this.OSchecked = res.data.checked.OS.split(',')
+          this.ageChecked = res.data.checked.age.split(',')
+          this.habitChecked = res.data.checked.habit.split(',')
+          this.marriageChecked = res.data.checked.marriage.split(',')
+          this.phoneChecked = res.data.checked.phone_brand.split(',')
+          this.priceChecked = res.data.checked.price.split(',')
+          this.sexChecked = res.data.checked.sex
         }
       })
     },
-    back () {
-      this.$router.go(-1)
+    methods: {
+      check (val) {
+        if (this.sexChecked === val) {
+          this.sexChecked = ''
+        } else {
+          this.sexChecked = val
+        }
+      },
+      checks (id, check) {
+        // 判断是不是第一个选项（不限），进行操作
+        if (id === '0') {
+          // 如果没不曾选中过（不限），就选中
+          if (this[check].indexOf(id) < 0) {
+            console.log('没有全选，即将全选')
+            this[check] = [id]
+          } else {
+            this[check] = []
+          }
+        } else {
+          // 如果点击其他选项，并且之前已经选中过（不限）要先清除（不限）
+          if (this[check].indexOf('0') >= 0) {
+            this[check].splice(this[check].indexOf('0'), 1)
+          }
+          // 如果当前选项为不曾选中，就制为选中
+          if (this[check].indexOf(id) < 0) {
+            this[check].push(id)
+          } else {
+            this[check].splice(this[check].indexOf(id), 1)
+          }
+        }
+      },
+      nextStep () {
+        this.$http.post(eggDspUrl + '/setUserAndDevice', {
+          plan_id: this.$store.state.creatData.planId,
+          sex: this.sexChecked,
+          age: this.ageChecked.join(','),
+          marriage: this.marriageChecked.join(','),
+          habit: this.habitChecked.join(','),
+          OS: this.OSchecked.join(','),
+          phone_brand: this.phoneChecked.join(','),
+          price: this.priceChecked.join(',')
+        }).then(res => {
+          console.log(res)
+          if (res.code === 200) {
+            this.$router.push('/creatScene')
+          }
+        })
+      },
+      back () {
+        this.$router.go(-1)
+      }
     }
   }
-}
 </script>
