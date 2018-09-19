@@ -176,6 +176,14 @@
     "display": true
   },
   {
+    "media_id": 1023,
+    "media_name": "TCL",
+    "media_url": "./static/img/TCL.png",
+    "checked": "0",
+    "alias": "w",
+    "display": true
+  },
+  {
     "media_id": 9999,
     "media_name": "测试服务器",
     "media_url": "./static/img/test.png",

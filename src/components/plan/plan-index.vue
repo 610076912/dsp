@@ -232,6 +232,7 @@
 
   let testEnv = process.env.TEST === 'test'
 
+      // 47.93.140.7:7001
   let eggDspUrl = testEnv ? '//47.93.140.7:7001' : '//dspegg.videozhishi.com'
 
   export default {
@@ -311,7 +312,7 @@
       let media = {
         1: [1014, 1015, 1020],
         2: [1002, 1004, 1021],
-        3: [1003]
+        3: [1003, 1023]
       }
       let putChannelIds = JSON.parse(sessionStorage.getItem('putChannelIds'))
       let flag = false
@@ -371,6 +372,11 @@
             res.data.forEach((item) => {
               this.switchData.push(item.publish === 1)
               this.switchDisabled.push(item.status === 5 || item.status === 3 || item.status === 7)
+              // 只要审核通过的 计划开关就可以打开
+              let switchS = item.actStatusArr.some((el) => {
+                return el.act_ids_status === 1
+              })
+              if (switchS) this.switchDisabled[-1] = switchS
             })
             this.tableData = res.data
             this.pageTotal = res.total
