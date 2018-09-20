@@ -15,7 +15,6 @@
         center: confinfo.position === 'center',
         right: confinfo.position === 'right',
         myScale: confinfo.effect === 'effect1',
-        ScaleLine: confinfo.effect === 'effect1' && confinfo.effect === 'effect3',
         myMoveLL: confinfo.effect === 'effect2' && confinfo.position === 'left',
         myMoveLR: confinfo.effect === 'effect2' && confinfo.position === 'right',
         myMoveLC: confinfo.effect === 'effect2' && confinfo.position === 'center',
