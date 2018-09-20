@@ -36,12 +36,16 @@
                 <span @click="changeSize('380,200,i_size1', 1)" :class="{'option-border':isSize===1}">380px * 200px</span>
                 <span @click="changeSize('300,300,i_size2', 2)" :class="{'option-border':isSize===2}">300px * 300px</span>
                 <span @click="changeSize('500,100,i_size3', 3)" :class="{'option-border':isSize===3}">500px * 100px</span>
+                <span @click="changeSize('400,400,i_size4', 4)" :class="{'option-border':isSize===4}">400px * 400px</span>
+                <span @click="changeSize('600,200,i_size5', 5)" :class="{'option-border':isSize===5}">600px * 200px</span>
               </div>
               <div class="ad-option ad-effect">
                 <span>展示效果</span>
                 <span @click="changeEffect('effect1', 1)" :class="{'option-border':isEffect===1}">从小到大</span>
                 <span @click="changeEffect('effect2', 2)" :class="{'option-border':isEffect===2}">移动飘过</span>
                 <span @click="changeEffect('effect3', 3)" :class="{'option-border':isEffect===3}">物体折线</span>
+                <span @click="changeEffect('effect4', 4)" :class="{'option-border':isEffect===4}">从上到下</span>
+                <span @click="changeEffect('effect5', 5)" :class="{'option-border':isEffect===5}">从下到上</span>
               </div>
               <div class="ad-option ad-position">
                 <span>广告位置</span>
@@ -158,6 +162,14 @@
             this.isSize = 3
             this.conf_info.size = '500,100,i_size3'
           }
+          if (this.adCon.adCon.size === '400,400,i_size4') {
+            this.isSize = 3
+            this.conf_info.size = '400,400,i_size4'
+          }
+          if (this.adCon.adCon.size === '600,200,i_size5') {
+            this.isSize = 3
+            this.conf_info.size = '600,200,i_size5'
+          }
           // 效果
           if (this.adCon.adCon.effect === 'effect1') this.isEffect = 1
           if (this.adCon.adCon.effect === 'effect2') {
@@ -167,6 +179,14 @@
           if (this.adCon.adCon.effect === 'effect3') {
             this.isEffect = 3
             this.conf_info.effect = 'effect3'
+          }
+          if (this.adCon.adCon.effect === 'effect4') {
+            this.isEffect = 4
+            this.conf_info.effect = 'effect4'
+          }
+          if (this.adCon.adCon.effect === 'effect5') {
+            this.isEffect = 5
+            this.conf_info.effect = 'effect5'
           }
           this.conf_info.image_src = this.adCon.adCon.image_src
           this.conf_info.out_url = this.adCon.adCon.out_url
@@ -359,7 +379,7 @@
     .img {
       width: 100%;
       height: 550px;
-      padding: 80px;
+      padding: 100px 40px;
       position: relative;
       background-image: url("../../../static/img/tplbg.png");
       background-position: center;
@@ -381,13 +401,14 @@
         width: 100%;
         height: 100%;
         .upload-flash {
-          width: 350px;
-          height: 350px;
+          margin-top 42px;
+          width: 260px;
+          height: 260px;
           float: left;
           background: rgba(0, 0, 0, .8)
           color: #fff;
           font-size: 20px;
-          line-height: 350px;
+          line-height: 260px;
           text-align: center;
           cursor: pointer;
           position: relative;
@@ -426,10 +447,9 @@
           }
         }
         .ad-con {
-          width: 468px;
+          width: 600px;
           height: 100%;
           float: right;
-          padding-left: 50px;
           .ad-title {
             font-size: 14px;
             margin-bottom: 15px;
@@ -441,10 +461,11 @@
             }
           }
           .ad-option {
-            width: 401px;
+            // width: 601px;
+            display flex;
             height: 40px;
             font-size: 0;
-            border-right: 1px solid #e4e4e4;
+            // border-right: 1px solid #e4e4e4;
             margin-bottom: 10px;
             .option-border {
               border-right: 1px solid;
@@ -467,8 +488,8 @@
             }
           }
           .ad-url, .bg-url, .click-url {
-            margin-top: 15px;
-            width: 400px;
+            margin-bottom: 15px;
+            width: 600px;
             .el-input-group__prepend {
               width: 100px;
               text-align: center;

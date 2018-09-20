@@ -3,8 +3,8 @@
     <setps :active="0"></setps>
     <div class="content">
       <el-form :model="ruleForm" :rules="rules" label-position="left" label-width="150px" class="form" ref="new1form">
-        <el-form-item label="计划名称" prop="name" required>
-          <el-input v-model.trim="ruleForm.name" :maxlength="20"></el-input>
+        <el-form-item label="计划名称" prop="name">
+          <el-input v-model.trim="ruleForm.name" :maxlength="10"></el-input>
         </el-form-item>
         <el-form-item label="选择分组" prop="group">
           <el-select
@@ -74,7 +74,7 @@
   import setps from './steps-component.vue'
   import mediaJsonP from '../../../static/json/media.json'
   // import mediaJsonT from '../../../static/json/test-media.json'
-  import mediaChannelIdForplatform from '../../../static/json/mediachannle-platform'
+  import mediaChannelIdForplatform from '../../../static/json/mediachannle-platform.json'
 
   // let testEnv = process.env.TEST === 'test'
   let mediaJson = mediaJsonP
@@ -125,7 +125,10 @@
         canEdit: true,
         // 验证规则
         rules: {
-          name: [{required: true, message: '请输入计划名称(20字符内)', trigger: 'blur', max: 10}],
+          name: [
+            {required: true, message: '请输入计划名称', trigger: 'blur'},
+            { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+          ],
           all: [{validator: checkAll, trigger: 'blur'}],
           // date: [{validator: checkDate, trigger: 'blur'}],
           date: [
@@ -170,7 +173,7 @@
       }
       // 判断store里是否有数据
       let creatData = this.$store.state.creatData.creatBasice
-      if (creatData.name) {
+      if (creatData.name === 123) {
         // 读取vux里的数据
         this.ruleForm.name = creatData.name
         this.ruleForm.group = creatData.group
@@ -219,6 +222,7 @@
       // 通过平台类型展示媒体类型
       showMedia () {
         const that = this
+        console.log(channelMedias[this.activeName], this.activeName)
         channelMedias[this.activeName].forEach((citem) => {
           mediaJson.forEach((mitem, index) => {
             if (mitem.media_id === citem) {
