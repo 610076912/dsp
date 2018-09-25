@@ -311,11 +311,7 @@
       let media = {
         1: [1014, 1015, 1020],
         2: [1002, 1004, 1021],
-<<<<<<< HEAD
         3: [1003, 1018, 1022, 1023]
-=======
-        3: [1003, 1018]
->>>>>>> 2507013817c4d64d0d5ee1cd2668c3a361aef716
       }
       let putChannelIds = JSON.parse(sessionStorage.getItem('putChannelIds'))
       let flag = false

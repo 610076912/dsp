@@ -47,7 +47,7 @@
                 <span @click="changeEffect('effect4', 4)" :class="{'option-border':isEffect===4}">从上到下</span>
                 <span @click="changeEffect('effect5', 5)" :class="{'option-border':isEffect===5}">从下到上</span>
               </div>
-              <div class="ad-option ad-position">
+              <div class="ad-option">
                 <span>广告位置</span>
                 <span @click="changePosition('left', 1)" :class="{'option-border':isPosition===1}">屏幕居左</span>
                 <span @click="changePosition('center', 2)" :class="{'option-border':isPosition===2}">屏幕居中</span>
@@ -163,11 +163,11 @@
             this.conf_info.size = '500,100,i_size3'
           }
           if (this.adCon.adCon.size === '400,400,i_size4') {
-            this.isSize = 3
+            this.isSize = 4
             this.conf_info.size = '400,400,i_size4'
           }
           if (this.adCon.adCon.size === '600,200,i_size5') {
-            this.isSize = 3
+            this.isSize = 5
             this.conf_info.size = '600,200,i_size5'
           }
           // 效果
@@ -286,7 +286,7 @@
       // 上传成功
       upLoadSuccess (res) {
         if (res.code === 200) {
-          this.upLoadLoding.close()
+          // this.upLoadLoding.close()
           this.conf_info.image_src = this.imgUrl + res.data
         }
       },
@@ -425,7 +425,7 @@
             width: 100%;
             position: absolute;
             left: 0;
-            top: -350px;
+            top: -260px;
             transition: all .5s;
             .el-upload {
               width: 100%;
@@ -444,6 +444,10 @@
             position: absolute;
             bottom: 0;
             left: 0;
+          }
+          .el-loading-spinner{
+            top: 20px;
+            margin: 0;
           }
         }
         .ad-con {
