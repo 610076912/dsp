@@ -185,9 +185,12 @@
       </div>
     </div>-->
     <div class="material cons">
-      <p class="head"><span>广告素材类型</span><b>
-        <router-link v-if="canEdit" to="creatMaterial">编辑信息</router-link>
-      </b></p>
+      <p class="head">
+        <span>广告素材类型</span>
+        <b>
+          <router-link v-if="canEdit" to="creatMaterial">编辑信息</router-link>
+        </b>
+      </p>
       <div class="pro-box">
         <div class="material-item" v-for="(item, index) in platformName">
           <span>{{item.mediaId}}</span>

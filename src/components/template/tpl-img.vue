@@ -8,22 +8,25 @@
       <span class="vca-line" v-if="confinfo.effect === 'effect3'"></span>
 
       <!-- 缩放滑动效果 -->
+      <!-- effect是指定动画类型，effect1是缩放，effect2是飘过，effect3是折线，effect4是从上到下，effect5从下到上 -->
       <div
         :class="{
-        adPosition: true,
-        left: confinfo.position === 'left',
-        center: confinfo.position === 'center',
-        right: confinfo.position === 'right',
-        myScale: confinfo.effect === 'effect1',
-        ScaleLine: confinfo.effect === 'effect1' && confinfo.effect === 'effect3',
-        myMoveLL: confinfo.effect === 'effect2' && confinfo.position === 'left',
-        myMoveLR: confinfo.effect === 'effect2' && confinfo.position === 'right',
-        myMoveLC: confinfo.effect === 'effect2' && confinfo.position === 'center',
-        size380: confinfo.size === '380,200,i_size1',
-        size300: confinfo.size === '300,300,i_size2',
-        size500: confinfo.size === '500,100,i_size3'
+          adPosition: true,
+          left: confinfo.position === 'left',
+          center: confinfo.position === 'center',
+          right: confinfo.position === 'right',
+          myScale: confinfo.effect === 'effect1',
+          ScaleLine: confinfo.effect === 'effect3',
+          myMoveLL: confinfo.effect === 'effect2' && confinfo.position === 'left',
+          myMoveLR: confinfo.effect === 'effect2' && confinfo.position === 'right',
+          myMoveLC: confinfo.effect === 'effect2' && confinfo.position === 'center',
+          myMoveDown: confinfo.effect === 'effect4',
+          myMoveUp: confinfo.effect === 'effect5',
         }"
-        :style="{background: 'url('+confinfo.image_src+') no-repeat center center', backgroundSize: 'contain'}">
+        :style="{background: 'url('+confinfo.image_src+') no-repeat center center',
+          backgroundSize: 'contain',
+          width: imgWidth,
+          height: imgHeight}">
           <a v-if="confinfo.out_url" class="img_link" :href="(/^http|https/).test(confinfo.out_url) ? confinfo.out_url : 'http://' +　confinfo.out_url" target="view_window"></a></div>
     </div>
   </div>
@@ -60,13 +63,9 @@ function brokenLine (opt, fn) {
     Math.pow(opt.endX - opt.startX - opt.lineLength, 2) +
     Math.pow(opt.endY - opt.startY, 2)
   )
+
   // 计算角度
-  var angle =
-    Math.atan(
-      (opt.endY - opt.startY) / (opt.endX - opt.startX - opt.lineLength)
-    ) /
-    (2 * Math.PI) *
-    360
+  var angle = Math.atan((opt.endY - opt.startY) / (opt.endX - opt.startX - opt.lineLength)) / (2 * Math.PI) * 360
   angle = Math.abs(angle)
 
   // 折线初始位置
@@ -127,7 +126,7 @@ function brokenLine (opt, fn) {
       diagonal +
       'px;}'
     opt.elRound.style.display = 'inline-block'
-  }, 10)
+  }, 16)
 
   // 结束动画
   setTimeout(function () {
@@ -153,14 +152,9 @@ function brokenLine (opt, fn) {
   }, 1500)
 }
 
-// computeLocation 计算中心点
-// param tpl 模板挂载元素
-// param video video元素
-// param polygon 多边形坐标点（各定点坐标）
-// param position 模板位置
-// param imgSize 图片尺寸
-// returns {{centerX: number, centerY: number, imgCenterX: number, imgCenterY: number}}
-// 返回多边形中心点和图片中心点
+/**
+ * 计算获取需要的点的位置
+ */
 function computeLocation (position, imgSize) {
   var tplW = 550
   var tplH = 360
@@ -179,7 +173,7 @@ function computeLocation (position, imgSize) {
       imgCenterX = tplW / 2
       break
     case 'right':
-      imgCenterX = tplW - imgW / 2 - 20
+      imgCenterX = tplW - imgW / 2 + 20
       break
   }
   return {
@@ -198,16 +192,24 @@ export default {
     }
   },
   props: ['confinfo'],
+  computed: {
+    imgWidth () {
+      return this.confinfo.size.split(',')[0] * 0.3 + 'px'
+    },
+    imgHeight () {
+      return this.confinfo.size.split(',')[1] * 0.3 + 'px'
+    }
+  },
   mounted () {
-    const that = this
     // 调用计算中心点
     if (this.confinfo.effect === 'effect3') {
       var ooo = computeLocation(this.confinfo.position, this.confinfo.size)
       ooo.elRound = document.getElementsByClassName('vca-round')[0]
       ooo.elLine = document.getElementsByClassName('vca-line')[0]
+
       this.timer = setInterval(function () {
         brokenLine(ooo, () => {
-          that.confinfo.effect = 'effect1'
+
         })
       }, 5000)
     }
@@ -383,12 +385,14 @@ export default {
 }
 
 .images {
-  height:100%;
+  height: 100%;
+
   .ad-style {
     width: 100%;
     height: 100%;
     position: relative;
     overflow: hidden;
+
     img {
       width: 100%;
     }
@@ -402,11 +406,27 @@ export default {
   }
 
   .ScaleLine {
-    opacity: 0;
+    animation: myscale 5s linear infinite;
+  }
+  @keyframes myscale {
+    0% {
+      transform: scale(0);
+    }
+
+    8% {
+      transform: scale(1);
+    }
+
+    92% {
+      transform: scale(1);
+    }
+
+    100% {
+      transform: scale(0);
+    }
   }
 
   .ad-style .myScale {
-    opacity: 1;
     transform: scale(0);
     animation: myfirst 10s linear infinite;
   }
@@ -475,11 +495,11 @@ export default {
     }
 
     3% {
-      left: 42%;
+      left: 40%;
     }
 
     90% {
-      left: 42%;
+      left: 40%;
     }
 
     95% {
@@ -492,45 +512,73 @@ export default {
   }
 
   .myMoveLR {
-    left: 100%;
     animation: myfour 10s linear infinite;
   }
 
   @keyframes myfour {
     0% {
-      left: 100%;
+      right: -35%;
     }
 
     3% {
-      left: 77%;
+      right: 3%;
     }
 
-    90% {
-      left: 77%;
+    92% {
+      right: 3%;
     }
 
-    95% {
-      left: -50%;
+    96% {
+      right: 130%;
     }
 
     100% {
-      left: -50%;
+      right: 130%;
     }
   }
 
-  .size300 {
-    width: 100px;
-    height: 66px;
+  .myMoveDown {
+    animation: myfive 10s linear infinite;
   }
 
-  .size380 {
-    width: 125px;
-    height: 66px;
+  @keyframes myfive {
+    0% {
+      bottom: 130%;
+    }
+
+    4% {
+      bottom: 3%;
+    }
+
+    97% {
+      bottom: 3%;
+    }
+
+    100% {
+      bottom: -30%;
+    }
   }
 
-  .size500 {
-    width: 150px;
-    height: 33px;
+  .myMoveUp {
+    animation: mysix 10s linear infinite;
+  }
+
+  @keyframes mysix {
+    0% {
+      bottom: -30%;
+    }
+
+    3% {
+      bottom: 3%;
+    }
+
+    96% {
+      bottom: 3%;
+    }
+
+    100% {
+      bottom: 130%;
+    }
   }
 
   .center {
@@ -542,7 +590,7 @@ export default {
   }
 
   .right {
-    left: 70%;
+    right: 3%;
   }
 
   .img_link {

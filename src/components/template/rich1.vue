@@ -71,11 +71,12 @@ export default {
   position: relative;
   width: 100%;
   height: 365px;
-  overflow hidden
-  background: url(../../assets/img/tplbj.png) no-repeat center center;
-  background-size cover
+  overflow: hidden;
+  background: url('../../assets/img/tplbj.png') no-repeat center center;
+  background-size: cover;
   color: #ffffff;
   font-size: 12px;
+
   .vcaRich2Tips {
     position: absolute;
     left: 20px;
@@ -135,53 +136,111 @@ export default {
       }
     }
   }
+
   /* tips动画效果 */
-  .myScale{
-    transform: scale(0)
+  .myScale {
+    transform: scale(0);
     animation: myfirst 10s linear 1s infinite;
   }
-  @keyframes myfirst{
-    0% {transform: scale(0);}
-    3% {transform: scale(1)}
-    97% {transform: scale(1)}
-    100% {transform: scale(0);}
+
+  @keyframes myfirst {
+    0% {
+      transform: scale(0);
+    }
+
+    3% {
+      transform: scale(1);
+    }
+
+    97% {
+      transform: scale(1);
+    }
+
+    100% {
+      transform: scale(0);
+    }
   }
 
-  .myMoveLL{
-    left: 100%
-    animation: mysecond 10s linear infinite ;
+  .myMoveLL {
+    left: 100%;
+    animation: mysecond 10s linear infinite;
   }
-  @keyframes mysecond{
-    0% {left: 100%;}
-    3% {left: 3%}
-    90% {left: 3%;}
-    95% {left: -50%;}
-    100% {left: -50%;}
+
+  @keyframes mysecond {
+    0% {
+      left: 100%;
+    }
+
+    3% {
+      left: 3%;
+    }
+
+    90% {
+      left: 3%;
+    }
+
+    95% {
+      left: -50%;
+    }
+
+    100% {
+      left: -50%;
+    }
   }
 
   /* 剩下两个动画暂没用 */
-  .myMoveLC{
-    left: 100%
-    animation: mythree 10s linear infinite ;
-  }
-  @keyframes mythree{
-    0% {left: 100%;}
-    3% {left: 42%}
-    90% {left: 42%;}
-    95% {left: -50%;}
-    100% {left: -50%;}
+  .myMoveLC {
+    left: 100%;
+    animation: mythree 10s linear infinite;
   }
 
-  .myMoveLR{
-    left: 100%
-    animation: myfour 10s linear infinite ;
+  @keyframes mythree {
+    0% {
+      left: 100%;
+    }
+
+    3% {
+      left: 42%;
+    }
+
+    90% {
+      left: 42%;
+    }
+
+    95% {
+      left: -50%;
+    }
+
+    100% {
+      left: -50%;
+    }
   }
-  @keyframes myfour{
-    0% {left: 100%;}
-    3% {left: 77%}
-    90% {left: 77%;}
-    95% {left: -50%;}
-    100% {left: -50%;}
+
+  .myMoveLR {
+    left: 100%;
+    animation: myfour 10s linear infinite;
+  }
+
+  @keyframes myfour {
+    0% {
+      left: 100%;
+    }
+
+    3% {
+      left: 77%;
+    }
+
+    90% {
+      left: 77%;
+    }
+
+    95% {
+      left: -50%;
+    }
+
+    100% {
+      left: -50%;
+    }
   }
 }
 
@@ -192,6 +251,7 @@ export default {
   position: absolute;
   right: 0;
   margin-top: 2.5%;
+
   .vca-textline1 {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -314,12 +374,13 @@ export default {
   vertical-align: middle;
   text-align: center;
 }
-.vca-rich2-main .vca-rich2-content .vca-rich2-imgs p a{
-  position absolute
-  height 100%
-  width 100%
-  display block
-  top 0
-  left 0
+
+.vca-rich2-main .vca-rich2-content .vca-rich2-imgs p a {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: block;
+  top: 0;
+  left: 0;
 }
 </style>
