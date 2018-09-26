@@ -55,19 +55,20 @@
 <script>
   import setps from './steps-component.vue'
   import mediaJsonP from '../../../static/json/media.json'
-  // import mediaJsonT from '../../../static/json/test-media.json'
-
-  // let testEnv = process.env.TEST === 'test'
-  let allMedias = mediaJsonP
-  // if (testEnv) {
-  //   allMedias = mediaJsonT
-  // }
-
   // 素材模板
   import flash from '../edit-template/tpl-flash.vue'
   import image from '../edit-template/tpl-image.vue'
   import relation2 from '../edit-template/tpl-relation2.vue'
   import relation1 from '../edit-template/tpl-relation1.vue'
+  // import mediaJsonT from '../../../static/json/test-media.json'
+
+  let testEnv = process.env.TEST === 'test'
+  let allMedias = mediaJsonP
+  // if (testEnv) {
+  //   allMedias = mediaJsonT
+  // }
+  // 47.93.140.7:7001
+  let eggDspUrl = testEnv ? '//47.93.140.7:7001' : '//dspegg.videozhishi.com'
 
   export default {
     data () {
@@ -368,6 +369,24 @@
             })
           }
         })
+
+        // 判断如果为乐播 并且类型为 image 或者 relation1，则调 往乐播素材库中写数据接口
+        if (this.currentMediaId === 1022 && (appType === 'image' || appType === 'relation')) {
+          if (appType === 'relation' && JSON.stringify(confInfo.conf_info).relation_info.type !== 'relation1') return
+          this.$http.post(eggDspUrl + '/create_materiel', {
+            // 活动id 计划id和媒体id组成
+            act_id: this.currentMediaplanId,
+            materiel_type: appType,
+            json: JSON.stringify(confInfo.conf_info)
+          }).then(res => {
+            if (res.code === 200) {
+              this.$message({
+                type: 'success',
+                message: '乐播平台素材保存成功!'
+              })
+            }
+          })
+        }
       }
     },
     components: {
