@@ -344,7 +344,7 @@
       // 添加广告信息
       addMaterial (appType, confInfo) {
         // 添加模板
-        this.$http.post('/api2/add_ad_material', {
+        this.$http.post(this.$baseUrl + '/api2/add_ad_material', {
           // 计划id
           plan_id: this.planId,
           // 活动id 计划id和媒体id组成

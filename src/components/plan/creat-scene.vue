@@ -370,8 +370,10 @@
         if (this.class1CheckboxArr[index]) {
           // 处理二级
           data.class2Arr.forEach(item => {
-            this.class2Data[index].push(item.valueArr)
-            this.class2PkgId[index].push(item.pkg_id)
+            if (this.class2PkgId[index].indexOf(item.pkg_id) === -1) {
+              this.class2Data[index].push(item.valueArr)
+              this.class2PkgId[index].push(item.pkg_id)
+            }
           })
           // 处理三级
           data.valueArr.forEach(item => {
@@ -535,7 +537,7 @@
           })
           return
         }
-        this.$http.post('/api2/add_pkg_info', {
+        this.$http.post(this.$baseUrl + '/api2/add_pkg_info', {
           plan_id: this.$store.state.creatData.planId,
           cls_id_list: JSON.stringify(checkedNodes)
         }).then(res => {
