@@ -334,7 +334,7 @@
                 this.totalCost += res.data[i]
               }
             }
-            console.log(this.totalCost)
+            // console.log(this.totalCost)
           }
         })
       },
