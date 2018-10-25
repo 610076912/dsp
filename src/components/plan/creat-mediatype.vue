@@ -5,11 +5,62 @@
       <creat-header title="媒体定向" text="视频类型"></creat-header>
       <div class="media-wrap">
         <el-checkbox v-model="isCheckedAll" @change="checkedAll">全选</el-checkbox>
-        <div class="item-wrap" v-for="(item,index) in typeData" :class="{active: liClass[index]}"
+        <div class="new-item-wrap">
+          <div class="all-video-num">
+            已选分类视频总量：<b>{{ videoNum }}</b>
+          </div>
+          <div class="wrap-content">
+            <div class="items"
+                 v-for="(item,index) in typeData"
+                 :class="{active: liClass[index]}"
+                 @click="clickItem(index, item.type_id)">
+              {{item.type}}
+            </div>
+          </div>
+        </div>
+        <el-table
+          :data="tableData"
+          border style="width: 100%">
+          <el-table-column
+            type="index"
+            label="序"
+            width="50"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            prop="video_name"
+            label="已选分类典型视频"
+            width="608"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            prop="video_class"
+            label="视频分类"
+            width="240"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            prop="video_type"
+            label="视频类型"
+            width="240"
+            align="center">
+          </el-table-column>
+        </el-table>
+        <div class="pagination">
+          <el-pagination
+            layout="total, prev, pager, next"
+            @current-change="currentChange"
+            :current-page.sync="currentPage"
+            :page-size="pageSize"
+            :total="pageTotal">
+          </el-pagination>
+        </div>
+
+        <!--<div class="item-wrap" v-for="(item,index) in typeData" :class="{active: liClass[index]}"
              @click="clickItem(index, item.type_id)">
           <i :class="item.type_class"></i>
           {{item.type}}
-        </div>
+        </div>-->
       </div>
     </div>
     <div class="button-wrap">
@@ -21,6 +72,7 @@
 
 <script type="text/ecmascript-6">
   import MEDIATYPE from '../../../static/json/media-type.json'
+  import mediaTypeVideoTop from '../../../static/json/media-type-videoTop'
   import steps from './steps-component.vue'
   import header from './header-component.vue'
 
@@ -32,7 +84,13 @@
         chosedType: [],
         isCheckedAll: false,
         typeData: null,
-        liClass: [false, false, false, false, false, false, false, false, false, false, false, false, false]
+        liClass: [false, false, false, false, false, false, false, false, false, false, false, false, false],
+        videoNum: 0,
+        tableData: [],
+        allDate: {},
+        currentPage: 0,
+        pageSize: 15,
+        pageTotal: 0
       }
     },
     created () {
@@ -65,14 +123,41 @@
       // 根据获取的chosedType来改变class数组
       reloadClassArr (chosedType) {
         const that = this
+        that.videoNum = 0
+        let allVideo = []
         this.liClass = [false, false, false, false, false, false, false, false, false, false, false, false, false]
         chosedType.forEach(function (item) {
           that.typeData.forEach(function (aItem, index) {
             if (item === aItem.type_id) {
               that.$set(that.liClass, index, true)
+              // 计算视频数量
+              that.videoNum += aItem.video_num
+              // 改变视频列表
+              if (mediaTypeVideoTop[item]) {
+                allVideo = allVideo.concat(mediaTypeVideoTop[item])
+              }
             }
           })
         })
+        that.arrGroup(allVideo)
+      },
+      arrGroup (allVideo) {
+        this.currentPage = 1
+        this.pageTotal = allVideo.length
+        let Page = 0
+        allVideo.forEach((item, index) => {
+          if ((index % 15) === 0) {
+            Page++
+            this.allDate['page' + Page] = []
+            this.allDate['page' + Page].push(item)
+          } else {
+            this.allDate['page' + Page].push(item)
+          }
+        })
+        // this.tableData = this.allDate.page1
+      },
+      currentChange (val) {
+        this.tableData = this.allDate['page' + val]
       },
       // 点击标签
       clickItem (index, typeId) {
@@ -138,8 +223,6 @@
         min-height: 280px;
         position: relative;
         padding: 10px 0;
-        margin-bottom: 70px;
-        padding-bottom: 60px;
         .el-checkbox {
           position: absolute;
           top: -55px;
@@ -147,8 +230,8 @@
         }
         .active {
           border-color: #169bd5 !important;
-          color: #169bd5 !important;
-          background-color: #fff !important;
+          color: #fff !important;
+          background-color: #169bd5 !important;
         }
         .item-wrap {
           width: 14%;
@@ -173,6 +256,48 @@
           &:nth-of-type(6n) {
             margin-right: 0;
           }
+        }
+        .new-item-wrap {
+          width 100%;
+          height 100px;
+          .all-video-num {
+            width: 300px;
+            height: 60px;
+            float: left;
+            border: 1px solid #169bd5;
+            border-radius: 2px;
+            line-height: 56px;
+            text-align: center;
+            b {
+              font-size: 22px;
+              color: #169bd5;
+              position: relative;
+              top: 3px;
+            }
+          }
+          .wrap-content {
+            width: 840px;
+            height: 100%;
+            float: right;
+            padding-left: 24px;
+            .items {
+              width: 92px;
+              height: 25px;
+              border: 1px solid #ddd;
+              border-radius: 2px;
+              text-align: center;
+              line-height: 23px;
+              color: #444;
+              margin: 0 0 10px 10px;
+              float: left;
+              cursor: pointer;
+            }
+          }
+        }
+        .pagination {
+          wdith: 100%;
+          text-align: center;
+          margin: 30px 0;
         }
       }
     }
