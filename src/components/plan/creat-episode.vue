@@ -36,11 +36,11 @@
 
 <script type="text/ecmascript-6">
   import mediaChannelIdForplatform from '../../../static/json/mediachannle-platform'
+  import steps from './steps-component.vue'
+  import header from './header-component.vue'
 
   const channelMedias = process.env.TEST === 'test' ? mediaChannelIdForplatform.test : mediaChannelIdForplatform.product
   let searchUrl = process.env.TEST === 'test' ? '//test-tj.videozhishi.com' : 'https://tj.videozhishi.com'
-  import steps from './steps-component.vue'
-  import header from './header-component.vue'
 
   export default {
     name: 'creatMediaType',
@@ -97,15 +97,36 @@
         })
       },
       // 搜索
-      searchEpisode () {
-        this.$http.get(searchUrl + '/data/search_episode', {
+      async searchEpisode () {
+        if (!this.searchText) return
+        this.episodeResult = []
+        // 搜索识别过的剧集
+        let res = await this.$http.get(searchUrl + '/data/search_episode', {
           params: {
             search_text: this.searchText,
             channel_ids: JSON.stringify(this.mediaChannelId)
           }
-        }).then(res => {
-          this.episodeResult = res.data
         })
+        // 搜索未识别过的剧集 只在正式服务器上存在。 userType 第二位为1，则要搜索导入的剧集
+        let userType = sessionStorage.getItem('user_type')
+        let filtedArr = []
+        if (userType && userType[1] === '1') {
+          let moreRes = await this.$http.get('http://tj.videozhishi.com/data/search_more_episode', {
+            params: {
+              search_text: this.searchText
+            }
+          })
+          // 过滤以识别接口中存在的数据
+          if (moreRes.code === 200) {
+            filtedArr = moreRes.data.filter(item => {
+              let result = res.data.some(item1 => {
+                return item1.name === item.name
+              })
+              return !result
+            })
+          }
+        }
+        this.episodeResult = [...res.data, ...filtedArr]
       },
       // 清空搜索结果
       clearSearchResult () {

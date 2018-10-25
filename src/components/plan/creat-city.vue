@@ -155,11 +155,11 @@
       next () {
         this.btnLoading = true
         Promise.all([
-          this.$http.post('/api2/add_region_plan', {
+          this.$http.post(this.$baseUrl + '/api2/add_region_plan', {
             plan_id: this.planId,
             city_id_list: JSON.stringify(this.checkedCityId)
           }),
-          this.$http.post('/api2/add_strategy_plan', {
+          this.$http.post(this.$baseUrl + '/api2/add_strategy_plan', {
             plan_id: this.$store.state.creatData.planId,
             frequency: 0,
             casttype: 1,

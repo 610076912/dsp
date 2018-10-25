@@ -340,7 +340,7 @@
       },
       // 获取审核相关数据
       getCheckData () {
-        this.$http.get('/api2/plan_check_info', {
+        this.$http.get(this.$baseUrl + '/api2/plan_check_info', {
           params: {
             user_id: sessionStorage.getItem('user_id')
           }

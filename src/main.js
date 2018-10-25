@@ -9,8 +9,6 @@ import store from './store'
 import analysis from './assets/js/analysis'
 // axios
 import es6Promise from 'es6-promise'
-
-es6Promise.polyfill()
 import axios from '@/assets/js/axiosplus'
 import './assets/css/reset.styl'
 import './assets/font/iconfont.css'
@@ -18,10 +16,13 @@ import echarts from '../static/js/echarts.min'
 // 自定义处理小数方法
 import fixed from '@/assets/js/fixed'
 
+es6Promise.polyfill()
+
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.config.performance = true
 Vue.prototype.$echarts = echarts
+Vue.prototype.$baseUrl = process.env.TEST === 'test' ? 'http://47.93.140.7:7001' : '//dspegg.videozhishi.com'
 Vue.use(axios)
 Vue.use(fixed)
 Vue.use(analysis)
