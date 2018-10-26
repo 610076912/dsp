@@ -86,7 +86,7 @@ export default {
 
       const sendImg = new Image()
       sendImg.src = this.config.url + '?' + this.urlParm(sendData)
-      console.log('埋点已发送', sendData)
+      // console.log('埋点已发送', sendData)
       if (data.describe === 'signOut') this.removeUUID()
     } catch (err) {}
   },
