@@ -229,11 +229,8 @@
 <script type="text/ecmascript-6">
   import setps from './steps-component.vue'
   import mediaChannelData from '../../../static/json/media'
-
   let testEnv = process.env.TEST === 'test'
-
-      // 47.93.140.7:7001
-  let eggDspUrl = testEnv ? '//47.93.140.7:7001' : '//dspegg.videozhishi.com'
+  let eggDspUrl = testEnv ? '' : '//dspegg.videozhishi.com'
 
   export default {
     name: 'plan',

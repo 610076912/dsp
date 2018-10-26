@@ -152,7 +152,7 @@
   import header from './header-component.vue'
 
   let testEnv = process.env.TEST === 'test'
-  let eggDspUrl = testEnv ? '//47.93.140.7:7001' : '//dspegg.videozhishi.com'
+  let eggDspUrl = testEnv ? '' : '//dspegg.videozhishi.com'
 
   export default {
     components: {
