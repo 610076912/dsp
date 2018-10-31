@@ -30,19 +30,19 @@
           <div class="head">智能推荐标签</div>
           <div class="main">
             <div class="object-class">
-              <div class="class-head">商品物体类</div>
+              <div class="class-head"><i><img src="../../assets/img/bao.png" alt=""></i>商品物体类</div>
               <ul class="class-list">
                 <li class="class-item" v-for="item in checkedObject" :key="item.class3id">{{ item.class3name }}</li>
               </ul>
             </div>
             <div class="scene-class">
-              <div class="class-head">静态场景类</div>
+              <div class="class-head"><i><img src="../../assets/img/fortawesome.png" alt=""></i>静态场景类</div>
               <ul class="class-list">
                 <li class="class-item" v-for="item in checkedScene" :key="item.class3id">{{ item.class3name }}</li>
               </ul>
             </div>
             <div class="behavior-class">
-              <div class="class-head">行为动作类</div>
+              <div class="class-head"><i><img src="../../assets/img/changjing.png" alt=""></i>行为动作类</div>
               <ul class="class-list">
                 <li class="class-item" v-for="item in checkedBehavior" :key="item.class3id">{{ item.class3name }}</li>
               </ul>
@@ -250,8 +250,12 @@
             height: 20px;
             line-height: 20px;
             font-size: 14px;
+            color: #1d8ce0;
             border-left: 2px solid #1d8ce0;
             margin: 10px 0;
+            i {
+              padding: 0 6px;
+            }
           }
           .class-list {
             min-height: 20px;
