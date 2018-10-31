@@ -18,6 +18,7 @@ const creatStrategy = () => import(/* webpackChunkName: "plan" */ '@/components/
 const creatPreview = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-preview')
 const creatMaterial = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-material')
 const creatUserDevice = () => import('@/components/plan/creat-user&device')
+const creatSmartScene = () => import('@/components/plan/creat-smart-scene')
 // import plan from '@/components/plan/plan'
 // import planIndex from '@/components/plan/plan-index'
 // import creatBasics from '@/components/plan/creat-basics'
@@ -132,6 +133,11 @@ export default new Router({
           path: '/creatMaterial',
           name: 'creatMaterial',
           component: creatMaterial
+        },
+        {
+          path: '/creatSmartScene',
+          name: 'creatSmartScene',
+          component: creatSmartScene
         }
       ]
     },

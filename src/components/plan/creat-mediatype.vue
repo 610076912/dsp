@@ -154,7 +154,7 @@
             this.allDate['page' + Page].push(item)
           }
         })
-        // this.tableData = this.allDate.page1
+        this.tableData = this.allDate.page1
       },
       currentChange (val) {
         this.tableData = this.allDate['page' + val]
