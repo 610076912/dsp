@@ -31,6 +31,7 @@ let state = {
     creatMediaType: null,
     creatEpisode: null,
     creatScene: null,
+    creatSmartScene: null,
     channel: null // 用来判别当前计划投放什么类型设备
   },
   materialData: {
@@ -59,6 +60,7 @@ const mutations = {
       creatMedia: null,
       creatMediaType: null,
       creatScene: null,
+      creatSmartScene: null,
       channel: null
     }
   },
@@ -86,6 +88,9 @@ const mutations = {
   },
   SCENE (state, scene) {
     state.creatData.creatScene = scene
+  },
+  SMARTSCENE (state, smartScene) {
+    state.creatData.creatSmartScene = smartScene
   },
   MEDIATYPE (state, mediatype) {
     state.creatData.creatMediaType = mediatype

@@ -24,13 +24,13 @@
           <el-table-column
             type="index"
             label="序"
-            width="50"
+            width="70"
             align="center">
           </el-table-column>
           <el-table-column
             prop="video_name"
             label="已选分类典型视频"
-            width="608"
+            width="588"
             align="center">
           </el-table-column>
           <el-table-column
@@ -145,16 +145,20 @@
         this.currentPage = 1
         this.pageTotal = allVideo.length
         let Page = 0
-        allVideo.forEach((item, index) => {
-          if ((index % 15) === 0) {
-            Page++
-            this.allDate['page' + Page] = []
-            this.allDate['page' + Page].push(item)
-          } else {
-            this.allDate['page' + Page].push(item)
-          }
-        })
-        // this.tableData = this.allDate.page1
+        if (allVideo.length > 0) {
+          allVideo.forEach((item, index) => {
+            if ((index % 15) === 0) {
+              Page++
+              this.allDate['page' + Page] = []
+              this.allDate['page' + Page].push(item)
+            } else {
+              this.allDate['page' + Page].push(item)
+            }
+          })
+          this.tableData = this.allDate.page1
+        } else {
+          this.tableData = []
+        }
       },
       currentChange (val) {
         this.tableData = this.allDate['page' + val]

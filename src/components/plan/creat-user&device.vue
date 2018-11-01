@@ -256,9 +256,10 @@
           phone_brand: this.phoneChecked.join(','),
           price: this.priceChecked.join(',')
         }).then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.code === 200) {
-            this.$router.push('/creatScene')
+            // this.$router.push('/creatScene')
+            this.$router.push('/creatSmartScene')
           }
         })
       },
