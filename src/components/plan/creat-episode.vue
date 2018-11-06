@@ -111,7 +111,7 @@
         let userType = sessionStorage.getItem('user_type')
         let filtedArr = []
         if (userType && userType[1] === '1') {
-          let moreRes = await this.$http.get('http://tj.videozhishi.com/data/search_more_episode', {
+          let moreRes = await this.$http.get('https://tj.videozhishi.com/data/search_more_episode', {
             params: {
               search_text: this.searchText
             }

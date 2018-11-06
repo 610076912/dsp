@@ -22,7 +22,7 @@ Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.config.performance = true
 Vue.prototype.$echarts = echarts
-Vue.prototype.$baseUrl = process.env.TEST === 'test' ? 'http://47.93.140.7:7001' : '//dspegg.videozhishi.com'
+Vue.prototype.$baseUrl = process.env.TEST === 'test' ? '' : '//dspegg.videozhishi.com'  // http://47.93.140.7:7001
 Vue.use(axios)
 Vue.use(fixed)
 Vue.use(analysis)
