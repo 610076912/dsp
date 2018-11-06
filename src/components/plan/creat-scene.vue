@@ -290,7 +290,12 @@
         })
         // 对比1级是否全选
         classArr.forEach(item => {
-          this.class1CheckboxArr[item.class1Index - 1] = this.allPack[item.class1Index - 1].valueArr.length === item.cont.length
+          if (item.class1Index === 9) {
+            // 对其他类，间隔打点  单独处理
+            this.class1CheckboxArr[4] = this.allPack[4].valueArr.length === item.cont.length
+          } else {
+            this.class1CheckboxArr[item.class1Index - 1] = this.allPack[item.class1Index - 1].valueArr.length === item.cont.length
+          }
         })
         // 对比2级是否全选
         pkgArr.forEach(item => {

@@ -229,8 +229,6 @@
 <script type="text/ecmascript-6">
   import setps from './steps-component.vue'
   import mediaChannelData from '../../../static/json/media'
-  let testEnv = process.env.TEST === 'test'
-  let eggDspUrl = testEnv ? '' : '//dspegg.videozhishi.com'
 
   export default {
     name: 'plan',
@@ -307,7 +305,7 @@
       })
       // 通过用户的putchannelids判断用户可以在什么媒体端创建广告
       let media = {
-        1: [1014, 1015, 1020],
+        1: [1013, 1014, 1015, 1020],
         2: [1002, 1004, 1021],
         3: [1003, 1018, 1022, 1023]
       }
@@ -351,7 +349,7 @@
           text: '努力加载中'
         })
         //   /api2/get_plan_list
-        this.$http.post(eggDspUrl + '/get_plan_list', {
+        this.$http.post('/get_plan_list', {
           user_id: sessionStorage.getItem('user_id'),
           sort_type: option.sort_type,
           plan_name: option.name,
@@ -396,7 +394,7 @@
           }).then(function (res) {
             if (res.code === 200) {
               // 埋点
-              this.$_send({
+              that.$_send({
                 describe: 'deletePlan',
                 planId: planId
               })
@@ -706,7 +704,7 @@
         } else {
           mediaSwitch = 1
         }
-        this.$http.post(eggDspUrl + '/act_switch_change', {
+        this.$http.post('/act_switch_change', {
           act_id: scope.row.act_id,
           status: mediaSwitch
         }).then(res => {
