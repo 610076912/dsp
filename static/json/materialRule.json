@@ -93,7 +93,7 @@
     "img_type": ["png", "jpeg", "gif"],
     "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3"],
     "position": ["left", "center", "right"],
-    "effect": ["effect2", "effect3"],
+    "effect": ["effect1", "effect2", "effect3"],
     "out_url": true,
     "bg_url": true,
     "click_url": true
@@ -115,7 +115,7 @@
     "img_type": ["png", "jpeg"],
     "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3", "400,400,i_size4", "600,200,i_size5"],
     "position": ["left", "center", "right"],
-    "effect": ["effect1", "effect2", "effect3", "effect4", "effect5"],
+    "effect": ["effect1", "effect2", "effect4", "effect5"],
     "out_url": false,
     "bg_url": true,
     "click_url": true
