@@ -6,7 +6,7 @@
       <span class="slide-next btn" @click="next"><i class="el-icon-arrow-right"></i></span>
       <div class="slide-box">
         <ul v-bind:style="{ width: slide.width+'%', left: slide.left+'%' }">
-          <li v-for="(item, index) in medias" :class="{checked: currentIndex===index, canclick: !item.canClick}"
+          <li v-for="(item, index) in medias" :class="{checked: currentIndex===index, canclick: !item.canClick}" v-show="item.canClick"
               @click="chooseMedia(item.act_id, item.media_id, index, item.status, item.statusDesc, item.canClick)">
             <img :src="item.media_url" :title="item.media_name">
           </li>
