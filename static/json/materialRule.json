@@ -141,6 +141,17 @@
     "out_url": false,
     "bg_url": true,
     "click_url": true
+  },
+  "1013": {
+    "planName": "人人视频",
+    "tpl_type": ["image", "relation1", "relation2"],
+    "img_type": ["png", "jpeg"],
+    "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3", "400,400,i_size4", "600,200,i_size5"],
+    "position": ["left", "right"],
+    "effect": ["effect1"],
+    "out_url": true,
+    "bg_url": true,
+    "click_url": true
   }
 
 }
