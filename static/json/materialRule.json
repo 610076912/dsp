@@ -1,0 +1,157 @@
+{
+  "9999": {
+    "planName": "测试",
+    "tpl_type": ["flash", "image", "relation1", "relation2"],
+    "img_type": ["png", "jpeg"],
+    "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3", "400,400,i_size4", "600,200,i_size5"],
+    "position": ["left", "center", "right"],
+    "effect": ["effect1", "effect2", "effect3", "effect4", "effect5"],
+    "out_url": true,
+    "bg_url": true,
+    "click_url": true
+  },
+  "1001": {
+    "planName": "暴风_Mobile",
+    "tpl_type": ["image", "relation1", "relation2"],
+    "img_type": ["png", "jpeg"],
+    "size": ["300,300,i_size2"],
+    "position": ["left"],
+    "effect": ["effect2"],
+    "out_url": true,
+    "bg_url": true,
+    "click_url": true
+  },
+  "1012": {
+    "planName": "暴风_PC",
+    "tpl_type": ["flash", "image",  "relation1", "relation2"],
+    "img_type": ["flash"],
+    "size": ["150,150,f_size1", "210,90,f_size2"],
+    "position": ["left"],
+    "effect": ["effect2"],
+    "out_url": true,
+    "bg_url": true,
+    "click_url": true
+  },
+  "1015": {
+    "planName": "PPTV_Mobile",
+    "tpl_type": ["image",  "relation1", "relation2"],
+    "img_type": ["png", "jpeg", "gif"],
+    "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3"],
+    "position": ["left"],
+    "effect": ["effect1"],
+    "out_url": true,
+    "bg_url": true,
+    "click_url": true
+  },
+  "1021": {
+    "planName": "PPTV_PC",
+    "tpl_type": ["image",  "relation1", "relation2"],
+    "img_type": ["png", "jpeg", "gif"],
+    "size": ["300,300,i_size2"],
+    "position": ["left"],
+    "effect": ["effect1"],
+    "out_url": true,
+    "bg_url": true,
+    "click_url": true
+  },
+  "1020": {
+    "planName": "1905电影网_mobile",
+    "tpl_type": ["image", "relation1", "relation2"],
+    "img_type": ["png", "jpeg", "gif"],
+    "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3"],
+    "position": ["left", "center", "right"],
+    "effect": ["effect1", "effect2", "effect3"],
+    "out_url": true,
+    "bg_url": true,
+    "click_url": true
+  },
+  "1004": {
+    "planName": "1905电影网_PC",
+    "tpl_type": ["image", "relation1", "relation2"],
+    "img_type": ["png", "jpeg", "gif"],
+    "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3"],
+    "position": ["left", "center", "right"],
+    "effect": ["effect2", "effect3"],
+    "out_url": true,
+    "bg_url": true,
+    "click_url": true
+  },
+  "1014": {
+    "planName": "天翼视讯",
+    "tpl_type": ["image", "relation1", "relation2"],
+    "img_type": ["png", "jpeg", "gif"],
+    "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3"],
+    "position": ["left"],
+    "effect": ["effect1", "effect2", "effect3"],
+    "out_url": true,
+    "bg_url": true,
+    "click_url": true
+  },
+  "1002": {
+    "planName": "华数传媒",
+    "tpl_type": ["image", "relation1", "relation2"],
+    "img_type": ["png", "jpeg", "gif"],
+    "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3"],
+    "position": ["left", "center", "right"],
+    "effect": ["effect2", "effect3"],
+    "out_url": true,
+    "bg_url": true,
+    "click_url": true
+  },
+  "1003": {
+    "planName": "CIBN",
+    "tpl_type": ["image", "relation1", "relation2"],
+    "img_type": ["png", "jpeg", "gif"],
+    "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3"],
+    "position": ["left", "right"],
+    "effect": ["effect1", "effect2", "effect3"],
+    "out_url": false,
+    "bg_url": true,
+    "click_url": true
+  },
+  "1018": {
+    "planName": "酷开电视",
+    "tpl_type": ["image", "relation1", "relation2"],
+    "img_type": ["png", "jpeg"],
+    "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3", "400,400,i_size4", "600,200,i_size5"],
+    "position": ["left", "center", "right"],
+    "effect": ["effect1", "effect2", "effect3", "effect4", "effect5"],
+    "out_url": false,
+    "bg_url": true,
+    "click_url": true
+  },
+  "1023": {
+    "planName": "TCL",
+    "tpl_type": ["image", "relation1", "relation2"],
+    "img_type": ["png", "jpeg"],
+    "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3", "400,400,i_size4", "600,200,i_size5"],
+    "position": ["left", "right"],
+    "effect": ["effect1", "effect2", "effect5"],
+    "out_url": false,
+    "bg_url": true,
+    "click_url": true
+  },
+  "1022": {
+    "planName": "乐播投屏",
+    "tpl_type": ["image", "relation1", "relation2"],
+    "img_type": ["png", "jpeg"],
+    "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3", "400,400,i_size4", "600,200,i_size5"],
+    "position": ["left", "center", "right"],
+    "effect": ["effect1", "effect2"],
+    "out_url": false,
+    "bg_url": true,
+    "click_url": true
+  },
+  "1013": {
+    "planName": "人人视频",
+    "tpl_type": ["image", "relation1", "relation2"],
+    "img_type": ["png", "jpeg"],
+    "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3", "400,400,i_size4", "600,200,i_size5"],
+    "position": ["left", "right"],
+    "effect": ["effect1"],
+    "out_url": true,
+    "bg_url": true,
+    "click_url": true
+  }
+
+}

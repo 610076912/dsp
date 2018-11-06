@@ -3,7 +3,7 @@
     <el-collapse accordion @change="collapseChange" :value="collapseVal">
       <el-collapse-item name="relation2">
         <template slot="title">屏占比4:1 / 适用于电商、票务等信息
-          <el-button class="button" size="small" @click.stop="edit" v-show="!isEdit && collapseVal==='relation2'">编辑
+          <el-button class="button" size="small" @click.stop="edit" v-show="!isEdit && collapseVal==='relation2'" :disabled="editRule.tpl_type.indexOf('relation2') < 0">编辑
           </el-button>
           <el-button :disabled="!canEdit" class="button" size="small" @click.stop="flashSave" v-show="isEdit && collapseVal==='relation2'">
             保存
@@ -156,6 +156,21 @@
       },
       canEdit: {
         default: true
+      },
+      editRule: {
+        default: function () {
+          return {
+            planName: '',
+            tpl_type: [],
+            img_type: [],
+            size: [],
+            position: [],
+            effect: [],
+            out_url: false,
+            bg_url: false,
+            click_url: false
+          }
+        }
       }
     },
     data () {

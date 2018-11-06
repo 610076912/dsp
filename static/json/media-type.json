@@ -3,67 +3,80 @@
     {
       "type": "电影",
       "type_id": "a",
-      "type_class": "el-icon-my-dianying1"
+      "type_class": "el-icon-my-dianying1",
+      "video_num": 723
     },
     {
       "type": "电视剧",
       "type_id": "b",
-      "type_class": "el-icon-my-dianshi"
+      "type_class": "el-icon-my-dianshi",
+      "video_num": 29124
     },
     {
       "type": "动漫",
       "type_id": "c",
-      "type_class": "el-icon-my-dongman"
+      "type_class": "el-icon-my-dongman",
+      "video_num": 0
     },
     {
       "type": "少儿",
       "type_id": "d",
-      "type_class": "el-icon-my-ertong"
+      "type_class": "el-icon-my-ertong",
+      "video_num": 0
     },
     {
       "type": "综艺",
       "type_id": "e",
-      "type_class": "el-icon-my-iconfontmaikefeng"
+      "type_class": "el-icon-my-iconfontmaikefeng",
+      "video_num": 2891
     },
     {
       "type": "体育",
       "type_id": "f",
-      "type_class": "el-icon-my-zuqiu"
+      "type_class": "el-icon-my-zuqiu",
+      "video_num": 0
     },
     {
       "type": "音乐",
       "type_id": "g",
-      "type_class": "el-icon-my-yinle"
+      "type_class": "el-icon-my-yinle",
+      "video_num": 0
     },
     {
       "type": "育儿",
       "type_id": "h",
-      "type_class": "el-icon-my-faxian_yuerbaodian"
+      "type_class": "el-icon-my-faxian_yuerbaodian",
+      "video_num": 0
     },
     {
       "type": "汽车",
       "type_id": "i",
-      "type_class": "el-icon-my-qiche"
+      "type_class": "el-icon-my-qiche",
+      "video_num": 0
     },
     {
       "type": "时尚",
       "type_id": "j",
-      "type_class": "el-icon-my-shishang"
+      "type_class": "el-icon-my-shishang",
+      "video_num": 0
     },
     {
       "type": "科技",
       "type_id": "k",
-      "type_class": "el-icon-my-keji"
+      "type_class": "el-icon-my-keji",
+      "video_num": 0
     },
     {
       "type": "旅游",
       "type_id": "l",
-      "type_class": "el-icon-my-plane"
+      "type_class": "el-icon-my-plane",
+      "video_num": 0
     },
     {
       "type": "纪录片",
       "type_id": "m",
-      "type_class": "el-icon-my-dianying"
+      "type_class": "el-icon-my-dianying",
+      "video_num": 0
     }
   ]
 }

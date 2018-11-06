@@ -21,7 +21,7 @@
           <ul>
             <li v-for="item in checkedArrObj">
               {{item.class_name}}
-              <i class="el-icon-close" @click="delChecked(item.class_id)"></i>
+              <i v-show="checkedSmartScene.indexOf(item.class_id) < 0" class="el-icon-close" @click="delChecked(item.class_id)"></i>
             </li>
           </ul>
         </div>
@@ -137,7 +137,8 @@
         // 搜索结果数据
         searchArr: [],
         // 一级全选框选中状态
-        class1CheckboxArr: new Array(5).fill(false)
+        class1CheckboxArr: new Array(5).fill(false),
+        checkedSmartScene: [10100013]
       }
     },
     created () {
@@ -162,6 +163,7 @@
               this.checkedArr.push(item.class_id)
               this.checkedArrObj.push(item)
             })
+            // console.log(this.checkedArrObj)
             // 请求接口拿数据时必须要等到拿到所有包数据以后执行
             this.getAllPkg(function () {
               res.data.forEach(function (item, index) {
@@ -453,13 +455,16 @@
       },
       // 点击三级
       class3Click (data) {
-        let index = this.checkedArr.indexOf(data.class_id)
-        if (index === -1) {
-          this.checkedArr.push(data.class_id)
-          this.checkedArrObj.push(data)
-        } else {
-          this.checkedArr.splice(index, 1)
-          this.checkedArrObj.splice(index, 1)
+        // console.log(data)
+        if (this.checkedSmartScene.indexOf(data.class_id) < 0) {
+          let index = this.checkedArr.indexOf(data.class_id)
+          if (index === -1) {
+            this.checkedArr.push(data.class_id)
+            this.checkedArrObj.push(data)
+          } else {
+            this.checkedArr.splice(index, 1)
+            this.checkedArrObj.splice(index, 1)
+          }
         }
       },
       // 请求所有包
@@ -478,6 +483,10 @@
             arr.sort(function (a, b) {
               return a[key].toString().localeCompare(b[key].toString())
             })
+
+            // 请求已选智能标签
+            this.getCheckedSmartScene(arr)
+
             var resultArr = []
             // 分出物体、场景、行为、明星、自定义场景类  class1
             for (var i = 0, len = arr.length; i < len; i++) {
@@ -530,6 +539,50 @@
             this.watchClass3Allchecked(this.checkedArrObj)
             // 回调~
             if (callback) callback()
+          }
+        })
+      },
+      // 获取智能推荐标签
+      getCheckedSmartScene (arr) {
+        this.$http.get('/api2/get_store_smart_sence', {
+          params: {
+            plan_id: this.$store.state.creatData.planId
+          }
+        }).then(res => {
+          if (res.code === 200) {
+            if (res.data.length > 0) {
+              const smartScene = res.data[0].class3.split(',')
+              const classIds = []
+              const classObj = []
+              for (const i in smartScene) {
+                smartScene[i] = parseInt(smartScene[i])
+                // 选中智能标签
+                arr.forEach(item => {
+                  if (smartScene[i] === item.class_id) {
+                    if (this.checkedArr.indexOf(smartScene[i]) < 0) {
+                      // 选中的三级标签
+                      classIds.push(smartScene[i])
+                      classObj.push(item)
+                      // 选中的二级标签
+                      const class2Type = Math.floor(item.pkg_id / 1000) - 1
+                      if (this.class2PkgId[class2Type].indexOf(item.pkg_id) < 0) {
+                        // 已选智能标签二级
+                        this.class2PkgId[class2Type].push(item.pkg_id)
+                        // 已选智能标签三级分组
+                        this.allPack[class2Type].class2Arr.forEach(current => {
+                          if (current.pkg_id === item.pkg_id) {
+                            this.class2Data[class2Type].push(current.valueArr)
+                          }
+                        })
+                      }
+                    }
+                  }
+                })
+              }
+              this.checkedArr = this.checkedArr.concat(classIds)
+              this.checkedArrObj = this.checkedArrObj.concat(classObj)
+              this.checkedSmartScene = smartScene
+            }
           }
         })
       },
