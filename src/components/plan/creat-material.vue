@@ -61,13 +61,7 @@ import relation2 from '../edit-template/tpl-relation2.vue'
 import relation1 from '../edit-template/tpl-relation1.vue'
 // import mediaJsonT from '../../../static/json/test-media.json'
 
-let testEnv = process.env.TEST === 'test'
 let allMedias = mediaJsonP
-// if (testEnv) {
-//   allMedias = mediaJsonT
-// }
-// 47.93.140.7:7001
-let eggDspUrl = testEnv ? '' : '//dspegg.videozhishi.com'
 
 export default {
   data () {
@@ -346,7 +340,7 @@ export default {
     // 添加广告信息
     addMaterial (appType, confInfo) {
       // 添加模板
-      this.$http.post(this.$baseUrl + '/api2/add_ad_material', {
+      this.$http.post('/api2/add_ad_material', {
         // 计划id
         plan_id: this.planId,
         // 活动id 计划id和媒体id组成
@@ -375,7 +369,7 @@ export default {
       // 判断如果为乐播 并且类型为 image 或者 relation1，则调 往乐播素材库中写数据接口
       if (this.currentMediaId === 1022 && (appType === 'image' || appType === 'relation')) {
         if (appType === 'relation' && JSON.stringify(confInfo.conf_info).relation_info.type !== 'relation1') return
-        this.$http.post(eggDspUrl + '/create_materiel', {
+        this.$http.post('/create_materiel', {
           // 活动id 计划id和媒体id组成
           act_id: this.currentMediaplanId,
           materiel_type: appType,

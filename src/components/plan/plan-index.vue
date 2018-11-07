@@ -708,6 +708,12 @@
         }).then(res => {
           this.seek()
           this.mediaStatusDialog = false
+          // 埋点
+          this.$_send({
+            describe: 'actSwitchChange',
+            act_id: scope.row.act_id,
+            switchStatus: mediaSwitch
+          })
         })
       },
       // 选择每页多少条

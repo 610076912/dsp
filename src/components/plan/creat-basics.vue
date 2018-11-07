@@ -189,7 +189,7 @@
         this.showMedia()
       } else if (this.$store.state.creatData.planId) {
         // 请求服务器数据
-        this.$http.get(this.$baseUrl + '/api2/get_plan', {
+        this.$http.get('/api2/get_plan', {
           params: {
             plan_id: this.$store.state.creatData.planId
           }
@@ -244,7 +244,7 @@
           if (valid && !that.isEdit) {
             this.btnLoading = true
             // 添加
-            url = this.$baseUrl + '/api2/add_plan'
+            url = '/api2/add_plan'
             mUrl = '/api2/add_media_plan'
             data = {
               plan_name: that.ruleForm.name,
@@ -259,7 +259,7 @@
           }
           if (valid && that.isEdit) {
             // 修改
-            url = this.$baseUrl + '/api2/upd_plan'
+            url = '/api2/upd_plan'
             mUrl = '/api2/upd_media_plan'
             data = {
               plan_id: that.$store.state.creatData.planId,
@@ -344,7 +344,7 @@
       // 请求分组数据
       queryGroupData () {
         // 获取计划分组
-        this.$http.get(this.$baseUrl + '/api2/get_plan_group').then(data => {
+        this.$http.get('/api2/get_plan_group').then(data => {
           if (data.code === 200) {
             this.groupArray = data.data
           }
@@ -352,7 +352,7 @@
       },
       // 添加分组
       addGroup (groupName) {
-        this.$http.post(this.$baseUrl + '/api2/add_plan_group',
+        this.$http.post('/api2/add_plan_group',
           {group_name: groupName}
         )
           .then(data => {

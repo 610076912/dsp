@@ -151,9 +151,6 @@
   import setps from './steps-component.vue'
   import header from './header-component.vue'
 
-  let testEnv = process.env.TEST === 'test'
-  let eggDspUrl = testEnv ? '' : '//dspegg.videozhishi.com'
-
   export default {
     components: {
       setps,
@@ -180,7 +177,7 @@
     },
     created () {
       console.log({channel: this.$store.state.creatData.channel})
-      this.$http.get(eggDspUrl + '/findUserAndDevice', {
+      this.$http.get('/findUserAndDevice', {
         params: {
           plan_id: this.$store.state.creatData.planId
         }
@@ -246,7 +243,7 @@
         }
       },
       nextStep () {
-        this.$http.post(eggDspUrl + '/setUserAndDevice', {
+        this.$http.post('/setUserAndDevice', {
           plan_id: this.$store.state.creatData.planId,
           sex: this.sexChecked,
           age: this.ageChecked.join(','),

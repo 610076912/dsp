@@ -595,7 +595,7 @@
           })
           return
         }
-        this.$http.post(this.$baseUrl + '/api2/add_pkg_info', {
+        this.$http.post('/api2/add_pkg_info', {
           plan_id: this.$store.state.creatData.planId,
           cls_id_list: JSON.stringify(checkedNodes)
         }).then(res => {
