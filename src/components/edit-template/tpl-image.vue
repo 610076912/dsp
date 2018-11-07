@@ -296,7 +296,7 @@ export default {
         this.$message.error('请输入跳转链接')
         return false
       }
-      if (!/^(https|http){1}:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i.test(this.conf_info.out_url)) {
+      if (!/^(https|http){1}:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i.test(this.conf_info.out_url) && this.editRule.out_url) {
         this.$message.error('跳转链接url地址不合法')
         return false
       }

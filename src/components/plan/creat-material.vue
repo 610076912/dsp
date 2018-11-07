@@ -149,7 +149,7 @@ export default {
             if (item.canClick === true) {
               that.medias.unshift(item)
             } else {
-              that.medias.push(item)
+              // that.medias.push(item)
             }
           })
           if (status) {

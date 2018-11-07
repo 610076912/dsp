@@ -235,7 +235,6 @@
       nextStep () {
         let that = this
         this.$refs['new1form'].validate((valid) => {
-          console.log(valid)
           // 如果验证通过则跳转下一个路由
           let url, data, mUrl // 基本设置接口url，基本设置数据，媒体接口url
           // 设置日期时间

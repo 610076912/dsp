@@ -310,6 +310,7 @@
         3: [1003, 1018, 1022, 1023]
       }
       let putChannelIds = JSON.parse(sessionStorage.getItem('putChannelIds'))
+      // console.log(putChannelIds)
       let flag = false
       if (putChannelIds.length > 0) {
         putChannelIds.forEach(putItem => {
@@ -325,6 +326,7 @@
             })
           }
         })
+        // console.log(media)
       } else {
         this.canCreat = '123'
       }
