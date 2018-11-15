@@ -153,6 +153,12 @@
         this.$router.go(-1)
       },
       next () {
+        if (this.checkedCityId.length <= 0) {
+          this.$alert('地域不能为空', '提示', {
+            confirmButtonText: '确定'
+          })
+          return
+        }
         this.btnLoading = true
         Promise.all([
           this.$http.post('/api2/add_region_plan', {
@@ -178,6 +184,8 @@
           }
           if (res[0].code === 200 && res[1].code === 200) {
             this.$router.push('/creatMaterial')
+          } else {
+            this.btnLoading = false
           }
         })
       },

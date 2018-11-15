@@ -105,7 +105,7 @@
     },
     created () {
       if (this.planId) {
-        if (!this.cityStore) {
+        if (!this.cityStore.kab.kab) {
           // 获取已选城市
           this.$http.get('/api2/get_region_plan_by_kab', {
             params: {
@@ -113,7 +113,8 @@
             }
           }).then(res => {
             if (res.code === 200) {
-              this.areaType = res.data.kab
+              this.areaType = 1
+              this.areaType = res.data.kab || 1
               this.$store.commit('CITY', {
                 type: 'kab',
                 msg: res.data
