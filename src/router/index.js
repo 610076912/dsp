@@ -17,8 +17,8 @@ const creatEpisode = () => import(/* webpackChunkName: "plan" */ '@/components/p
 const creatStrategy = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-strategy')
 const creatPreview = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-preview')
 const creatMaterial = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-material')
-const creatUserDevice = () => import('@/components/plan/creat-user&device')
-const creatSmartScene = () => import('@/components/plan/creat-smart-scene')
+const creatUserDevice = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-user&device')
+const creatSmartScene = () => import(/* webpackChunkName: "plan" */ '@/components/plan/creat-smart-scene')
 // import plan from '@/components/plan/plan'
 // import planIndex from '@/components/plan/plan-index'
 // import creatBasics from '@/components/plan/creat-basics'
@@ -33,7 +33,8 @@ const creatSmartScene = () => import('@/components/plan/creat-smart-scene')
 const data = () => import(/* webpackChunkName: "data" */ '@/components/data/data')
 const plandata = () => import(/* webpackChunkName: "data" */ '@/components/data/plandata')
 const mediadata = () => import(/* webpackChunkName: "data" */ '@/components/data/mediadata')
-const timebucket = () => import('@/components/data/timebucket')
+const timebucket = () => import(/* webpackChunkName: "data" */ '@/components/data/timebucket')
+const adseat = () => import(/* webpackChunkName: "data" */ '@/components/data/adseat')
 
 // 引入财务管理页面
 const finance = () => import(/* webpackChunkName: "finance" */ '@/components/finance/finance')
@@ -160,6 +161,11 @@ export default new Router({
           path: '/timebucket',
           name: '时段分析',
           component: timebucket
+        },
+        {
+          path: '/adseat',
+          name: 'adseat',
+          component: adseat
         }
       ]
     },

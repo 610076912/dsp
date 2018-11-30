@@ -5,11 +5,11 @@
     <div class="data-con">
       <el-row class="tac">
         <el-col :span="4" class="data-left">
-          <el-menu mode="vertical" default-active="data" class="el-menu-vertical-demo" router>
+          <el-menu mode="vertical" :default-active="currentIndex" class="el-menu-vertical-demo" router>
             <el-menu-item-group index="1">
               <template slot="title"><i class="el-icon-menu"></i>广告数据</template>
               <el-menu-item index="data" @click="changePath('推广数据')">推广数据</el-menu-item>
-              <!--<el-menu-item index="mediadata" @click="changePath('媒体分析')">媒体分析</el-menu-item>-->
+              <el-menu-item index="adseat" @click="changePath('广告位查看')">广告位查看</el-menu-item>
               <!--<el-menu-item index="territory"  @click="changePath('地域分析')">地域分析</el-menu-item>-->
               <!--<el-menu-item index="timebucket"  @click="changePath('时段分析')">时段分析</el-menu-item>-->
             </el-menu-item-group>
@@ -28,8 +28,15 @@
     name: 'dataindex',
     data () {
       return {
-        msg: 'data',
-        path: '推广数据'
+        path: '推广数据',
+        currentIndex: 'data'
+      }
+    },
+    created () {
+      // 当在历史数据栏刷新的时候保证选中状态还为历史数据栏
+      if (this.$router.currentRoute.fullPath === '/adseat') {
+        this.currentIndex = 'adseat'
+        this.path = '广告位查看'
       }
     },
     methods: {
