@@ -35,6 +35,7 @@ const plandata = () => import(/* webpackChunkName: "data" */ '@/components/data/
 const mediadata = () => import(/* webpackChunkName: "data" */ '@/components/data/mediadata')
 const timebucket = () => import(/* webpackChunkName: "data" */ '@/components/data/timebucket')
 const adseat = () => import(/* webpackChunkName: "data" */ '@/components/data/adseat')
+const occupy = () => import(/* webpackChunkName: "data" */ '@/components/data/occupy')
 
 // 引入财务管理页面
 const finance = () => import(/* webpackChunkName: "finance" */ '@/components/finance/finance')
@@ -166,6 +167,11 @@ export default new Router({
           path: '/adseat',
           name: 'adseat',
           component: adseat
+        },
+        {
+          path: '/occupy',
+          name: 'occupy',
+          component: occupy
         }
       ]
     },

@@ -10,6 +10,7 @@
               <template slot="title"><i class="el-icon-menu"></i>广告数据</template>
               <el-menu-item index="data" @click="changePath('推广数据')">推广数据</el-menu-item>
               <el-menu-item index="adseat" @click="changePath('广告位查看')">广告位查看</el-menu-item>
+              <el-menu-item index="occupy" @click="changePath('占用资源')">占用资源</el-menu-item>
               <!--<el-menu-item index="territory"  @click="changePath('地域分析')">地域分析</el-menu-item>-->
               <!--<el-menu-item index="timebucket"  @click="changePath('时段分析')">时段分析</el-menu-item>-->
             </el-menu-item-group>
