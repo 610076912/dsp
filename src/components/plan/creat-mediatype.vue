@@ -131,7 +131,7 @@
             if (item === aItem.type_id) {
               that.$set(that.liClass, index, true)
               // 计算视频数量
-              that.videoNum += aItem.video_num
+              that.videoNum += parseInt(aItem.video_num * 1.1)
               // 改变视频列表
               if (mediaTypeVideoTop[item]) {
                 allVideo = allVideo.concat(mediaTypeVideoTop[item])
