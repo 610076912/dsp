@@ -19,6 +19,7 @@
           </div>
         </div>
         <el-table
+          v-loading="loading"
           :data="tableData"
           border style="width: 100%">
           <el-table-column
@@ -72,7 +73,6 @@
 
 <script type="text/ecmascript-6">
   import MEDIATYPE from '../../../static/json/media-type.json'
-  import mediaTypeVideoTop from '../../../static/json/media-type-videoTop'
   import steps from './steps-component.vue'
   import header from './header-component.vue'
 
@@ -86,14 +86,33 @@
         typeData: null,
         liClass: [false, false, false, false, false, false, false, false, false, false, false, false, false],
         videoNum: 0,
+        loading: true,
         tableData: [],
         allDate: {},
         currentPage: 0,
         pageSize: 15,
-        pageTotal: 0
+        pageTotal: 0,
+        mediaTypeVideoTop: []
       }
     },
     created () {
+      // 获取视频TOP
+      this.$http.get('/api2/get_video_top').then(res => {
+        if (res.code === 200) {
+          this.mediaTypeVideoTop = res.data
+          this.mediaTypeVideoTop.forEach(item => {
+            for (let i in mediaType) {
+              if (item.video_type === mediaType[i].type) {
+                item.video_type_id = mediaType[i].type_id
+                break
+              }
+            }
+          })
+          this.reloadClassArr(this.chosedType)
+        }
+        this.loading = false
+      })
+
       // 判断Vuex中是否有数据
       let initData = this.$store.state.creatData.creatMediaType
       if (initData) {
@@ -131,11 +150,12 @@
             if (item === aItem.type_id) {
               that.$set(that.liClass, index, true)
               // 计算视频数量
-              that.videoNum += aItem.video_num
-              // 改变视频列表
-              if (mediaTypeVideoTop[item]) {
-                allVideo = allVideo.concat(mediaTypeVideoTop[item])
-              }
+              that.videoNum += parseInt(aItem.video_num * 1.1)
+            }
+          })
+          that.mediaTypeVideoTop.forEach(current => {
+            if (item === current.video_type_id) {
+              allVideo.push(current)
             }
           })
         })
