@@ -217,6 +217,7 @@
 <style lang="stylus" rel="stylesheet/stylus" type="text/stylus">
   #adseat {
     .el-dialog {
+      min-width: 900px;
       .search-wrap {
         width: 100%;
         height: 60px;
@@ -225,7 +226,7 @@
         padding: 15px 20px;
 
         .el-input {
-          width: 230px;
+          width: 210px;
         }
 
         .el-button {
