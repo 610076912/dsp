@@ -97,7 +97,8 @@
     },
     created () {
       // 获取视频TOP
-      this.$http.get('/api2/get_video_top').then(res => {
+      const host = process.env.TEST === 'test' ? 'https://context.videozhishi.com' : ''
+      this.$http.get(host + '/api2/get_video_top').then(res => {
         if (res.code === 200) {
           this.mediaTypeVideoTop = res.data
           this.mediaTypeVideoTop.forEach(item => {
