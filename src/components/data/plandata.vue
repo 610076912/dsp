@@ -101,7 +101,7 @@
 
 <script>
   import spurious from '../../../static/json/spurious'
-  let searchUrl = process.env.TEST === 'test' ? '//test-tj.videozhishi.com' : 'https://tj.videozhishi.com'
+  let searchUrl = process.env.TEST === 'test' ? 'https://test-tj.videozhishi.com' : 'https://tj.videozhishi.com'
 
   import mediaJsonP from '../../../static/json/media.json'
   // import mediaJsonT from '../../../static/json/test-media.json'
