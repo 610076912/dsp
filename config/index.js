@@ -30,12 +30,12 @@ module.exports = {
     proxyTable: {
       '/api': {
         // 180
-        target: 'http://localhost:7001',
+        // target: 'http://localhost:7001',
         // target: 'http://localhost:5001',
         // 正式
         // target: 'https://context.videozhishi.com',
         // 测试
-        // target: 'https://test-context.videozhishi.com',
+        target: 'https://test-context.videozhishi.com',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

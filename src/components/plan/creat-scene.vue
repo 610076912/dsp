@@ -655,6 +655,7 @@
           li {
             width: 95px;
             height: 28px;
+            overflow: hidden;
             display: inline-block;
             line-height: 28px;
             padding: 0 6px;

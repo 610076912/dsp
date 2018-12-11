@@ -161,6 +161,12 @@
           })
         })
         that.arrGroup(allVideo)
+        // 判断是否全选
+        if (this.chosedType.length >= 13) {
+          this.isCheckedAll = true
+        } else {
+          this.isCheckedAll = false
+        }
       },
       arrGroup (allVideo) {
         this.currentPage = 1
