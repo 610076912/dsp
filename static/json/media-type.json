@@ -77,6 +77,12 @@
       "type_id": "m",
       "type_class": "el-icon-my-dianying",
       "video_num": 0
+    },
+    {
+      "type": "游戏",
+      "type_id": "n",
+      "type_class": "el-icon-my-dianying",
+      "video_num": 0
     }
   ]
 }
