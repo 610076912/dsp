@@ -81,7 +81,7 @@
     "tpl_type": ["image", "relation1", "relation2"],
     "img_type": ["png", "jpeg", "gif"],
     "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3"],
-    "position": ["left"],
+    "position": ["left", "center", "right"],
     "effect": ["effect1", "effect2", "effect3"],
     "out_url": true,
     "bg_url": true,

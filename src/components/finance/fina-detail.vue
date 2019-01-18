@@ -59,7 +59,8 @@
   </div>
 </template>
 <script>
-  import spurious from '../../../static/json/spurious'
+  import spurious from '../../../static/json/spurious2'
+  import spurious1 from '../../../static/json/spurious3'
   let chartData = {
     tooltip: {trigger: 'axis'},
     color: [
@@ -196,8 +197,12 @@
         }).then((res) => {
           if (res.code === 200) {
             // 数据造假
-            if (sessionStorage.getItem('user_id') === 'H1lzVeGM7SyllfExfzX') {
+            if (sessionStorage.getItem('user_id') === this.$MockUserid) {
               res.data = spurious.cw
+              console.log(res.data)
+            }
+            if (sessionStorage.getItem('user_id') === this.$MockUserid1) {
+              res.data = spurious1.cw
               console.log(res.data)
             }
             this.over = res.data.over
