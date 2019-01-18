@@ -100,7 +100,6 @@
 </template>
 
 <script>
-  import spurious from '../../../static/json/spurious'
   let searchUrl = process.env.TEST === 'test' ? 'https://test-tj.videozhishi.com' : 'https://tj.videozhishi.com'
 
   import mediaJsonP from '../../../static/json/media.json'
@@ -166,9 +165,6 @@
           const that = this
           if (res.code === 200) {
             this.totalCost = 0
-            if (sessionStorage.getItem('user_id') === 'H1lzVeGM7SyllfExfzX' && sTime && sTime === '2018-06-10T16:00:00.000Z' && eTime === '2018-06-17T15:59:59.000Z') {
-              res.data = spurious.cost
-            }
             for (let i in res.data) {
               this.totalCost += res.data[i]
               this.tableData.forEach((item) => {
@@ -283,12 +279,6 @@
           }
         }).then(res => {
           if (res.code === 200) {
-            // 造假数据
-            console.log(res.data)
-            if (sessionStorage.getItem('user_id') === 'H1lzVeGM7SyllfExfzX' && bTime && bTime === '2018-06-10T16:00:00.000Z' && eTime === '2018-06-17T15:59:59.000Z') {
-              res.data = spurious.jc
-              console.log(res.data)
-            }
             // 处理数据中的小数点位数
             res.data.clickRateArr.forEach((item, index) => {
               res.data.clickRateArr[index] = this.$_toFixed(item)

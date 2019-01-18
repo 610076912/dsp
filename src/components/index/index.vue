@@ -138,7 +138,6 @@
 </template>
 
 <script>
-  import spurious from '../../../static/json/spurious'
   let searchUrl = process.env.TEST === 'test' ? 'https://test-tj.videozhishi.com' : 'https://tj.videozhishi.com'
   let selectLOption = [{
     value: 'bgCount',
@@ -324,10 +323,6 @@
           }
         }).then(res => {
           if (res.code === 200 && res.data) {
-            // 造假数据
-            if (sessionStorage.getItem('user_id') === 'H1lzVeGM7SyllfExfzX' && sTime && sTime.toLocaleDateString() === '2018/6/11' && eTime.toLocaleDateString() === '2018/6/17') {
-              res.data = spurious.cost
-            }
             this.todayCost = this.$_toFixed(res.data.today, 2) / 1000
             for (let i in res.data) {
               if (i !== 'today') {
@@ -374,10 +369,6 @@
           }
         }).then(res => {
           if (res.code === 200) {
-            // 造假数据
-            if (sessionStorage.getItem('user_id') === 'H1lzVeGM7SyllfExfzX' && timeRange && timeRange[0] === 1528646400000 && timeRange[1] === 1529251199999) {
-              res.data = spurious.data
-            }
             let clickRateArr = res.data.clickRateArr.map(item => {
               return this.$_toFixed(item)
             })
