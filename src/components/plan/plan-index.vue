@@ -69,7 +69,7 @@
             :show-overflow-tooltip="true"
             prop="plan_name"
             align="center"
-            width="190">
+            width="150">
           </el-table-column>
           <el-table-column
             :resizable="false"
@@ -94,6 +94,13 @@
             prop="plan_all_budget"
             align="center"
             width="75">
+          </el-table-column>
+          <el-table-column
+            :resizable="false"
+            label="日余额"
+            prop="day_balance"
+            align="center"
+            width="70">
           </el-table-column>
           <el-table-column
             :resizable="false"
