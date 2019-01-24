@@ -100,9 +100,12 @@
 </template>
 
 <script>
+  import spurious from '../../../static/json/spurious2'
+  import spurious1 from '../../../static/json/spurious3'
+  import mediaJsonP from '../../../static/json/media.json'
+
   let searchUrl = process.env.TEST === 'test' ? 'https://test-tj.videozhishi.com' : 'https://tj.videozhishi.com'
 
-  import mediaJsonP from '../../../static/json/media.json'
   // import mediaJsonT from '../../../static/json/test-media.json'
 
   // let testEnv = process.env.TEST === 'test'
@@ -165,6 +168,23 @@
           const that = this
           if (res.code === 200) {
             this.totalCost = 0
+            if (sessionStorage.getItem('user_id') === this.$MockUserid) {
+              if (JSON.parse(actIdArr)[0] === '1674_1015') {
+                res.data = spurious.data[1].cost
+              }
+              if (JSON.parse(actIdArr)[0] === '1673_1021') {
+                res.data = spurious.data[2].cost
+              }
+            }
+            if (sessionStorage.getItem('user_id') === this.$MockUserid1) {
+              if (JSON.parse(actIdArr)[0] === '1675_1015') {
+                res.data = spurious1.data[1].cost
+              }
+              if (JSON.parse(actIdArr)[0] === '1676_1021') {
+                res.data = spurious1.data[2].cost
+              }
+            }
+            console.log(res.data)
             for (let i in res.data) {
               this.totalCost += res.data[i]
               this.tableData.forEach((item) => {
@@ -279,6 +299,24 @@
           }
         }).then(res => {
           if (res.code === 200) {
+            // 造假数据
+            console.log(res.data)
+            if (sessionStorage.getItem('user_id') === this.$MockUserid) {
+              if (arg[0] === '1674_1015') {
+                res.data = JSON.parse(JSON.stringify(spurious.jc[1]))
+              }
+              if (arg[0] === '1673_1021') {
+                res.data = JSON.parse(JSON.stringify(spurious.jc[2]))
+              }
+            }
+            if (sessionStorage.getItem('user_id') === this.$MockUserid1) {
+              if (arg[0] === '1675_1015') {
+                res.data = JSON.parse(JSON.stringify(spurious1.jc[1]))
+              }
+              if (arg[0] === '1676_1021') {
+                res.data = JSON.parse(JSON.stringify(spurious1.jc[2]))
+              }
+            }
             // 处理数据中的小数点位数
             res.data.clickRateArr.forEach((item, index) => {
               res.data.clickRateArr[index] = this.$_toFixed(item)

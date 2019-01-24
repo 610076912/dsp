@@ -65,7 +65,8 @@
     <div class="mobile">
       <div class="mobile-title">
         <span>{{tags[indexs]}}营销概况</span>
-        <div class="date-wrap">
+        <!-- 模拟数据 -->
+        <div class="date-wrap" v-if="(userId !== this.$MockUserid1 && userId !== this.$MockUserid)">
           <el-date-picker
             class="date-picker"
             v-model="mobileDate"
@@ -138,6 +139,8 @@
 </template>
 
 <script>
+  import spurious from '../../../static/json/spurious2'
+  import spurious1 from '../../../static/json/spurious3'
   let searchUrl = process.env.TEST === 'test' ? 'https://test-tj.videozhishi.com' : 'https://tj.videozhishi.com'
   let selectLOption = [{
     value: 'bgCount',
@@ -235,6 +238,7 @@
           }]
         },
         name: sessionStorage.getItem('user'),
+        userId: sessionStorage.getItem('user_id'),
         msg: 'index',
         location: '首页',
         tags: ['移动', 'PC', 'OTT'],
@@ -323,6 +327,10 @@
           }
         }).then(res => {
           if (res.code === 200 && res.data) {
+            // 造假数据
+            if (sessionStorage.getItem('user_id') === this.$MockUserid) {
+              res.data = spurious.data[channelId].cost
+            }
             this.todayCost = this.$_toFixed(res.data.today, 2) / 1000
             for (let i in res.data) {
               if (i !== 'today') {
@@ -369,6 +377,14 @@
           }
         }).then(res => {
           if (res.code === 200) {
+            // 造假数据
+            if (sessionStorage.getItem('user_id') === this.$MockUserid) {
+              res.data = spurious.data[channelType]
+            }
+            // 造假数据
+            if (sessionStorage.getItem('user_id') === this.$MockUserid1) {
+              res.data = spurious1.data[channelType]
+            }
             let clickRateArr = res.data.clickRateArr.map(item => {
               return this.$_toFixed(item)
             })

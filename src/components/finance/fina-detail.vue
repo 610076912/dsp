@@ -59,6 +59,8 @@
   </div>
 </template>
 <script>
+  import spurious from '../../../static/json/spurious2'
+  import spurious1 from '../../../static/json/spurious3'
   let chartData = {
     tooltip: {trigger: 'axis'},
     color: [
@@ -194,6 +196,15 @@
           }
         }).then((res) => {
           if (res.code === 200) {
+            // 数据造假
+            if (sessionStorage.getItem('user_id') === this.$MockUserid) {
+              res.data = spurious.cw
+              console.log(res.data)
+            }
+            if (sessionStorage.getItem('user_id') === this.$MockUserid1) {
+              res.data = spurious1.cw
+              console.log(res.data)
+            }
             this.over = res.data.over
             if (res.data.all_costs !== 0) {
               // 对拿到的数据做小数位处理，保留三位小数
