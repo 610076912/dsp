@@ -40,7 +40,8 @@
   </div>
 </template>
 <script>
-  import spurious from '../../../static/json/spurious'
+  import spurious from '../../../static/json/spurious2'
+  import spurious1 from '../../../static/json/spurious3'
   export default {
     name: 'finaHistory',
     data () {
@@ -66,8 +67,12 @@
           }
         }).then(res => {
           if (res.code === 200) {
-            if (sessionStorage.getItem('user_id') === 'H1lzVeGM7SyllfExfzX') {
+            if (sessionStorage.getItem('user_id') === this.$MockUserid) {
               res.data = spurious.history
+              console.log(res.data)
+            }
+            if (sessionStorage.getItem('user_id') === this.$MockUserid1) {
+              res.data = spurious1.history
               console.log(res.data)
             }
             this.tableData = res.data.data
