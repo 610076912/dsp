@@ -539,6 +539,9 @@
       },
       // 查询按钮
       seek () {
+        let date = []
+        date[0] = new Date(this.seekData.date[0])
+        date[1] = new Date(this.seekData.date[1])
         let option = {
           sort_type: this.seekData.sort,
           name: this.seekData.name,
@@ -547,8 +550,8 @@
           channel: this.activeName,
           // 使用setHours方法，使开始时间往前1毫秒，结束时间往后1毫秒
           // 其实包含当前日期下的00:00点的计划
-          timeStart: this.seekData.date[0] ? new Date(this.seekData.date[0].setHours(0, 0, 0, -1)).Format('yyyy-MM-dd hh:mm:ss') : null,
-          timeEnd: this.seekData.date[1] ? new Date(this.seekData.date[1].setHours(23, 59, 59, 1000)).Format('yyyy-MM-dd hh:mm:ss') : null,
+          timeStart: this.seekData.date[0] ? new Date(date[0].setHours(0, 0, 0, -1)).Format('yyyy-MM-dd hh:mm:ss') : null,
+          timeEnd: this.seekData.date[1] ? new Date(date[1].setHours(23, 59, 59, 1000)).Format('yyyy-MM-dd hh:mm:ss') : null,
           pageId: this.currentPage,
           pageCount: this.pageSize
         }
