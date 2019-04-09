@@ -38,14 +38,16 @@
             </el-option>
           </el-select>
         </label>
-        <!--<label>-->
-        <!--状态：-->
-        <!--<el-select v-model="seekData.status" class="status-select" clearable>-->
-        <!--<el-option key="time" label="计划推广时间" value="time"></el-option>-->
-        <!--<el-option key="group" label="分组" value="group"></el-option>-->
-        <!--<el-option key="kg" label="开关" value="kg"></el-option>-->
-        <!--</el-select>-->
-        <!--</label>-->
+        <label>
+          状态：
+          <el-select v-model="seekData.status" class="status-select" clearable>
+            <el-option
+              v-for="i in status"
+              :key="i.label"
+              :label="i.value"
+              :value="i.label"></el-option>
+          </el-select>
+        </label>
         <button class="submit" @click="seek">查询</button>
       </div>
       <div class="card-content">
@@ -123,7 +125,7 @@
             align="center"
             prop="status"
             :formatter="activity"
-            width="90">
+            width="100">
           </el-table-column>
           <el-table-column
             :resizable="false"
@@ -245,6 +247,16 @@
         sort: '',
         serchText: '',
         group: [],
+        status: [
+          {label: 1, value: '正在编辑'},
+          {label: 2, value: '正在审核'},
+          {label: 3, value: '审核未通过'},
+          {label: 4, value: '审核通过'},
+          {label: 5, value: '正在投放'},
+          {label: 6, value: '暂停投放'},
+          {label: 7, value: '投放完成-到期'},
+          {label: 8, value: '投放完成-终止'}
+        ],
         seekData: {
           sort: '',
           name: '',
@@ -753,23 +765,12 @@
       formatter (item) {
         return new Date(item.plan_b_time).Format('yyyy-MM-dd') + ' -- ' + new Date(item.plan_e_time).Format('yyyy-MM-dd')
       },
-      activity (val) {  // 格式化内容对应文本
-        if (val.status === 1) {
-          return '正在编辑'
-        } else if (val.status === 2) {
-          return '正在审核'
-        } else if (val.status === 3) {
-          return '审核通过'
-        } else if (val.status === 4) {
-          return '审核未通过'
-        } else if (val.status === 5) {
-          return '正在投放'
-        } else if (val.status === 6) {
-          return '投放完成'
-        } else if (val.status === 7) {
-          return '暂停投放'
-        } else if (val.status === 100) {
-          return '异常状态'
+      // 格式化内容对应文本
+      activity (val) {
+        for (let e of this.status) {
+          if (e.label === val.status) {
+            return e.value
+          }
         }
       },
       // 计划列表的媒体状态formatter
@@ -867,15 +868,21 @@
       }
       .sort-select {
         width: 130px;
-        margin-right: 55px;
+        margin-right: 20px;
       }
       .serch {
         width: 180px;
-        margin-right: 15px;
+        margin-right: 20px;
       }
-      .group-select, .status-select {
-        margin-right: 10px;
-        width: 90px;
+      .group-select{
+        margin-right: 20px;
+        width: 100px;
+      }
+      .date-wrap{
+        margin-right: 20px
+      }
+      .status-select {
+        width: 136px;
       }
       .submit {
         background: #169bd5;
