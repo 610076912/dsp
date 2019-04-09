@@ -54,6 +54,17 @@
     "bg_url": true,
     "click_url": true
   },
+  "1025": {
+    "planName": "PPTV_OTT",
+    "tpl_type": ["image",  "relation1", "relation2"],
+    "img_type": ["png", "jpeg", "gif"],
+    "size": ["300,300,i_size2"],
+    "position": ["left"],
+    "effect": ["effect1"],
+    "out_url": false,
+    "bg_url": true,
+    "click_url": true
+  },
   "1020": {
     "planName": "1905电影网_mobile",
     "tpl_type": ["image", "relation1", "relation2"],
