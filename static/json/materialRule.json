@@ -58,7 +58,7 @@
     "planName": "PPTV_OTT",
     "tpl_type": ["image",  "relation1", "relation2"],
     "img_type": ["png", "jpeg", "gif"],
-    "size": ["300,300,i_size2"],
+    "size": ["380,200,i_size1", "300,300,i_size2", "500,100,i_size3"],
     "position": ["left"],
     "effect": ["effect1"],
     "out_url": false,
