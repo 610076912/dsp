@@ -393,14 +393,15 @@ export default {
         if (this.status.publish === 1) {
           this.canEdit = false
         } else {
-          if (this.status.plan_status === 6) {
-            let all = this.status.act_ids_status.every(item => {
-              return item.act_ids_status === -1
-            })
-            if (!all) {
-              this.canEdit = false
-            }
-          }
+          // if (this.status.plan_status === 6) {
+          //   let all = this.status.act_ids_status.every(item => {
+          //     return item.act_ids_status === -1
+          //   })
+          //   if (!all) {
+          //     this.canEdit = false
+          //   }
+          // }
+          this.canEdit = true
         }
         this.$store.commit('STATUS', result.status)
       }
