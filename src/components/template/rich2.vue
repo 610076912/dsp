@@ -64,8 +64,8 @@ export default {
 
     .tipsImg {
       .images {
-        height: 63px;
-        width: 147px;
+        height: 100px;
+        width: 100px;
         background: #ccc;
         border: 1px solid #f2f2f2;
       }
