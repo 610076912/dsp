@@ -10,7 +10,7 @@
         </template>
         <div class="can-edit" v-if="!canEdit"></div>
         <div class="img">
-          <div class="ad-style" v-show="!isEdit"><video id="imgvideo" loop src="http://sltimg.adv.ott.cibntv.net/static/2018928/111.mp4" alt=""></video></div>
+          <div class="ad-style" v-show="!isEdit"><video id="imgvideo" loop src="http://sltimg.adv.ott.cibntv.net/img/video/image.mp4" alt=""></video></div>
           <div class="ad-edit">
             <div class="upload-flash">
               <img v-show="conf_info.image_src" :src="conf_info.image_src" class="avatar" id="loadImg">

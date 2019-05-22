@@ -12,7 +12,7 @@
         <div class="can-edit" v-if="!canEdit"></div>
         <div class="relation">
           <div class="ad-style" v-show="!isEdit">
-            <video id="rel2video" loop src="http://sltimg.adv.ott.cibntv.net/static/video/relation2.mp4" alt=""></video>
+            <video id="rel2video" loop src="http://sltimg.adv.ott.cibntv.net/img/video/relation2.mp4" alt=""></video>
           </div>
           <div class="ad-edit">
             <div class="url-wrap">

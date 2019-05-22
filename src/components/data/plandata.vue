@@ -184,7 +184,6 @@
                 res.data = spurious1.data[2].cost
               }
             }
-            console.log(res.data)
             for (let i in res.data) {
               this.totalCost += res.data[i]
               this.tableData.forEach((item) => {
@@ -290,7 +289,7 @@
             planName = this.activityO[i].plan_name
           }
         }
-        console.log('bTime' + bTime, 'eTime' + eTime)
+        // console.log('bTime' + bTime, 'eTime' + eTime)
         this.$http.get(searchUrl + '/data/get_promotion_data', {
           params: {
             actid_list: JSON.stringify(arg),
@@ -300,7 +299,7 @@
         }).then(res => {
           if (res.code === 200) {
             // 造假数据
-            console.log(res.data)
+            // console.log(res.data)
             if (sessionStorage.getItem('user_id') === this.$MockUserid) {
               if (arg[0] === '1674_1015') {
                 res.data = JSON.parse(JSON.stringify(spurious.jc[1]))
