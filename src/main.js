@@ -26,6 +26,9 @@ Vue.use(axios)
 Vue.use(fixed)
 Vue.use(analysis)
 
+Vue.prototype.$MockUserid = 'WeZWICcQ1$1QFFTdLIW'
+Vue.prototype.$MockUserid1 = 'WeZWICcQ1$1QFFTdLIW'
+
 // 登录页面router钩子函数
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.Auth)) {

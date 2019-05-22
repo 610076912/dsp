@@ -326,7 +326,7 @@
       let media = {
         1: [1013, 1014, 1015, 1020],
         2: [1002, 1004, 1021],
-        3: [1003, 1018, 1022, 1023]
+        3: [1003, 1018, 1022, 1023, 1025]
       }
       let putChannelIds = JSON.parse(sessionStorage.getItem('putChannelIds'))
       // console.log(putChannelIds)

@@ -39,6 +39,16 @@
         <div class="checked-city">
           <div class="top">
             <span class="title">已选（{{ checkedCitysNum }}）位置</span>
+            <el-autocomplete
+              class="search-input"
+              v-model="searchCity"
+              :fetch-suggestions="querySearch"
+              placeholder="搜索城市"
+              :trigger-on-focus="false"
+              @select="handleSelect"
+              size="small"
+              clearable
+            ></el-autocomplete>
           </div>
           <div class="con">
             <el-tree ref="checkedCityTree" :data="checkedCitys" :props="checkedCityProps"></el-tree>
@@ -99,7 +109,8 @@
         allCityId: [],
         btnLoading: false,
         loading: true,
-        timer: null
+        timer: null,
+        searchCity: ''
       }
     },
     created () {
@@ -268,6 +279,23 @@
           }
         }
         return resultArr
+      },
+      querySearch (queryString, cb) {
+        const restaurants = citys.RECORDS
+        const results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
+        // 调用 callback 返回建议列表的数据
+        results.forEach(item => {
+          item.value = item.city + ' ' + item.region
+        })
+        cb(results)
+      },
+      createFilter (queryString) {
+        return (restaurant) => {
+          return (restaurant.city.toLowerCase().indexOf(queryString.toLowerCase()) >= 0)
+        }
+      },
+      handleSelect (selectItem) {
+        this.checkedCityId.push(selectItem.city_id)
       }
     },
     watch: {
@@ -365,6 +393,10 @@
         .el-tree-node__children {
           background: #f9f9f9
         }
+      }
+      .search-input{
+        width: 140px;
+        float right;
       }
     }
   }

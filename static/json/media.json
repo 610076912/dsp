@@ -184,6 +184,14 @@
     "display": true
   },
   {
+    "media_id": 1025,
+    "media_name": "pptv_ott",
+    "media_url": "./static/img/PPTV.jpg",
+    "checked": "0",
+    "alias": "y",
+    "display": true
+  },
+  {
     "media_id": 9999,
     "media_name": "测试服务器",
     "media_url": "./static/img/test.png",
