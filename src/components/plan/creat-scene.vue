@@ -3,6 +3,17 @@
     <setps :active="1"></setps>
     <div class="content">
       <creat-header title="场景化投放设置" text="场景投放"></creat-header>
+      <el-upload
+        :auto-upload="false"
+        :on-change="upLoadClass3"
+        action="www.baidu.com"
+        :show-file-list="false"
+        accept=".txt"
+        style="display: inline-block">
+        <el-button size="small" type="primary">导入标签</el-button>
+      </el-upload>
+      <el-button size="small" @click="downLoadClass3">导出已选标签</el-button>
+      <a ref="class3a"></a>
       <el-input class="search-input" placeholder="请输入关键词查询" v-model="searchInput">
         <el-button slot="append" @click="search">查询</el-button>
       </el-input>
@@ -21,7 +32,8 @@
           <ul>
             <li v-for="item in checkedArrObj">
               {{item.class_name}}
-              <i v-show="checkedSmartScene.indexOf(item.class_id) < 0" class="el-icon-close" @click="delChecked(item.class_id)"></i>
+              <i v-show="checkedSmartScene.indexOf(item.class_id) < 0" class="el-icon-close"
+                 @click="delChecked(item.class_id)"></i>
             </li>
           </ul>
         </div>
@@ -586,6 +598,48 @@
           }
         })
       },
+      upLoadClass3 (file) {
+        let reader = new FileReader()
+        const _this = this
+        reader.onload = function (event) {
+          // event.target.result就是文件文本内容
+          let upData = event.target.result
+          let dataArr = []
+          try {
+            dataArr = JSON.parse(upData)
+            // id去重合并
+            _this.checkedArr = [...new Set([..._this.checkedArr, ...dataArr.checkedArr])]
+            // obj去重合并
+            let margeObj = []
+            dataArr.checkedArrObj.forEach(item => {
+              let flag = _this.checkedArrObj.some(item1 => {
+                return item.class_id === item1.class_id
+              })
+              if (!flag) margeObj.push(item)
+            })
+            _this.checkedArrObj = _this.checkedArrObj.concat(margeObj)
+          } catch (e) {
+            _this.$message({
+              message: '文件格式错误。',
+              type: 'warning'
+            })
+          }
+        }
+        reader.readAsText(file.raw)
+      },
+      downLoadClass3 () {
+        if (this.checkedArr.length === 0) return
+        let exportData = {
+          checkedArr: this.checkedArr,
+          checkedArrObj: this.checkedArrObj
+        }
+        let exportStr = JSON.stringify(exportData)
+        let blob = new Blob([exportStr], { type: 'text/plain' })
+        const a = this.$refs.class3a
+        a.href = URL.createObjectURL(blob)
+        a.download = this.$store.state.creatData.planId + 'class3Id.txt'
+        a.click()
+      },
       // 下一步
       nextStep () {
         let checkedNodes = this.checkedArr
@@ -630,11 +684,13 @@
       padding: 15px 30px;
       padding-bottom: 30px;
       border-bottom: 1px solid #cacaca;
+
       .search-input {
         width: 320px;
         float: right;
         margin-bottom: 20px;
       }
+
       .checked-wrap, .search-res-wrap {
         width: 100%;
         min-height: 100px;
@@ -642,16 +698,20 @@
         float: left;
         margin-bottom: 25px;
         padding: 10px;
+
         .checked-num {
           font-size: 14px;
         }
+
         .el-button {
           padding: 5px 15px;
           display: block;
           float: right;
         }
+
         ul {
           padding-top: 10px;
+
           li {
             width: 95px;
             height: 28px;
@@ -664,9 +724,11 @@
             position: relative;
             user-select: none;
             margin: 0 18px 10px 0;
+
             &:nth-of-type(10n) {
               margin-right: 0;
             }
+
             i {
               font-size: 10px;
               position: absolute;
@@ -678,22 +740,27 @@
           }
         }
       }
+
       .search-res-wrap {
         position: relative;
+
         i {
           position: absolute
           right: 10px;
           top: 8px;
           cursor: pointer;
         }
+
         ul {
           padding-top: 20px;
+
           li {
             text-align: center;
             cursor: pointer;
           }
         }
       }
+
       .class-wrap {
         width: 100%;
         background: #F2F2F2;
@@ -701,10 +768,12 @@
         overflow: hidden;
         position: relative;
         border-right: 1px solid #f2f2f2;
+
         & > ul {
           width: 125px;
           height: 100%;
           float: left;
+
           li {
             width: 100%;
             height: 45px;
@@ -714,24 +783,29 @@
             text-indent: 5px;
             border-left: 2px solid transparent;
             transition: all .5s;
+
             .el-checkbox {
               float: left;
             }
           }
+
           .active {
             border-left-color: #169bd5;
             background-color: #fff;
           }
         }
+
         .class2-wrap {
           width: 500px;
           height: 450px;
           background: #fff;
           float: left;
           padding: 15px;
+
           .seeAll {
             float: right;
             margin-bottom: 10px;
+
             span {
               border-radius: 15px;
               font-size: 12px;
@@ -740,14 +814,17 @@
               line-height: 9px;
             }
           }
+
           .class2-cont {
             width: 100%;
             overflow: hidden;
+
             .active {
               border-color: #169bd5;
               background: #fff;
               color: #169bd5;
             }
+
             li {
               display: inline-block;
               width: 102px;
@@ -765,6 +842,7 @@
             }
           }
         }
+
         .content-wrap {
           width: 528px;
           height: 450px;
@@ -774,6 +852,7 @@
           overflow-y: auto;
           position: absolute;
           left: 628px;
+
           .header {
             font-size: 16px;
             text-indent: 10px;
@@ -782,9 +861,11 @@
             color: #169bd5;
             margin-bottom: 20px;
           }
+
           .cont {
             li {
               margin-bottom: 20px;
+
               & > label {
                 input {
                   width: 18px;
@@ -793,6 +874,7 @@
                   top: 5px;
                 }
               }
+
               span {
                 display: inline-block;
                 height: 25px;
@@ -803,13 +885,16 @@
                 margin-left: 3px;
                 margin-bottom: 15px;
               }
+
               .class3-cont {
                 padding: 0 0px 0 30px;
+
                 .active {
                   border-color: #169bd5;
                   background: #fff;
                   color: #169bd5;
                 }
+
                 li {
                   display: inline-block;
                   width: 98px;
@@ -823,27 +908,33 @@
                   cursor: pointer;
                   color: #333;
                   transition: color, background-color, border .5s;
+
                   &:nth-of-type(4n) {
                     margin-right: 0
                   }
                 }
               }
+
               .class3-cont-start {
                 .py-wrap {
                   margin-bottom: 0px;
                   width: 488px;
+
                   & > span {
                     vertical-align: top;
                     width: 26px;
                   }
+
                   ul {
                     display: inline-block;
                     width: 440px;
+
                     .active {
                       border-color: #169bd5;
                       background: #fff;
                       color: #169bd5;
                     }
+
                     li {
                       display: inline-block;
                       width: 98px;
@@ -857,6 +948,7 @@
                       cursor: pointer;
                       color: #333;
                       transition: color, background .5s;
+
                       &:nth-of-type(4n) {
                         margin-right: 0
                       }
@@ -868,9 +960,11 @@
           }
         }
       }
+
       .fade-enter-active, .fade-leave-active {
         transition: opacity .5s
       }
+
       .fade-enter, .fade-leave-to /* .fade-leave-active in below version 2.1.8 */
       {
         opacity: 0
