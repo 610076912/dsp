@@ -607,7 +607,7 @@ export default {
       if (!file.response) {
         this.loadLocImg(file.raw, naturalSize => {
           // 验证图片尺寸
-          if (naturalSize.naturalWidth !== 120 && naturalSize.naturalHeight !== 120) {
+          if (!(naturalSize.naturalWidth === 120 && naturalSize.naturalHeight === 120)) {
             this.$message.error('图片尺寸不是120px*120px，请重新上传')
             this.$refs.uploadTopImg.clearFiles()  // 清空文件列表
             return false
@@ -628,7 +628,7 @@ export default {
       if (!file.response) {
         this.loadLocImg(file.raw, naturalSize => {
           // 验证图片尺寸
-          if (naturalSize.naturalWidth !== 180 && naturalSize.naturalHeight !== 250) {
+          if (!(naturalSize.naturalWidth === 180 && naturalSize.naturalHeight === 250)) {
             this.$message.error('图片尺寸不是180px*250px，请重新上传')
             this.$refs.uploadItemImg.clearFiles()  // 清空文件列表
             return false
@@ -651,7 +651,7 @@ export default {
       if (!file.response) {
         this.loadLocImg(file.raw, naturalSize => {
           // 验证图片尺寸
-          if (naturalSize.naturalWidth !== 300 && naturalSize.naturalHeight !== 300) {
+          if (!(naturalSize.naturalWidth === 300 && naturalSize.naturalHeight === 300)) {
             this.$message.error('图片尺寸不是300px*300px，请重新上传')
             this.$refs.uploadPrompt1.clearFiles()  // 清空文件列表
             return false
@@ -666,7 +666,7 @@ export default {
       if (!file.response) {
         this.loadLocImg(file.raw, naturalSize => {
           // 验证图片尺寸
-          if (naturalSize.naturalWidth !== 150 && naturalSize.naturalHeight !== 150) {
+          if (!(naturalSize.naturalWidth === 150 && naturalSize.naturalHeight === 150)) {
             this.$message.error('图片尺寸不是150px*150px，请重新上传')
             this.$refs.uploadPrompt2.clearFiles()  // 清空文件列表
             return false

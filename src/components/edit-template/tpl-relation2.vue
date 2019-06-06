@@ -95,7 +95,7 @@
                   :on-change="tplImgUpLoadChange"
                   :on-success="tplImgSuccess"
                   :before-upload="beforeAvatarUpload">
-                  <p v-if="!conf_info.relation_info.content[0].info_con">480px*540px 上传图片</p>
+                  <p v-if="!conf_info.relation_info.content[0].info_con">450px*540px 上传图片</p>
                 </el-upload>
               </div>
               <el-input
@@ -419,7 +419,7 @@
         if (!file.response) {
           this.loadLocImg(file.raw, naturalSize => {
             // 验证图片尺寸
-            if (naturalSize.naturalWidth !== 300 && naturalSize.naturalHeight !== 300) {
+            if (!(naturalSize.naturalWidth === 300 && naturalSize.naturalHeight === 300)) {
               this.$message.error('图片尺寸不是300px*300px，请重新上传')
               this.$refs.uploadPrompt1.clearFiles()  // 清空文件列表
               return false
@@ -440,7 +440,7 @@
         if (!file.response) {
           this.loadLocImg(file.raw, naturalSize => {
             // 验证图片尺寸
-            if (naturalSize.naturalWidth !== 150 && naturalSize.naturalHeight !== 150) {
+            if (!(naturalSize.naturalWidth === 150 && naturalSize.naturalHeight === 150)) {
               this.$message.error('图片尺寸不是150px*150px，请重新上传')
               this.$refs.uploadPrompt2.clearFiles()  // 清空文件列表
               return false
@@ -461,8 +461,8 @@
         if (!file.response) {
           this.loadLocImg(file.raw, naturalSize => {
             // 验证图片尺寸
-            if (naturalSize.naturalWidth !== 480 && naturalSize.naturalHeight !== 540) {
-              this.$message.error('图片尺寸不是540px*480px，请重新上传')
+            if (!(naturalSize.naturalWidth === 450 && naturalSize.naturalHeight === 540)) {
+              this.$message.error('图片尺寸不是450px*540px，请重新上传')
               this.$refs.uploadTplImg.clearFiles()  // 清空文件列表
               return false
             }
@@ -482,7 +482,7 @@
         if (!file.response) {
           this.loadLocImg(file.raw, naturalSize => {
             // 验证图片尺寸
-            if (naturalSize.naturalWidth !== 150 && naturalSize.naturalHeight !== 150) {
+            if (!(naturalSize.naturalWidth === 150 && naturalSize.naturalHeight === 150)) {
               this.$message.error('图片尺寸不是150px*150px，请重新上传')
               this.$refs.uploadQRcodeImg.clearFiles()  // 清空文件列表
               return false
@@ -658,11 +658,11 @@
 
           .pic {
             width: 100%;
-            height: 280px;
+            height: 270px;
             background: #fff;
             color: #2e2e2e;
             text-align: center;
-            line-height: 280px;
+            line-height: 270px;
             cursor: pointer;
           }
 
