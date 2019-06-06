@@ -388,6 +388,7 @@
             res.data.forEach((item) => {
               this.switchData.push(item.publish === 1)
               this.switchDisabled.push(item.status === 4 || item.status === 5 || item.status === 6)
+              item.day_balance = (item.day_balance.toFixed(3) * 1000).toFixed(3) / 1000
               // 只要审核通过的 计划开关就可以打开
               let switchS = item.actStatusArr.some((el) => {
                 return el.act_ids_status === 1
