@@ -75,6 +75,7 @@
             :editable="false"
             align="right"
             placeholder="选择日期范围"
+            :clearable="false"
             :picker-options="pickerOptions">
           </el-date-picker>
         </div>

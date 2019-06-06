@@ -184,7 +184,7 @@ export default {
 
 .vca-rich1-main .vca-rich1-img {
   width: calc(100% - 20px);
-  height: 46%;
+  height: 40%;
   margin: 10px 10px 0;
   background: #cccccc;
 }
