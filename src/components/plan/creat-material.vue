@@ -299,14 +299,34 @@ export default {
             this.adCon[res.data[0].tpl_cat] = {
               adCon: JSON.parse(res.data[0].conf_info),
               bgUrl: res.data[0].bg_url,
-              clickUrl: res.data[0].click_url
+              clickUrl: res.data[0].click_url,
+              bg_url_desc: res.data[0].bg_url_desc,
+              click1_url: res.data[0].click1_url,
+              bg1_url: res.data[0].bg1_url,
+              bg1_url_desc: res.data[0].bg1_url_desc,
+              click2_url: res.data[0].click2_url,
+              bg2_url: res.data[0].bg2_url,
+              bg2_url_desc: res.data[0].bg2_url_desc,
+              click3_url: res.data[0].click3_url,
+              bg3_url: res.data[0].bg3_url,
+              bg3_url_desc: res.data[0].bg3_url_desc
             }
           } else {
             this.collVal = JSON.parse(res.data[0].conf_info).relation_info.type
             this.adCon[this.collVal] = {
               adCon: JSON.parse(res.data[0].conf_info),
               bgUrl: res.data[0].bg_url,
-              clickUrl: res.data[0].click_url
+              clickUrl: res.data[0].click_url,
+              bg_url_desc: res.data[0].bg_url_desc,
+              click1_url: res.data[0].click1_url,
+              bg1_url: res.data[0].bg1_url,
+              bg1_url_desc: res.data[0].bg1_url_desc,
+              click2_url: res.data[0].click2_url,
+              bg2_url: res.data[0].bg2_url,
+              bg2_url_desc: res.data[0].bg2_url_desc,
+              click3_url: res.data[0].click3_url,
+              bg3_url: res.data[0].bg3_url,
+              bg3_url_desc: res.data[0].bg3_url_desc
             }
           }
         } else {
@@ -355,6 +375,16 @@ export default {
         bg_url: confInfo.bg_url,
         // 点击url
         click_url: confInfo.click_url,
+        bg_url_desc: confInfo.bg_url_desc,
+        click1_url: confInfo.click1_url,
+        bg1_url: confInfo.bg1_url,
+        bg1_url_desc: confInfo.bg1_url_desc,
+        click2_url: confInfo.click2_url,
+        bg2_url: confInfo.bg2_url,
+        bg2_url_desc: confInfo.bg2_url_desc,
+        click3_url: confInfo.click3_url,
+        bg3_url: confInfo.bg3_url,
+        bg3_url_desc: confInfo.bg3_url_desc,
         // 模板广告内容
         conf_info: JSON.stringify(confInfo.conf_info)
       }).then(res => {

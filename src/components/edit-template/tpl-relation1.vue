@@ -14,12 +14,52 @@
             <video id="rel1video" loop src="http://sltimg.adv.ott.cibntv.net/img/video/relation1.mp4" alt=""></video>
           </div>
           <div class="ad-edit">
+            <div class="links-title">
+              <span class="title">监测代码列表</span>
+              <el-button size="small">添加</el-button>
+            </div>
             <div class="url-wrap">
               <el-input placeholder="请输入曝光检测链接" v-model="bgUrl" size="small">
-                <template slot="prepend">曝光检测链接</template>
+                <template slot="prepend">曝光</template>
               </el-input>
               <el-input placeholder="请输入点击检测链接" v-model="clickUrl" size="small">
-                <template slot="prepend">点击检测链接</template>
+                <template slot="prepend">点击</template>
+              </el-input>
+              <el-input placeholder="请输入备注" v-model="bg_url_desc" size="small">
+                <template slot="prepend">备注</template>
+              </el-input>
+            </div>
+            <div class="url-wrap1">
+              <el-input placeholder="请输入曝光检测链接" v-model="bg1_url" size="small">
+                <template slot="prepend">曝光</template>
+              </el-input>
+              <el-input placeholder="请输入点击检测链接" v-model="click1_url" size="small">
+                <template slot="prepend">点击</template>
+              </el-input>
+              <el-input placeholder="请输入备注" v-model="bg1_url_desc" size="small">
+                <template slot="prepend">备注</template>
+              </el-input>
+            </div>
+            <div class="url-wrap2">
+              <el-input placeholder="请输入曝光检测链接" v-model="bg2_url" size="small">
+                <template slot="prepend">曝光</template>
+              </el-input>
+              <el-input placeholder="请输入点击检测链接" v-model="click2_url" size="small">
+                <template slot="prepend">点击</template>
+              </el-input>
+              <el-input placeholder="请输入备注" v-model="bg2_url_desc" size="small">
+                <template slot="prepend">备注</template>
+              </el-input>
+            </div>
+            <div class="url-wrap3">
+              <el-input placeholder="请输入曝光检测链接" v-model="bg3_url" size="small">
+                <template slot="prepend">曝光</template>
+              </el-input>
+              <el-input placeholder="请输入点击检测链接" v-model="click3_url" size="small">
+                <template slot="prepend">点击</template>
+              </el-input>
+              <el-input placeholder="请输入备注" v-model="bg3_url_desc" size="small">
+                <template slot="prepend">备注</template>
               </el-input>
             </div>
             <!--提示-->
@@ -301,7 +341,17 @@ export default {
         }
       },
       bgUrl: '',
-      clickUrl: ''
+      clickUrl: '',
+      bg_url_desc: '',
+      click1_url: '',
+      bg1_url: '',
+      bg1_url_desc: '',
+      click2_url: '',
+      bg2_url: '',
+      bg2_url_desc: '',
+      click3_url: '',
+      bg3_url: '',
+      bg3_url_desc: ''
     }
   },
   watch: {
@@ -329,6 +379,16 @@ export default {
         // 曝光url和点击url
         this.bgUrl = this.adCon.bgUrl
         this.clickUrl = this.adCon.clickUrl
+        this.bg_url_desc = this.adCon.bg_url_desc
+        this.click1_url = this.adCon.click1_url
+        this.bg1_url = this.adCon.bg1_url
+        this.bg1_url_desc = this.adCon.bg1_url_desc
+        this.click2_url = this.adCon.click2_url
+        this.bg2_url = this.adCon.bg2_url
+        this.bg2_url_desc = this.adCon.bg2_url_desc
+        this.click3_url = this.adCon.click3_url
+        this.bg3_url = this.adCon.bg3_url
+        this.bg3_url_desc = this.adCon.bg3_url_desc
       } else {
         // 清空数据，必须是完整的数据结构！
         this.conf_info = {
@@ -415,6 +475,16 @@ export default {
         // 曝光url和点击url
         this.bgUrl = ''
         this.clickUrl = ''
+        this.bg_url_desc = ''
+        this.click1_url = ''
+        this.bg1_url = ''
+        this.bg1_url_desc = ''
+        this.click2_url = ''
+        this.bg2_url = ''
+        this.bg2_url_desc = ''
+        this.click3_url = ''
+        this.bg3_url = ''
+        this.bg3_url_desc = ''
       }
     }
   },
@@ -514,6 +584,16 @@ export default {
       // 曝光url和点击url
       this.bgUrl = ''
       this.clickUrl = ''
+      this.bg_url_desc = ''
+      this.click1_url = ''
+      this.bg1_url = ''
+      this.bg1_url_desc = ''
+      this.click2_url = ''
+      this.bg2_url = ''
+      this.bg2_url_desc = ''
+      this.click3_url = ''
+      this.bg3_url = ''
+      this.bg3_url_desc = ''
       // 验证是否选中了媒体平台，否则提示。
       if (!this.canSave) {
         this.$message.warning('请先选择一个平台')
@@ -556,7 +636,17 @@ export default {
       this.$parent.save('relation', {
         conf_info: this.conf_info,
         bg_url: this.bgUrl,
-        click_url: this.clickUrl
+        click_url: this.clickUrl,
+        bg_url_desc: this.bg_url_desc,
+        click1_url: this.click1_url,
+        bg1_url: this.bg1_url,
+        bg1_url_desc: this.bg1_url_desc,
+        click2_url: this.click2_url,
+        bg2_url: this.bg2_url,
+        bg2_url_desc: this.bg2_url_desc,
+        click3_url: this.click3_url,
+        bg3_url: this.bg3_url,
+        bg3_url_desc: this.bg3_url_desc
       })
     },
     // 点击图片上的设置图标
@@ -763,11 +853,57 @@ export default {
       background-repeat: no-repeat;
       background-position: center;
 
+      .links-title{
+        width: 300px;
+        position: absolute;
+        left: 20px;
+        top: 220px;
+        .title{
+          font-size 18px;
+          font-weight bold;
+          line-height 40px;
+        }
+        .el-button{
+          float right;
+          margin: 6px 0;
+        }
+      }
+
       .url-wrap {
         width: 300px;
         position: absolute;
         left: 20px;
-        bottom: 220px;
+        top: 260px;
+
+        .el-input {
+          margin-top: 3px;
+        }
+      }
+      .url-wrap1 {
+        width: 300px;
+        position: absolute;
+        left: 340px;
+        top: 260px;
+
+        .el-input {
+          margin-top: 3px;
+        }
+      }
+      .url-wrap2 {
+        width: 300px;
+        position: absolute;
+        left: 20px;
+        top: 380px;
+
+        .el-input {
+          margin-top: 3px;
+        }
+      }
+      .url-wrap3 {
+        width: 300px;
+        position: absolute;
+        left: 340px;
+        top: 380px;
 
         .el-input {
           margin-top: 3px;
@@ -777,7 +913,7 @@ export default {
       .tpl-tips {
         position: absolute;
         left: 20px;
-        bottom: 20px;
+        top: 20px;
         width: 300px;
         height: 195px;
         background: #f0f0f0;

@@ -58,15 +58,79 @@
                   <template slot="prepend">跳转链接</template>
                 </el-input>
               </div>
-              <div class="bg-url">
-                <el-input placeholder="请输入曝光检测链接" v-model="bgUrl" :disabled="!editRule.bg_url">
-                  <template slot="prepend">曝光检测链接</template>
-                </el-input>
+            </div>
+            <div class="links">
+              <div class="links-top">
+                <span class="title">监测代码列表</span>
+                <el-button size="small">添加</el-button>
               </div>
-              <div class="click-url">
-                <el-input placeholder="请输入点击检测链接" v-model="clickUrl" :disabled="!editRule.click_url">
-                  <template slot="prepend">点击检测链接</template>
-                </el-input>
+              <div class="links-list">
+                <div class="bg-url">
+                  <el-input placeholder="请输入曝光检测链接" v-model="bgUrl" :disabled="!editRule.bg_url">
+                    <template slot="prepend">曝光</template>
+                  </el-input>
+                </div>
+                <div class="click-url">
+                  <el-input placeholder="请输入点击检测链接" v-model="clickUrl" :disabled="!editRule.click_url">
+                    <template slot="prepend">点击</template>
+                  </el-input>
+                </div>
+                <div class="desc">
+                  <el-input placeholder="请输入备注" v-model="bg_url_desc" :disabled="!editRule.bg_url">
+                    <template slot="prepend">备注</template>
+                  </el-input>
+                </div>
+              </div>
+              <div class="links-list">
+                <div class="bg-url">
+                  <el-input placeholder="请输入曝光检测链接" v-model="bg1_url" :disabled="!editRule.bg_url">
+                    <template slot="prepend">曝光</template>
+                  </el-input>
+                </div>
+                <div class="click-url">
+                  <el-input placeholder="请输入点击检测链接" v-model="click1_url" :disabled="!editRule.click_url">
+                    <template slot="prepend">点击</template>
+                  </el-input>
+                </div>
+                <div class="desc">
+                  <el-input placeholder="请输入备注" v-model="bg1_url_desc" :disabled="!editRule.bg_url">
+                    <template slot="prepend">备注</template>
+                  </el-input>
+                </div>
+              </div>
+              <div class="links-list">
+                <div class="bg-url">
+                  <el-input placeholder="请输入曝光检测链接" v-model="bg2_url" :disabled="!editRule.bg_url">
+                    <template slot="prepend">曝光</template>
+                  </el-input>
+                </div>
+                <div class="click-url">
+                  <el-input placeholder="请输入点击检测链接" v-model="click2_url" :disabled="!editRule.click_url">
+                    <template slot="prepend">点击</template>
+                  </el-input>
+                </div>
+                <div class="desc">
+                  <el-input placeholder="请输入备注" v-model="bg2_url_desc" :disabled="!editRule.bg_url">
+                    <template slot="prepend">备注</template>
+                  </el-input>
+                </div>
+              </div>
+              <div class="links-list">
+                <div class="bg-url">
+                  <el-input placeholder="请输入曝光检测链接" v-model="bg3_url" :disabled="!editRule.bg_url">
+                    <template slot="prepend">曝光</template>
+                  </el-input>
+                </div>
+                <div class="click-url">
+                  <el-input placeholder="请输入点击检测链接" v-model="click3_url" :disabled="!editRule.click_url">
+                    <template slot="prepend">点击</template>
+                  </el-input>
+                </div>
+                <div class="desc">
+                  <el-input placeholder="请输入备注" v-model="bg3_url_desc" :disabled="!editRule.bg_url">
+                    <template slot="prepend">备注</template>
+                  </el-input>
+                </div>
               </div>
             </div>
           </div>
@@ -135,6 +199,16 @@ export default {
       },
       bgUrl: '',
       clickUrl: '',
+      bg_url_desc: '',
+      click1_url: '',
+      bg1_url: '',
+      bg1_url_desc: '',
+      click2_url: '',
+      bg2_url: '',
+      bg2_url_desc: '',
+      click3_url: '',
+      bg3_url: '',
+      bg3_url_desc: '',
       naturalWidth: 0,
       naturalHeight: 0
     }
@@ -229,6 +303,16 @@ export default {
         // 曝光url和点击url
         this.bgUrl = this.adCon.bgUrl
         this.clickUrl = this.adCon.clickUrl
+        this.bg_url_desc = this.adCon.bg_url_desc
+        this.click1_url = this.adCon.click1_url
+        this.bg1_url = this.adCon.bg1_url
+        this.bg1_url_desc = this.adCon.bg1_url_desc
+        this.click2_url = this.adCon.click2_url
+        this.bg2_url = this.adCon.bg2_url
+        this.bg2_url_desc = this.adCon.bg2_url_desc
+        this.click3_url = this.adCon.click3_url
+        this.bg3_url = this.adCon.bg3_url
+        this.bg3_url_desc = this.adCon.bg3_url_desc
       } else {
         this.conf_info = {
           image_src: '',
@@ -243,6 +327,16 @@ export default {
         // 曝光url和点击url
         this.bgUrl = ''
         this.clickUrl = ''
+        this.bg_url_desc = ''
+        this.click1_url = ''
+        this.bg1_url = ''
+        this.bg1_url_desc = ''
+        this.click2_url = ''
+        this.bg2_url = ''
+        this.bg2_url_desc = ''
+        this.click3_url = ''
+        this.bg3_url = ''
+        this.bg3_url_desc = ''
       }
     },
     'editRule' (val) {
@@ -271,6 +365,16 @@ export default {
       // 曝光url和点击url
       this.bgUrl = ''
       this.clickUrl = ''
+      this.bg_url_desc = ''
+      this.click1_url = ''
+      this.bg1_url = ''
+      this.bg1_url_desc = ''
+      this.click2_url = ''
+      this.bg2_url = ''
+      this.bg2_url_desc = ''
+      this.click3_url = ''
+      this.bg3_url = ''
+      this.bg3_url_desc = ''
       // 验证是否选中了媒体平台，否则提示。
       if (!this.canSave) {
         this.$message.warning('请先选择一个平台')
@@ -305,7 +409,17 @@ export default {
       this.$parent.save('image', {
         conf_info: this.conf_info,
         bg_url: this.bgUrl,
-        click_url: this.clickUrl
+        click_url: this.clickUrl,
+        bg_url_desc: this.bg_url_desc,
+        click1_url: this.click1_url,
+        bg1_url: this.bg1_url,
+        bg1_url_desc: this.bg1_url_desc,
+        click2_url: this.click2_url,
+        bg2_url: this.bg2_url,
+        bg2_url_desc: this.bg2_url_desc,
+        click3_url: this.click3_url,
+        bg3_url: this.bg3_url,
+        bg3_url_desc: this.bg3_url_desc
       })
     },
     // 选择大小
@@ -430,7 +544,7 @@ export default {
   .img {
     width: 100%;
     height: 550px;
-    padding: 100px 40px;
+    padding: 26px 40px;
     position: relative;
     background-image: url('../../../static/img/tplbg.png');
     background-position: center;
@@ -456,7 +570,7 @@ export default {
       height: 100%;
 
       .upload-flash {
-        margin-top: 42px;
+        /*margin-top: 42px;*/
         width: 260px;
         height: 260px;
         float: left;
@@ -515,12 +629,14 @@ export default {
 
       .ad-con {
         width: 600px;
-        height: 100%;
+        height: 260px;
         float: right;
+        overflow: hidden;
 
         .ad-title {
           font-size: 14px;
           margin-bottom: 15px;
+          line-height: 58px;
 
           span {
             color: red;
@@ -563,13 +679,40 @@ export default {
           }
         }
 
-        .ad-url, .bg-url, .click-url {
+        .ad-url {
           margin-bottom: 15px;
           width: 600px;
 
           .el-input-group__prepend {
             width: 100px;
             text-align: center;
+          }
+        }
+      }
+      .links{
+        width: 100%;
+        float: left;
+        margin: 15px 0;
+
+        .links-top .title{
+          font-size 18px;
+          font-weight bold;
+          line-height 40px;
+        }
+        .links-top .el-button{
+          float right;
+          margin: 6px 0;
+        }
+        .links-list{
+          height: 50px;
+          .bg-url, .click-url{
+            width: 334px;
+            margin-right: 15px;
+            float: left;
+          }
+          .desc{
+            width: 200px;
+            float: left;
           }
         }
       }
