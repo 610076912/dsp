@@ -62,7 +62,7 @@
             <div class="links">
               <div class="links-top">
                 <span class="title">监测代码列表</span>
-                <el-button size="small">添加</el-button>
+                <el-button size="small" @click="addLinks">添加</el-button>
               </div>
               <div class="links-list">
                 <div class="bg-url">
@@ -81,7 +81,7 @@
                   </el-input>
                 </div>
               </div>
-              <div class="links-list">
+              <div class="links-list" v-show="show_link1">
                 <div class="bg-url">
                   <el-input placeholder="请输入曝光检测链接" v-model="bg1_url" :disabled="!editRule.bg_url">
                     <template slot="prepend">曝光</template>
@@ -98,7 +98,7 @@
                   </el-input>
                 </div>
               </div>
-              <div class="links-list">
+              <div class="links-list" v-show="show_link2">
                 <div class="bg-url">
                   <el-input placeholder="请输入曝光检测链接" v-model="bg2_url" :disabled="!editRule.bg_url">
                     <template slot="prepend">曝光</template>
@@ -115,7 +115,7 @@
                   </el-input>
                 </div>
               </div>
-              <div class="links-list">
+              <div class="links-list" v-show="show_link3">
                 <div class="bg-url">
                   <el-input placeholder="请输入曝光检测链接" v-model="bg3_url" :disabled="!editRule.bg_url">
                     <template slot="prepend">曝光</template>
@@ -210,7 +210,10 @@ export default {
       bg3_url: '',
       bg3_url_desc: '',
       naturalWidth: 0,
-      naturalHeight: 0
+      naturalHeight: 0,
+      show_link1: false,
+      show_link2: false,
+      show_link3: false
     }
   },
   computed: {
@@ -313,6 +316,10 @@ export default {
         this.click3_url = this.adCon.click3_url
         this.bg3_url = this.adCon.bg3_url
         this.bg3_url_desc = this.adCon.bg3_url_desc
+
+        this.show_link1 = this.click1_url || this.bg1_url
+        this.show_link2 = this.click2_url || this.bg2_url
+        this.show_link3 = this.click3_url || this.bg3_url
       } else {
         this.conf_info = {
           image_src: '',
@@ -511,6 +518,9 @@ export default {
         target: '.upload-flash',
         text: '上传中。。。。'
       })
+    },
+    addLinks () {
+      !this.show_link1 ? this.show_link1 = true : !this.show_link2 ? this.show_link2 = true : this.show_link3 = true
     }
   }
 }

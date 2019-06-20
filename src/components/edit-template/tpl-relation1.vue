@@ -16,7 +16,7 @@
           <div class="ad-edit">
             <div class="links-title">
               <span class="title">监测代码列表</span>
-              <el-button size="small">添加</el-button>
+              <el-button size="small" @click="addLinks">添加</el-button>
             </div>
             <div class="url-wrap">
               <el-input placeholder="请输入曝光检测链接" v-model="bgUrl" size="small">
@@ -29,7 +29,7 @@
                 <template slot="prepend">备注</template>
               </el-input>
             </div>
-            <div class="url-wrap1">
+            <div class="url-wrap1" v-show="show_link1">
               <el-input placeholder="请输入曝光检测链接" v-model="bg1_url" size="small">
                 <template slot="prepend">曝光</template>
               </el-input>
@@ -40,7 +40,7 @@
                 <template slot="prepend">备注</template>
               </el-input>
             </div>
-            <div class="url-wrap2">
+            <div class="url-wrap2" v-show="show_link2">
               <el-input placeholder="请输入曝光检测链接" v-model="bg2_url" size="small">
                 <template slot="prepend">曝光</template>
               </el-input>
@@ -51,7 +51,7 @@
                 <template slot="prepend">备注</template>
               </el-input>
             </div>
-            <div class="url-wrap3">
+            <div class="url-wrap3" v-show="show_link3">
               <el-input placeholder="请输入曝光检测链接" v-model="bg3_url" size="small">
                 <template slot="prepend">曝光</template>
               </el-input>
@@ -351,7 +351,10 @@ export default {
       bg2_url_desc: '',
       click3_url: '',
       bg3_url: '',
-      bg3_url_desc: ''
+      bg3_url_desc: '',
+      show_link1: false,
+      show_link2: false,
+      show_link3: false
     }
   },
   watch: {
@@ -389,6 +392,10 @@ export default {
         this.click3_url = this.adCon.click3_url
         this.bg3_url = this.adCon.bg3_url
         this.bg3_url_desc = this.adCon.bg3_url_desc
+
+        this.show_link1 = this.click1_url || this.bg1_url
+        this.show_link2 = this.click2_url || this.bg2_url
+        this.show_link3 = this.click3_url || this.bg3_url
       } else {
         // 清空数据，必须是完整的数据结构！
         this.conf_info = {
@@ -789,6 +796,9 @@ export default {
         this.$message.error('上传的文件大小不能超过 2M!')
       }
       return isType && isLt2M
+    },
+    addLinks () {
+      !this.show_link1 ? this.show_link1 = true : !this.show_link2 ? this.show_link2 = true : this.show_link3 = true
     }
   }
 }
